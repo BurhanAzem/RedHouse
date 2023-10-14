@@ -1,0 +1,34 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
+
+namespace BlueHouse_Server.Models
+{
+    public class Property
+    {
+        [Key]
+        public int Id { get; set; }
+        public string PropertyType { get; set; }
+        [ForeignKey(nameof(User))]
+        public int UserId { get; set; }
+        [ForeignKey(nameof(Location))]
+        public int LocationId { get; set; }
+        [ForeignKey(nameof(Neighborhood))]
+        public int NeighborhoodId { get; set; }
+        public int  Price { get; set; } 
+        public int NumberOfBedRooms { get; set; }
+        public int NumberOfBathRooms { get;set; }
+        public float SquareMetersArea { get; set; }
+        public string PropertyDescription { get; set; }
+        public DateTime BuiltYear  { get; set; }
+        public string View { get; set; }
+        public DateTime AvailableOn { get; set; } = DateTime.Now;
+        public string PropertyStatus { get; set; } = "Accepting Offers";
+        public int? NumberOfUnits { get; set; } = 1;
+        public int ParkingSpots { get; set; }
+        public string ListingType { get; set; }
+        public bool IsAvailableBasement { get; set; } = false;
+        public string ListingBy { get; set; } = "Landlord";
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+    }
+}
