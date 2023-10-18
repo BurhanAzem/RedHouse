@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 
 // ignore: must_be_immutable
 class RegisterOne extends StatelessWidget {
-   const RegisterOne({Key? key}) : super(key: key);
+  const RegisterOne({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-   SignUpControllerImp controller = Get.put(SignUpControllerImp());
+    SignUpControllerImp controller = Get.put(SignUpControllerImp());
 
     return Scaffold(
       appBar: AppBar(
@@ -37,100 +37,100 @@ class RegisterOne extends StatelessWidget {
           child: ListView(
             children: [
               Container(height: 5),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(height: 20),
-                    Text(
-                      "First Name",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    Container(height: 5),
-                    TextFormField(
-                      controller: controller.firstName,
-                      style: TextStyle(height: 0.8),
-                      decoration: InputDecoration(
-                        suffixIcon:
-                            Icon(Icons.man), // Use prefixIcon for password icon
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(height: 20),
+                  Text(
+                    "First Name",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.firstName,
+                    style: TextStyle(height: 0.8),
+                    decoration: InputDecoration(
+                      suffixIcon:
+                          Icon(Icons.man), // Use prefixIcon for password icon
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    Container(height: 20),
-                        Text(
-                          "Last Name",
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                        Container(height: 5),
-                        TextFormField(
-                          controller: controller.lastName,
-                          style: TextStyle(),
-                          decoration: InputDecoration(
-                            suffixIcon: Icon(
-                                Icons.man), // Use prefixIcon for email icon
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: EdgeInsets.all(5),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      
-                    Container(height: 20),
-                    Text(
-                      "Email",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    Container(height: 5),
-                    TextFormField(
-                      controller: controller.email,
-                      style: TextStyle(height: 0.8),
-                      decoration: InputDecoration(
-                        suffixIcon:
-                            Icon(Icons.email), // Use prefixIcon for password icon
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                  ),
+                  Container(height: 20),
+                  Text(
+                    "Last Name",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.lastName,
+                    style: TextStyle(),
+                    decoration: InputDecoration(
+                      suffixIcon:
+                          Icon(Icons.man), // Use prefixIcon for email icon
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    Container(height: 20),
-                    Text(
-                      "Password",
-                      style: TextStyle(fontSize: 18, color: Colors.black),
-                    ),
-                    Container(height: 5),
-                    TextFormField(
-                      controller: controller.password,
-                      style: TextStyle(height: 0.8),
-                      decoration: InputDecoration(
-                        suffixIcon:
-                            Icon(Icons.lock), // Use prefixIcon for password icon
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                  ),
+                  Container(height: 20),
+                  Text(
+                    "Email",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.email,
+                    style: TextStyle(height: 0.8),
+                    decoration: InputDecoration(
+                      suffixIcon:
+                          Icon(Icons.email), // Use prefixIcon for password icon
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    Container(height: 20),
-                    Container(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(child: Text("I already have an account"),
+                  ),
+                  Container(height: 20),
+                  Text(
+                    "Password",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.password,
+                    style: TextStyle(height: 0.8),
+                    decoration: InputDecoration(
+                      suffixIcon:
+                          Icon(Icons.lock), // Use prefixIcon for password icon
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Container(height: 20),
+                  Container(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        child: Text("I already have an account"),
                         onTap: () {
                           controller.goToLogin();
                         },
-                        )
-                      ],
-                    ),
-                  ],
-                ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
               Container(
                 height: 20,
               ),
@@ -141,8 +141,8 @@ class RegisterOne extends StatelessWidget {
                 color: Color(0xffd92328),
                 child: Text(
                   "Next",
-                  style:
-                      TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.w700),
                 ), // Provide a child for the bu),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
