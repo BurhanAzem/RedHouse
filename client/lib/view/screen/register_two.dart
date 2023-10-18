@@ -129,7 +129,8 @@ class _RegisterTwoState extends State<RegisterTwo> {
                 onPressed: () {
                   controller.signUp();
                 },
-                color: Color(0xffd92328),
+               color: Color(0xffd92328),
+
                 child: Text(
                   "Sign Up",
                   style: TextStyle(

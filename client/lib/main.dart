@@ -2,6 +2,8 @@
 // import 'package:client/view/screen/OnBoardingTwo.dart';
 
 import 'package:client/routes.dart';
+import 'package:client/view/screen/custom.dart';
+import 'package:client/view/screen/login.dart';
 import 'package:client/view/screen/register_one.dart';
 // import 'package:client/view/screen/welcoming.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
           useMaterial3: true,
         ),
-        home: RegisterOne(),
+        home: Custom(),
         routes: routes,
         );
   }

@@ -32,8 +32,12 @@ namespace BlueHouse_Server.Controllers
                 var code = result.StatusCode;
                 throw new StatusCodeException(code.Value, result.Exception);
             }
+            else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 
         }
     }
 }
+
+
+

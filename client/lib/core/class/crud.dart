@@ -8,11 +8,17 @@ class Crud {
   Future<Either<StatusRequest, Map>> postData(String linkurl, Map data) async {
    
       if (await checkInternet()) {
-        var response = await http.post(Uri.parse(linkurl), body: data);
+        var response = await http.post(Uri.parse(linkurl), 
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: json.encode(data),
+          encoding: Encoding.getByName("utf-8")
+        );
           print(response.statusCode) ; 
 
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Map responsebody = jsonDecode(response.body);
+          Map responsebody = json.decode(response.body);
           print(responsebody) ; 
           return Right(responsebody);
         } else {

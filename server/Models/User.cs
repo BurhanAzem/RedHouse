@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Microsoft.OpenApi.Any;
 namespace BlueHouse_Server.Models
 {
     public class User

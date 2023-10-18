@@ -21,7 +21,7 @@ namespace BlueHouse_Server.Controllers
 
         // /api/auth/register
         [HttpPost("/auth/register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +38,7 @@ namespace BlueHouse_Server.Controllers
         }
 
         [HttpPost("/auth/login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {
