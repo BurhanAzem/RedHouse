@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.ComponentModel;
 using System.Reflection.Emit;
 
-namespace BlueHouse_Server.Models
+namespace RedHouse_Server.Models
 {
     public class RedHouseDbContext : IdentityDbContext
     {

@@ -1,11 +1,12 @@
-import 'package:client/view/screen/onboardingFour.dart';
-import 'package:client/view/screen/onboardingOne.dart';
-import 'package:client/view/screen/onboardingThree.dart';
-import 'package:client/view/screen/onboardingTwo.dart';
+
+import 'package:client/view/screen/onboarding/onboardingFour.dart';
+import 'package:client/view/screen/onboarding/onboardingOne.dart';
+import 'package:client/view/screen/onboarding/onboardingThree.dart';
+import 'package:client/view/screen/onboarding/onboardingTwo.dart';
 import 'package:flutter/material.dart';
 
-class OnBoarding extends StatelessWidget {
-  const OnBoarding({Key? key}) : super(key: key);
+class AddProperty extends StatelessWidget {
+  const AddProperty({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

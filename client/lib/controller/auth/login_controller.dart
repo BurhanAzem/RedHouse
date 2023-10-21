@@ -25,21 +25,25 @@ class LoginControllerImp extends LoginController {
   @override 
   login () async{
     if (formstate.currentState!.validate()) {
-      statusRequest = StatusRequest.loading;
+      // statusRequest = StatusRequest.loading;
       var response = await loginData.postdata(password.text, email.text);
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
-      if (StatusRequest.success == StatusRequest) {
-        if (response['message'] == "success") {
-          data.addAll(response['data']);
+      if (response['statusCode'] == 200) {
+          print(response['dto']);
+          // data.addAll(response['dto']);
           // Get.offNamed(AppRoute.verfiyCodeSignUp);
         } else {
-          Get.defaultDialog(title: "ُWarning" , middleText: response['message']) ; 
+      Get.defaultDialog(title: "ُError" , middleText: 'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]') ; 
           statusRequest = StatusRequest.failure;
         }
       }
-      update();
-    } else {}
+      
+      // update();
+     else {
+      Get.defaultDialog(title: "ُError" , middleText: 'There is something wronge !') ; 
+          statusRequest = StatusRequest.failure;
+    }
   }
 
   @override

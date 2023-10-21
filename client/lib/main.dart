@@ -1,29 +1,29 @@
-// import 'package:client/lib/view/screen/OnBoardingThree.dart';
-// import 'package:client/view/screen/OnBoardingTwo.dart';
-
 import 'package:client/routes.dart';
-import 'package:client/view/screen/custom.dart';
+import 'package:client/view/screen/add_property/add_property_1.dart';
 import 'package:client/view/screen/login.dart';
-import 'package:client/view/screen/register_one.dart';
-// import 'package:client/view/screen/welcoming.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
- import 'dart:io';
- 
- class MyHttpOverrides extends HttpOverrides{
+import 'dart:io';
+// import 'firebase_options.dart';
+
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
-void main() {
+
+void main() async{
   HttpOverrides.global = MyHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,  
+);  
   runApp(const MyApp());
 }
-
-
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
           useMaterial3: true,
         ),
-        home: Custom(),
+        home: AddProperty1(),
         routes: routes,
         );
   }

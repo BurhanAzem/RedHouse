@@ -1,4 +1,4 @@
-namespace BlueHouse_Server
+namespace RedHouse_Server
 {
     public class WeatherForecast
     {

@@ -1,20 +1,19 @@
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/view/widget/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 
 
 
 
-class Custom extends StatefulWidget {
-  const Custom({super.key});
+class ManageProperties extends StatefulWidget {
+  const ManageProperties({super.key});
 
   @override
-  State<Custom> createState() => _TopNavigationBar();
+  State<ManageProperties> createState() => _TopNavigationBar();
 }
 
 /// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
-class _TopNavigationBar extends State<Custom>
+class _TopNavigationBar extends State<ManageProperties>
     with TickerProviderStateMixin {
   late TabController _tabController;
 
@@ -48,7 +47,7 @@ class _TopNavigationBar extends State<Custom>
         controller: _tabController,
         children: const <Widget>[
           Center(
-            child: Text("It's cloudy here"),
+            child: Properties()
           ),
           Center(
             child: Text("It's rainy here"),

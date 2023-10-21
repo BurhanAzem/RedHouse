@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace BlueHouse_Server.Models
+namespace RedHouse_Server.Models
 {
     public class Location
     {

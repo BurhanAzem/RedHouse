@@ -1,4 +1,4 @@
-﻿namespace BlueHouse_Server.Dtos.LocationDtos
+﻿namespace RedHouse_Server.Dtos.LocationDtos
 {
     public class LocationDto
     {

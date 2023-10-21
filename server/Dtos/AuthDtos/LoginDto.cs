@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BlueHouse_Server.Dtos.AuthDtos
+namespace RedHouse_Server.Dtos.AuthDtos
 {
     public class LoginDto
     {
