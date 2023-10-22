@@ -1,5 +1,6 @@
 import 'package:client/routes.dart';
 import 'package:client/view/screen/add_property/add_property_1.dart';
+import 'package:client/view/screen/bottom_bar.dart';
 import 'package:client/view/screen/login.dart';
 import 'package:client/view/screen/manage_properties.dart';
 import 'package:firebase_core/firebase_core.dart';
