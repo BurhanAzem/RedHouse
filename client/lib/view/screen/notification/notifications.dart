@@ -22,13 +22,14 @@ class _NotificationsState extends State<Notifications> {
                 iconSize: 32,
                 icon: Icon(Icons.settings_outlined), // Your settings icon
                 onPressed: () {
-                   Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => NotificationsSettings()),
-              );
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => NotificationsSettings()),
+                  );
                 },
               ),
             ),
-            Padding(
+            const Padding(
               padding: EdgeInsets.only(top: 10),
               child: Text(
                 'Notifications',
@@ -40,12 +41,12 @@ class _NotificationsState extends State<Notifications> {
           ],
         ),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Get Notifications',
+              'Get notifications',
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
@@ -56,7 +57,7 @@ class _NotificationsState extends State<Notifications> {
               "Be the first to know about new listings and price reductions",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 19,
+                fontSize: 17,
               ),
             ),
           ],

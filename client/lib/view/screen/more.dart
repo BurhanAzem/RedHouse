@@ -31,7 +31,7 @@ class _MoreState extends State<More> {
                         "Welcome",
                         style: TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w800,
                           fontSize: 34,
                         ),
                       ),
@@ -75,7 +75,7 @@ class _MoreState extends State<More> {
                                 builder: (context) => RegisterOne()),
                           );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
@@ -89,7 +89,7 @@ class _MoreState extends State<More> {
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                                 decoration: TextDecoration.underline,
                               ),
                             ),
@@ -104,21 +104,21 @@ class _MoreState extends State<More> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.only(left: 10),
+                        padding: EdgeInsets.only(left: 10),
                         child: Text('ayman.dwikat.2001@gmail.com',
                             style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               fontSize: 17,
                             )),
-                      ), // Replace with your actual email
+                      ),
                       MaterialButton(
                         onPressed: () {
                           setState(() {
                             widget.visitor = true;
                           });
                         },
-                        child: Text(' Log out ',
+                        child: Text('Log out',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w600,
@@ -135,12 +135,11 @@ class _MoreState extends State<More> {
                 Container(
                   width: 360,
                   height: 45,
-                  // color: Colors.green,
-                  child: Text(
+                  child: const Text(
                     "Settings",
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.bold,
                       fontSize: 28,
                     ),
                   ),
@@ -149,269 +148,330 @@ class _MoreState extends State<More> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) => NotificationsSettings()),
+                        builder: (context) => NotificationsSettings(),
+                      ),
                     );
                   },
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                                    Notifications",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text(
+                        "Notifications",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  // color: Colors.green,
                   child: Text(
                     "My home",
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.bold,
                       fontSize: 28,
                     ),
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                              Estimate my home value",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Estimate my home value",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                                  Sell my home",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Sell my home",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                             Compare agents",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                 View home equity rates",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "View home equity rates",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  // color: Colors.green,
                   child: Text(
                     "Buying a home",
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.bold,
                       fontSize: 28,
                     ),
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                              Estimate my home value",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                                  Sell my home",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                             Compare agents",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                 View home equity rates",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  // color: Colors.green,
                   child: Text(
                     "Rentals",
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.bold,
                       fontSize: 28,
                     ),
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                              Estimate my home value",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                                  Sell my home",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  // color: Colors.green,
                   child: Text(
                     "Other",
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.bold,
                       fontSize: 28,
                     ),
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                              Estimate my home value",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                                  Sell my home",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                             Compare agents",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                 View home equity rates",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 MaterialButton(
                   onPressed: () {},
-                  minWidth: 3000,
-                  // color: Colors.yellow,
                   height: 55,
-                  child: Text(
-                    "                                 View home equity rates",
-                    style: TextStyle(
-                      color: Color.fromARGB(174, 0, 0, 0),
-                      fontSize: 19,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Compare agents",
+                        style: TextStyle(
+                          color: Color.fromARGB(174, 0, 0, 0),
+                          fontSize: 19,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                    ],
                   ),
                 ),
                 SizedBox(height: 45),

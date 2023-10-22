@@ -33,13 +33,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-        title: 'RedHouse',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
-          useMaterial3: true,
-        ),
-        home: ManageProperties(),
-        routes: routes,
-        );
+      title: 'RedHouse',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
+        useMaterial3: true,
+        fontFamily: "Poppins",
+      ),
+      home: BottomBar(false),
+      routes: routes,
+    );
   }
 }
