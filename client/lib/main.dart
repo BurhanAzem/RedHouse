@@ -1,6 +1,7 @@
 import 'package:client/routes.dart';
 import 'package:client/view/screen/add_property/add_property_1.dart';
 import 'package:client/view/screen/login.dart';
+import 'package:client/view/screen/manage_properties.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
           useMaterial3: true,
         ),
-        home: AddProperty1(),
+        home: ManageProperties(),
         routes: routes,
         );
   }

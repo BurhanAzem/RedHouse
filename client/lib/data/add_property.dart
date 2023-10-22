@@ -1,6 +1,6 @@
 import 'package:client/core/class/crud.dart';
 import 'package:client/link_api.dart';
-
+import 'package:intl/intl.dart';
 
 class PropertyData {
   Crud crud;
@@ -8,27 +8,32 @@ class PropertyData {
   postdata(String propertyType ,String price ,String numberOfBedrooms ,
     String numberOfBathrooms, String squareMeter ,String propertyDescription,
     DateTime builtYear, String view, DateTime availableOn, String propertyStatus, String numberOfUnits,
-    String parkingSpots, String listingType, String isAvaliableBasement, String listingBy,
-    int userId) async {
+    String parkingSpots, String listingType, String isAvailableBasement, String listingBy,
+    int userId, List<String> downloadUrls) async {
+
+    String formattedBuiltYear = DateFormat('yyyy-MM-ddTHH:mm:ss').format(builtYear);
+    String formattedAvailableOn = DateFormat('yyyy-MM-ddTHH:mm:ss').format(availableOn);
+   
     var response = await crud.postData(AppLink.add_property, {
       "propertyType" : propertyType , 
       "userId" : userId,
-      "price" : price  , 
-      "availableOn" : availableOn.toLocal().toString(),
-      "numberOfBedrooms" : numberOfBedrooms , 
-      "numberOfBathrooms" : numberOfBathrooms  , 
-      "squareMeter" : squareMeter,
+      "price" : int.tryParse(price) ?? 0, 
+      "availableOn" : formattedAvailableOn ,
+      "numberOfBedrooms" :  int.tryParse(numberOfBedrooms) ?? 0, 
+      "numberOfBathrooms" : int.tryParse(numberOfBathrooms) ?? 0, 
+      "squareMeter" : int.tryParse(squareMeter) ?? 0,
       "propertyDescription" : propertyDescription,
-      "builtYear" : builtYear.toLocal().toString(),
+      "builtYear" : formattedBuiltYear,
       "view" : view,
       "propertyStatus" : propertyStatus,
-      "numberOfUnits" : numberOfUnits,
-      "parkingSpots" : parkingSpots,
+      "numberOfUnits" : int.tryParse(numberOfUnits) ?? 0,
+      "parkingSpots" :  int.tryParse(parkingSpots) ?? 0,
       "listingType" : listingType,
-      "isAvaliableBasement" : isAvaliableBasement,
+      "isAvailableBasement" : isAvailableBasement,
       "listingBy" : listingBy,
-      "locationDto":{},
-      "neighborhoodDto":{}
+      // "locationDto":{},
+      // "neighborhoodDto":{},
+      "propertyFiles" : downloadUrls
     });
     return response.fold((l) => l, (r) => r);
   }

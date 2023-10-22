@@ -40,15 +40,25 @@ namespace RedHouse_Server.Services
                 PropertyDescription = propertyDto.PropertyDescription,
                 PropertyStatus = propertyDto.PropertyStatus,
                 PropertyType = propertyDto.PropertyType,
-                SquareMetersArea = propertyDto.SquareMetersArea,
+                SquareMetersArea = propertyDto.SquareMeter,
                 UserId = propertyDto.UserId,
                 View = propertyDto.View,
             };
-            await _redHouseDbContext.Properties.AddAsync(property);
+            var propertyRes = await _redHouseDbContext.Properties.AddAsync(property);
             await _redHouseDbContext.SaveChangesAsync();
+            int propertyId = propertyRes.Entity.Id;
+            foreach (var file in propertyDto.PropertyFiles)
+            {
+                PropertyFile propertyFile = new PropertyFile {
+                    PropertyId = propertyId,
+                    DownloadUrls = file
+                };
+                await _redHouseDbContext.Files.AddAsync(propertyFile);
+                await _redHouseDbContext.SaveChangesAsync();
+            }
             return new ResponsDto<Property>
             {
-                Exception = new Exception("Proprety Added Successfully"),
+                Message = "Proprety Added Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }

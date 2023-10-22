@@ -9,7 +9,6 @@ import 'package:get/get.dart';
 
 abstract class AddPropertyController extends GetxController {
   AddPropertyController();
-
   goToAddProperty1();
   goToAddProperty2();
   goToAddProperty3();
@@ -23,7 +22,6 @@ abstract class AddPropertyController extends GetxController {
 
 class AddPropertyControllerImp extends AddPropertyController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
-  LoginData loginData = LoginData(Crud());
   int activeStep = 0;
   late TextEditingController price;
   late TextEditingController numberOfBedrooms;
@@ -68,6 +66,7 @@ class AddPropertyControllerImp extends AddPropertyController {
         isAvaliableBasement,
         listingBy,
         userId,
+        downloadUrls
       );
 
       if (response['statusCode'] == 200) {

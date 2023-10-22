@@ -1,6 +1,7 @@
 ﻿using RedHouse_Server.Dtos.LocationDtos;
 using RedHouse_Server.Dtos.NeighborhoodDtos;
 using RedHouse_Server.Models;
+using server.Dtos.FileDtos;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RedHouse_Server.Dtos.PropertyDtos
@@ -9,12 +10,13 @@ namespace RedHouse_Server.Dtos.PropertyDtos
     {
         public string PropertyType { get; set; }
         public int UserId { get; set; }
+        public List<string> PropertyFiles { get; set; }
         // public LocationDto? LocationDto { get; set; }
         // public NeighborhoodDto? NeighborhoodDto { get; set; }
         public int Price { get; set; }
         public int NumberOfBedRooms { get; set; }
         public int NumberOfBathRooms { get; set; }
-        public float SquareMetersArea { get; set; }
+        public float SquareMeter { get; set; }
         public string PropertyDescription { get; set; }
         public DateTime BuiltYear { get; set; }
         public string View { get; set; }

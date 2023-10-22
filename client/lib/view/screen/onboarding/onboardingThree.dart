@@ -1,6 +1,6 @@
 
 
-import 'package:client/controller/onboarding_controller.dart';
+import 'package:client/controller/onboarding/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

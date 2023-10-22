@@ -20,7 +20,7 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpPost("/properties")]
-        public async Task<IActionResult> CreateProperty(PropertyDto propertyDto)
+        public async Task<IActionResult> CreateProperty([FromBody] PropertyDto propertyDto)
         {
             if (!ModelState.IsValid)
             {
