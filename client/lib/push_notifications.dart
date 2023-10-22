@@ -8,11 +8,11 @@ class PushNotifications extends StatefulWidget {
 }
 
 class _PushNotificationsState extends State<PushNotifications> {
-  int _selectedValue = 1; // Initial selection, 1 for "Right away"
+  int _selectedValue = 1;
 
   void _handleRadioValueChange(int? value) {
     setState(() {
-      _selectedValue = value ?? 1; // Default to "Right away" if value is null
+      _selectedValue = value ?? 1;
     });
   }
 
@@ -44,15 +44,12 @@ class _PushNotificationsState extends State<PushNotifications> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 25),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   children: <TextSpan>[
                     TextSpan(
                       text:
                           "You can change which homes you get alerted about in your ",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16 // You can customize the text color
-                          ),
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     TextSpan(
                       text: "saved homes",
@@ -60,15 +57,11 @@ class _PushNotificationsState extends State<PushNotifications> {
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.underline,
                           color: Colors.black,
-                          fontSize: 16 // You can customize the text color
-                          ),
+                          fontSize: 16),
                     ),
                     TextSpan(
                       text: " and ",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16 // You can customize the text color
-                          ),
+                      style: TextStyle(color: Colors.black, fontSize: 16),
                     ),
                     TextSpan(
                       text: "saved searches",
@@ -76,8 +69,7 @@ class _PushNotificationsState extends State<PushNotifications> {
                           fontWeight: FontWeight.w500,
                           decoration: TextDecoration.underline,
                           color: Colors.black,
-                          fontSize: 16 // You can customize the text color
-                          ),
+                          fontSize: 16),
                     ),
                   ],
                 ),
@@ -90,29 +82,26 @@ class _PushNotificationsState extends State<PushNotifications> {
                   RadioListTile<int>(
                     value: 1,
                     groupValue: _selectedValue,
-                    title: Text(
-                        "                                                  Right away"),
+                    title: const Text(
+                        "                                            Right away"),
                     onChanged: _handleRadioValueChange,
-                    activeColor:
-                        Colors.green, // Color of the selected radio button
+                    activeColor: Colors.green,
                   ),
                   RadioListTile<int>(
                     value: 2,
                     groupValue: _selectedValue,
-                    title: Text(
-                        "                                                  Once a day"),
+                    title: const Text(
+                        "                                           Once a day"),
                     onChanged: _handleRadioValueChange,
-                    activeColor:
-                        Colors.green, // Color of the selected radio button
+                    activeColor: Colors.green,
                   ),
                   RadioListTile<int>(
                     value: 3,
                     groupValue: _selectedValue,
-                    title: Text(
-                        "                                                           None"),
+                    title: const Text(
+                        "                                                      None"),
                     onChanged: _handleRadioValueChange,
-                    activeColor:
-                        Colors.green, // Color of the selected radio button
+                    activeColor: Colors.green,
                   ),
                 ],
               ),

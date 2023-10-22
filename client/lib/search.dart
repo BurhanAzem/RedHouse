@@ -1,3 +1,6 @@
+import 'package:client/view/screen/filter/filters_listview.dart';
+import 'package:client/search_bar.dart';
+import 'package:client/sort_options.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -8,115 +11,45 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  bool isListView = true;
-  String buttonText = "List";
-  IconData buttonIcon = Icons.list;
-
-  void toggleView() {
-    setState(() {
-      isListView = !isListView;
-      buttonText = isListView ? "List" : "Map";
-      buttonIcon = isListView ? Icons.list : Icons.map_outlined;
-    });
-  }
+  bool _isListIcon = true;
+  int resultsCount = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
         child: Column(
           children: [
-            Row(
-              children: [
-                Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 79,
-                          child: GestureDetector(
-                            onTap: () {
-                              toggleView(); // Call the function to change the view
-                            },
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 8),
-                                  child: Text(
-                                    buttonText, // Display updated text
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                Icon(
-                                  buttonIcon, // Display updated icon
-                                  color: Colors.black,
-                                  size: 30,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            showSearch(
-                                context: context, delegate: HomeSearch());
-                          },
-                          child: Text(
-                            "    City, Zip, School, or Addr",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.grey[400],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-                Text("e...   ",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[400],
-                    )),
-                Icon(
-                  Icons.search_outlined,
-                  size: 27,
-                ),
-              ],
+            Container(
+              padding: EdgeInsets.only(top: 40, left: 22, right: 22),
+              child: Column(
+                children: [
+                  SearchBarRow(
+                    isListIcons: _isListIcon,
+                    onToggleView: () {
+                      setState(() {
+                        _isListIcon = !_isListIcon;
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
+            Container(height: 15),
+            FilterListView(),
+            Container(height: 7),
+            SortOptionsWidget(
+              isListIcon: _isListIcon,
+              resultsCount: resultsCount,
+            ),
+            Divider(thickness: 1.0, color: Colors.black26),
+            Visibility(
+                visible: _isListIcon, child: Container(child: Text("Map"))),
+            Visibility(
+                visible: !_isListIcon, child: Container(child: Text("List"))),
           ],
         ),
       ),
     );
-  }
-}
-
-
-class HomeSearch extends SearchDelegate {
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    
   }
 }
