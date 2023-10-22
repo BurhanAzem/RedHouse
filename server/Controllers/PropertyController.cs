@@ -1,11 +1,11 @@
-﻿using BlueHouse_Server.Dtos.AuthDtos;
-using BlueHouse_Server.Dtos.PropertyDtos;
-using BlueHouse_Server.Services;
+﻿using RedHouse_Server.Dtos.AuthDtos;
+using RedHouse_Server.Dtos.PropertyDtos;
+using RedHouse_Server.Services;
 using Cooking_School.Core.ModelUsed;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BlueHouse_Server.Controllers
+namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -13,14 +13,14 @@ namespace BlueHouse_Server.Controllers
     {
         private IPropertyServices _propertyServices;
 
-        PropertyController(IPropertyServices propertyServices) 
+        public PropertyController(IPropertyServices propertyServices) 
         {
             _propertyServices = propertyServices;
         }
 
 
-        [HttpPost("/Properties")]
-        public async Task<IActionResult> CreateProperty(PropertyDto propertyDto)
+        [HttpPost("/properties")]
+        public async Task<IActionResult> CreateProperty([FromBody] PropertyDto propertyDto)
         {
             if (!ModelState.IsValid)
             {
@@ -30,10 +30,14 @@ namespace BlueHouse_Server.Controllers
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
-                throw new StatusCodeException(code.Value, result.Exception);
+                 throw new StatusCodeException(code.Value, result.Exception);
             }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 
         }
     }
 }
+
+
+

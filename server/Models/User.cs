@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
-namespace BlueHouse_Server.Models
+using Microsoft.OpenApi.Any;
+namespace RedHouse_Server.Models
 {
     public class User
     {

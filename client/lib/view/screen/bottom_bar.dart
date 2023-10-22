@@ -1,8 +1,9 @@
-import 'package:client/more.dart';
-import 'package:client/myhome.dart';
-import 'package:client/mylistings.dart';
-import 'package:client/notifications.dart';
-import 'package:client/search.dart';
+
+import 'package:client/view/screen/more.dart';
+import 'package:client/view/screen/myhome.dart';
+import 'package:client/view/screen/mylistings.dart';
+import 'package:client/view/screen/notification/notifications.dart';
+import 'package:client/view/screen/search.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {

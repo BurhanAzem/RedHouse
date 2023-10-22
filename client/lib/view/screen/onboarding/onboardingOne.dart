@@ -1,10 +1,11 @@
-
-import 'package:client/controller/onboarding_controller.dart';
+import 'package:client/controller/onboarding/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OnBoardingTwo extends StatelessWidget {
-  const OnBoardingTwo({Key? key}) : super(key: key);
+class OnBoardingOne extends StatelessWidget {
+  // final PageController pageController;
+
+  const OnBoardingOne({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,41 +40,35 @@ class OnBoardingTwo extends StatelessWidget {
                 Container(
                   height: 30,
                 ),
+                Image.asset("assets/images/red-tree.png", scale: 1),
                 Container(
-                  child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0), // Same radius as in the BoxDecoration
-                  child: Image.asset("assets/images/redhouse1.png", scale: .8),
+                  height: 50,
                 ),
-                ),
-                Container(
-                  height: 20,
-                ),
-                
                 Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Welcome To ",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Welcome To ",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      "Red",
+                      style: TextStyle(
+                        color: Color(0xffd92328),
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "House",
+                      style: TextStyle(color: Colors.black, fontSize: 24),
+                    ),
+                  ],
                 ),
-                Text(
-                  "Red",
-                  style: TextStyle(
-                    color: Color(0xffd92328),
-                    fontSize: 42,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "House",
-                  style: TextStyle(color: Colors.black, fontSize: 24),
-                ),
-              ],
-            ),
                 Container(
                   height: 10,
                 ),
@@ -86,9 +81,9 @@ class OnBoardingTwo extends StatelessWidget {
                   ),
                 ),
                 Container(
-              height: 20,
-            ),
-                            Row(
+                  height: 30,
+                ),
+                Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ...List.generate(
@@ -104,22 +99,24 @@ class OnBoardingTwo extends StatelessWidget {
               ],
             ),
             Container(
-                  height: 10,
+                  height: 30,
                 ),
                 Container(
                   width: 220,
                   child: MaterialButton(
-                      onPressed: () {
-                        controller.toOnBoardingThree();
-                      },
-                      child: Text(
-                          "Next", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),), // Provide a child for the button
-                      color: Color(0xffd92328),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    
-                      ),
+                    onPressed: () {
+                      controller.toOnBoardingTwo();
+                    },
+                    child: Text(
+                      "Next",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w700),
+                    ), // Provide a child for the button
+                    color: Color(0xffd92328),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 )
               ],
             ),

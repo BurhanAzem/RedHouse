@@ -39,11 +39,11 @@ class SignUpControllerImp extends SignUpController {
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
+        if (response['message'] == "success") {
           data.addAll(response['data']);
           // Get.offNamed(AppRoute.verfiyCodeSignUp);
         } else {
-          Get.defaultDialog(title: "ُWarning" , middleText: "Phone Number Or Email Already Exists") ; 
+          Get.defaultDialog(title: "ُWarning" , middleText: response['message']) ; 
           statusRequest = StatusRequest.failure;
         }
       }

@@ -1,4 +1,4 @@
-﻿namespace BlueHouse_Server.Dtos.NeighborhoodDtos
+﻿namespace RedHouse_Server.Dtos.NeighborhoodDtos
 {
     public class NeighborhoodDto
     {

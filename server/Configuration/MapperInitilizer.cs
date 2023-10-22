@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 
 using Cooking_School.Core.ModelUsed;
-using BlueHouse_Server.Migrations;
-using BlueHouse_Server.Models;
+using RedHouse_Server.Migrations;
+using RedHouse_Server.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using BlueHouse_Server.Dtos.AuthDtos;
+using RedHouse_Server.Dtos.AuthDtos;
 
 namespace Cooking_School_ASP.NET.Configurations
 {

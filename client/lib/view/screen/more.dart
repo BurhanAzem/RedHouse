@@ -1,6 +1,6 @@
-import 'package:client/notifications_settings.dart';
 import 'package:client/view/screen/login.dart';
-import 'package:client/view/screen/register_one.dart';
+import 'package:client/view/screen/notification/notifications_settings.dart';
+import 'package:client/view/screen/register/register_one.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable

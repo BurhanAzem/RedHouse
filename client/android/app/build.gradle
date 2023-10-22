@@ -2,7 +2,13 @@ plugins {
     id "com.android.application"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id 'com.google.gms.google-services'
+    
 }
+    apply plugin: 'com.google.gms.google-services'
+// apply plugin: 'com.android.application'
+// // Add this line
+// apply plugin: 'com.google.gms.google-services'
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -49,6 +55,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        // multiDexEnabled=true
     }
 
     buildTypes {
@@ -58,10 +65,22 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+//     android {
+//     configurations {
+//         all*.exclude group: 'com.github.yalantis', module: 'ucrop'
+//     }
+// }
+
 }
 
 flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:32.3.1')
+    implementation 'com.google.firebase:firebase-analytics'
+    // implementation 'com.android.support:multidex:1.0.3'
+}
+
+

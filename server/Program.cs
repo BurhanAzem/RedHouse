@@ -1,5 +1,5 @@
-using BlueHouse_Server.Models;
-using BlueHouse_Server.Services;
+using RedHouse_Server.Models;
+using RedHouse_Server.Services;
 using Cooking_School.Infrastructure.MiddlewareHandlingEx;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +44,7 @@ builder.Services.AddAuthentication(auth =>
         //ValidAudience = builder.Configuration["AuthSettings:Audience"],
         //ValidIssuer = builder.Configuration["AuthSettings:Issuer"],
         RequireExpirationTime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:Key"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:Key"]!)),
         ValidateIssuerSigningKey = true
     };
 });
@@ -56,6 +56,7 @@ var mapperConfig = new MapperConfiguration(mc =>
 var mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper); 
 builder.Services.AddScoped<IAuthServices, AuthServices>();
+builder.Services.AddScoped<IPropertyServices, PropertyServices>();
 var app = builder.Build();
 app.UseMiddleware<ErrorHandlingMiddlewareExtensions>();
 

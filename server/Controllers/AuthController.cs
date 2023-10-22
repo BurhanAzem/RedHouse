@@ -1,5 +1,5 @@
-﻿using BlueHouse_Server.Dtos.AuthDtos;
-using BlueHouse_Server.Services;
+﻿using RedHouse_Server.Dtos.AuthDtos;
+using RedHouse_Server.Services;
 using Cooking_School.Core.ModelUsed;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 using System.Reflection.PortableExecutable;
 using System.Security.Policy;
 
-namespace BlueHouse_Server.Controllers
+namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -21,7 +21,7 @@ namespace BlueHouse_Server.Controllers
 
         // /api/auth/register
         [HttpPost("/auth/register")]
-        public async Task<IActionResult> Register(RegisterDto registerDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,7 +38,7 @@ namespace BlueHouse_Server.Controllers
         }
 
         [HttpPost("/auth/login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {
@@ -61,7 +61,7 @@ namespace BlueHouse_Server.Controllers
 
             // Set the token value in the cookie
             Response.Cookies.Append("AuthToken", result.Message!, cookieOptions);
-            return Ok("Token stored in a cookie.");
+            return Ok(result);
         }
 
         [HttpPost("/auth/logout")]

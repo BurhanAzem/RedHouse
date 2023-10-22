@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.Metrics;
 
-namespace BlueHouse_Server.Models
+namespace RedHouse_Server.Models
 {
     public class Property
     {
@@ -20,15 +20,14 @@ namespace BlueHouse_Server.Models
         public int NumberOfBathRooms { get;set; }
         public float SquareMetersArea { get; set; }
         public string PropertyDescription { get; set; }
-        public DateTime BuiltYear  { get; set; }
+        public DateTime BuiltYear  { get; set; } = DateTime.Now;
         public string View { get; set; }
         public DateTime AvailableOn { get; set; } = DateTime.Now;
-        public string PropertyStatus { get; set; } = "Accepting Offers";
+        public string PropertyStatus { get; set; } = "Accepting offers";
         public int? NumberOfUnits { get; set; } = 1;
         public int ParkingSpots { get; set; }
         public string ListingType { get; set; }
-        public bool IsAvailableBasement { get; set; } = false;
+        public string IsAvailableBasement { get; set; } = "false";
         public string ListingBy { get; set; } = "Landlord";
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

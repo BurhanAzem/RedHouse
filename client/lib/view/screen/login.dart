@@ -1,6 +1,6 @@
 import 'package:client/controller/auth/login_controller.dart';
 import 'package:client/core/functions/validInput.dart';
-import 'package:client/bottom_bar.dart';
+import 'package:client/view/screen/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

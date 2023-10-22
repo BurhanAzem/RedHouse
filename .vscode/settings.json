@@ -3,5 +3,9 @@
     "files.autoSaveDelay": 500,
     "dart.flutterGenerateLocalizationsOnSave": "all",
     "dart.flutterHotReloadOnSave": "all",
-    "dart.hotReloadOnSave": "all"
+    "dart.hotReloadOnSave": "all",
+    "emulator.emulatorPath": "C:\\Program Files\\Android\\Sdk\\emulator",
+    "emulator.emulatorPathWindows": "C:\\Program Files\\Android\\Sdk\\emulator",
+    "emulator.simulatorPath": "C:\\Program Files\\Android\\Sdk\\emulator",
+    "dart.projectSearchDepth": 10
 }
