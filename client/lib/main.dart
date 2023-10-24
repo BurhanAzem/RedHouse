@@ -1,5 +1,6 @@
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/register/register_one.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';

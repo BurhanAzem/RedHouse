@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace RedHouse_Server.Services
 {
@@ -139,30 +140,47 @@ namespace RedHouse_Server.Services
             }
         }
 
-        public string GenerateJwtToken(IdentityUser user)
-        {
-            var tokenExpiration = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour (adjust as needed).
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+public string GenerateJwtToken(IdentityUser user)
+{
+    var tokenExpiration = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour (adjust as needed).
 
-            var claims = new List<Claim>
+    // Generate a strong, random key of sufficient length
+    var securityKey = GenerateStrongSecurityKey();
+
+    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+    var claims = new List<Claim>
     {
         new Claim(ClaimTypes.Name, user.UserName),
         // Add other claims as needed
     };
 
-            var token = new JwtSecurityToken(
-                issuer: "your-issuer",
-                audience: "your-audience",
-                claims: claims,
-                expires: tokenExpiration,
-                signingCredentials: credentials
-            );
+    var token = new JwtSecurityToken(
+        issuer: "your-issuer",
+        audience: "your-audience",
+        claims: claims,
+        expires: tokenExpiration,
+        signingCredentials: credentials
+    );
 
-            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-            return tokenString;
-        }
+    return tokenString;
+}
+
+public SymmetricSecurityKey GenerateStrongSecurityKey()
+{
+    // Generate a strong, random key
+    var keyBytes = new byte[32]; // 256 bits
+    using (var rng = new RNGCryptoServiceProvider())
+    {
+        rng.GetBytes(keyBytes);
+    }
+
+    return new SymmetricSecurityKey(keyBytes);
+}
+
+
 
 
 
