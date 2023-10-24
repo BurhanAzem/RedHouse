@@ -1,7 +1,10 @@
 import 'package:client/controller/auth/login_controller.dart';
 import 'package:client/core/functions/validInput.dart';
-import 'package:client/view/screen/bottom_bar.dart';
+import 'package:client/view/bottom_bar/bottom_bar.dart';
+// import 'package:client/view/bottom_bar.dart';
+// import 'package:client/view/screen/bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:client/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class Login extends StatelessWidget {
@@ -130,7 +133,8 @@ class Login extends StatelessWidget {
                 height: 15,
               ),
               MaterialButton(
-                onPressed: () {
+                onPressed: () async {
+                  await setVisitor(true);
                   visitor = true;
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(

@@ -1,4 +1,5 @@
-import 'package:client/view/screen/notification/notifications_settings.dart';
+// import 'package:client/view/screen/notification/notifications_settings.dart';
+import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
 import 'package:flutter/material.dart';
 
 class Notifications extends StatefulWidget {

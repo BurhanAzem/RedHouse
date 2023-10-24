@@ -94,34 +94,36 @@ namespace RedHouse_Server.Services
         }
 
 
-        public async Task<ResponsDto<User>> LoginUser(LoginDto loginDto)
+        public async Task<ResponsDto<string>> LoginUser(LoginDto loginDto)
         {
-            // Use a try-catch block to handle exceptions.
             try
             {
-                User loginUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
                 if (user == null)
                 {
-                    return new ResponsDto<User>
+                    return new ResponsDto<string>
                     {
                         Exception = new Exception("User Not found"),
                         StatusCode = HttpStatusCode.BadRequest,
                     };
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user, loginDto.Password, true, lockoutOnFailure: false);
+                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
-                    return new ResponsDto<User>
+                    var token = GenerateJwtToken(user);
+
+                    return new ResponsDto<string>
                     {
                         Message = "You are logged in successfully",
                         StatusCode = HttpStatusCode.OK,
-                        Dto = loginUser
+                        Dto = token
                     };
                 }
 
-                return new ResponsDto<User>
+                return new ResponsDto<string>
                 {
                     Exception = new Exception("Invalid login attempt."),
                     StatusCode = HttpStatusCode.BadRequest,
@@ -129,14 +131,40 @@ namespace RedHouse_Server.Services
             }
             catch (Exception ex)
             {
-                // Handle and log exceptions as needed.
-                return new ResponsDto<User>
+                return new ResponsDto<string>
                 {
                     Exception = ex,
                     StatusCode = HttpStatusCode.InternalServerError,
                 };
             }
         }
+
+        public string GenerateJwtToken(IdentityUser user)
+        {
+            var tokenExpiration = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour (adjust as needed).
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.UserName),
+        // Add other claims as needed
+    };
+
+            var token = new JwtSecurityToken(
+                issuer: "your-issuer",
+                audience: "your-audience",
+                claims: claims,
+                expires: tokenExpiration,
+                signingCredentials: credentials
+            );
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return tokenString;
+        }
+
+
 
         public async Task<ResponsDto<User>> Logout()
         {

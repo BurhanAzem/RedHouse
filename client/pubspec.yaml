@@ -58,7 +58,7 @@ dependencies:
   cloud_firestore: ^4.11.0
   # Local Data Cache
   sqflite: ^2.0.2
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.2.2
   # Qrcode
   qr_flutter: ^4.0.0
   scan: ^1.6.0

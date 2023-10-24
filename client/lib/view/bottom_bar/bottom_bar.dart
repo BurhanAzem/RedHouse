@@ -1,9 +1,8 @@
-
-import 'package:client/view/screen/more.dart';
-import 'package:client/view/screen/myhome.dart';
-import 'package:client/view/screen/mylistings.dart';
-import 'package:client/view/screen/notification/notifications.dart';
-import 'package:client/view/screen/search.dart';
+import 'package:client/view/bottom_bar/more/more.dart';
+import 'package:client/view/bottom_bar/myhome/myhome.dart';
+import 'package:client/view/bottom_bar/mylistings/mylistings.dart';
+import 'package:client/view/bottom_bar/notification/notifications.dart';
+import 'package:client/view/bottom_bar/search/search.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
@@ -39,10 +38,10 @@ class _BottomBarState extends State<BottomBar> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          More(visitor: widget.visitor), 
+          More(visitor: widget.visitor),
           MyHome(),
           Notifications(),
-          MyListings(), 
+          MyListings(),
           Search(),
         ],
       ),

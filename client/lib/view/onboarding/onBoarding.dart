@@ -1,8 +1,8 @@
 
-import 'package:client/view/screen/onboarding/onboardingFour.dart';
-import 'package:client/view/screen/onboarding/onboardingOne.dart';
-import 'package:client/view/screen/onboarding/onboardingThree.dart';
-import 'package:client/view/screen/onboarding/onboardingTwo.dart';
+import 'package:client/view/onboarding/onboardingFour.dart';
+import 'package:client/view/onboarding/onboardingOne.dart';
+import 'package:client/view/onboarding/onboardingThree.dart';
+import 'package:client/view/onboarding/onboardingTwo.dart';
 import 'package:flutter/material.dart';
 
 class OnBoarding extends StatelessWidget {
