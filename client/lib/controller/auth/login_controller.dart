@@ -6,14 +6,15 @@ import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class LoginController extends GetxController{
+abstract class LoginController extends GetxController {
   login();
   goToSignUp();
   goToLogin();
+  goToSearch();
+  goToBottomBar();
 }
 
 class LoginControllerImp extends LoginController {
-
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
   LoginData loginData = LoginData(new Crud());
 
@@ -22,32 +23,36 @@ class LoginControllerImp extends LoginController {
   late StatusRequest statusRequest;
   List data = [];
 
-  @override 
-  login () async{
+  @override
+  login() async {
     if (formstate.currentState!.validate()) {
       // statusRequest = StatusRequest.loading;
       var response = await loginData.postdata(password.text, email.text);
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
       if (response['statusCode'] == 200) {
-          print(response['dto']);
-          // data.addAll(response['dto']);
-          // Get.offNamed(AppRoute.verfiyCodeSignUp);
-        } else {
-      Get.defaultDialog(title: "ُError" , middleText: 'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]') ; 
-          statusRequest = StatusRequest.failure;
-        }
+        print(response['dto']);
+        // data.addAll(response['dto']);
+        // Get.offNamed(AppRoute.verfiyCodeSignUp);
+      } else {
+        Get.defaultDialog(
+            title: "ُError",
+            middleText:
+                'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
+        statusRequest = StatusRequest.failure;
       }
-      
-      // update();
-     else {
-      Get.defaultDialog(title: "ُError" , middleText: 'There is something wronge !') ; 
-          statusRequest = StatusRequest.failure;
+    }
+
+    // update();
+    else {
+      Get.defaultDialog(
+          title: "ُError", middleText: 'There is something wronge !');
+      statusRequest = StatusRequest.failure;
     }
   }
 
   @override
-  goToSignUp(){
+  goToSignUp() {
     Get.toNamed(AppRoute.registerOne);
   }
 
@@ -58,9 +63,8 @@ class LoginControllerImp extends LoginController {
     super.onInit();
   }
 
-
-@override
-  goToLogin(){
+  @override
+  goToLogin() {
     Get.toNamed(AppRoute.login);
   }
 
@@ -69,5 +73,15 @@ class LoginControllerImp extends LoginController {
     email.dispose();
     password.dispose();
     super.dispose();
+  }
+
+  @override
+  goToSearch() {
+    Get.toNamed(AppRoute.search);
+  }
+
+  @override
+  goToBottomBar() {
+    Get.toNamed(AppRoute.bottomBar);
   }
 }
