@@ -1,14 +1,10 @@
 import 'package:client/routes.dart';
-import 'package:client/view/screen/add_property/add_property_1.dart';
-import 'package:client/view/screen/bottom_bar.dart';
-import 'package:client/view/screen/login.dart';
-import 'package:client/view/screen/manage_properties.dart';
+import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-// import 'firebase_options.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -19,11 +15,12 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() async{
+void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,  
-);  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

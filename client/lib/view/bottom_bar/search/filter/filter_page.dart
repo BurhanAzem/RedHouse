@@ -1,10 +1,11 @@
-import 'package:client/view/screen/filter/PropertyTypeContent.dart';
-import 'package:client/view/screen/filter/RowEnterPrice%20.dart';
-import 'package:client/view/screen/filter/price_filter.dart';
+import 'package:client/view/bottom_bar/search/filter/BuyFilter.dart';
+import 'package:client/view/bottom_bar/search/filter/RentFilter.dart';
+import 'package:client/view/bottom_bar/search/filter/property_type_sheet%20.dart';
 import 'package:flutter/material.dart';
 
 class FilterPage extends StatefulWidget {
-  const FilterPage({super.key});
+  PropertyTypeSelection selection;
+  FilterPage({Key? key, required this.selection}) : super(key: key);
 
   @override
   _FilterPageState createState() => _FilterPageState();
@@ -15,7 +16,7 @@ class _FilterPageState extends State<FilterPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: 1,
+      initialIndex: widget.selection.listingType ? 1 : 0,
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -63,30 +64,8 @@ class _FilterPageState extends State<FilterPage> {
         ),
         body: TabBarView(
           children: [
-            Center(child: Text('This is the Buy Tab')),
-            ListView(
-              children: [
-                MaterialButton(
-                  onPressed: () {
-                    
-                  },
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Property type",
-                      style: TextStyle(
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ),
-                const Align(
-                    alignment: Alignment.centerRight,
-                    child: Text("Price    ", style: TextStyle(fontSize: 20))),
-                Container(height: 15),
-                RowEnterPrice(),
-              ],
-            )
+            RentFilter(selection: widget.selection),
+            BuyFilter(selection: widget.selection),
           ],
         ),
       ),

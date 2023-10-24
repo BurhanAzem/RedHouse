@@ -1,7 +1,7 @@
 
 
-import 'package:client/view/screen/notification/notifications_tab.dart';
-import 'package:client/view/screen/notification/push_notifications.dart';
+import 'package:client/view/bottom_bar/notification/notifications_tab.dart';
+import 'package:client/view/bottom_bar/notification/push_notifications.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsSettings extends StatelessWidget {

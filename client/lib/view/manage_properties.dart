@@ -1,9 +1,5 @@
-import 'package:client/view/widget/manage_properties/properties.dart';
+import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
-
-
-
-
 
 class ManageProperties extends StatefulWidget {
   const ManageProperties({super.key});
@@ -46,9 +42,7 @@ class _TopNavigationBar extends State<ManageProperties>
       body: TabBarView(
         controller: _tabController,
         children: const <Widget>[
-          Center(
-            child: Properties()
-          ),
+          Center(child: Properties()),
           Center(
             child: Text("It's rainy here"),
           ),

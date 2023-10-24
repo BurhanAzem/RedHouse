@@ -1,6 +1,7 @@
-import 'package:client/view/screen/login.dart';
-import 'package:client/view/screen/notification/notifications_settings.dart';
-import 'package:client/view/screen/register/register_one.dart';
+import 'package:client/shared_preferences.dart';
+import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
+import 'package:client/view/login.dart';
+import 'package:client/view/register/register_one.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -23,110 +24,127 @@ class _MoreState extends State<More> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // check visitor here
-                if (widget.visitor)
-                  Column(
-                    children: <Widget>[
-                      SizedBox(height: 25),
-                      Text(
-                        "Welcome",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 34,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 40),
-                        child: Text(
-                          "Sign up or log in to save listings and get updates on your home search.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (context) => Login()),
-                          );
-                        },
-                        minWidth: 300,
-                        height: 45,
-                        color: Colors.black,
-                        child: Text(
-                          "Log in",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => RegisterOne()),
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account? ",
-                              style: TextStyle(
-                                fontSize: 16,
+                FutureBuilder<bool>(
+                  future: getVisitor(),
+                  builder: (context, snapshot) {
+                    final isVisitor = snapshot.data ?? false;
+
+                    if (isVisitor) {
+                      // Your visitor-specific content here
+                      return Column(
+                        children: <Widget>[
+                          Column(
+                            children: <Widget>[
+                              SizedBox(height: 25),
+                              Text(
+                                "Welcome",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 34,
+                                ),
                               ),
-                            ),
-                            Text(
-                              "sign up",
-                              style: TextStyle(
-                                fontSize: 16,
+                              SizedBox(height: 20),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 40),
+                                child: Text(
+                                  "Sign up or log in to save listings and get updates on your home search.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => Login()),
+                                  );
+                                },
+                                minWidth: 300,
+                                height: 45,
                                 color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
+                                child: Text(
+                                  "Log in",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                    ],
-                  ),
-                if (!widget.visitor)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text('ayman.dwikat.2001@gmail.com',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                            )),
-                      ),
-                      MaterialButton(
-                        onPressed: () {
-                          setState(() {
-                            widget.visitor = true;
-                          });
-                        },
-                        child: Text('Log out',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 17,
-                            )),
-                      ),
-                    ],
-                  ),
+                              SizedBox(height: 20),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => RegisterOne()),
+                                  );
+                                },
+                                child: const Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Don't have an account? ",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    Text(
+                                      "sign up",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                            ],
+                          ),
+                        ],
+                      );
+                    } else {
+                      // Content for non-visitors
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text('ayman.dwikat.2001@gmail.com',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                )),
+                          ),
+                          MaterialButton(
+                            onPressed: () async {
+                              await setVisitor(true);
+                              setState(() {
+                                widget.visitor = true;
+                              });
+                            },
+                            child: Text('Log out',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 17,
+                                )),
+                          ),
+                        ],
+                      );
+                    }
+                  },
+                ),
+
                 Divider(
                   height: 1,
                   color: Colors.black,

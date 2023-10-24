@@ -1,6 +1,6 @@
-import 'package:client/view/screen/filter/filters_listview.dart';
-import 'package:client/search_bar.dart';
-import 'package:client/sort_options.dart';
+import 'package:client/view/bottom_bar/search/filter/filters_listview.dart';
+import 'package:client/view/bottom_bar/search/search_bar.dart';
+import 'package:client/view/bottom_bar/search/sort_options.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -44,7 +44,7 @@ class _SearchState extends State<Search> {
             ),
             Divider(thickness: 1.0, color: Colors.black26),
             Visibility(
-                visible: _isListIcon, child: Container(child: Text("Map"))),
+                visible: _isListIcon, child: Container(child: Text("x"))),
             Visibility(
                 visible: !_isListIcon, child: Container(child: Text("List"))),
           ],

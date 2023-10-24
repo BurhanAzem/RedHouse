@@ -1,15 +1,25 @@
+import 'package:client/view/bottom_bar/search/filter/property_type_sheet%20.dart';
 import 'package:flutter/material.dart';
 
-class RowEnterPrice extends StatefulWidget {
-  const RowEnterPrice({Key? key}) : super(key: key);
+class RowRentPrice extends StatefulWidget {
+  PropertyTypeSelection selection;
+
+  RowRentPrice({Key? key, required this.selection}) : super(key: key);
 
   @override
-  _RowEnterPriceState createState() => _RowEnterPriceState();
+  _RowRentPriceState createState() => _RowRentPriceState();
 }
 
-class _RowEnterPriceState extends State<RowEnterPrice> {
-  TextEditingController maxController = TextEditingController();
-  TextEditingController minController = TextEditingController();
+class _RowRentPriceState extends State<RowRentPrice> {
+  @override
+  void initState() {
+    super.initState();
+
+    // if (widget.selection.rent_NoMax != 0)
+    //   widget.maxController.text = widget.selection.rent_NoMax.toString();
+    // if (widget.selection.rent_NoMin != 0)
+    //   widget.minController.text = widget.selection.rent_NoMin.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +28,7 @@ class _RowEnterPriceState extends State<RowEnterPrice> {
         Container(width: 12),
         Expanded(
           child: TextField(
-            controller: maxController,
+            controller: widget.selection.rentMaxController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               hintText: "No max",
@@ -30,7 +40,7 @@ class _RowEnterPriceState extends State<RowEnterPrice> {
               suffix: GestureDetector(
                 onTap: () {
                   setState(() {
-                    maxController.clear();
+                    widget.selection.rentMaxController.clear();
                   });
                 },
                 child: Container(
@@ -51,7 +61,7 @@ class _RowEnterPriceState extends State<RowEnterPrice> {
         Container(width: 15),
         Expanded(
           child: TextField(
-            controller: minController,
+            controller: widget.selection.rentMinController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               hintText: "No min",
@@ -63,7 +73,7 @@ class _RowEnterPriceState extends State<RowEnterPrice> {
               suffix: GestureDetector(
                 onTap: () {
                   setState(() {
-                    minController.clear();
+                    widget.selection.rentMinController.clear();
                   });
                 },
                 child: Container(
