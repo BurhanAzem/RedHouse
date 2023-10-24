@@ -1,22 +1,22 @@
-import 'package:client/view/screen/add_property/add_property_1.dart';
-import 'package:client/view/screen/add_property/add_property_2.dart';
-import 'package:client/view/screen/add_property/add_property_3.dart';
-import 'package:client/view/screen/add_property/add_property_4.dart';
-import 'package:client/view/screen/add_property/add_property_5.dart';
-import 'package:client/view/screen/add_property/add_property_6.dart';
-import 'package:client/view/screen/add_property/add_property_7.dart';
-import 'package:client/view/screen/add_property/add_property_8.dart';
-import 'package:client/view/screen/add_property/add_property_9.dart';
-import 'package:client/view/screen/login.dart';
-import 'package:client/view/screen/onboarding/onBoarding.dart';
-import 'package:client/view/screen/onboarding/onboardingFour.dart';
-import 'package:client/view/screen/onboarding/onboardingOne.dart';
-import 'package:client/view/screen/onboarding/onboardingThree.dart';
-import 'package:client/view/screen/onboarding/onboardingTwo.dart';
-
-import 'package:client/view/screen/register/register_one.dart';
-import 'package:client/view/screen/register/register_two.dart';
-
+import 'package:client/view/add_property/add_property_1.dart';
+import 'package:client/view/add_property/add_property_2.dart';
+import 'package:client/view/add_property/add_property_3.dart';
+import 'package:client/view/add_property/add_property_4.dart';
+import 'package:client/view/add_property/add_property_5.dart';
+import 'package:client/view/add_property/add_property_6.dart';
+import 'package:client/view/add_property/add_property_7.dart';
+import 'package:client/view/add_property/add_property_8.dart';
+import 'package:client/view/add_property/add_property_9.dart';
+import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/bottom_bar/search/search.dart';
+import 'package:client/view/login.dart';
+import 'package:client/view/onboarding/onBoarding.dart';
+import 'package:client/view/onboarding/onboardingFour.dart';
+import 'package:client/view/onboarding/onboardingOne.dart';
+import 'package:client/view/onboarding/onboardingThree.dart';
+import 'package:client/view/onboarding/onboardingTwo.dart';
+import 'package:client/view/register/register_one.dart';
+import 'package:client/view/register/register_two.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
@@ -37,6 +37,8 @@ class AppRoute {
   static const String addProperty7 = "/add-property7";
   static const String addProperty8 = "/add-property8";
   static const String addProperty9 = "/add-property9";
+  static const String search = "/go-search";
+  static const String bottomBar = "/go-bottomBar";
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
@@ -57,6 +59,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
   AppRoute.addProperty9: (context) => AddProperty9(),
-
+  AppRoute.search: (context) => Search(),
+  AppRoute.bottomBar: (context) => BottomBar(),
 
 };

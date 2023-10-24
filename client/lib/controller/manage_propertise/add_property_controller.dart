@@ -1,8 +1,6 @@
 import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
-import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/add_property.dart';
-import 'package:client/data/login.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,24 +48,23 @@ class AddPropertyControllerImp extends AddPropertyController {
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
       var response = await propertyData.postdata(
-        propertyType,
-        price.text,
-        numberOfBedrooms.text,
-        numberOfBathrooms.text,
-        squareMeter.text,
-        propertyDescription.text,
-        builtYear,
-        view,
-        availableDate,
-        propertyStatus,
-        numberOfUnits?.text ?? "",
-        parkingSpots.text,
-        listingType,
-        isAvaliableBasement,
-        listingBy,
-        userId,
-        downloadUrls
-      );
+          propertyType,
+          price.text,
+          numberOfBedrooms.text,
+          numberOfBathrooms.text,
+          squareMeter.text,
+          propertyDescription.text,
+          builtYear,
+          view,
+          availableDate,
+          propertyStatus,
+          numberOfUnits?.text ?? "",
+          parkingSpots.text,
+          listingType,
+          isAvaliableBasement,
+          listingBy,
+          userId,
+          downloadUrls);
 
       if (response['statusCode'] == 200) {
         data.addAll(response['data']);
@@ -75,7 +72,8 @@ class AddPropertyControllerImp extends AddPropertyController {
       } else {
         Get.defaultDialog(
           title: "Error",
-          middleText: "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
         );
         statusRequest = StatusRequest.failure;
       }
