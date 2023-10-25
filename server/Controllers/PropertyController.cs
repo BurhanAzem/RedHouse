@@ -5,6 +5,7 @@ using Cooking_School.Core.ModelUsed;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Dtos.PropertyDtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RedHouse_Server.Controllers
 {
@@ -18,7 +19,6 @@ namespace RedHouse_Server.Controllers
         {
             _propertyServices = propertyServices;
         }
-
 
         [HttpPost("/properties")]
         public async Task<IActionResult> CreateProperty([FromBody] PropertyDto propertyDto)

@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 
 namespace RedHouse_Server.Services
 {
@@ -96,11 +97,11 @@ namespace RedHouse_Server.Services
 
         public async Task<ResponsDto<User>> LoginUser(LoginDto loginDto)
         {
-            // Use a try-catch block to handle exceptions.
+            var userRes = await _redHouseDbContext.Users.Where(x => x.Email == loginDto.Email).ToListAsync();
             try
             {
-                User loginUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(x => x.Email == loginDto.Email);
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
                 if (user == null)
                 {
                     return new ResponsDto<User>
@@ -110,14 +111,17 @@ namespace RedHouse_Server.Services
                     };
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(user, loginDto.Password, true, lockoutOnFailure: false);
+                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
+                    var token = GenerateJwtToken(user);
+
                     return new ResponsDto<User>
                     {
-                        Message = "You are logged in successfully",
+                        Message = token,
                         StatusCode = HttpStatusCode.OK,
-                        Dto = loginUser
+                        Dto = userRes[0]
                     };
                 }
 
@@ -129,7 +133,6 @@ namespace RedHouse_Server.Services
             }
             catch (Exception ex)
             {
-                // Handle and log exceptions as needed.
                 return new ResponsDto<User>
                 {
                     Exception = ex,
@@ -137,6 +140,50 @@ namespace RedHouse_Server.Services
                 };
             }
         }
+
+public string GenerateJwtToken(IdentityUser user)
+{
+    var tokenExpiration = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour (adjust as needed).
+
+    // Generate a strong, random key of sufficient length
+    var securityKey = GenerateStrongSecurityKey();
+
+    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+    var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.UserName),
+        // Add other claims as needed
+    };
+
+    var token = new JwtSecurityToken(
+        issuer: "your-issuer",
+        audience: "your-audience",
+        claims: claims,
+        expires: tokenExpiration,
+        signingCredentials: credentials
+    );
+
+    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+    return tokenString;
+}
+
+public SymmetricSecurityKey GenerateStrongSecurityKey()
+{
+    // Generate a strong, random key
+    var keyBytes = new byte[32]; // 256 bits
+    using (var rng = new RNGCryptoServiceProvider())
+    {
+        rng.GetBytes(keyBytes);
+    }
+
+    return new SymmetricSecurityKey(keyBytes);
+}
+
+
+
+
 
         public async Task<ResponsDto<User>> Logout()
         {

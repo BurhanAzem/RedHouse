@@ -139,7 +139,7 @@ class _PriceState extends State<Price> {
       child: Text(
         "Price",
         style: TextStyle(
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.bold,
           fontSize: 17,
         ),
       ),
