@@ -31,7 +31,7 @@ class _NotificationsTabState extends State<NotificationsTab> {
           children: <Widget>[
             SizedBox(height: 30),
             Text(
-              "Property updates",
+              "      Property updates",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 19,
@@ -82,7 +82,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
             ),
             SizedBox(height: 15),
             CheckboxListTile(
-              title: Text("New listings"),
+              title: Text(
+                "New listings",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.black,
+                ),
+              ),
               value: newListingChecked,
               onChanged: (value) {
                 setState(() {
@@ -92,7 +98,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
               activeColor: Colors.green, // Color when selected
             ),
             CheckboxListTile(
-              title: Text("Price changes"),
+              title: Text(
+                "Price changes",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.black,
+                ),
+              ),
               value: priceChangeChecked,
               onChanged: (value) {
                 setState(() {
@@ -102,7 +114,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
               activeColor: Colors.green,
             ),
             CheckboxListTile(
-              title: Text("Open houses"),
+              title: Text(
+                "Open houses",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.black,
+                ),
+              ),
               value: openHousesChecked,
               onChanged: (value) {
                 setState(() {
@@ -112,7 +130,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
               activeColor: Colors.green,
             ),
             CheckboxListTile(
-              title: Text("Status changes"),
+              title: Text(
+                "Status changes",
+                style: TextStyle(
+                  fontSize: 17,
+                  color: Colors.black,
+                ),
+              ),
               value: statusChangeChecked,
               onChanged: (value) {
                 setState(() {

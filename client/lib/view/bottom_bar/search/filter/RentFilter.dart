@@ -190,8 +190,8 @@ class _RentFilterState extends State<RentFilter> {
           ),
         ),
         const Align(
-            alignment: Alignment.centerRight,
-            child: Text("Price    ", style: TextStyle(fontSize: 20))),
+            alignment: Alignment.centerLeft,
+            child: Text("Price", style: TextStyle(fontSize: 20))),
         Container(height: 15),
         RowRentPrice(selection: widget.selection),
         Container(height: 20),

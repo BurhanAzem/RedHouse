@@ -84,22 +84,22 @@ class OnBoardingOne extends StatelessWidget {
                   height: 30,
                 ),
                 Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...List.generate(
-                    4,
-                    (index) => Container(
-                          margin: const EdgeInsets.only(right: 5),
-                          height: 6,
-                          width: 6,
-                          decoration: BoxDecoration(
-                          color: Color(0xffd92328),
-                              borderRadius: BorderRadius.circular(10)),
-                        ))
-              ],
-            ),
-            Container(
-                  height: 30,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...List.generate(
+                        4,
+                        (index) => Container(
+                              margin: const EdgeInsets.only(right: 5),
+                              height: 6,
+                              width: 6,
+                              decoration: BoxDecoration(
+                                  color: Color(0xffd92328),
+                                  borderRadius: BorderRadius.circular(10)),
+                            ))
+                  ],
+                ),
+                Container(
+                  height: 20,
                 ),
                 Container(
                   width: 220,

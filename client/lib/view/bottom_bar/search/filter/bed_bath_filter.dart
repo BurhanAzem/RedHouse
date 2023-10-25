@@ -130,7 +130,7 @@ class _BedBathState extends State<BedBath> {
       child: Text(
         "Bed / Bath",
         style: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           fontSize: 17,
         ),
       ),

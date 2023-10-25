@@ -28,10 +28,10 @@ class _RowRentPriceState extends State<RowRentPrice> {
         Container(width: 12),
         Expanded(
           child: TextField(
-            controller: widget.selection.rentMaxController,
+            controller: widget.selection.rentMinController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              hintText: "No max",
+              hintText: "No min",
               contentPadding:
                   EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               border: OutlineInputBorder(
@@ -40,7 +40,7 @@ class _RowRentPriceState extends State<RowRentPrice> {
               suffix: GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.selection.rentMaxController.clear();
+                    widget.selection.rentMinController.clear();
                   });
                 },
                 child: Container(
@@ -61,10 +61,10 @@ class _RowRentPriceState extends State<RowRentPrice> {
         Container(width: 15),
         Expanded(
           child: TextField(
-            controller: widget.selection.rentMinController,
+            controller: widget.selection.rentMaxController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              hintText: "No min",
+              hintText: "No max",
               contentPadding:
                   EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               border: OutlineInputBorder(
@@ -73,7 +73,7 @@ class _RowRentPriceState extends State<RowRentPrice> {
               suffix: GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.selection.rentMinController.clear();
+                    widget.selection.rentMaxController.clear();
                   });
                 },
                 child: Container(

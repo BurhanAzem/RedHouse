@@ -86,7 +86,7 @@ class OnBoardingTwo extends StatelessWidget {
                   ),
                 ),
                 Container(
-              height: 20,
+              height: 24,
             ),
                             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -104,7 +104,7 @@ class OnBoardingTwo extends StatelessWidget {
               ],
             ),
             Container(
-                  height: 10,
+                  height: 19,
                 ),
                 Container(
                   width: 220,

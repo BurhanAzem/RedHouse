@@ -1,6 +1,5 @@
-
-
 import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,38 +37,37 @@ class OnBoardingFour extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 30,
+                  height: 53,
                 ),
                 Image.asset("assets/images/for-rent.jpg", scale: 0.5),
                 Container(
-                  height: 50,
+                  height: 73,
                 ),
-                
                 Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Welcome To ",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Welcome To ",
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      "Red",
+                      style: TextStyle(
+                        color: Color(0xffd92328),
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      "House",
+                      style: TextStyle(color: Colors.black, fontSize: 24),
+                    ),
+                  ],
                 ),
-                Text(
-                  "Red",
-                  style: TextStyle(
-                    color: Color(0xffd92328),
-                    fontSize: 42,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  "House",
-                  style: TextStyle(color: Colors.black, fontSize: 24),
-                ),
-              ],
-            ),
                 Container(
                   height: 10,
                 ),
@@ -82,40 +80,42 @@ class OnBoardingFour extends StatelessWidget {
                   ),
                 ),
                 Container(
-              height: 30,
-            ),
-                            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...List.generate(
-                    4,
-                    (index) => Container(
-                          margin: const EdgeInsets.only(right: 5),
-                          height: 6,
-                          width: 6,
-                          decoration: BoxDecoration(
-                          color: Color(0xffd92328),
-                              borderRadius: BorderRadius.circular(10)),
-                        ))
-              ],
-            ),
-            Container(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...List.generate(
+                        4,
+                        (index) => Container(
+                              margin: const EdgeInsets.only(right: 5),
+                              height: 6,
+                              width: 6,
+                              decoration: BoxDecoration(
+                                  color: Color(0xffd92328),
+                                  borderRadius: BorderRadius.circular(10)),
+                            ))
+                  ],
+                ),
+                Container(
                   height: 20,
                 ),
                 Container(
                   width: 220,
                   child: MaterialButton(
-                      onPressed: () {
-                        controller.goToLogin();
-                      },
-                      child: Text(
-                          "Next", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),), // Provide a child for the button
-                      color: Color(0xffd92328),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    
-                      ),
+                    onPressed: () {
+                      controller.goToBottomBar();
+                    },
+                    child: Text(
+                      "Next",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w700),
+                    ), // Provide a child for the button
+                    color: Color(0xffd92328),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 )
               ],
             ),

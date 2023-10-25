@@ -20,19 +20,11 @@ class _FilterListViewState extends State<FilterListView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35,
+      height: 37,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
           Text("      "),
-          PropertyType(selection: propertyTypeSelection),
-          Text("   "),
-          BedBath(),
-          Text("   "),
-          Price(
-            selection: propertyTypeSelection,
-          ),
-          Text("   "),
           MaterialButton(
               onPressed: () {
                 Navigator.push(
@@ -52,22 +44,30 @@ class _FilterListViewState extends State<FilterListView> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(100),
                 side: BorderSide(
-                  color: Colors.grey,
-                  width: 1.6,
+                  color: Color.fromARGB(255, 169, 169, 169),
+                  width: 1.5,
                 ),
               ),
               child: Row(
                 children: [
-                  Icon(Icons.tune, size: 21),
+                  Icon(Icons.tune, size: 20),
                   Text(
                     " Filters",
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 17,
                     ),
                   ),
                 ],
               )),
+          Text("   "),
+          Price(
+            selection: propertyTypeSelection,
+          ),
+          Text("   "),
+          BedBath(),
+          Text("   "),
+          PropertyType(selection: propertyTypeSelection),
           Text("      "),
         ],
       ),

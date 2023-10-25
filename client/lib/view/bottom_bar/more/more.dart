@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class More extends StatefulWidget {
-  bool visitor;
-  More({Key? key, required this.visitor}) : super(key: key);
+  More({Key? key}) : super(key: key);
 
   @override
   State<More> createState() => _MoreState();
@@ -126,10 +125,9 @@ class _MoreState extends State<More> {
                                 )),
                           ),
                           MaterialButton(
-                            onPressed: () async {
-                              await setVisitor(true);
-                              setState(() {
-                                widget.visitor = true;
+                            onPressed: () {
+                              setState(() async {
+                                await setVisitor(true);
                               });
                             },
                             child: Text('Log out',

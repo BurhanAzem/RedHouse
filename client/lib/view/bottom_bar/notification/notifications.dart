@@ -17,6 +17,15 @@ class _NotificationsState extends State<Notifications> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                'Notifications',
+                style: TextStyle(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
             Padding(
               padding: EdgeInsets.only(top: 10),
               child: IconButton(
@@ -28,15 +37,6 @@ class _NotificationsState extends State<Notifications> {
                         builder: (context) => NotificationsSettings()),
                   );
                 },
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 10),
-              child: Text(
-                'Notifications',
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                ),
               ),
             ),
           ],

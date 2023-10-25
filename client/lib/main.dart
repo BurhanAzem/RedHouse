@@ -1,6 +1,7 @@
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
-import 'package:client/view/register/register_one.dart';
+import 'package:client/view/onboarding/onBoarding.dart';
+import 'package:client/view/welcoming.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: "Poppins",
       ),
-      home: BottomBar(false),
+      home: BottomBar(),
       routes: routes,
     );
   }

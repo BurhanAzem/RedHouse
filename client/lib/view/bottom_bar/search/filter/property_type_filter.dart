@@ -307,8 +307,7 @@ class _PropertyTypeState extends State<PropertyType> {
           child: Text(
             "Property type",
             style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               fontSize: 17,
             ),
             overflow: TextOverflow.ellipsis,

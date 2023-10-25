@@ -186,8 +186,8 @@ class _BuyFilterState extends State<BuyFilter> {
           ),
         ),
         const Align(
-            alignment: Alignment.centerRight,
-            child: Text("Price    ", style: TextStyle(fontSize: 20))),
+            alignment: Alignment.centerLeft,
+            child: Text("Price", style: TextStyle(fontSize: 20))),
         Container(height: 15),
         RowBuyPrice(selection: widget.selection),
         Container(height: 20),

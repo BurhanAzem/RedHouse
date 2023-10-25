@@ -16,7 +16,7 @@ class _FilterPageState extends State<FilterPage> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: widget.selection.listingType ? 1 : 0,
+      initialIndex: widget.selection.listingType ? 0 : 1,
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -45,8 +45,8 @@ class _FilterPageState extends State<FilterPage> {
           ),
           bottom: TabBar(
             tabs: [
-              Tab(text: 'Rent'),
               Tab(text: 'Buy'),
+              Tab(text: 'Rent'),
             ],
             overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
             indicatorColor: Colors.black,
@@ -64,8 +64,8 @@ class _FilterPageState extends State<FilterPage> {
         ),
         body: TabBarView(
           children: [
-            RentFilter(selection: widget.selection),
             BuyFilter(selection: widget.selection),
+            RentFilter(selection: widget.selection),
           ],
         ),
       ),

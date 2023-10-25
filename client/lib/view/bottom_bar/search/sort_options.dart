@@ -35,17 +35,24 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
-      height: widget.isListIcon ? 0.0 : 42,
+      height: widget.isListIcon ? 0.0 : 35,
       child: Visibility(
         visible: !widget.isListIcon,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 8),
+                padding: EdgeInsets.symmetric(horizontal: 25),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Text(
+                      " ${widget.resultsCount} results",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         showModalBottomSheet(
@@ -167,19 +174,20 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                           });
                         });
                       },
-                      child: Text(
-                        "Sort: $_selectedText",
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      "Results ${widget.resultsCount}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                      child: Row(
+                        children: [
+                          Text(
+                            "$_selectedText",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Icon(
+                            Icons.keyboard_arrow_down_sharp,
+                            size: 24,
+                          ),
+                        ],
                       ),
                     ),
                   ],

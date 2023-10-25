@@ -34,7 +34,7 @@ class _PushNotificationsState extends State<PushNotifications> {
           children: <Widget>[
             SizedBox(height: 30),
             Text(
-              "Property updates",
+              "      Property updates",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 19,
@@ -77,37 +77,35 @@ class _PushNotificationsState extends State<PushNotifications> {
             ),
             SizedBox(height: 15),
             Container(
-              child: Column(
-                children: <Widget>[
-                  RadioListTile<int>(
-                    value: 1,
-                    groupValue: _selectedValue,
-                    title: const Text(
-                        "                                            Right away"),
-                    onChanged: _handleRadioValueChange,
-                    activeColor: Colors.green,
-                  ),
-                  RadioListTile<int>(
-                    value: 2,
-                    groupValue: _selectedValue,
-                    title: const Text(
-                        "                                           Once a day"),
-                    onChanged: _handleRadioValueChange,
-                    activeColor: Colors.green,
-                  ),
-                  RadioListTile<int>(
-                    value: 3,
-                    groupValue: _selectedValue,
-                    title: const Text(
-                        "                                                      None"),
-                    onChanged: _handleRadioValueChange,
-                    activeColor: Colors.green,
-                  ),
-                ],
-              ),
-            ),
+                child: Column(
+              children: <Widget>[
+                _buildRadioListTile(1, " Right away"),
+                _buildRadioListTile(2, " Once a day"),
+                _buildRadioListTile(3, " None"),
+              ],
+            )),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildRadioListTile(int value, String title) {
+    return RadioListTile<int>(
+      value: value,
+      groupValue: _selectedValue,
+      onChanged: _handleRadioValueChange,
+      activeColor: Colors.green,
+      controlAffinity: ListTileControlAffinity.trailing,
+      title: Row(
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 17.5,
+            ),
+          ),
+        ],
       ),
     );
   }

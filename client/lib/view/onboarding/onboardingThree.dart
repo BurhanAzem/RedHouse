@@ -38,11 +38,11 @@ class OnBoardingThree extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 30,
+                  height: 57,
                 ),
                 Image.asset("assets/images/for-sale2.jpg", scale: 1.2),
                 Container(
-                  height: 50,
+                  height: 77,
                 ),
                 
                 Row(

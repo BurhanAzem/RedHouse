@@ -18,71 +18,75 @@ class SearchBarRow extends StatefulWidget {
 class _SearchBarRowState extends State<SearchBarRow> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: GestureDetector(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
             onTap: () {
               // SearchDelegate
               showSearch(context: context, delegate: HomeSearch());
             },
             child: Container(
-              height: 46,
+              height: 50,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: const Color.fromRGBO(239, 239, 239, 10),
                 borderRadius: BorderRadius.circular(30.0),
               ),
               child: Row(
                 children: [
-                  Container(
-                    width: 77,
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.onToggleView();
-                      },
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 8),
-                            child: Text(
-                              widget.isListIcons ? "List " : "Map",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                          Icon(
-                            widget.isListIcons
-                                ? Icons.format_list_bulleted
-                                : Icons.map_outlined,
-                            color: Colors.black,
-                            size: 25,
-                          ),
-                        ],
+                  const Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Icon(
+                        Icons.search_outlined,
+                        size: 26,
                       ),
                     ),
                   ),
-                  Text("   "),
+                  Container(width: 15),
                   Container(
-                    width: 230,
-                    child: Text("City, ZIP, School, Address",
+                    width: 210,
+                    child: Text("City, ZIP, School, AddressAddress",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 17,
                           color: Colors.black45,
                         ),
                         overflow: TextOverflow.ellipsis),
                   ),
-                  const Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Icon(
-                          Icons.search_outlined,
-                          size: 27,
-                        ),
+                  Container(width: 8),
+                ],
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              widget.onToggleView();
+            },
+            child: Container(
+              width: 82,
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Icon(
+                      widget.isListIcons
+                          ? Icons.format_list_bulleted
+                          : Icons.map_outlined,
+                      color: Colors.black,
+                      size: widget.isListIcons ? 27 : 28,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 2),
+                    child: Text(
+                      widget.isListIcons ? "List" : "Map",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: widget.isListIcons ? 20 : 18,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -90,8 +94,8 @@ class _SearchBarRowState extends State<SearchBarRow> {
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

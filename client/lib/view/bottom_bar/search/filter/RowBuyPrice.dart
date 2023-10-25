@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 class RowBuyPrice extends StatefulWidget {
   PropertyTypeSelection selection;
 
-  RowBuyPrice(
-      {Key? key,
-      required this.selection})
-      : super(key: key);
+  RowBuyPrice({Key? key, required this.selection}) : super(key: key);
 
   @override
   _RowBuyPriceState createState() => _RowBuyPriceState();
@@ -31,10 +28,10 @@ class _RowBuyPriceState extends State<RowBuyPrice> {
         Container(width: 12),
         Expanded(
           child: TextField(
-            controller: widget.selection.buyMaxController,
+            controller: widget.selection.buyMinController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              hintText: "No max",
+              hintText: "No min",
               contentPadding:
                   EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               border: OutlineInputBorder(
@@ -43,7 +40,7 @@ class _RowBuyPriceState extends State<RowBuyPrice> {
               suffix: GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.selection.buyMaxController.clear();
+                    widget.selection.buyMinController.clear();
                   });
                 },
                 child: Container(
@@ -64,10 +61,10 @@ class _RowBuyPriceState extends State<RowBuyPrice> {
         Container(width: 15),
         Expanded(
           child: TextField(
-            controller: widget.selection.buyMinController,
+            controller: widget.selection.buyMaxController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              hintText: "No min",
+              hintText: "No max",
               contentPadding:
                   EdgeInsets.symmetric(vertical: 15, horizontal: 10),
               border: OutlineInputBorder(
@@ -76,7 +73,7 @@ class _RowBuyPriceState extends State<RowBuyPrice> {
               suffix: GestureDetector(
                 onTap: () {
                   setState(() {
-                    widget.selection.buyMinController.clear();
+                    widget.selection.buyMaxController.clear();
                   });
                 },
                 child: Container(

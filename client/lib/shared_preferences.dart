@@ -7,5 +7,5 @@ Future<void> setVisitor(bool value) async {
 
 Future<bool> getVisitor() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('visitor') ?? false;
+  return prefs.getBool('visitor') ?? true;
 }
