@@ -1,16 +1,10 @@
-<<<<<<< HEAD
-=======
 import 'dart:async';
 
->>>>>>> master
 import 'package:client/view/bottom_bar/search/filter/filters_listview.dart';
 import 'package:client/view/bottom_bar/search/search_bar.dart';
 import 'package:client/view/bottom_bar/search/sort_options.dart';
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
 import 'package:google_maps_flutter/google_maps_flutter.dart';
->>>>>>> master
 
 class Search extends StatefulWidget {
   const Search({Key? key}) : super(key: key);
@@ -20,8 +14,6 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-<<<<<<< HEAD
-=======
   GoogleMapController? mapController;
 
   CameraPosition jerusalem = CameraPosition(
@@ -29,7 +21,6 @@ class _SearchState extends State<Search> {
     zoom: 8,
   );
 
->>>>>>> master
   bool _isListIcon = true;
   int resultsCount = 0;
 
@@ -40,11 +31,7 @@ class _SearchState extends State<Search> {
         child: Column(
           children: [
             Container(
-<<<<<<< HEAD
-              padding: EdgeInsets.only(top: 40, left: 22, right: 22),
-=======
               padding: EdgeInsets.only(top: 40),
->>>>>>> master
               child: Column(
                 children: [
                   SearchBarRow(
@@ -58,27 +45,14 @@ class _SearchState extends State<Search> {
                 ],
               ),
             ),
-<<<<<<< HEAD
-            Container(height: 15),
-            FilterListView(),
-            Container(height: 7),
-=======
             Container(
               margin: EdgeInsets.symmetric(vertical: 15),
               child: FilterListView(),
             ),
->>>>>>> master
             SortOptionsWidget(
               isListIcon: _isListIcon,
               resultsCount: resultsCount,
             ),
-<<<<<<< HEAD
-            Divider(thickness: 1.0, color: Colors.black26),
-            Visibility(
-                visible: _isListIcon, child: Container(child: Text("x"))),
-            Visibility(
-                visible: !_isListIcon, child: Container(child: Text("List"))),
-=======
             Visibility(
               visible: _isListIcon,
               child: Expanded(
@@ -98,7 +72,6 @@ class _SearchState extends State<Search> {
                 Text("List"),
               ]),
             ),
->>>>>>> master
           ],
         ),
       ),

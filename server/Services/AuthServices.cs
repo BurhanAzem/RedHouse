@@ -95,15 +95,16 @@ namespace RedHouse_Server.Services
         }
 
 
-        public async Task<ResponsDto<string>> LoginUser(LoginDto loginDto)
+        public async Task<ResponsDto<User>> LoginUser(LoginDto loginDto)
         {
+            var userRes = await _redHouseDbContext.Users.Where(x => x.Email == loginDto.Email).ToListAsync();
             try
             {
                 var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
                 if (user == null)
                 {
-                    return new ResponsDto<string>
+                    return new ResponsDto<User>
                     {
                         Exception = new Exception("User Not found"),
                         StatusCode = HttpStatusCode.BadRequest,
@@ -116,15 +117,15 @@ namespace RedHouse_Server.Services
                 {
                     var token = GenerateJwtToken(user);
 
-                    return new ResponsDto<string>
+                    return new ResponsDto<User>
                     {
-                        Message = "You are logged in successfully",
+                        Message = token,
                         StatusCode = HttpStatusCode.OK,
-                        Dto = token
+                        Dto = userRes[0]
                     };
                 }
 
-                return new ResponsDto<string>
+                return new ResponsDto<User>
                 {
                     Exception = new Exception("Invalid login attempt."),
                     StatusCode = HttpStatusCode.BadRequest,
@@ -132,7 +133,7 @@ namespace RedHouse_Server.Services
             }
             catch (Exception ex)
             {
-                return new ResponsDto<string>
+                return new ResponsDto<User>
                 {
                     Exception = ex,
                     StatusCode = HttpStatusCode.InternalServerError,

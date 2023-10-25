@@ -42,7 +42,7 @@ class AppRoute {
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
-  AppRoute.login: (context) => const Login(),
+  AppRoute.login: (context) =>  Login(),
   AppRoute.registerOne: (context) => RegisterOne(),
   AppRoute.registerTwo: (context) => RegisterTwo(),
   AppRoute.onBoarding: (context) => const OnBoarding(),
