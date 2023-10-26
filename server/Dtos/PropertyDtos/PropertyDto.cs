@@ -11,7 +11,7 @@ namespace RedHouse_Server.Dtos.PropertyDtos
         public string PropertyType { get; set; }
         public int UserId { get; set; }
         public List<string> PropertyFiles { get; set; }
-        // public LocationDto? LocationDto { get; set; }
+        public LocationDto? LocationDto { get; set; }
         // public NeighborhoodDto? NeighborhoodDto { get; set; }
         public int Price { get; set; }
         public int NumberOfBedRooms { get; set; }
