@@ -20,7 +20,7 @@ namespace RedHouse_Server.Controllers
             _propertyServices = propertyServices;
         }
         
-        [Authorize]
+        // [Authorize]
         [HttpPost("/properties")]
         public async Task<IActionResult> CreateProperty([FromBody] PropertyDto propertyDto)
         {
