@@ -98,88 +98,78 @@ namespace RedHouse_Server.Services
         public async Task<ResponsDto<User>> LoginUser(LoginDto loginDto)
         {
             var userRes = await _redHouseDbContext.Users.Where(x => x.Email == loginDto.Email).ToListAsync();
-            try
+
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+            if (user == null)
             {
-                var user = await _userManager.FindByEmailAsync(loginDto.Email);
-
-                if (user == null)
-                {
-                    return new ResponsDto<User>
-                    {
-                        Exception = new Exception("User Not found"),
-                        StatusCode = HttpStatusCode.BadRequest,
-                    };
-                }
-
-                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: false);
-
-                if (result.Succeeded)
-                {
-                    var token = GenerateJwtToken(user);
-
-                    return new ResponsDto<User>
-                    {
-                        Message = token,
-                        StatusCode = HttpStatusCode.OK,
-                        Dto = userRes[0]
-                    };
-                }
-
                 return new ResponsDto<User>
                 {
-                    Exception = new Exception("Invalid login attempt."),
+                    Exception = new Exception("User Not found"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            catch (Exception ex)
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: false);
+
+            if (result.Succeeded)
             {
+                var token = GenerateJwtToken(user);
+
                 return new ResponsDto<User>
                 {
-                    Exception = ex,
-                    StatusCode = HttpStatusCode.InternalServerError,
+                    Message = token,
+                    StatusCode = HttpStatusCode.OK,
+                    Dto = userRes[0]
                 };
             }
+
+            return new ResponsDto<User>
+            {
+                Exception = new Exception("Invalid login attempt."),
+                StatusCode = HttpStatusCode.BadRequest,
+            };
+
         }
 
-public string GenerateJwtToken(IdentityUser user)
-{
-    var tokenExpiration = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour (adjust as needed).
+        public string GenerateJwtToken(IdentityUser user)
+        {
+            var tokenExpiration = DateTime.UtcNow.AddDays(2); // Token expires in 1 hour (adjust as needed).
 
-    // Generate a strong, random key of sufficient length
-    var securityKey = GenerateStrongSecurityKey();
+            // Generate a strong, random key of sufficient length
+            var securityKey = GenerateStrongSecurityKey();
 
-    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-    var claims = new List<Claim>
+            var claims = new List<Claim>
     {
-        new Claim(ClaimTypes.Name, user.UserName),
-        // Add other claims as needed
+        new Claim(ClaimTypes.Name, user.UserName),        // Add other claims as needed
     };
 
-    var token = new JwtSecurityToken(
-        issuer: "your-issuer",
-        audience: "your-audience",
-        claims: claims,
-        expires: tokenExpiration,
-        signingCredentials: credentials
-    );
+            var token = new JwtSecurityToken(
+                issuer: "your-issuer",
+                audience: "your-audience",
+                claims: claims,
+                expires: tokenExpiration,
+                signingCredentials: credentials
+            );
 
-    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-    return tokenString;
-}
+            return tokenString;
+        }
 
-public SymmetricSecurityKey GenerateStrongSecurityKey()
-{
-    // Generate a strong, random key
-    var keyBytes = new byte[32]; // 256 bits
-    using (var rng = new RNGCryptoServiceProvider())
-    {
-        rng.GetBytes(keyBytes);
-    }
+        public SymmetricSecurityKey GenerateStrongSecurityKey()
+        {
+            // Generate a strong, random key
+            var keyBytes = new byte[32]; // 256 bits
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                rng.GetBytes(keyBytes);
+            }
 
-    return new SymmetricSecurityKey(keyBytes);
-}
+            return new SymmetricSecurityKey(keyBytes);
+        }
 
 
 

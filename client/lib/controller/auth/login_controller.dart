@@ -40,14 +40,15 @@ class LoginControllerImp extends LoginController {
           final userDtoJson = jsonEncode(response['dto']); // Convert the DTO to JSON
           setUser(userDtoJson);
           print(getUser());
-          goToSearch();
+          goToBottomBar();
       } else {
         Get.defaultDialog(
             title: "ُError",
             middleText:
-                'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
+                'There is something wronge ! \n statusCode: $response["statusCode"], exception: $response["exception"]');
         statusRequest = StatusRequest.failure;
       }
+      return;
     }
 
     // update();
