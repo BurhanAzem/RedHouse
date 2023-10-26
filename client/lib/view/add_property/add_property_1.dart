@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:geocoding/geocoding.dart';
 
 import 'package:client/controller/manage_propertise/add_property_controller.dart';
 import 'package:easy_stepper/easy_stepper.dart';
@@ -16,14 +17,18 @@ class AddProperty1 extends StatefulWidget {
 
 class _AddProperty1State extends State<AddProperty1> {
   GoogleMapController? mapController;
+  bool arePlacemarksAvailable = false;
+
+  final geocoding = GeocodingPlatform.instance;
+
   late double lat;
   late double long;
-  Position ?cl;
+  Position? cl;
   CameraPosition? currentCameraPosition;
-  StreamSubscription<Position> ?positionStream;
-  Set<Marker> ?marker ={
+  StreamSubscription<Position>? positionStream;
+  Set<Marker>? marker = {
     Marker(markerId: MarkerId("1"), position: LatLng(20, 20))
-  } ;
+  };
   Future<void> getLatAndLong() async {
     LocationPermission permission = await Geolocator.requestPermission();
     cl = await Geolocator.getCurrentPosition().then((value) => value);
@@ -40,9 +45,11 @@ class _AddProperty1State extends State<AddProperty1> {
 
   @override
   void initState() {
-    positionStream = Geolocator.getPositionStream().listen(
-    (Position? position) {
-        print(position == null ? 'Unknown' : '${position.latitude.toString()}, ${position.longitude.toString()}');
+    positionStream =
+        Geolocator.getPositionStream().listen((Position? position) {
+      print(position == null
+          ? 'Unknown'
+          : '${position.latitude.toString()}, ${position.longitude.toString()}');
     });
     getLatAndLong(); // Initialize currentCameraPosition when the widget is created.
     super.initState();
@@ -229,8 +236,8 @@ class _AddProperty1State extends State<AddProperty1> {
                     setState(() => controller.activeStep = index),
               ),
               Container(
-                margin: EdgeInsets.only(left: 12),
-                child: Image.asset("assets/images/logo.png", scale: 10)),
+                  margin: EdgeInsets.only(left: 12),
+                  child: Image.asset("assets/images/logo.png", scale: 10)),
               Container(
                 margin: EdgeInsets.only(left: 12),
                 child: Text(
@@ -294,11 +301,45 @@ class _AddProperty1State extends State<AddProperty1> {
                       : Expanded(
                           child: GoogleMap(
                             markers: marker!,
-                            onTap: (latlng){
-                              marker!.add(Marker(markerId: MarkerId("9"), position: latlng));
-                              setState(() {
-                                
-                              });
+                            onTap: (latlng) async {
+                              marker!.add(Marker(
+                                  markerId: MarkerId("9"), position: latlng));
+                              try {
+                                List<Placemark> placemarks =
+                                    await placemarkFromCoordinates(
+                                        latlng.latitude, latlng.longitude);
+
+                                if (placemarks.isNotEmpty) {
+                                  final placemark = placemarks[0];
+                                  controller.City = placemark.locality;
+                                  controller.PostalCode = placemark.postalCode!;
+                                  controller.streetAddress.text =
+                                      placemark.street!;
+                                  controller.Country = placemark.country;
+                                  controller.Region = placemark.locality;
+                                  controller.Latitude = latlng.latitude;
+                                  controller.Longitude = latlng.longitude;
+
+                                  print('City: ${controller.City}');
+                                  print('PostalCode: ${controller.PostalCode}');
+                                  print('Country: ${controller.Country}');
+                                  print(
+                                      'streetAddress: ${controller.streetAddress.text}');
+                                  print('Region: ${controller.Region}');
+                                  print('Latitude: ${controller.Latitude}');
+                                  print('Longitude: ${controller.Longitude}');
+                                  arePlacemarksAvailable = true;
+                                  setState(() {
+                                    
+                                  });
+                                }
+                              } catch (e) {
+                                Get.defaultDialog(
+                                    title: "ُEntered invalid location",
+                                    middleText: 'Error: $e');
+                                arePlacemarksAvailable = false;
+                              }
+                              setState(() {});
                             },
                             mapType: MapType.normal,
                             initialCameraPosition: currentCameraPosition!,
@@ -316,13 +357,15 @@ class _AddProperty1State extends State<AddProperty1> {
                 margin: EdgeInsets.only(left: 12),
                 child: MaterialButton(
                   minWidth: 400,
-                  onPressed: () {
-                    setState(() {
-                      controller.activeStep++;
-                    });
-                    controller.goToAddProperty2();
-                  },
-                  color: Color(0xffd92328),
+                  onPressed: arePlacemarksAvailable
+                      ? () {
+                          setState(() {
+                            controller.activeStep++;
+                          });
+                          controller.goToAddProperty2();
+                        }
+                      : (){},
+                  color:arePlacemarksAvailable ? Color(0xffd92328) : Color.fromARGB(255, 251, 169, 169),
                   child: Text(
                     "Continue",
                     style: TextStyle(

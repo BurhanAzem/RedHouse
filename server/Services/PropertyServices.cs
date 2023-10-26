@@ -25,7 +25,17 @@ namespace RedHouse_Server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            //var location = await _blueHouseDbContext.Locations.AddAsync(propertyDto.LocationDto);
+
+            Location location = new Location{
+                City = propertyDto.LocationDto.City,
+                Country = propertyDto.LocationDto.Country,
+                Region = propertyDto.LocationDto.Region,
+                PostalCode = propertyDto.LocationDto.PostalCode,
+                StreetAddress = propertyDto.LocationDto.StreetAddress,
+                Latitude = propertyDto.LocationDto.Latitude,
+                Longitude =propertyDto.LocationDto.Longitude,
+            } ;
+            var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
             Property property = new Property
             {
                 AvailableOn = propertyDto.AvailableOn,
@@ -33,7 +43,7 @@ namespace RedHouse_Server.Services
                 IsAvailableBasement = propertyDto.IsAvailableBasement,
                 ListingBy = propertyDto.ListingBy,
                 ListingType = propertyDto.ListingType,
-                LocationId = 0,
+                LocationId = locationRes.Entity.Id,
                 NeighborhoodId = 0,
                 NumberOfBathRooms = propertyDto.NumberOfBathRooms,
                 NumberOfBedRooms = propertyDto.NumberOfBedRooms,
