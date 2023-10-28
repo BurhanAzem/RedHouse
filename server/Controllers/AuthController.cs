@@ -28,11 +28,11 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _authServices.RegisterUser(registerDto);
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code!.Value, result.Exception);
-            }
+            // if (result.Exception != null)
+            // {
+            //     var code = result.StatusCode;
+            //     throw new StatusCodeException(code!.Value, result.Exception);
+            // }
             return Ok(result);
 
         }
@@ -45,22 +45,22 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _authServices.LoginUser(loginDto);
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code!.Value, result.Exception);
-            }
+            // if (result.Exception != null)
+            // {
+            //     var code = result.StatusCode;
+            //     throw new StatusCodeException(code!.Value, result.Exception);
+            // }
 
-            var cookieOptions = new CookieOptions
-            {
-                Expires = DateTime.Now.AddDays(1), // Expires in 1 day
-                HttpOnly = true, // Make the cookie accessible only through HTTP (not JavaScript)
-                Secure = true, // Require HTTPS to send the cookie
-                SameSite = SameSiteMode.Strict // Enforce same-site cookie policy
-            };
+            // var cookieOptions = new CookieOptions
+            // {
+            //     Expires = DateTime.Now.AddDays(1), // Expires in 1 day
+            //     HttpOnly = true, // Make the cookie accessible only through HTTP (not JavaScript)
+            //     Secure = true, // Require HTTPS to send the cookie
+            //     SameSite = SameSiteMode.Strict // Enforce same-site cookie policy
+            // };
 
-            // Set the token value in the cookie
-            Response.Cookies.Append("AuthToken", result.Message!, cookieOptions);
+            // // Set the token value in the cookie
+            // Response.Cookies.Append("AuthToken", result.Message!, cookieOptions);
             return Ok(result);
         }
 

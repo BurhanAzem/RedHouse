@@ -19,7 +19,8 @@ namespace RedHouse_Server.Controllers
         {
             _propertyServices = propertyServices;
         }
-
+        
+        // [Authorize]
         [HttpPost("/properties")]
         public async Task<IActionResult> CreateProperty([FromBody] PropertyDto propertyDto)
         {
@@ -37,7 +38,6 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
-
 
         [HttpGet("/properties/{id}")]
         public async Task<IActionResult> GetProperty(int id)

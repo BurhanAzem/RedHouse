@@ -46,7 +46,7 @@ class SignUpControllerImp extends SignUpController {
         Get.defaultDialog(
           title: "Error",
           middleText:
-              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+              "statusCode: ${response['statusCode']}, exception: ${response['exception']}",
         );
         statusRequest = StatusRequest.failure;
       }

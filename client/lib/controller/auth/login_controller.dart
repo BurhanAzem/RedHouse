@@ -30,6 +30,7 @@ class LoginControllerImp extends LoginController {
       statusRequest = handlingData(response);
       if (response['statusCode'] == 200) {
         print(response['dto']);
+<<<<<<< HEAD
         setToken(response['message']);
         final userDtoJson =
             jsonEncode(response['dto']); // Convert the DTO to JSON
@@ -40,8 +41,21 @@ class LoginControllerImp extends LoginController {
       } else {
         Get.snackbar("ُWarning",
             'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
+=======
+          setToken(response['message']);
+          final userDtoJson = jsonEncode(response['dto']); // Convert the DTO to JSON
+          setUser(userDtoJson);
+          print(getUser());
+          goToBottomBar();
+      } else {
+        Get.defaultDialog(
+            title: "ُError",
+            middleText:
+                'There is something wronge ! \n statusCode: $response["statusCode"], exception: $response["exception"]');
+>>>>>>> cb5ec897582a0ab1b90e1a6b0906c20767c4688c
         statusRequest = StatusRequest.failure;
       }
+      return;
     }
 
     // update();
