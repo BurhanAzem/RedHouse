@@ -2,6 +2,7 @@ import 'package:client/view/bottom_bar/contract/mylistings.dart';
 import 'package:client/view/bottom_bar/more/more.dart';
 import 'package:client/view/bottom_bar/notification/notifications.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
+import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,7 +49,7 @@ class _BottomBarState extends State<BottomBar> {
         index: _currentIndex,
         children: [
           const Search(),
-          const MyListings(),
+          const AllContracts(),
           const Notifications(),
           const ManageProperties(),
           More(),

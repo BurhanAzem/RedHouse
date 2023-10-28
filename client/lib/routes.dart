@@ -11,6 +11,7 @@ import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/bottom_bar/notification/notifications.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
+import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/login.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
 import 'package:client/view/onboarding/onboarding_four.dart';
@@ -35,6 +36,8 @@ class AppRoute {
   static const String addProperty7 = "/add-property7";
   static const String addProperty8 = "/add-property8";
   static const String addProperty9 = "/add-property9";
+  static const String allContracts = "/all-contracts";
+
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
@@ -52,6 +55,8 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
   AppRoute.addProperty9: (context) => AddProperty9(),
+  AppRoute.allContracts: (context) => AllContracts(),
+
   //________________________________________________________
   "/search": (context) => const Search(),
   "/bottom-bar": (context) => BottomBar(),

@@ -40,7 +40,7 @@ class SignUpControllerImp extends SignUpController {
 
       if (response['statusCode'] == 200) {
         print(response['dto']);
-        data.addAll(response['data']);
+        print(response['dto']);
         // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {
         Get.defaultDialog(
