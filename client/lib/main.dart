@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: "Poppins",
       ),
-      home: BottomBar(),
+      home: BottomBar(), 
       routes: routes,
     );
   }
