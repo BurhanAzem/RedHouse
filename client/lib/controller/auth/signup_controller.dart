@@ -1,15 +1,11 @@
 import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
-import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/signup.dart';
-import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 abstract class SignUpController extends GetxController {
   signUp();
-  goToLogin();
-  goToRegisterTwo();
 }
 
 class SignUpControllerImp extends SignUpController {
@@ -24,7 +20,7 @@ class SignUpControllerImp extends SignUpController {
 
   final formstateRegister = GlobalKey<FormState>();
 
-  SignupData signupData = SignupData(new Crud());
+  SignupData signupData = SignupData(Crud());
 
   List data = [];
 
@@ -57,16 +53,6 @@ class SignUpControllerImp extends SignUpController {
 
       update();
     }
-  }
-
-  @override
-  goToLogin() {
-    Get.toNamed(AppRoute.login);
-  }
-
-  @override
-  goToRegisterTwo() {
-    Get.toNamed(AppRoute.registerTwo);
   }
 
   @override

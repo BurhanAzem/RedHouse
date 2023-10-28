@@ -1,8 +1,12 @@
+import 'package:client/main.dart';
+import 'package:client/routes.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
 import 'package:client/view/login.dart';
-import 'package:client/view/register/register_one.dart';
+import 'package:client/view/register.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 // ignore: must_be_immutable
 class More extends StatefulWidget {
@@ -23,131 +27,114 @@ class _MoreState extends State<More> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // check visitor here
-                FutureBuilder<bool>(
-                  future: getVisitor(),
-                  builder: (context, snapshot) {
-                    final isVisitor = snapshot.data ?? false;
-
-                    if (isVisitor) {
-                      // Your visitor-specific content here
-                      return Column(
+                if (sharepref!.getString("visitor") == "no")
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      const Padding(
+                        padding: EdgeInsets.only(left: 10),
+                        child: Text('ayman.dwikat.2001@gmail.com',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            )),
+                      ),
+                      MaterialButton(
+                        onPressed: () {
+                          sharepref!.clear();
+                          Get.offAllNamed("/login");
+                        },
+                        child: const Text('Log out',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            )),
+                      ),
+                    ],
+                  )
+                else
+                  Column(
+                    children: <Widget>[
+                      Column(
                         children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              SizedBox(height: 25),
-                              Text(
-                                "Welcome",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 34,
-                                ),
+                          const SizedBox(height: 25),
+                          const Text(
+                            "Welcome",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 34,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: const Text(
+                              "Sign up or log in to save listings and get updates on your home search.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
                               ),
-                              SizedBox(height: 20),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 40),
-                                child: Text(
-                                  "Sign up or log in to save listings and get updates on your home search.",
-                                  textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            onPressed: () {
+                              Get.toNamed("/login");
+                            },
+                            minWidth: 300,
+                            height: 45,
+                            color: Colors.black,
+                            child: const Text(
+                              "Log in",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed("/register");
+                            },
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account? ",
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: 20),
-                              MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => Login()),
-                                  );
-                                },
-                                minWidth: 300,
-                                height: 45,
-                                color: Colors.black,
-                                child: Text(
-                                  "Log in",
+                                Text(
+                                  "sign up",
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 20),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => RegisterOne()),
-                                  );
-                                },
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Don't have an account? ",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    Text(
-                                      "sign up",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 30),
-                            ],
+                              ],
+                            ),
                           ),
+                          const SizedBox(height: 30),
                         ],
-                      );
-                    } else {
-                      // Content for non-visitors
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text('ayman.dwikat.2001@gmail.com',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                )),
-                          ),
-                          MaterialButton(
-                            onPressed: () {
-                              setState(() async {
-                                await setVisitor(true);
-                              });
-                            },
-                            child: Text('Log out',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 17,
-                                )),
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
+                      ),
+                    ],
+                  ),
 
-                Divider(
+                const Divider(
                   height: 1,
                   color: Colors.black,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Container(
                   width: 360,
                   height: 45,
@@ -164,12 +151,12 @@ class _MoreState extends State<More> {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => NotificationsSettings(),
+                        builder: (context) => const NotificationsSettings(),
                       ),
                     );
                   },
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Text(
@@ -183,11 +170,11 @@ class _MoreState extends State<More> {
                     ],
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  child: Text(
+                  child: const Text(
                     "My home",
                     style: TextStyle(
                       color: Colors.black,
@@ -199,7 +186,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -216,7 +203,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -233,7 +220,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -250,7 +237,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -264,11 +251,11 @@ class _MoreState extends State<More> {
                     ],
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  child: Text(
+                  child: const Text(
                     "Buying a home",
                     style: TextStyle(
                       color: Colors.black,
@@ -280,7 +267,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -297,7 +284,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -314,7 +301,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -331,7 +318,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -345,11 +332,11 @@ class _MoreState extends State<More> {
                     ],
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  child: Text(
+                  child: const Text(
                     "Rentals",
                     style: TextStyle(
                       color: Colors.black,
@@ -361,7 +348,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -378,7 +365,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -392,11 +379,11 @@ class _MoreState extends State<More> {
                     ],
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
                 Container(
                   width: 360,
                   height: 45,
-                  child: Text(
+                  child: const Text(
                     "Other",
                     style: TextStyle(
                       color: Colors.black,
@@ -408,7 +395,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -425,7 +412,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -442,7 +429,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -459,7 +446,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -476,7 +463,7 @@ class _MoreState extends State<More> {
                 MaterialButton(
                   onPressed: () {},
                   height: 55,
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
@@ -490,10 +477,10 @@ class _MoreState extends State<More> {
                     ],
                   ),
                 ),
-                SizedBox(height: 45),
-                Text("RedHouse.com® Version 23.24"),
-                Text("all copyright © rights reserved"),
-                SizedBox(height: 5),
+                const SizedBox(height: 45),
+                const Text("RedHouse.com® Version 23.24"),
+                const Text("all copyright © rights reserved"),
+                const SizedBox(height: 5),
               ],
             ),
           ],

@@ -37,6 +37,18 @@ class _TopNavigationBar extends State<ManageProperties>
               child: Text("Other"),
             ),
           ],
+          overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
+          indicatorColor: Colors.black,
+          labelColor: Colors.black,
+          labelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 17,
+          ),
+          unselectedLabelColor: Colors.grey[700],
+          unselectedLabelStyle: TextStyle(
+            fontWeight: FontWeight.normal,
+            fontSize: 17,
+          ),
         ),
       ),
       body: TabBarView(

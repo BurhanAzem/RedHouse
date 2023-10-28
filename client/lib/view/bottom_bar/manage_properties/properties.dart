@@ -18,7 +18,7 @@ class Properties extends StatelessWidget {
               onPressed: () {
                 controller.goToAddProperty1();
               },
-              color: Color(0xFFD82228),
+              color: Color(0xffd92328),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
