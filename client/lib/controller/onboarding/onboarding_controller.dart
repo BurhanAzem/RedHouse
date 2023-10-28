@@ -10,31 +10,22 @@ abstract class OnBoardingController extends GetxController {
 
 class OnBoardingControllerImp extends OnBoardingController {
   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
   toOnBoardingFour() {
-    // TODO: implement toOnBoardingFour
-    Get.toNamed(AppRoute.onBoardingFour);
+    Get.offAllNamed(AppRoute.onBoardingFour);
   }
 
   @override
   toOnBoardingOne() {
-    // TODO: implement toOnBoardingOne
     Get.toNamed(AppRoute.onBoardingOne);
   }
 
   @override
   toOnBoardingThree() {
-    // TODO: implement toOnBoardingThree
     Get.toNamed(AppRoute.onBoardingThree);
   }
 
   @override
   toOnBoardingTwo() {
-    // TODO: implement toOnBoardingTwo
     Get.toNamed(AppRoute.onBoardingTwo);
   }
 }

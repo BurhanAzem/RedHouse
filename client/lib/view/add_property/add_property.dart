@@ -1,8 +1,7 @@
-
-import 'package:client/view/onboarding/onboardingFour.dart';
-import 'package:client/view/onboarding/onboardingOne.dart';
-import 'package:client/view/onboarding/onboardingThree.dart';
-import 'package:client/view/onboarding/onboardingTwo.dart';
+import 'package:client/view/onboarding/onboarding_four.dart';
+import 'package:client/view/onboarding/onboarding_one.dart';
+import 'package:client/view/onboarding/onboarding_three.dart';
+import 'package:client/view/onboarding/onboarding_two.dart';
 import 'package:flutter/material.dart';
 
 class AddProperty extends StatelessWidget {
@@ -19,8 +18,7 @@ class AddProperty extends StatelessWidget {
             OnBoardingThree(),
             OnBoardingFour()
           ],
-          scrollDirection: Axis
-              .horizontal, // Set the scroll direction (horizontal or vertical)
+          scrollDirection: Axis.horizontal,
         ),
       ),
     );

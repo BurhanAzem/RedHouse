@@ -1,22 +1,51 @@
-import 'package:client/view/bottom_bar/search/filter/BuyFilter.dart';
-import 'package:client/view/bottom_bar/search/filter/RentFilter.dart';
-import 'package:client/view/bottom_bar/search/filter/property_type_sheet%20.dart';
+import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/view/bottom_bar/search/filter/buy_filter.dart';
+import 'package:client/view/bottom_bar/search/filter/rent_filter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FilterPage extends StatefulWidget {
-  PropertyTypeSelection selection;
-  FilterPage({Key? key, required this.selection}) : super(key: key);
+  FilterPage({Key? key}) : super(key: key);
 
   @override
   _FilterPageState createState() => _FilterPageState();
 }
 
 class _FilterPageState extends State<FilterPage> {
+  FilterController controller = Get.put(FilterController());
+
+  @override
+  void initState() {
+    super.initState();
+    controller.buyHouseTemp = controller.buyHouse;
+    controller.buyApartmentTemp = controller.buyApartment;
+    controller.buyTownhouseTemp = controller.buyTownhouse;
+    controller.buyCastleTemp = controller.buyCastle;
+    controller.buyDepartmentTemp = controller.buyDepartment;
+
+    controller.rentHouseTemp = controller.rentHouse;
+    controller.rentApartmentTemp = controller.rentApartment;
+    controller.rentTownhouseTemp = controller.rentTownhouse;
+    controller.rentCastleTemp = controller.rentCastle;
+    controller.rentDepartmentTemp = controller.rentDepartment;
+
+    controller.rentMaxControllerTemp.text = controller.rentMaxController.text;
+    controller.rentMinControllerTemp.text = controller.rentMinController.text;
+    controller.buyMaxControllerTemp.text = controller.buyMaxController.text;
+    controller.buyMinControllerTemp.text = controller.buyMinController.text;
+
+    controller.buyViewTemp = controller.buyView;
+    controller.rentViewTemp = controller.rentView;
+
+    controller.copyBathButtonTemp();
+    controller.copyBedButtonTemp();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: widget.selection.listingType ? 0 : 1,
+      initialIndex: controller.listingType ? 0 : 1,
       child: Scaffold(
         appBar: AppBar(
           title: Row(
@@ -44,19 +73,19 @@ class _FilterPageState extends State<FilterPage> {
             ],
           ),
           bottom: TabBar(
-            tabs: [
+            tabs: const [
               Tab(text: 'Buy'),
               Tab(text: 'Rent'),
             ],
             overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
             indicatorColor: Colors.black,
             labelColor: Colors.black,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 17,
             ),
             unselectedLabelColor: Colors.grey[700],
-            unselectedLabelStyle: TextStyle(
+            unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 17,
             ),
@@ -64,8 +93,8 @@ class _FilterPageState extends State<FilterPage> {
         ),
         body: TabBarView(
           children: [
-            BuyFilter(selection: widget.selection),
-            RentFilter(selection: widget.selection),
+            BuyFilter(),
+            RentFilter(),
           ],
         ),
       ),
