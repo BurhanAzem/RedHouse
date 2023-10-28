@@ -1,14 +1,13 @@
-import 'package:client/controller/auth/login_controller.dart';
-import 'package:client/shared_preferences.dart';
+import 'package:client/controller/onboarding/onboarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class OnBoardingFour extends StatelessWidget {
-  const OnBoardingFour({Key? key}) : super(key: key);
+class OnBoardingOne extends StatelessWidget {
+  const OnBoardingOne({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    LoginControllerImp controller = Get.put(LoginControllerImp());
+    OnBoardingControllerImp controller = Get.put(OnBoardingControllerImp());
     return Scaffold(
       body: Container(
         child: Column(
@@ -16,7 +15,7 @@ class OnBoardingFour extends StatelessWidget {
             Container(
               height: 30,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -37,13 +36,13 @@ class OnBoardingFour extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  height: 53,
+                  height: 30,
                 ),
-                Image.asset("assets/images/for-rent.jpg", scale: 0.5),
+                Image.asset("assets/images/red-tree.png", scale: 1),
                 Container(
-                  height: 73,
+                  height: 50,
                 ),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -92,7 +91,7 @@ class OnBoardingFour extends StatelessWidget {
                               height: 6,
                               width: 6,
                               decoration: BoxDecoration(
-                                  color: Color(0xffd92328),
+                                  color: const Color(0xffd92328),
                                   borderRadius: BorderRadius.circular(10)),
                             ))
                   ],
@@ -104,14 +103,14 @@ class OnBoardingFour extends StatelessWidget {
                   width: 220,
                   child: MaterialButton(
                     onPressed: () {
-                      controller.goToBottomBar();
+                      controller.toOnBoardingTwo();
                     },
-                    child: Text(
+                    child: const Text(
                       "Next",
                       style: TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w700),
                     ), // Provide a child for the button
-                    color: Color(0xffd92328),
+                    color: const Color(0xffd92328),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

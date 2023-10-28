@@ -1,6 +1,5 @@
+import 'package:client/view/bottom_bar/contract/mylistings.dart';
 import 'package:client/view/bottom_bar/more/more.dart';
-import 'package:client/view/bottom_bar/myhome/myhome.dart';
-import 'package:client/view/bottom_bar/mylistings/mylistings.dart';
 import 'package:client/view/bottom_bar/notification/notifications.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
@@ -17,29 +16,29 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int _currentIndex = 0;
 
-  List<Icon> _unselectedIcons = [
-    Icon(Icons.search),
-    Icon(
+  final List<Icon> _unselectedIcons = [
+    const Icon(Icons.search),
+    const Icon(
       FontAwesomeIcons.handshake,
       size: 25,
     ),
-    Icon(Icons.notifications_active_outlined),
-    Icon(Icons.home_outlined),
-    Icon(Icons.more_horiz_outlined),
+    const Icon(Icons.notifications_active_outlined),
+    const Icon(Icons.home_outlined),
+    const Icon(Icons.more_horiz_outlined),
   ];
 
-  List<Icon> _selectedIcons = [
-    Icon(
+  final List<Icon> _selectedIcons = [
+    const Icon(
       FontAwesomeIcons.magnifyingGlassLocation,
       size: 23,
     ),
-        Icon(
+    const Icon(
       FontAwesomeIcons.solidHandshake,
       size: 23,
     ),
-    Icon(Icons.notifications_active_rounded),
-    Icon(Icons.home),
-    Icon(Icons.more_horiz),
+    const Icon(Icons.notifications_active_rounded),
+    const Icon(Icons.home),
+    const Icon(Icons.more_horiz),
   ];
 
   @override
@@ -48,10 +47,10 @@ class _BottomBarState extends State<BottomBar> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          Search(),
-          MyListings(),
-          Notifications(),
-          ManageProperties(),
+          const Search(),
+          const MyListings(),
+          const Notifications(),
+          const ManageProperties(),
           More(),
         ],
       ),
@@ -60,10 +59,10 @@ class _BottomBarState extends State<BottomBar> {
         iconSize: 32,
         type: BottomNavigationBarType.shifting,
         backgroundColor: Colors.white,
-        selectedItemColor: Color.fromARGB(255, 253, 45, 30),
+        selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
         unselectedItemColor: Colors.black,
         selectedLabelStyle:
-            TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+            const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5),
         items: [
           _buildBottomNavigationBarItem(0),
           _buildBottomNavigationBarItem(1),

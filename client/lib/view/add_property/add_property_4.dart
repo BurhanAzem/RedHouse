@@ -1,9 +1,9 @@
-
 import 'package:client/controller/manage_propertise/add_property_controller.dart';
 import 'package:client/view/firebase.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 class AddProperty4 extends StatefulWidget {
   AddProperty4({Key? key}) : super(key: key);
 
@@ -17,13 +17,12 @@ class _AddProperty4State extends State<AddProperty4> {
   Widget build(BuildContext context) {
     const options = [
       "City",
+      "Village",
       "Mountain",
-      "Water",
+      "Beach",
+      "Island",
     ];
-    const optionBool = [
-      "Yes",
-      "No"
-    ];
+    const optionBool = ["Yes", "No"];
     AddPropertyControllerImp controller =
         Get.put(AddPropertyControllerImp(), permanent: true);
     return Scaffold(
@@ -79,8 +78,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 0 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 0
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Waiting',
@@ -91,8 +91,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 1 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 1
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Order Received',
@@ -104,8 +105,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 2 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 2
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Preparing',
@@ -116,8 +118,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 3 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 3
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'On Way',
@@ -129,8 +132,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 4 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 4
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -141,8 +145,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 5 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 5
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -153,8 +158,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 6 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 6
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -165,8 +171,9 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 7 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 7
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -177,13 +184,13 @@ class _AddProperty4State extends State<AddProperty4> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 8 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 8
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
                       ),
-                      
                     ],
                     onStepReached: (index) =>
                         setState(() => controller.activeStep = index),
@@ -324,7 +331,7 @@ class _AddProperty4State extends State<AddProperty4> {
               MaterialButton(
                 onPressed: () {
                   setState(() {
-                    controller.activeStep++;                    
+                    controller.activeStep++;
                   });
                   controller.goToAddProperty5();
                 },

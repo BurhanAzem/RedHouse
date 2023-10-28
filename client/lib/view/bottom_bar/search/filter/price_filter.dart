@@ -1,45 +1,36 @@
-import 'package:client/view/bottom_bar/search/filter/RowBuyPrice.dart';
-import 'package:client/view/bottom_bar/search/filter/RowRentPrice.dart';
-import 'package:client/view/bottom_bar/search/filter/property_type_sheet%20.dart';
+import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/view/bottom_bar/search/filter/buy_filter.dart';
+import 'package:client/view/bottom_bar/search/filter/rent_filter.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
 class Price extends StatefulWidget {
-  PropertyTypeSelection selection;
-
-  Price({Key? key, required this.selection}) : super(key: key);
+  Price({Key? key}) : super(key: key);
 
   @override
   _PriceState createState() => _PriceState();
 }
 
 class _PriceState extends State<Price> {
-  @override
-  void initState() {
-    super.initState();
-    print(widget.selection.listingType);
-    // if (widget.selection.listingType) {
-    //   if (widget.selection.buy_NoMax != 0)
-    //     widget.selection.buyMinController.text =
-    //         widget.selection.buy_NoMax.toString();
-    //   if (widget.selection.buy_NoMin != 0)
-    //     widget.selection.buyMinController.text =
-    //         widget.selection.buy_NoMin.toString();
-    // } else {
-    //   if (widget.selection.rent_NoMax != 0)
-    //     widget.selection.rentMaxController.text =
-    //         widget.selection.rent_NoMax.toString();
-    //   if (widget.selection.rent_NoMin != 0)
-    //     widget.selection.rentMinController.text =
-    //         widget.selection.rent_NoMin.toString();
-    // }
-  }
+  FilterController controller = Get.put(FilterController());
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () {
+        print(
+            "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+        controller.buyMaxControllerTemp.text = controller.buyMaxController.text;
+        controller.buyMinControllerTemp.text = controller.buyMinController.text;
+        controller.rentMaxControllerTemp.text =
+            controller.rentMaxController.text;
+        controller.rentMinControllerTemp.text =
+            controller.rentMinController.text;
+
         showModalBottomSheet(
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
           context: context,
           isScrollControlled: true,
@@ -47,14 +38,15 @@ class _PriceState extends State<Price> {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius:
                           BorderRadius.vertical(top: Radius.circular(30))),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   height: MediaQuery.of(context).viewInsets.bottom > 0
-                      ? MediaQuery.of(context).size.height / 1.5
-                      : MediaQuery.of(context).size.height / 3.2,
+                      ? MediaQuery.of(context).size.height / 1.8
+                      : MediaQuery.of(context).size.height / 3.5,
                   child: Column(
                     children: [
                       Column(
@@ -63,59 +55,84 @@ class _PriceState extends State<Price> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              const Text(
+                                '  Price',
+                                style: TextStyle(
+                                    fontSize: 27, fontWeight: FontWeight.w700),
+                              ),
                               IconButton(
-                                icon: Icon(Icons.close),
+                                icon: const Icon(Icons.close,
+                                    color: Colors.black, size: 27),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                               ),
-                              Text(
-                                'Price  ',
-                                style: TextStyle(
-                                    fontSize: 27, fontWeight: FontWeight.w800),
-                              ),
                             ],
                           ),
                           Container(height: 15),
-                          if (widget.selection.listingType)
-                            RowBuyPrice(selection: widget.selection)
+                          if (controller.listingType)
+                            RowBuyPrice()
                           else
-                            RowRentPrice(selection: widget.selection),
+                            RowRentPrice(),
                         ],
                       ),
                       Container(height: 20),
-                      MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        onPressed: () {
-                          // if (widget.selection.listingType) {
-                          //   widget.selection.buy_NoMax = int.tryParse(
-                          //           widget.selection.buyNaxController.text) ??
-                          //       0;
-                          //   widget.selection.buy_NoMin = int.tryParse(
-                          //           widget.selection.buyMinController.text) ??
-                          //       0;
-                          // } else {
-                          //   widget.selection.rent_NoMax = int.tryParse(
-                          //           widget.selection.rentMaxController.text) ??
-                          //       0;
-                          //   widget.selection.rent_NoMin = int.tryParse(
-                          //           widget.selection.rentMinController.text) ??
-                          //       0;
-                          // }
-                          Navigator.pop(context);
-                        },
-                        minWidth: 300,
-                        height: 45,
-                        color: Colors.black87,
-                        child: Center(
-                          child: Text(
-                            "See 0 homes",
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                      Container(
+                        width: 340,
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          onPressed: () {
+                            if (controller.listingType) {
+                              if (controller.buyMinControllerTemp.text != "" &&
+                                  controller.buyMaxControllerTemp.text != "" &&
+                                  int.parse(controller
+                                          .buyMinControllerTemp.text) >
+                                      int.parse(controller
+                                          .buyMaxControllerTemp.text)) {
+                                Get.snackbar("Warning",
+                                    "The Min limit cannot be greater than the Max limit");
+                              } else {
+                                controller.rentMaxController.text = "";
+                                controller.rentMinController.text = "";
+                                controller.buyMaxController.text =
+                                    controller.buyMaxControllerTemp.text;
+                                controller.buyMinController.text =
+                                    controller.buyMinControllerTemp.text;
+                                Navigator.pop(context);
+                              }
+                            } else {
+                              if (controller.rentMinControllerTemp.text != "" &&
+                                  controller.rentMaxControllerTemp.text != "" &&
+                                  int.parse(controller
+                                          .rentMinControllerTemp.text) >
+                                      int.parse(controller
+                                          .rentMaxControllerTemp.text)) {
+                                Get.snackbar("Warning",
+                                    "The Min limit cannot be greater than the Max limit");
+                              } else {
+                                controller.buyMaxController.text = "";
+                                controller.buyMinController.text = "";
+                                controller.rentMaxController.text =
+                                    controller.rentMaxControllerTemp.text;
+                                controller.rentMinController.text =
+                                    controller.rentMinControllerTemp.text;
+                                Navigator.pop(context);
+                              }
+                            }
+                          },
+                          minWidth: 300,
+                          height: 45,
+                          color: Colors.black87,
+                          child: const Center(
+                            child: Text(
+                              "See 0 homes",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -128,18 +145,18 @@ class _PriceState extends State<Price> {
           },
         );
       },
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(100),
-        side: BorderSide(
+        side: const BorderSide(
           color: Colors.grey,
-          width: 1.6,
+          width: 1.5,
         ),
       ),
-      child: Text(
+      child: const Text(
         "Price",
         style: TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
           fontSize: 17,
         ),
       ),

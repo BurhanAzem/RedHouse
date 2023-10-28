@@ -17,9 +17,9 @@ class AddProperty7 extends StatefulWidget {
 
 class _AddProperty7State extends State<AddProperty7> {
   // final PageController pageController;
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
-    firebase_storage.FirebaseStorage storage =
+  AddPropertyControllerImp controller =
+      Get.put(AddPropertyControllerImp(), permanent: true);
+  firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
   List<File> _photos = [];
@@ -69,7 +69,8 @@ class _AddProperty7State extends State<AddProperty7> {
         await ref.putFile(photo);
         final url = await ref.getDownloadURL();
         setState(() {
-          controller.downloadUrls.add(url); // Store the download URL in the list
+          controller.downloadUrls
+              .add(url); // Store the download URL in the list
         });
       } catch (e) {
         print('Error occurred while uploading: $e');
@@ -82,7 +83,6 @@ class _AddProperty7State extends State<AddProperty7> {
 
   @override
   Widget build(BuildContext context) {
-    
     const options = [
       "House",
       "Apartment Unit",
@@ -144,8 +144,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 0 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 0
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Waiting',
@@ -156,8 +157,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 1 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 1
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Order Received',
@@ -169,8 +171,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 2 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 2
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Preparing',
@@ -181,8 +184,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 3 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 3
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'On Way',
@@ -194,8 +198,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 4 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 4
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -206,8 +211,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 5 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 5
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -218,8 +224,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 6 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 6
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -230,8 +237,9 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 7 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 7
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -242,13 +250,13 @@ class _AddProperty7State extends State<AddProperty7> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 8 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 8
+                                ? Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
                       ),
-                      
                     ],
                     onStepReached: (index) =>
                         setState(() => controller.activeStep = index),
@@ -256,95 +264,94 @@ class _AddProperty7State extends State<AddProperty7> {
                   Image.asset("assets/images/logo.png", scale: 10),
                   Container(height: 5),
                   Text(
-                  "When is your property available to rent?",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Add photos",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  "Photos help renters imagine living in your place.",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
+                    "When is your property available to rent?",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
                   ),
-                ),
-                SizedBox(height: 5),
-                Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      _showPicker(context);
-                    },
-                    child: CircleAvatar(
-                      radius: 55,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[400],
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        width: 100,
-                        height: 100,
-                        child: Icon(
-                          Icons.add,
-                          size: 60,
-                          color: Colors.black,
-                        ),
-                      ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Add photos",
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Photos help renters imagine living in your place.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(15),
-                  foregroundDecoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(5))),
-                  child: Container(
-                    margin: EdgeInsets.all(5),
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 1,
-                      ),
-                      itemCount: controller.downloadUrls.length,
-                      itemBuilder: (context, index) {
-                        final imageUrl = controller.downloadUrls[index];
-                        return Image.network(imageUrl);
+                  SizedBox(height: 5),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        _showPicker(context);
                       },
+                      child: CircleAvatar(
+                        radius: 55,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[400],
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          width: 100,
+                          height: 100,
+                          child: Icon(
+                            Icons.add,
+                            size: 60,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-                  
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    foregroundDecoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.all(Radius.circular(5))),
+                    child: Container(
+                      margin: EdgeInsets.all(5),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1,
+                        ),
+                        itemCount: controller.downloadUrls.length,
+                        itemBuilder: (context, index) {
+                          final imageUrl = controller.downloadUrls[index];
+                          return Image.network(imageUrl);
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
               Container(height: 25),
               isUploading
-                ? Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : MaterialButton(
-                    onPressed: () {
-                      setState(() {
-                    controller.activeStep++;                    
-                  });
-                      controller.goToAddProperty8();
-                    },
-                    color: Color(0xffd92328),
-                    child: Text(
-                      "Continue",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          controller.activeStep++;
+                        });
+                        controller.goToAddProperty8();
+                      },
+                      color: Color(0xffd92328),
+                      child: Text(
+                        "Continue",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
               Container(height: 15),
             ],
           ),
@@ -384,5 +391,4 @@ class _AddProperty7State extends State<AddProperty7> {
       },
     );
   }
-
 }
