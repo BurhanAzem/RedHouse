@@ -30,7 +30,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   sharepref = await SharedPreferences.getInstance();
-  sharepref!.setString("visitor", "first"); // visitor: first or yes or no
+  sharepref!.setString("first", "yes"); // first: yes or no
   runApp(const MyApp());
   Get.put<NetworkController>(NetworkController(), permanent: true);
 }
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: "Poppins",
       ),
-      home: BottomBar(), 
+      home: BottomBar(),
       routes: routes,
     );
   }

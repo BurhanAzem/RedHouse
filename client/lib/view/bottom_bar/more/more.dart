@@ -1,12 +1,8 @@
+import 'dart:convert';
 import 'package:client/main.dart';
-import 'package:client/routes.dart';
-import 'package:client/shared_preferences.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
-import 'package:client/view/login.dart';
-import 'package:client/view/register.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 // ignore: must_be_immutable
 class More extends StatefulWidget {
@@ -19,9 +15,9 @@ class More extends StatefulWidget {
 class _MoreState extends State<More> {
   @override
   Widget build(BuildContext context) {
-    final visitor = sharepref!.getString("visitor") ?? "";
-    final user = sharepref!.getString("user") ?? "";
-
+    // final visitor = sharepref!.getString("visitor") ?? "";
+    String? userDtoJson = sharepref!.getString("user");
+    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
 
     return Scaffold(
       body: Container(
@@ -31,13 +27,13 @@ class _MoreState extends State<More> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 // check visitor here
-                if (sharepref!.getString("visitor") == "no")
+                if (sharepref!.getString("user") != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(left: 10),
-                        child: Text("email",
+                        child: Text(userDto["email"],
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -47,6 +43,8 @@ class _MoreState extends State<More> {
                       MaterialButton(
                         onPressed: () {
                           sharepref!.clear();
+                          print("++++++++++++++++++++++++++++++++++++++++++");
+                          print(sharepref!.getString("user"));
                           Get.offAllNamed("/login");
                         },
                         child: const Text('Log out',

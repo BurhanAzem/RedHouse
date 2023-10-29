@@ -82,7 +82,9 @@ class AddPropertyControllerImp extends AddPropertyController {
           Longitude);
 
       if (response['statusCode'] == 200) {
-        data.addAll(response['data']);
+        print("================================================== LsitDto");
+        print(response["listDto"]);
+
         // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {
         Get.defaultDialog(

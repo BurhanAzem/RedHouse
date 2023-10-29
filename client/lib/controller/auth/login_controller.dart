@@ -39,12 +39,10 @@ class LoginControllerImp extends LoginController {
         setToken(response['message']);
         final userDtoJson =
             jsonEncode(response['dto']); // Convert the DTO to JSON
-        setUser(userDtoJson);
-        // sharepref!.setString("user", userDtoJson);
-        print("===============================================");
-        print(getUser());
-        // print(sharepref!.getString("user"));
-        Get.toNamed("/bottom-bar");
+        sharepref!.setString("user", userDtoJson);
+        print("========================================================= User");
+        print(sharepref!.getString("user"));
+        Get.offAllNamed("/bottom-bar");
         sharepref!.setString("visitor", "no");
       } else {
         Get.defaultDialog(

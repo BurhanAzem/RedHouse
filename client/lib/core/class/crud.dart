@@ -4,7 +4,6 @@ import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Crud {
   Future<Either<StatusRequest, Map>> postData(String linkurl, Map data) async {

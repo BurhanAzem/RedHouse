@@ -26,8 +26,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    // controller.email.text = "";
-    // controller.password.text = "";
+    controller.email.text = "";
+    controller.password.text = "";
   }
 
   @override
@@ -159,7 +159,7 @@ class _LoginState extends State<Login> {
             ),
             MaterialButton(
               onPressed: () async {
-                sharepref!.setString("visitor", "yes");
+                // sharepref!.setString("visitor", "yes");
                 Get.offAllNamed("/bottom-bar");
               },
               color: const Color.fromARGB(255, 255, 255, 255),
