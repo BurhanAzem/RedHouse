@@ -14,9 +14,19 @@ class _RegisterState extends State<Register> {
   List<String> options = ['Customer', 'Landlord', 'Agent'];
 
   @override
-  Widget build(BuildContext context) {
-    SignUpControllerImp controller = Get.put(SignUpControllerImp());
+  void initState() {
+    super.initState();
+    controller.email.text = "";
+    controller.password.text = "";
+    controller.firstName.text = "";
+    controller.lastName.text = "";
+    controller.postalCode.text = "";
+    controller.phoneNumber.text = "";
+    controller.userRole = "Customer";
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -56,8 +66,7 @@ class _RegisterState extends State<Register> {
                     controller: controller.firstName,
                     style: const TextStyle(),
                     decoration: InputDecoration(
-                      suffixIcon: const Icon(
-                          Icons.man), // Use prefixIcon for password icon
+                      suffixIcon: const Icon(Icons.man),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(
@@ -112,8 +121,7 @@ class _RegisterState extends State<Register> {
                     obscureText: true,
                     style: const TextStyle(),
                     decoration: InputDecoration(
-                      suffixIcon: const Icon(
-                          Icons.lock), // Use prefixIcon for password icon
+                      suffixIcon: const Icon(Icons.lock),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(

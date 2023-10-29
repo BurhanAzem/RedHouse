@@ -5,14 +5,9 @@ import 'package:client/view/bottom_bar/search/filter/propertytype_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class FilterListView extends StatefulWidget {
+class FilterListView extends StatelessWidget {
   const FilterListView({super.key});
 
-  @override
-  _FilterListViewState createState() => _FilterListViewState();
-}
-
-class _FilterListViewState extends State<FilterListView> {
   @override
   Widget build(BuildContext context) {
     return Container(

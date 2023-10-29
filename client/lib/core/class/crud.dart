@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Crud {
-
   Future<Either<StatusRequest, Map>> postData(String linkurl, Map data) async {
     if (await checkInternet()) {
       var response = await http.post(Uri.parse(linkurl),

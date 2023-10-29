@@ -61,7 +61,6 @@ class _RentFilterState extends State<RentFilter> {
                         child: Column(
                           children: [
                             RentPropertyType(),
-                            // Container(height: 15),
                             Container(
                               width: 340,
                               child: MaterialButton(
@@ -75,6 +74,12 @@ class _RentFilterState extends State<RentFilter> {
                                     townhouse = controller.rentTownhouseTemp;
                                     castle = controller.rentCastleTemp;
                                     department = controller.rentDepartmentTemp;
+
+                                    controller.buyHouse = true;
+                                    controller.buyApartment = true;
+                                    controller.buyTownhouse = true;
+                                    controller.buyCastle = true;
+                                    controller.buyDepartment = true;
                                   });
 
                                   Navigator.pop(context);

@@ -3,7 +3,6 @@ import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/login.dart';
-import 'package:client/main.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,9 +21,15 @@ class LoginControllerImp extends LoginController {
   List data = [];
 
   @override
+  void onInit() {
+    email = TextEditingController();
+    password = TextEditingController();
+    super.onInit();
+  }
+
+  @override
   login() async {
     if (formstate.currentState!.validate()) {
-      // statusRequest = StatusRequest.loading;
       var response = await loginData.postdata(password.text, email.text);
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
@@ -36,7 +41,7 @@ class LoginControllerImp extends LoginController {
         setUser(userDtoJson);
         print(getUser());
         Get.toNamed("/bottom-bar");
-        sharepref!.setString("visitor", "no");
+        // sharepref!.setString("visitor", "no");
       } else {
         Get.snackbar("ُWarning",
             'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
@@ -47,16 +52,9 @@ class LoginControllerImp extends LoginController {
 
     // update();
     else {
-      Get.snackbar("ُWarning", 'There is something wronge!');
+      // Get.snackbar("ُWarning", 'There is something wronge!');
       statusRequest = StatusRequest.failure;
     }
-  }
-
-  @override
-  void onInit() {
-    email = TextEditingController();
-    password = TextEditingController();
-    super.onInit();
   }
 
   @override
