@@ -52,6 +52,7 @@ class PropertyData {
       "listingType": listingType,
       "isAvailableBasement": isAvailableBasement,
       "listingBy": listingBy,
+      // "locationDto":{},
       "locationDto":{
          "streetAddress": streetAddress,
          "city": city,

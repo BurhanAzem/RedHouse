@@ -1,8 +1,8 @@
 import 'package:client/controller/auth/login_controller.dart';
 import 'package:client/core/functions/validInput.dart';
+import 'package:client/main.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:client/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class Login extends StatefulWidget {
@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -47,14 +47,14 @@ class _LoginState extends State<Login> {
         ),
       ),
       body: loading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : buildLoginForm(context, controller),
     );
   }
 
   Widget buildLoginForm(BuildContext context, LoginControllerImp controller) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       child: Form(
         key: controller.formstate,
         child: ListView(
@@ -68,7 +68,7 @@ class _LoginState extends State<Login> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Email",
                   style: TextStyle(fontSize: 18, color: Colors.black),
                 ),
@@ -78,18 +78,18 @@ class _LoginState extends State<Login> {
                     return validInput(val!, 5, 100, "email");
                   },
                   controller: controller.email,
-                  style: TextStyle(),
+                  style: const TextStyle(),
                   decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.email),
+                    suffixIcon: const Icon(Icons.email),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                 ),
                 Container(height: 20),
-                Text(
+                const Text(
                   "Password",
                   style: TextStyle(fontSize: 18, color: Colors.black),
                 ),
@@ -99,11 +99,12 @@ class _LoginState extends State<Login> {
                     return validInput(val!, 5, 30, "password");
                   },
                   controller: controller.password,
-                  style: TextStyle(),
+                  obscureText: true,
+                  style: const TextStyle(),
                   decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.lock),
+                    suffixIcon: const Icon(Icons.lock),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -114,12 +115,12 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      child: Text("Don't have an account ?"),
+                      child: const Text("Don't have an account?"),
                       onTap: () {
-                        controller.goToSignUp();
+                        Get.offNamed("/register");
                       },
                     ),
-                    InkWell(
+                    const InkWell(
                       child: Text("Forgot password"),
                     ),
                   ],
@@ -135,8 +136,8 @@ class _LoginState extends State<Login> {
                 await controller.login();
                 setLoading(false);
               },
-              color: Color(0xffd92328),
-              child: Text(
+              color: const Color(0xffd92328),
+              child: const Text(
                 "Login",
                 style: TextStyle(
                   color: Colors.black,
@@ -152,16 +153,11 @@ class _LoginState extends State<Login> {
             ),
             MaterialButton(
               onPressed: () async {
-                await setVisitor(true);
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => BottomBar(),
-                  ),
-                  (route) => false,
-                );
+                sharepref!.setString("visitor", "yes");
+                Get.offAllNamed("/bottom-bar");
               },
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: Text(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              child: const Text(
                 "Login as visitor",
                 style: TextStyle(
                   color: Color(0xffd92328),
@@ -170,14 +166,14 @@ class _LoginState extends State<Login> {
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: BorderSide(width: 1),
+                side: const BorderSide(width: 1),
               ),
             ),
             Container(
               height: 15,
             ),
             Container(
-              child: Text(
+              child: const Text(
                 "or",
                 textAlign: TextAlign.center,
               ),
@@ -188,11 +184,11 @@ class _LoginState extends State<Login> {
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: BorderSide(width: 1),
+                side: const BorderSide(width: 1),
               ),
               onPressed: () {},
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: Row(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              child: const Row(
                 children: [
                   Icon(Icons.email),
                   Text(
@@ -206,17 +202,15 @@ class _LoginState extends State<Login> {
                 ],
               ),
             ),
-            Container(
-              height: 15,
-            ),
+            Container(height: 8),
             MaterialButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
-                side: BorderSide(width: 1),
+                side: const BorderSide(width: 1),
               ),
               onPressed: () {},
-              color: Color.fromARGB(255, 255, 255, 255),
-              child: Row(
+              color: const Color.fromARGB(255, 255, 255, 255),
+              child: const Row(
                 children: [
                   Icon(Icons.facebook),
                   Text(

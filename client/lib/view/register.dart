@@ -2,22 +2,24 @@ import 'package:client/controller/auth/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class RegisterTwo extends StatefulWidget {
-  RegisterTwo({Key? key}) : super(key: key);
+class Register extends StatefulWidget {
+  const Register({Key? key}) : super(key: key);
 
   @override
-  _RegisterTwoState createState() => _RegisterTwoState();
+  _RegisterState createState() => _RegisterState();
 }
 
-class _RegisterTwoState extends State<RegisterTwo> {
-  final SignUpControllerImp controller = Get.find<SignUpControllerImp>();
+class _RegisterState extends State<Register> {
+  SignUpControllerImp controller = Get.put(SignUpControllerImp());
   List<String> options = ['Customer', 'Landlord', 'Agent'];
 
   @override
   Widget build(BuildContext context) {
+    SignUpControllerImp controller = Get.put(SignUpControllerImp());
+
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -36,58 +38,133 @@ class _RegisterTwoState extends State<RegisterTwo> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Form(
+          key: controller.formstateRegister,
           child: ListView(
             children: [
-              Container(height: 5),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(height: 20),
-                  Text(
+                  const Text(
+                    "First Name",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.firstName,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(
+                          Icons.man), // Use prefixIcon for password icon
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Container(height: 22),
+                  const Text(
+                    "Last Name",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.lastName,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(Icons.man),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Container(height: 22),
+                  const Text(
+                    "Email",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.email,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(Icons.email),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Container(height: 22),
+                  const Text(
+                    "Password",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    controller: controller.password,
+                    obscureText: true,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(
+                          Icons.lock), // Use prefixIcon for password icon
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(5),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Container(height: 22),
+                  const Text(
                     "Phone Number",
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   Container(height: 5),
                   TextFormField(
                     controller: controller.phoneNumber,
-                    style: TextStyle(height: 0.8),
+                    style: const TextStyle(),
                     decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.phone),
+                      suffixIcon: const Icon(Icons.phone),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
-                  Container(height: 20),
-                  Text(
+                  Container(height: 22),
+                  const Text(
                     "Postal Code",
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   Container(height: 5),
                   TextFormField(
                     controller: controller.postalCode,
-                    style: TextStyle(),
+                    style: const TextStyle(),
                     decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.map),
+                      suffixIcon: const Icon(Icons.map),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
-                  Container(height: 20),
-                  Text(
+                  Container(height: 22),
+                  const Text(
                     "User Role",
                     style: TextStyle(fontSize: 18, color: Colors.black),
                   ),
                   Container(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -112,14 +189,19 @@ class _RegisterTwoState extends State<RegisterTwo> {
                         }
                       },
                       isExpanded: true,
-                      underline: SizedBox(),
+                      underline: const SizedBox(),
                     ),
                   ),
                   Container(height: 5),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("I already have an account"),
+                      InkWell(
+                        child: const Text("I already have an account"),
+                        onTap: () {
+                          Get.offNamed("/login");
+                        },
+                      )
                     ],
                   ),
                 ],
@@ -129,9 +211,8 @@ class _RegisterTwoState extends State<RegisterTwo> {
                 onPressed: () {
                   controller.signUp();
                 },
-               color: Color(0xffd92328),
-
-                child: Text(
+                color: const Color(0xffd92328),
+                child: const Text(
                   "Sign Up",
                   style: TextStyle(
                     color: Colors.black,
@@ -144,7 +225,7 @@ class _RegisterTwoState extends State<RegisterTwo> {
               ),
               Container(height: 15),
               Container(
-                child: Text(
+                child: const Text(
                   "or",
                   textAlign: TextAlign.center,
                 ),
@@ -153,11 +234,11 @@ class _RegisterTwoState extends State<RegisterTwo> {
               MaterialButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(width: 1),
+                  side: const BorderSide(width: 1),
                 ),
                 onPressed: () {},
-                color: Color.fromARGB(255, 255, 255, 255),
-                child: Row(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                child: const Row(
                   children: [
                     Icon(Icons.email),
                     Text(
@@ -171,15 +252,15 @@ class _RegisterTwoState extends State<RegisterTwo> {
                   ],
                 ),
               ),
-              Container(height: 15),
+              Container(height: 5),
               MaterialButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
-                  side: BorderSide(width: 1),
+                  side: const BorderSide(width: 1),
                 ),
                 onPressed: () {},
-                color: Color.fromARGB(255, 255, 255, 255),
-                child: Row(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                child: const Row(
                   children: [
                     Icon(Icons.facebook),
                     Text(
@@ -193,6 +274,7 @@ class _RegisterTwoState extends State<RegisterTwo> {
                   ],
                 ),
               ),
+              Container(height: 10),
             ],
           ),
         ),

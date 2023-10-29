@@ -8,22 +8,21 @@ import 'package:client/view/add_property/add_property_7.dart';
 import 'package:client/view/add_property/add_property_8.dart';
 import 'package:client/view/add_property/add_property_9.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/bottom_bar/notification/notifications.dart';
+import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
+import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/login.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
-import 'package:client/view/onboarding/onboardingFour.dart';
-import 'package:client/view/onboarding/onboardingOne.dart';
-import 'package:client/view/onboarding/onboardingThree.dart';
-import 'package:client/view/onboarding/onboardingTwo.dart';
-import 'package:client/view/register/register_one.dart';
-import 'package:client/view/register/register_two.dart';
+import 'package:client/view/onboarding/onboarding_four.dart';
+import 'package:client/view/onboarding/onboarding_one.dart';
+import 'package:client/view/onboarding/onboarding_three.dart';
+import 'package:client/view/onboarding/onboarding_two.dart';
+import 'package:client/view/register.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
-  static const String login = "/login";
   static const String onBoarding = "/onboarding";
-  static const String registerOne = "/register_one";
-  static const String registerTwo = "/register_two";
   static const String onBoardingOne = "/onboarding-one";
   static const String onBoardingTwo = "/onboarding-two";
   static const String onBoardingThree = "/onboarding-three";
@@ -37,14 +36,11 @@ class AppRoute {
   static const String addProperty7 = "/add-property7";
   static const String addProperty8 = "/add-property8";
   static const String addProperty9 = "/add-property9";
-  static const String search = "/go-search";
-  static const String bottomBar = "/go-bottomBar";
+  static const String allContracts = "/all-contracts";
+
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
-  AppRoute.login: (context) =>  Login(),
-  AppRoute.registerOne: (context) => RegisterOne(),
-  AppRoute.registerTwo: (context) => RegisterTwo(),
   AppRoute.onBoarding: (context) => const OnBoarding(),
   AppRoute.onBoardingOne: (context) => const OnBoardingOne(),
   AppRoute.onBoardingTwo: (context) => const OnBoardingTwo(),
@@ -59,7 +55,13 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
   AppRoute.addProperty9: (context) => AddProperty9(),
-  AppRoute.search: (context) => Search(),
-  AppRoute.bottomBar: (context) => BottomBar(),
+  AppRoute.allContracts: (context) => AllContracts(),
 
+  //________________________________________________________
+  "/search": (context) => const Search(),
+  "/bottom-bar": (context) => BottomBar(),
+  "/notificatins": (context) => const Notifications(),
+  "/notificatins-settings": (context) => const NotificationsSettings(),
+  "/login": (context) => Login(),
+  "/register": (context) => Register(),
 };
