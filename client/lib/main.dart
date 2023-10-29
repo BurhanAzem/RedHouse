@@ -1,14 +1,15 @@
+import 'package:client/core/services/network_controller.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/login.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
 import 'package:client/view/welcoming.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:io';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -31,6 +32,7 @@ void main() async {
   sharepref = await SharedPreferences.getInstance();
   sharepref!.setString("visitor", "first"); // visitor: first or yes or no
   runApp(const MyApp());
+  Get.put<NetworkController>(NetworkController(), permanent: true);
 }
 
 class MyApp extends StatelessWidget {

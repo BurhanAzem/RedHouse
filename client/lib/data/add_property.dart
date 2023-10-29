@@ -22,9 +22,6 @@ class PropertyData {
       String isAvailableBasement,
       String listingBy,
       int userId,
-<<<<<<< HEAD
-      List<String> downloadUrls) async {
-=======
       List<String> downloadUrls,
       String streetAddress,
       String city,
@@ -33,7 +30,6 @@ class PropertyData {
       String country,
       dynamic latitude,
       dynamic longitude) async {
->>>>>>> cb5ec897582a0ab1b90e1a6b0906c20767c4688c
     String formattedBuiltYear =
         DateFormat('yyyy-MM-ddTHH:mm:ss').format(builtYear);
     String formattedAvailableOn =
@@ -56,9 +52,6 @@ class PropertyData {
       "listingType": listingType,
       "isAvailableBasement": isAvailableBasement,
       "listingBy": listingBy,
-<<<<<<< HEAD
-      // "locationDto":{},
-=======
       "locationDto":{
          "streetAddress": streetAddress,
          "city": city,
@@ -68,7 +61,6 @@ class PropertyData {
          "latitude": latitude,
          "longitude": longitude
       },
->>>>>>> cb5ec897582a0ab1b90e1a6b0906c20767c4688c
       // "neighborhoodDto":{},
       "propertyFiles": downloadUrls
     });

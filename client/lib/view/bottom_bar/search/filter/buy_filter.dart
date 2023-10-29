@@ -40,7 +40,7 @@ class _BuyFilterState extends State<BuyFilter> {
               apartment = controller.buyApartmentTemp;
               townhouse = controller.buyTownhouseTemp;
               castle = controller.buyCastleTemp;
-              department = controller.rentDepartmentTemp;
+              department = controller.buyDepartmentTemp;
               showModalBottomSheet(
                 shape: const RoundedRectangleBorder(
                     borderRadius:
@@ -74,6 +74,12 @@ class _BuyFilterState extends State<BuyFilter> {
                                     townhouse = controller.buyTownhouseTemp;
                                     castle = controller.buyCastleTemp;
                                     department = controller.buyDepartmentTemp;
+
+                                    controller.rentHouse = true;
+                                    controller.rentApartment = true;
+                                    controller.rentTownhouse = true;
+                                    controller.rentCastle = true;
+                                    controller.rentDepartment = true;
                                   });
 
                                   Navigator.pop(context);

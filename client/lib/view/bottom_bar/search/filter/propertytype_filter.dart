@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PropertyType extends StatefulWidget {
-  PropertyType({Key? key}) : super(key: key);
+  const PropertyType({Key? key}) : super(key: key);
 
   @override
   _PropertyTypeState createState() => _PropertyTypeState();
@@ -67,6 +67,12 @@ class _PropertyTypeState extends State<PropertyType> {
                                 controller.buyCastle = controller.buyCastleTemp;
                                 controller.buyDepartment =
                                     controller.buyDepartmentTemp;
+
+                                controller.rentHouse = true;
+                                controller.rentApartment = true;
+                                controller.rentTownhouse = true;
+                                controller.rentCastle = true;
+                                controller.rentDepartment = true;
                               } else {
                                 controller.rentHouse = controller.rentHouseTemp;
                                 controller.rentApartment =
@@ -77,6 +83,12 @@ class _PropertyTypeState extends State<PropertyType> {
                                     controller.rentCastleTemp;
                                 controller.rentDepartment =
                                     controller.rentDepartmentTemp;
+
+                                controller.buyHouse = true;
+                                controller.buyApartment = true;
+                                controller.buyTownhouse = true;
+                                controller.buyCastle = true;
+                                controller.buyDepartment = true;
                               }
                             });
                             Navigator.pop(context);
@@ -132,7 +144,7 @@ class _PropertyTypeState extends State<PropertyType> {
 }
 
 class BuyPropertType extends StatefulWidget {
-  BuyPropertType({Key? key}) : super(key: key);
+  const BuyPropertType({Key? key}) : super(key: key);
 
   @override
   State<BuyPropertType> createState() => _BuyPropertTypeState();
@@ -235,7 +247,7 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
 }
 
 class RentPropertyType extends StatefulWidget {
-  RentPropertyType({Key? key}) : super(key: key);
+  const RentPropertyType({Key? key}) : super(key: key);
 
   @override
   State<RentPropertyType> createState() => _RentPropertyTypeState();

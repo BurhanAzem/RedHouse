@@ -42,15 +42,14 @@ class AddPropertyControllerImp extends AddPropertyController {
   PropertyData propertyData = PropertyData(Crud());
   StatusRequest statusRequest = StatusRequest.loading;
 
-  String? City; 
-  String? Region; 
-  late String PostalCode; 
-  String? Country; 
-  double? Latitude; 
-  double? Longitude; 
-  
+  String? City;
+  String? Region;
+  late String PostalCode;
+  String? Country;
+  double? Latitude;
+  double? Longitude;
+
   List data = [];
-  
 
   @override
   AddProperty() async {
@@ -75,13 +74,12 @@ class AddPropertyControllerImp extends AddPropertyController {
           userId,
           downloadUrls,
           streetAddress.text,
-          City!, 
-          Region!, 
-          PostalCode, 
+          City!,
+          Region!,
+          PostalCode,
           Country!,
-          Latitude, 
-          Longitude
-          );
+          Latitude,
+          Longitude);
 
       if (response['statusCode'] == 200) {
         data.addAll(response['data']);

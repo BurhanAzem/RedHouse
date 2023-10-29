@@ -30,7 +30,7 @@ class _BottomBarState extends State<BottomBar> {
   final List<Icon> _selectedIcons = [
     const Icon(
       FontAwesomeIcons.magnifyingGlassLocation,
-      size: 23,
+      size: 22,
     ),
     const Icon(
       FontAwesomeIcons.solidHandshake,

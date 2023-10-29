@@ -3,7 +3,6 @@ import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/login.dart';
-import 'package:client/main.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,37 +21,31 @@ class LoginControllerImp extends LoginController {
   List data = [];
 
   @override
+  void onInit() {
+    email = TextEditingController();
+    password = TextEditingController();
+    super.onInit();
+  }
+
+  @override
   login() async {
     if (formstate.currentState!.validate()) {
-      // statusRequest = StatusRequest.loading;
       var response = await loginData.postdata(password.text, email.text);
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
       if (response['statusCode'] == 200) {
         print(response['dto']);
-<<<<<<< HEAD
         setToken(response['message']);
         final userDtoJson =
             jsonEncode(response['dto']); // Convert the DTO to JSON
         setUser(userDtoJson);
         print(getUser());
-        Get.toNamed("/search");
-        sharepref!.setString("visitor", "no");
-      } else {
-        Get.snackbar("ُWarning",
-            'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
-=======
-          setToken(response['message']);
-          final userDtoJson = jsonEncode(response['dto']); // Convert the DTO to JSON
-          setUser(userDtoJson);
-          print(getUser());
-          goToBottomBar();
+        Get.toNamed("/bottom-bar");
       } else {
         Get.defaultDialog(
             title: "ُError",
             middleText:
                 'There is something wronge ! \n statusCode: $response["statusCode"], exception: $response["exception"]');
->>>>>>> cb5ec897582a0ab1b90e1a6b0906c20767c4688c
         statusRequest = StatusRequest.failure;
       }
       return;
@@ -60,16 +53,9 @@ class LoginControllerImp extends LoginController {
 
     // update();
     else {
-      Get.snackbar("ُWarning", 'There is something wronge!');
+      // Get.snackbar("ُWarning", 'There is something wronge!');
       statusRequest = StatusRequest.failure;
     }
-  }
-
-  @override
-  void onInit() {
-    email = TextEditingController();
-    password = TextEditingController();
-    super.onInit();
   }
 
   @override

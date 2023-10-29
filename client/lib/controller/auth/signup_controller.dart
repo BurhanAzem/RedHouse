@@ -19,10 +19,20 @@ class SignUpControllerImp extends SignUpController {
   late StatusRequest statusRequest;
 
   final formstateRegister = GlobalKey<FormState>();
-
   SignupData signupData = SignupData(Crud());
-
   List data = [];
+
+  @override
+  void onInit() {
+    email = TextEditingController();
+    password = TextEditingController();
+    firstName = TextEditingController();
+    lastName = TextEditingController();
+    userRole = "Customer";
+    postalCode = TextEditingController();
+    phoneNumber = TextEditingController();
+    super.onInit();
+  }
 
   @override
   signUp() async {
@@ -41,7 +51,6 @@ class SignUpControllerImp extends SignUpController {
       if (response['statusCode'] == 200) {
         print(response['dto']);
         data.addAll(response['data']);
-        // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {
         Get.defaultDialog(
           title: "Error",
@@ -53,18 +62,6 @@ class SignUpControllerImp extends SignUpController {
 
       update();
     }
-  }
-
-  @override
-  void onInit() {
-    email = TextEditingController();
-    password = TextEditingController();
-    firstName = TextEditingController();
-    lastName = TextEditingController();
-    userRole = "Customer";
-    postalCode = TextEditingController();
-    phoneNumber = TextEditingController();
-    super.onInit();
   }
 
   @override

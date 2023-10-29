@@ -1,7 +1,6 @@
 import 'package:client/controller/auth/login_controller.dart';
 import 'package:client/core/functions/validInput.dart';
 import 'package:client/main.dart';
-import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,6 +21,13 @@ class _LoginState extends State<Login> {
     setState(() {
       loading = value;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller.email.text = "";
+    controller.password.text = "";
   }
 
   @override
@@ -192,7 +198,7 @@ class _LoginState extends State<Login> {
                 children: [
                   Icon(Icons.email),
                   Text(
-                    "Continue with Google",
+                    "                 Continue with Google",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -214,7 +220,7 @@ class _LoginState extends State<Login> {
                 children: [
                   Icon(Icons.facebook),
                   Text(
-                    "Continue with Facebook",
+                    "                  Continue with Facebook",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
