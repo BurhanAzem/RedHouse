@@ -30,6 +30,7 @@ class FilterController extends GetxController {
   final buyMinController = TextEditingController();
   final rentMaxController = TextEditingController();
   final rentMinController = TextEditingController();
+
   final buyMaxControllerTemp = TextEditingController();
   final buyMinControllerTemp = TextEditingController();
   final rentMaxControllerTemp = TextEditingController();
@@ -37,11 +38,13 @@ class FilterController extends GetxController {
 
   String buyView = "Any view";
   String buyViewTemp = "";
+
   String rentView = "Any view";
   String rentViewTemp = "";
 
   RxString bedButtonTemp = "Any".obs;
   RxString bedButton = "Any".obs;
+  
   RxString bathButtonTemp = "Any".obs;
   RxString bathButton = "Any".obs;
 

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 abstract class AllContractsController extends GetxController {
   AllContractsController();
-  goToAddProperty1();
+  goToContract();
   goToAddProperty2();
   goToAddProperty3();
   goToAddProperty4();
@@ -255,5 +255,11 @@ class AllContractsControllerImp extends AllContractsController {
   @override
   goToAddProperty9() {
     Get.toNamed(AppRoute.addProperty9);
+  }
+  
+  @override
+  goToContract() {
+    // Get.toNamed(AppRoute.contract);
+
   }
 }

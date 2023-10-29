@@ -1,4 +1,6 @@
 import 'package:client/controller/contracts/all_contracts_controller.dart';
+import 'package:client/routes.dart';
+import 'package:client/view/contracts/contract.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -125,124 +127,134 @@ class _AllContractsState extends State<AllContracts> {
             child: ListView.builder(
               itemCount: controller.Contracts!.length,
               itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
+                return GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoute.contract);
+                    setState(() {
+                      
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: ListTile(
+                      title: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(
+                                FontAwesomeIcons.handshake,
+                                size: 25,
+                              ),
+                              Text(
+                                (controller.Contracts![index].CreatedDate!
+                                            .toString()
+                                            .length <=
+                                        10)
+                                    ? "       " +
+                                        controller
+                                            .Contracts![index].CreatedDate!
+                                            .toString()!
+                                    : "       " +
+                                        controller
+                                            .Contracts![index].CreatedDate!
+                                            .toString()
+                                            .substring(0, 9),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            (controller.Contracts![index].Title!.length <= 38)
+                                ? controller.Contracts![index].Title!
+                                : controller.Contracts![index].Title!
+                                        .substring(0, 38) +
+                                    '...',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: ListTile(
-                    title: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.handshake,
-                              size: 25,
-                            ),
-                            Text(
-                              (controller.Contracts![index].CreatedDate!
-                                          .toString()
-                                          .length <=
-                                      10)
-                                  ? "       " +
-                                      controller.Contracts![index].CreatedDate!
-                                          .toString()!
-                                  : "       " +
-                                      controller.Contracts![index].CreatedDate!
-                                          .toString()
-                                          .substring(0, 9),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 12),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          (controller.Contracts![index].Title!.length <= 38)
-                              ? controller.Contracts![index].Title!
-                              : controller.Contracts![index].Title!
-                                      .substring(0, 38) +
-                                  '...',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ],
+                      isThreeLine:
+                          true, // This allows the title to take up more horizontal space
+                      subtitle: Column(
+                        children: [
+                          Container(
+                            height: 1,
+                          ),
+                          Container(height: 0.5, color: Color(0xffd92328)),
+                          Container(
+                            height: 1,
+                          ),
+                          Text(
+                            (controller.Contracts![index].Description!.length <=
+                                    100)
+                                ? controller.Contracts![index].Description!
+                                : controller.Contracts![index].Description!
+                                        .substring(0, 100) +
+                                    '...',
+                            style: TextStyle(fontWeight: FontWeight.w400),
+                          ),
+                          Container(
+                            height: 5,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    "Price: ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12),
+                                  ),
+                                  Text(
+                                    controller.Contracts![index].Price!
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: Color(0xffd92328)),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "Contract status: ",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12),
+                                  ),
+                                  Text(
+                                    controller
+                                        .Contracts![index].ContractStatus!,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: Color(0xffd92328)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      // Add other widgets here for displaying additional information
                     ),
-                    isThreeLine:
-                        true, // This allows the title to take up more horizontal space
-                    subtitle: Column(
-                      children: [
-                        Container(
-                          height: 1,
-                        ),
-                        Container(height: 0.5, color: Color(0xffd92328)),
-                        Container(
-                          height: 1,
-                        ),
-                        Text(
-                          (controller.Contracts![index].Description!.length <=
-                                  100)
-                              ? controller.Contracts![index].Description!
-                              : controller.Contracts![index].Description!
-                                      .substring(0, 100) +
-                                  '...',
-                          style: TextStyle(fontWeight: FontWeight.w400),
-                        ),
-                        Container(
-                          height: 5,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  "Price: ",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12),
-                                ),
-                                Text(
-                                  controller.Contracts![index].Price!
-                                      .toString(),
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                      color: Color(0xffd92328)),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "Contract status: ",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12),
-                                ),
-                                Text(
-                                  controller.Contracts![index].ContractStatus!,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                      color: Color(0xffd92328)),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    // Add other widgets here for displaying additional information
                   ),
                 );
               },
