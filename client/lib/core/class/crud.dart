@@ -28,4 +28,34 @@ class Crud {
       return const Left(StatusRequest.offlinefailure);
     }
   }
+
+Future<Either<StatusRequest, Map>> getData(String linkurl, Map data) async {
+  if (await checkInternet()) {
+    // Construct the query parameters from the 'data' map
+    final queryParameters = <String, String>{};
+    data.forEach((key, value) {
+      queryParameters[key] = value.toString();
+    });
+
+    // Build the full URL with query parameters
+    final uri = Uri.https("", linkurl, queryParameters);
+
+    var response = await http.get(uri, headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${getToken()}'
+    });
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map responsebody = json.decode(response.body);
+      print(responsebody);
+      return Right(responsebody);
+    } else {
+      return const Left(StatusRequest.serverfailure);
+    }
+  } else {
+    return const Left(StatusRequest.offlinefailure);
+  }
+}
 }

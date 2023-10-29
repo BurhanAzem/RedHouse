@@ -3,5 +3,6 @@ class AppLink {
   //  -------------- auth
   static const String register = "$server/auth/register";
   static const String login = "$server/auth/login";
-  static const String add_property = "$server/properties";
+  static const String properties = "$server/properties";
+
 }

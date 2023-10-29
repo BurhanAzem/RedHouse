@@ -1,4 +1,3 @@
-import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/signup.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class SignUpControllerImp extends SignUpController {
   late StatusRequest statusRequest;
 
   final formstateRegister = GlobalKey<FormState>();
-  SignupData signupData = SignupData(Crud());
   List data = [];
 
   @override
@@ -38,7 +36,7 @@ class SignUpControllerImp extends SignUpController {
   signUp() async {
     if (formstateRegister.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await signupData.postdata(
+      var response = await SignUpData.postdata(
           firstName.text,
           lastName.text,
           password.text,

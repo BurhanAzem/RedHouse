@@ -8,4 +8,6 @@ class MapListController extends GetxController {
   String currentLocationName = '';
 
   List<Property> Properties = [];
+
+  
 }

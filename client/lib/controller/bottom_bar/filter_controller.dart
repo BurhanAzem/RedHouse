@@ -67,6 +67,13 @@ class FilterController extends GetxController {
     '5+',
   ];
 
+
+getProperties(){
+  
+}
+
+
+
   void setBedButtonTemp(String label) {
     bedButtonTemp.value = label;
   }

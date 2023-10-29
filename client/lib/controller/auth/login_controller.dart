@@ -14,7 +14,6 @@ abstract class LoginController extends GetxController {
 
 class LoginControllerImp extends LoginController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
-  LoginData loginData = LoginData(Crud());
 
   late TextEditingController email;
   late TextEditingController password;
@@ -31,7 +30,7 @@ class LoginControllerImp extends LoginController {
   @override
   login() async {
     if (formstate.currentState!.validate()) {
-      var response = await loginData.postdata(password.text, email.text);
+      var response = await LoginData.postdata(password.text, email.text);
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
       if (response['statusCode'] == 200) {
