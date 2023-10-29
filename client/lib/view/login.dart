@@ -26,8 +26,8 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    controller.email.text = "";
-    controller.password.text = "";
+    // controller.email.text = "";
+    // controller.password.text = "";
   }
 
   @override

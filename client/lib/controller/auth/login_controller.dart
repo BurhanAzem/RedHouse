@@ -3,6 +3,7 @@ import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/login.dart';
+import 'package:client/main.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,12 +40,17 @@ class LoginControllerImp extends LoginController {
         final userDtoJson =
             jsonEncode(response['dto']); // Convert the DTO to JSON
         setUser(userDtoJson);
+        // sharepref!.setString("user", userDtoJson);
+        print("===============================================");
         print(getUser());
+        // print(sharepref!.getString("user"));
         Get.toNamed("/bottom-bar");
-        // sharepref!.setString("visitor", "no");
+        sharepref!.setString("visitor", "no");
       } else {
-        Get.snackbar("ُWarning",
-            'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
+        Get.defaultDialog(
+            title: "ُWarning",
+            middleText:
+                'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
         statusRequest = StatusRequest.failure;
       }
       return;
@@ -52,7 +58,8 @@ class LoginControllerImp extends LoginController {
 
     // update();
     else {
-      // Get.snackbar("ُWarning", 'There is something wronge!');
+      Get.defaultDialog(
+          title: "ُWarning", middleText: 'There is something wronge!');
       statusRequest = StatusRequest.failure;
     }
   }

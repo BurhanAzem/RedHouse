@@ -19,6 +19,10 @@ class More extends StatefulWidget {
 class _MoreState extends State<More> {
   @override
   Widget build(BuildContext context) {
+    final visitor = sharepref!.getString("visitor") ?? "";
+    final user = sharepref!.getString("user") ?? "";
+
+
     return Scaffold(
       body: Container(
         child: ListView(
@@ -31,9 +35,9 @@ class _MoreState extends State<More> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.only(left: 10),
-                        child: Text('ayman.dwikat.2001@gmail.com',
+                        child: Text("email",
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,

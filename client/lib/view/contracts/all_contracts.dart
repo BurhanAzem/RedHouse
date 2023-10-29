@@ -211,7 +211,8 @@ class _AllContractsState extends State<AllContracts> {
                                       fontSize: 12),
                                 ),
                                 Text(
-                                  controller.Contracts![index].Price!.toString(),
+                                  controller.Contracts![index].Price!
+                                      .toString(),
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 12,
