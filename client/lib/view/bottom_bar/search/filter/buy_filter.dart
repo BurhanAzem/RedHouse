@@ -203,6 +203,9 @@ class _BuyFilterState extends State<BuyFilter> {
                   controller.buyView = controller.buyViewTemp;
                   controller.rentView = "Any view";
 
+
+                  controller.getProperties();
+
                   Navigator.pop(context);
                 }
               },

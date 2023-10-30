@@ -97,8 +97,7 @@ class PropertyData {
       String numberOfBathrooms,
       String numberOfBedrooms,
       String view,
-      String listingType,
-      String listingBy) async {
+      String listingType) async {
     final String propertyTypesParam = jsonEncode(propertyTypes);
     final Map<String, String> filters = {
       "propertyType": propertyTypesParam,
@@ -108,7 +107,6 @@ class PropertyData {
       "numberOfBathrooms": numberOfBathrooms,
       "view": view,
       "listingType": listingType,
-      "listingBy": listingBy,
     };
 
     if (await checkInternet()) {

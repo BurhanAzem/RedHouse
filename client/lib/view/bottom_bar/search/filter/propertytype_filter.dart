@@ -91,6 +91,9 @@ class _PropertyTypeState extends State<PropertyType> {
                                 controller.buyDepartment = true;
                               }
                             });
+
+                            controller.getProperties();
+
                             Navigator.pop(context);
                           },
                           minWidth: 300,

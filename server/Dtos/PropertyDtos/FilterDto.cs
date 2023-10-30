@@ -18,6 +18,5 @@ namespace server.Dtos.PropertyDtos
         // public int ParkingSpots { get; set; }
         public string ListingType { get; set; }
         // public string IsAvailableBasement { get; set; }
-        public string ListingBy { get; set; } 
     }
 }

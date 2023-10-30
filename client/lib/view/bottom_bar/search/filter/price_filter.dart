@@ -118,6 +118,10 @@ class _PriceState extends State<Price> {
                                     controller.rentMaxControllerTemp.text;
                                 controller.rentMinController.text =
                                     controller.rentMinControllerTemp.text;
+
+                                    
+                                controller.getProperties();
+
                                 Navigator.pop(context);
                               }
                             }
