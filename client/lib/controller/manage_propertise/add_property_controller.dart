@@ -83,7 +83,7 @@ class AddPropertyControllerImp extends AddPropertyController {
 
       if (response['statusCode'] == 200) {
         print("================================================== LsitDto");
-        print(response["listDto"]);
+        print(response['listDto']);
 
         // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {
