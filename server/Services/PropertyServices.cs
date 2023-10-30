@@ -26,15 +26,16 @@ namespace RedHouse_Server.Services
                 };
             }
 
-            Location location = new Location{
+            Location location = new Location
+            {
                 City = propertyDto.LocationDto.City,
                 Country = propertyDto.LocationDto.Country,
                 Region = propertyDto.LocationDto.Region,
                 PostalCode = propertyDto.LocationDto.PostalCode,
                 StreetAddress = propertyDto.LocationDto.StreetAddress,
                 Latitude = propertyDto.LocationDto.Latitude,
-                Longitude =propertyDto.LocationDto.Longitude,
-            } ;
+                Longitude = propertyDto.LocationDto.Longitude,
+            };
             var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
             Property property = new Property
             {
@@ -43,8 +44,8 @@ namespace RedHouse_Server.Services
                 IsAvailableBasement = propertyDto.IsAvailableBasement,
                 ListingBy = propertyDto.ListingBy,
                 ListingType = propertyDto.ListingType,
-                LocationId = locationRes.Entity.Id,
-                NeighborhoodId = 0,
+                LocationId = locationRes.Entity.LocationId,
+                // NeighborhoodId = 0,
                 NumberOfBathRooms = propertyDto.NumberOfBathRooms,
                 NumberOfBedRooms = propertyDto.NumberOfBedRooms,
                 NumberOfUnits = propertyDto.NumberOfUnits,
@@ -59,7 +60,7 @@ namespace RedHouse_Server.Services
             };
             var propertyRes = await _redHouseDbContext.Properties.AddAsync(property);
             await _redHouseDbContext.SaveChangesAsync();
-            int propertyId = propertyRes.Entity.Id;
+            int propertyId = propertyRes.Entity.PropertyId;
             foreach (var file in propertyDto.PropertyFiles)
             {
                 PropertyFile propertyFile = new PropertyFile
@@ -99,26 +100,116 @@ namespace RedHouse_Server.Services
         }
 
 
-public async Task<ResponsDto<Property>> GetProperties(FilterDto filterDto)
-{
-    // Create a queryable variable based on the DbSet
-    var query = _redHouseDbContext.Properties.AsQueryable();
+        public async Task<ResponsDto<Property>> GetProperties(FilterDto filterDto)
+        {
+            // Create a queryable variable based on the DbSet
+            var query = _redHouseDbContext.Properties.AsQueryable();
 
-    // // Apply filtering based on the filterDto, if provided
-    // if (!string.IsNullOrEmpty(filterDto.SomeFilterProperty))
-    // {
-    //     query = query.Where(p => p.SomeProperty == filterDto.SomeFilterProperty);
-    // }
-    
-    // Execute the query and return the results
-    var properties = await query.ToArrayAsync();
+            query = query.Where(p => p.PropertyId >= 0);
 
-    return new ResponsDto<Property>
-    {
-        ListDto = properties,
-        StatusCode = HttpStatusCode.OK,
-    };
-}
+            // Apply filtering based on the filterDto, if provided
+
+            if (!string.IsNullOrEmpty(filterDto.MinPrice) && !string.IsNullOrEmpty(filterDto.MaxPrice))
+            {
+                int minPrice;
+                int maxPrice;
+
+                if (int.TryParse(filterDto.MinPrice, out minPrice) && int.TryParse(filterDto.MaxPrice, out maxPrice))
+                {
+                    query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.NumberOfBedRooms))
+            {
+                if (int.TryParse(filterDto.NumberOfBedRooms, out int numberOfBedRooms))
+                {
+                    query = query.Where(p => p.NumberOfBedRooms == numberOfBedRooms);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.NumberOfBathRooms))
+            {
+                if (int.TryParse(filterDto.NumberOfBathRooms, out int numberOfBathRooms))
+                {
+                    query = query.Where(p => p.NumberOfBathRooms == numberOfBathRooms);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.View))
+            {
+                query = query.Where(p => p.View == filterDto.View);
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.ListingType))
+            {
+                query = query.Where(p => p.ListingType == filterDto.ListingType);
+            }
+
+            if (filterDto.PropertyTypes != null)
+            {
+                query = query.Where(p => filterDto.PropertyTypes.Contains(p.PropertyType));
+            }
+
+
+
+
+            // Execute the query and return the results
+            var properties = await query.ToArrayAsync();
+
+            foreach (var property in properties)
+            {
+                var locationRes = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.LocationId == property.LocationId);
+                property.Location = locationRes;
+            }
+
+            if (filterDto.LocationDto != null)
+            {
+                if (!string.IsNullOrEmpty(filterDto.LocationDto.City))
+                {
+                    properties = properties.Where(p => p.Location.City == filterDto.LocationDto.City).ToArray();
+                }
+
+                if (!string.IsNullOrEmpty(filterDto.LocationDto.Region))
+                {
+                    properties = properties.Where(p => p.Location.Region == filterDto.LocationDto.Region).ToArray();
+                }
+
+                if (!string.IsNullOrEmpty(filterDto.LocationDto.Country))
+                {
+                    properties = properties.Where(p => p.Location.Country == filterDto.LocationDto.Country).ToArray();
+                }
+
+                if (!string.IsNullOrEmpty(filterDto.LocationDto.StreetAddress))
+                {
+                    properties = properties.Where(p => p.Location.StreetAddress == filterDto.LocationDto.StreetAddress).ToArray();
+                }
+
+                if (!string.IsNullOrEmpty(filterDto.LocationDto.PostalCode))
+                {
+                    properties = properties.Where(p => p.Location.PostalCode == filterDto.LocationDto.PostalCode).ToArray();
+                }
+
+                if (!string.IsNullOrEmpty(filterDto.LocationDto.Latitude) && !string.IsNullOrEmpty(filterDto.LocationDto.Longitude))
+                {
+                    double latitude;
+                    double longitude;
+
+                    if (double.TryParse(filterDto.LocationDto.Latitude, out latitude) && double.TryParse(filterDto.LocationDto.Longitude, out longitude))
+                    {
+                        properties = properties.Where(p => p.Location.Latitude == latitude && p.Location.Longitude == longitude).ToArray();
+                    }
+                }
+            }
+
+
+            return new ResponsDto<Property>
+            {
+                ListDto = properties,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
 
 
         public async Task<ResponsDto<Property>> GetProperty(int propertyId)
@@ -158,7 +249,7 @@ public async Task<ResponsDto<Property>> GetProperties(FilterDto filterDto)
                 ListingBy = propertyDto.ListingBy,
                 ListingType = propertyDto.ListingType,
                 LocationId = 0,
-                NeighborhoodId = 0,
+                // NeighborhoodId = 0,
                 NumberOfBathRooms = propertyDto.NumberOfBathRooms,
                 NumberOfBedRooms = propertyDto.NumberOfBedRooms,
                 NumberOfUnits = propertyDto.NumberOfUnits,

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/link_api.dart';
+import 'package:client/model/location.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:dartz/dartz.dart';
@@ -80,53 +81,64 @@ class PropertyData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody);
-        return Right(responsebody);
+        return (responsebody);
       } else {
-        return const Left(StatusRequest.serverfailure);
+        return (StatusRequest.serverfailure);
       }
     } else {
-      return const Left(StatusRequest.offlinefailure);
+      return  (StatusRequest.offlinefailure);
     }
     // return response.fold((l) => l, (r) => r);
   }
 
   static getdata(
-      List<String> propertyTypes,
-      String minPrice,
-      String maxPrice,
-      String numberOfBathrooms,
-      String numberOfBedrooms,
-      String view,
-      String listingType) async {
-    final String propertyTypesParam = jsonEncode(propertyTypes);
-    final Map<String, String> filters = {
-      "propertyType": propertyTypesParam,
-      "minPrice": minPrice,
-      "maxPrice": maxPrice,
-      "numberOfBedrooms": numberOfBedrooms,
-      "numberOfBathrooms": numberOfBathrooms,
-      "view": view,
-      "listingType": listingType,
-    };
+  List<String> propertyTypes,
+  String minPrice,
+  String maxPrice,
+  String numberOfBathrooms,
+  String numberOfBedrooms,
+  String view,
+  String listingType,
+  Location location
+) async {
+  final String propertyTypesParam = propertyTypes.join(',');
+  final Map<String, dynamic> filters = {
+  "propertyTypes": propertyTypes,
+  "minPrice": minPrice.toString(),
+  "maxPrice": maxPrice.toString(),
+  "numberOfBedrooms": numberOfBedrooms.toString(),
+  "numberOfBathrooms": numberOfBathrooms.toString(),
+  "view": view,
+  "listingType": listingType,
+  "StreetAddress": location.StreetAddress,
+  "City": location.City,
+  "Region": location.Region,
+  "PostalCode": location.PostalCode,
+  "Country": location.Country,
+  "Latitude": location.Latitude == 0 ? "" : location.Latitude.toString(),
+  "Longitude": location.Longitude == 0 ? "" : location.Longitude.toString(),
+};
 
-    if (await checkInternet()) {
-      final uri = Uri.https("", AppLink.properties, filters);
+  if (await checkInternet()) {
+    final uri = Uri.https("10.0.2.2:7042", "/properties", filters);
 
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}'
-      });
-      print(response.statusCode);
+    var response = await http.get(uri, headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${getToken()}',
+    });
+    print(response.statusCode);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody);
-        return Right(responsebody);
-      } else {
-        return const Left(StatusRequest.serverfailure);
-      }
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map responsebody = json.decode(response.body);
+      print(responsebody);
+      
+      return (responsebody);
     } else {
-      return const Left(StatusRequest.offlinefailure);
+      return  StatusRequest.serverfailure;
     }
+  } else {
+    return  StatusRequest.offlinefailure;
   }
+}
+
 }

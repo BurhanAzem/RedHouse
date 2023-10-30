@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/login.dart';

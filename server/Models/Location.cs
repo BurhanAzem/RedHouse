@@ -6,7 +6,7 @@ namespace RedHouse_Server.Models
     public class Location
     {
         [Key]
-        public int Id { get; set; }
+        public int LocationId { get; set; }
         public string ? StreetAddress { get; set; }
         public string ? City { get; set; }
         public string ? Region { get; set; }

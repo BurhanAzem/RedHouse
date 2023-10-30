@@ -7,11 +7,5 @@ class MapListController extends GetxController {
   CameraPosition? currentCameraPosition;
   final RxString currentLocationName = "".obs;
 
-<<<<<<< HEAD
   List<Property> properties = [];
-=======
-  List<Property> Properties = [];
-
-  
->>>>>>> d19e12219740318d11d500af635f633b653ce0be
 }

@@ -1,10 +1,15 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
+import 'package:client/model/location.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FilterController extends GetxController {
   bool listingType = true; // true --> Buy, false --> Rent
+
+
+  Location ?location = new Location("", "", "", "",
+           "", 0, 0);
 
   bool buyHouse = true;
   bool buyHouseTemp = true;
@@ -79,29 +84,29 @@ class FilterController extends GetxController {
      String? listingPropertyType;
 
     if (listingType) {
-      if (buyHouse) propertyTypes!.add("house");
+      if (buyHouse) propertyTypes!.add("House");
       else propertyTypes!.add("");
-      if (buyApartment) propertyTypes!.add("apartment");
+      if (buyApartment) propertyTypes!.add("Apartment Unit");
       else propertyTypes!.add("");
-      if (buyTownhouse) propertyTypes!.add("townhouse");
+      if (buyTownhouse) propertyTypes!.add("Townhouse");
       else propertyTypes!.add("");
-      if (buyCastle) propertyTypes!.add("castle");
+      if (buyCastle) propertyTypes!.add("Castle");
       else propertyTypes!.add("");
-      if (buyDepartment) propertyTypes!.add("department");
+      if (buyDepartment) propertyTypes!.add("Entire Department Community");
       else propertyTypes!.add("");
       minPrice = buyMinController.text;
       maxPrice = buyMaxController.text;
       view = buyView;
     } else {
-      if (rentHouse) propertyTypes!.add("house");
+      if (rentHouse) propertyTypes!.add("House");
       else propertyTypes!.add("");
-      if (rentApartment) propertyTypes!.add("apartment");
+      if (rentApartment) propertyTypes!.add("Apartment Unit");
       else propertyTypes!.add("");
-      if (rentTownhouse) propertyTypes!.add("townhouse");
+      if (rentTownhouse) propertyTypes!.add("Townhouse");
       else propertyTypes!.add("");
-      if (rentCastle) propertyTypes!.add("castle");
+      if (rentCastle) propertyTypes!.add("Castle");
       else propertyTypes!.add("");
-      if (rentDepartment) propertyTypes!.add("department");
+      if (rentDepartment) propertyTypes!.add("Entire Department Community");
       else propertyTypes!.add("");
 
       minPrice = rentMinController.text;
@@ -109,10 +114,10 @@ class FilterController extends GetxController {
       view = rentView;
     }
 
-     if (bedButton.toString().length > 2) numberOfBedrooms = bedButton.string.substring(0, 1);
+     if (bedButton.toString().length <= 2) numberOfBedrooms = bedButton.string.substring(0, 1);
      else numberOfBedrooms = "";
 
-     if (bathButton.toString().length > 2) numberOfBathrooms = bathButton.string.substring(0, 1);
+     if (bathButton.toString().length <= 2) numberOfBathrooms = bathButton.string.substring(0, 1);
      else numberOfBathrooms = ""; 
         // Rest of your code
       if(listingType) listingPropertyType = "For sell";
@@ -124,7 +129,9 @@ class FilterController extends GetxController {
        numberOfBathrooms,
        numberOfBedrooms,
        view,
-       listingPropertyType.toString());
+       listingPropertyType.toString(),
+       location!       
+       );
 
       if (response['statusCode'] == 200) {
         print("================================================== LsitDto");

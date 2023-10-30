@@ -7,7 +7,7 @@ namespace RedHouse_Server.Models
     public class Application
     {
         [Key]
-        public int Id { get; set; }
+        public int ApplicationId { get; set; }
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
 

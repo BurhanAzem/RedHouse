@@ -14,6 +14,8 @@ import 'package:client/view/bottom_bar/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/contracts/contract.dart';
 import 'package:client/view/login.dart';
+import 'package:client/view/manage_properties/manage_properties.dart';
+import 'package:client/view/manage_properties/properties.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
 import 'package:client/view/onboarding/onboarding_four.dart';
 import 'package:client/view/onboarding/onboarding_one.dart';
@@ -39,6 +41,10 @@ class AppRoute {
   static const String addProperty9 = "/add-property9";
   static const String allContracts = "/all-contracts";
   static const String contract = "/contract";
+  static const String properties = "/properties";
+  static const String manageProperties = "/manage-properties";
+  
+
 
 }
 
@@ -59,6 +65,10 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty9: (context) => AddProperty9(),
   AppRoute.allContracts: (context) => AllContracts(),
   AppRoute.contract: (context) => const Contract(),
+  AppRoute.properties: (context) => const Properties(),
+  AppRoute.manageProperties: (context) => const ManageProperties(),
+
+
 
   //________________________________________________________
   "/search": (context) => const Search(),

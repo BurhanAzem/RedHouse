@@ -22,7 +22,7 @@ class _BuyFilterState extends State<BuyFilter> {
   @override
   Widget build(BuildContext context) {
     const options = [
-      "Any view",
+      "Any",
       "City",
       "Village",
       "Mountain",

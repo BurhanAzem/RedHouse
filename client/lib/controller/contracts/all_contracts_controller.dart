@@ -1,4 +1,3 @@
-import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/model/contract.dart';

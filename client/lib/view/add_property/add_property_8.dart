@@ -1,4 +1,5 @@
 import 'package:client/controller/manage_propertise/add_property_controller.dart';
+import 'package:client/routes.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -289,10 +290,24 @@ class _AddProperty8State extends State<AddProperty8> {
               Container(height: 5),
               MaterialButton(
                 onPressed: () {
-                  setState(() {
-                    controller.activeStep++;
-                  });
-                  controller.AddProperty();
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      // Show a loading dialog while processing
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  );
+
+                  // AddPropertyFuture is a function that performs controller.AddProperty
+                  Future<void> addPropertyFuture() async {
+                    await controller.AddProperty();
+                    Get.offAndToNamed(AppRoute.manageProperties);
+                  }
+
+                  // Execute the addPropertyFuture asynchronously and navigate when done
+                  addPropertyFuture();
                 },
                 color: Color(0xffd92328),
                 child: Text(
