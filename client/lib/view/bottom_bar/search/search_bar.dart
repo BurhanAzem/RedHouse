@@ -1,4 +1,6 @@
+import 'package:client/controller/map_list_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class SearchBarRow extends StatefulWidget {
@@ -16,6 +18,8 @@ class SearchBarRow extends StatefulWidget {
 }
 
 class _SearchBarRowState extends State<SearchBarRow> {
+  MapListController controller = Get.put(MapListController());
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -49,12 +53,18 @@ class _SearchBarRowState extends State<SearchBarRow> {
                   Container(width: 15),
                   Container(
                     width: 210,
-                    child: Text("City, ZIP, School, AddressAddress",
-                        style: TextStyle(
+                    child: Obx(() {
+                      return Text(
+                        controller.currentLocationName.value == ""
+                            ? "City, ZIP, School, AddressAddress"
+                            : controller.currentLocationName.value,
+                        style: const TextStyle(
                           fontSize: 17,
                           color: Colors.black45,
                         ),
-                        overflow: TextOverflow.ellipsis),
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    }),
                   ),
                   Container(width: 8),
                 ],
@@ -70,7 +80,7 @@ class _SearchBarRowState extends State<SearchBarRow> {
               child: Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 10),
+                    padding: const EdgeInsets.only(left: 10),
                     child: Icon(
                       widget.isListIcons
                           ? Icons.format_list_bulleted
@@ -80,7 +90,7 @@ class _SearchBarRowState extends State<SearchBarRow> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 2),
+                    padding: const EdgeInsets.only(left: 2),
                     child: Text(
                       widget.isListIcons ? "List" : "Map",
                       style: TextStyle(
@@ -129,14 +139,14 @@ class HomeSearch extends SearchDelegate {
             print("===================================================");
             print(query);
           },
-          icon: Icon(Icons.keyboard_voice, size: 30, color: Colors.black),
+          icon: const Icon(Icons.keyboard_voice, size: 30, color: Colors.black),
         )
       else
         IconButton(
           onPressed: () {
             query = "";
           },
-          icon: Icon(Icons.close, size: 27, color: Colors.black),
+          icon: const Icon(Icons.close, size: 27, color: Colors.black),
         ),
     ];
   }
@@ -147,12 +157,12 @@ class HomeSearch extends SearchDelegate {
         onPressed: () {
           close(context, null);
         },
-        icon: Icon(Icons.arrow_back, size: 27, color: Colors.black));
+        icon: const Icon(Icons.arrow_back, size: 27, color: Colors.black));
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return Text("");
+    return const Text("");
   }
 
   @override

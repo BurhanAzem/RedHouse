@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class MapListController extends GetxController {
   Set<Marker> markers = Set<Marker>();
   CameraPosition? currentCameraPosition;
-  String currentLocationName = '';
+  final RxString currentLocationName = "".obs;
 
-  List<Property> Properties = [];
+  List<Property> properties = [];
 }

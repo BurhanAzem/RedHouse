@@ -52,14 +52,14 @@ class PropertyData {
       "listingType": listingType,
       "isAvailableBasement": isAvailableBasement,
       "listingBy": listingBy,
-      "locationDto":{
-         "streetAddress": streetAddress,
-         "city": city,
-         "region": region,
-         "postalCode": postalCode,
-         "country": country,
-         "latitude": latitude,
-         "longitude": longitude
+      "locationDto": {
+        "streetAddress": streetAddress,
+        "city": city,
+        "region": region,
+        "postalCode": postalCode,
+        "country": country,
+        "latitude": latitude,
+        "longitude": longitude
       },
       // "neighborhoodDto":{},
       "propertyFiles": downloadUrls
