@@ -1,3 +1,4 @@
+import 'package:client/view/contracts/overview.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 
@@ -53,8 +54,8 @@ class _TopNavigationBar extends State<Contract>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const <Widget>[
-          Center(child: Properties()),
+        children:  <Widget>[
+          Center(child: OverView()),
           Center(
             child: Text("It's rainy here"),
           ),

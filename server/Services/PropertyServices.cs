@@ -72,6 +72,7 @@ namespace RedHouse_Server.Services
             }
             return new ResponsDto<Property>
             {
+                Dto = propertyRes.Entity,
                 Message = "Proprety Added Successfully",
                 StatusCode = HttpStatusCode.OK,
             };

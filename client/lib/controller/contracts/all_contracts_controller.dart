@@ -1,6 +1,6 @@
 import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
-import 'package:client/data/add_property.dart';
+import 'package:client/data/properties.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 abstract class AllContractsController extends GetxController {
   AllContractsController();
-  goToAddProperty1();
+  goToContract();
   goToAddProperty2();
   goToAddProperty3();
   goToAddProperty4();
@@ -137,7 +137,6 @@ class AllContractsControllerImp extends AllContractsController {
   String listingBy = "Landlord";
   int userId = 1;
   List<String> downloadUrls = [];
-  PropertyData propertyData = PropertyData(Crud());
   StatusRequest statusRequest = StatusRequest.loading;
 
   String? City;
@@ -153,7 +152,7 @@ class AllContractsControllerImp extends AllContractsController {
   AddProperty() async {
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await propertyData.postdata(
+      var response = await PropertyData.postdata(
           propertyType,
           price.text,
           numberOfBedrooms.text,
@@ -255,5 +254,11 @@ class AllContractsControllerImp extends AllContractsController {
   @override
   goToAddProperty9() {
     Get.toNamed(AppRoute.addProperty9);
+  }
+  
+  @override
+  goToContract() {
+    // Get.toNamed(AppRoute.contract);
+
   }
 }

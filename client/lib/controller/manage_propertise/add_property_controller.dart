@@ -1,6 +1,6 @@
 import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
-import 'package:client/data/add_property.dart';
+import 'package:client/data/properties.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +39,7 @@ class AddPropertyControllerImp extends AddPropertyController {
   String listingBy = "Landlord";
   int userId = 1;
   List<String> downloadUrls = [];
-  PropertyData propertyData = PropertyData(Crud());
+  // PropertyData propertyData = PropertyData(Crud());
   StatusRequest statusRequest = StatusRequest.loading;
 
   String? City;
@@ -55,7 +55,7 @@ class AddPropertyControllerImp extends AddPropertyController {
   AddProperty() async {
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await propertyData.postdata(
+      var response = await PropertyData.postdata(
           propertyType,
           price.text,
           numberOfBedrooms.text,
