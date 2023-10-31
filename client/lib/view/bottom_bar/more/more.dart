@@ -66,7 +66,7 @@ class _MoreState extends State<More> {
                             "Welcome",
                             style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.bold,
                               fontSize: 34,
                             ),
                           ),
@@ -145,7 +145,7 @@ class _MoreState extends State<More> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 27,
                     ),
                   ),
                 ),
@@ -181,7 +181,7 @@ class _MoreState extends State<More> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 27,
                     ),
                   ),
                 ),
@@ -262,7 +262,7 @@ class _MoreState extends State<More> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 27,
                     ),
                   ),
                 ),
@@ -343,7 +343,7 @@ class _MoreState extends State<More> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 27,
                     ),
                   ),
                 ),
@@ -390,7 +390,7 @@ class _MoreState extends State<More> {
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 27,
                     ),
                   ),
                 ),

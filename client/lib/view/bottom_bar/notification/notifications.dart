@@ -22,7 +22,7 @@ class _NotificationsState extends State<Notifications> {
               child: Text(
                 'Notifications',
                 style: TextStyle(
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -50,7 +50,7 @@ class _NotificationsState extends State<Notifications> {
               'Get notifications',
               style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.bold,
                 fontSize: 30,
               ),
             ),

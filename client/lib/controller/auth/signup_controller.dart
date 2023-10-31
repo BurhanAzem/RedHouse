@@ -48,6 +48,7 @@ class SignUpControllerImp extends SignUpController {
 
       if (response['statusCode'] == 200) {
         print(response['dto']);
+        // Get.offAllNamed("/login");
         // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {
         Get.defaultDialog(

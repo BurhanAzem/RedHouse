@@ -1,4 +1,5 @@
 import 'package:client/controller/map_list_controller.dart';
+import 'package:client/view/bottom_bar/search/search%20api/search_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
@@ -30,7 +31,8 @@ class _SearchBarRowState extends State<SearchBarRow> {
           GestureDetector(
             onTap: () {
               // SearchDelegate
-              showSearch(context: context, delegate: HomeSearch());
+              // showSearch(context: context, delegate: HomeSearch());
+              Get.to(() => SearhcLoactionScreen());
             },
             child: Container(
               height: 50,
@@ -111,44 +113,9 @@ class _SearchBarRowState extends State<SearchBarRow> {
 }
 
 class HomeSearch extends SearchDelegate {
-  final stt.SpeechToText _speech = stt.SpeechToText();
-
-  Future<void> startListening() async {
-    bool available = await _speech.initialize();
-    if (available) {
-      await _speech.listen(
-        onResult: (result) {
-          if (result.finalResult) {
-            // Set the recognized text as the query
-            query = result.recognizedWords;
-          }
-        },
-      );
-    } else {
-      // Handle if speech recognition is not available
-    }
-  }
-
   @override
   List<Widget>? buildActions(BuildContext context) {
-    return [
-      if (query == "")
-        IconButton(
-          onPressed: () {
-            startListening();
-            print("===================================================");
-            print(query);
-          },
-          icon: const Icon(Icons.keyboard_voice, size: 30, color: Colors.black),
-        )
-      else
-        IconButton(
-          onPressed: () {
-            query = "";
-          },
-          icon: const Icon(Icons.close, size: 27, color: Colors.black),
-        ),
-    ];
+    return [];
   }
 
   @override
@@ -157,12 +124,13 @@ class HomeSearch extends SearchDelegate {
         onPressed: () {
           close(context, null);
         },
-        icon: const Icon(Icons.arrow_back, size: 27, color: Colors.black));
+        icon: const Icon(Icons.arrow_back_rounded,
+            size: 27, color: Colors.black));
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    return const Text("");
+    return const Text("ffff");
   }
 
   @override

@@ -1,5 +1,4 @@
 
-import 'package:client/core/class/crud.dart';
 import 'package:client/link_api.dart';
 import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
@@ -19,7 +18,7 @@ class SignUpData {
       String userRole,
       String postalCode) async {
     var data = {
-      "name": firstName.toString() + " " + lastName.toString(),
+      "name": "$firstName $lastName",
       "password": password,
       "email": email,
       "phoneNumber": phoneNumber,

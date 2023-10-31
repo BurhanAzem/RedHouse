@@ -1,9 +1,13 @@
+import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list_controller.dart';
+import 'package:client/model/property.dart';
+import 'package:client/view/bottom_bar/search/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluster/fluster.dart';
+import 'package:intl/intl.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({super.key});
@@ -15,27 +19,36 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   MapListController controller = Get.put(MapListController());
   GoogleMapController? mapController;
-  CameraPosition jerusalem =
-      const CameraPosition(target: LatLng(32.438909, 35.295625), zoom: 8);
-  CameraPosition? currentCameraPosition;
-  String? currentLocationName;
+  CameraPosition _currentPosition =
+      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
   bool isLoading = true;
+  bool isLoadingMap = false;
   bool userNotified = false;
-  String snackBarMessage = "Please zoom in on the map";
+  String snackBarMessage = "You are too far out, please zoom in";
 
   @override
   void initState() {
     super.initState();
-    currentCameraPosition = controller.currentCameraPosition ?? jerusalem;
+    _currentPosition = controller.currentPosition ?? _currentPosition;
+    controller.allMarkers =
+        controller.getMarkerLocations(controller.allProperties);
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         isLoading = false;
+      });
+    });
+
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        isLoadingMap = true;
       });
     });
   }
 
   Future<void> updateMarkers(double zoom) async {
+    print("======================================================== markers");
+    print(controller.allMarkers);
     print("========================================================Zoom $zoom");
 
     if (mapController == null) {
@@ -47,17 +60,19 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
 
-    if (zoom < 13) {
+    if (zoom < 12) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           behavior: SnackBarBehavior.floating,
-          padding: EdgeInsets.all(6),
-          margin: EdgeInsets.only(left: 8, right: 8, bottom: 2),
+          padding: const EdgeInsets.all(6),
+          margin: const EdgeInsets.only(left: 8, right: 8, bottom: 2),
         ));
         userNotified = true;
       }
+    } else {
+      userNotified = false;
     }
 
     final LatLng centerCoordinates = LatLng(
@@ -65,7 +80,16 @@ class _MapWidgetState extends State<MapWidget> {
       (bounds.southwest.longitude + bounds.northeast.longitude) / 2,
     );
 
-    Set<Marker> visibleMarkers = markerLocations
+    Set<Property> newVisibleProperties = controller.allProperties
+        .where((property) =>
+            property.PropertyLocation!.Latitude! >= bounds.southwest.latitude &&
+            property.PropertyLocation!.Latitude! <= bounds.northeast.latitude &&
+            property.PropertyLocation!.Longitude! >=
+                bounds.southwest.longitude &&
+            property.PropertyLocation!.Longitude! <= bounds.northeast.longitude)
+        .toSet();
+
+    Set<Marker> visibleMarkers = controller.allMarkers
         .where((marker) =>
             marker.position.latitude >= bounds.southwest.latitude &&
             marker.position.latitude <= bounds.northeast.latitude &&
@@ -75,16 +99,18 @@ class _MapWidgetState extends State<MapWidget> {
         .toSet();
 
     setState(() {
-      controller.markers.clear();
-      if (zoom >= 13) {
-        controller.markers.addAll(visibleMarkers);
+      controller.visibleMarkers.clear();
+      controller.visibleProperties.clear();
+      if (zoom >= 12) {
+        controller.visibleMarkers.addAll(visibleMarkers);
+        controller.visibleProperties.addAll(newVisibleProperties);
         reverseGeocode(centerCoordinates);
       }
-      currentCameraPosition = CameraPosition(
+      _currentPosition = CameraPosition(
         target: centerCoordinates,
         zoom: zoom,
       );
-      controller.currentCameraPosition = currentCameraPosition;
+      controller.currentPosition = _currentPosition;
     });
   }
 
@@ -97,30 +123,32 @@ class _MapWidgetState extends State<MapWidget> {
       if (placemarks.isNotEmpty) {
         controller.currentLocationName.value =
             "Area in ${placemarks[0].locality ?? ''}";
-
         print('Location Name: ${controller.currentLocationName}');
       }
-    } catch (e) {
-      print('Error during reverse geocoding: $e');
-    }
+    } catch (e) {}
   }
 
   @override
   Widget build(BuildContext context) {
+    controller.mapContext = context;
+
     return Stack(
       children: [
-        GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: currentCameraPosition ?? jerusalem,
-          onMapCreated: (controller) {
-            setState(() {
-              mapController = controller;
-            });
-          },
-          markers: controller.markers,
-          onCameraMove: (CameraPosition position) {
-            updateMarkers(position.zoom);
-          },
+        Visibility(
+          visible: isLoadingMap,
+          child: GoogleMap(
+            mapType: MapType.normal,
+            initialCameraPosition: _currentPosition,
+            onMapCreated: (controller) {
+              setState(() {
+                mapController = controller;
+              });
+            },
+            markers: controller.visibleMarkers,
+            onCameraMove: (CameraPosition position) {
+              updateMarkers(position.zoom);
+            },
+          ),
         ),
         Visibility(
           visible: isLoading,
@@ -135,97 +163,150 @@ class _MapWidgetState extends State<MapWidget> {
 }
 
 class MapMarker extends Clusterable {
-  final String id;
+  MapListController controller = Get.put(MapListController());
+  FilterController filterController = Get.put(FilterController());
+
+  Property property;
   final LatLng position;
-  final BitmapDescriptor icon;
 
   MapMarker({
-    required this.id,
+    required this.property,
     required this.position,
-    required this.icon,
-    isCluster = false,
-    clusterId,
-    pointsSize,
-    childMarkerId,
-  }) : super(
-          markerId: id,
-          latitude: position.latitude,
-          longitude: position.longitude,
-          isCluster: isCluster,
-          clusterId: clusterId,
-          pointsSize: pointsSize,
-          childMarkerId: childMarkerId,
-        );
+  });
+
+  get context => null;
 
   Marker toMarker() => Marker(
-        markerId: MarkerId(id),
-        position: LatLng(
-          position.latitude,
-          position.longitude,
-        ),
-        icon: icon,
-      );
-}
+      markerId: MarkerId(property.PropertyId.toString()),
+      position: LatLng(
+        position.latitude,
+        position.longitude,
+      ),
+      icon: filterController.listingType
+          ? BitmapDescriptor.defaultMarker
+          : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+      onTap: () {
+        _showMarkerInfo(property);
+      });
 
-final List<MapMarker> markerLocations = [
-  MapMarker(
-    id: '1',
-    position: const LatLng(31.527837, 35.0865029),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '2',
-    position: const LatLng(31.527435, 35.0865435),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '3',
-    position: const LatLng(31.524345, 35.08643554),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '4',
-    position: const LatLng(31.524545, 35.0864345),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '5',
-    position: const LatLng(31.854345, 35.4643344),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '6',
-    position: const LatLng(31.8544535, 35.46445453),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '7',
-    position: const LatLng(31.854354, 35.4648335),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '8',
-    position: const LatLng(31.8544354, 35.46484334),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '9',
-    position: const LatLng(32.4384345, 35.29243545),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '10',
-    position: const LatLng(32.4383432, 35.2923434),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '11',
-    position: const LatLng(32.43834553, 35.29534545),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-  MapMarker(
-    id: '12',
-    position: const LatLng(32.438945, 35.29543554),
-    icon: BitmapDescriptor.defaultMarker,
-  ),
-];
+  void _showMarkerInfo(Property property) {
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+      context: controller.mapContext ?? context,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+                decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(30))),
+                height: MediaQuery.of(context).size.height / 2, //2.3
+                width: 500,
+                child: InkWell(
+                  onTap: () {
+                    Get.to(() => const HomeInformation());
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(30)),
+                            child: Image.asset(
+                              property.PropertyFiles![0],
+                              width: double.infinity,
+                              height: 190,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                              bottom: 16,
+                              right: 16,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    width: 42,
+                                    height: 42,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[300],
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.favorite_border,
+                                        color: Colors.black,
+                                        size: 25,
+                                      ),
+                                      onPressed: () {},
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 25, top: 15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 12,
+                                  height: 12,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color.fromARGB(255, 44, 162, 46),
+                                  ),
+                                ),
+                                Text(
+                                  " ${property.PropertyStatus}",
+                                  style: const TextStyle(fontSize: 17.5),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "ID = ${property.PropertyId}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                            Text(
+                              "\$${NumberFormat.decimalPattern().format(property.Price)}${property.PropertyStatus == "For Rent" ? "/mo" : ""}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.SquareMeter)} meters",
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              "${property.PropertyLocation!.StreetAddress}, ${property.PropertyLocation!.City}, ${property.PropertyLocation!.Country}",
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              (property.PropertyDescription!.length <= 100)
+                                  ? property.PropertyDescription!
+                                  : '${property.PropertyDescription!.substring(0, 45)}...',
+                              style: const TextStyle(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ));
+          },
+        );
+      },
+    );
+  }
+}

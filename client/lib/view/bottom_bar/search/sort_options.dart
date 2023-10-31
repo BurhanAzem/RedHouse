@@ -1,4 +1,6 @@
+import 'package:client/controller/map_list_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SortOptionsWidget extends StatefulWidget {
   final bool isListIcon;
@@ -14,6 +16,7 @@ class SortOptionsWidget extends StatefulWidget {
 }
 
 class _SortOptionsWidgetState extends State<SortOptionsWidget> {
+  MapListController controller = Get.put(MapListController());
   int _temporaryValue = 1;
   int _selectedValue = 1;
   String _selectedText = "Default";
@@ -35,19 +38,19 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(milliseconds: 500),
-      height: widget.isListIcon ? 0.0 : 35,
+      height: widget.isListIcon ? 0.0 : 42,
       child: Visibility(
         visible: !widget.isListIcon,
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 25),
+                padding: EdgeInsets.only(right: 25, left: 25, bottom: 5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      " ${widget.resultsCount} results",
+                      " ${controller.visibleProperties.length} results",
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -193,6 +196,7 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                   ],
                 ),
               ),
+              const Divider(thickness: 1.0, color: Colors.black26),
             ],
           ),
         ),

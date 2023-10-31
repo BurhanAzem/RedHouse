@@ -18,7 +18,7 @@ class _NotificationsTabState extends State<NotificationsTab> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Push Notifications",
+          "Notifications tab",
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),

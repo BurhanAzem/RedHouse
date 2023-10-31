@@ -1,6 +1,7 @@
 import 'package:client/core/services/network_controller.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/bottom_bar/search/search%20api/search_location_screen.dart';
 import 'package:client/view/login.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
 import 'package:client/view/welcoming.dart';

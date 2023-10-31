@@ -29,7 +29,7 @@ class _AllContractsState extends State<AllContracts> {
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -54,28 +54,28 @@ class _AllContractsState extends State<AllContracts> {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: TextFormField(
               // Use your controller here if needed
-              style: TextStyle(height: 1.2),
+              style: const TextStyle(height: 1.2),
               decoration: InputDecoration(
                 hintText: "Search by contract, customer, landlord name",
-                suffixIcon: Icon(Icons.search),
+                suffixIcon: const Icon(Icons.search),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
-                contentPadding: EdgeInsets.all(10),
+                contentPadding: const EdgeInsets.all(10),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: 180,
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1.0),
                   borderRadius: BorderRadius.circular(10.0),
@@ -95,9 +95,9 @@ class _AllContractsState extends State<AllContracts> {
                   }).toList(),
                 ),
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 width: 180,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1.0),
@@ -143,11 +143,11 @@ class _AllContractsState extends State<AllContracts> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: ListTile(
                       title: Column(
                         children: [
@@ -163,16 +163,14 @@ class _AllContractsState extends State<AllContracts> {
                                             .toString()
                                             .length <=
                                         10)
-                                    ? "       " +
-                                        controller
+                                    ? "       ${controller
                                             .Contracts![index].CreatedDate!
-                                            .toString()!
-                                    : "       " +
-                                        controller
+                                            .toString()!}"
+                                    : "       ${controller
                                             .Contracts![index].CreatedDate!
                                             .toString()
-                                            .substring(0, 9),
-                                style: TextStyle(
+                                            .substring(0, 9)}",
+                                style: const TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 12),
                               ),
                             ],
@@ -180,10 +178,9 @@ class _AllContractsState extends State<AllContracts> {
                           Text(
                             (controller.Contracts![index].Title!.length <= 38)
                                 ? controller.Contracts![index].Title!
-                                : controller.Contracts![index].Title!
-                                        .substring(0, 38) +
-                                    '...',
-                            style: TextStyle(fontWeight: FontWeight.w600),
+                                : '${controller.Contracts![index].Title!
+                                        .substring(0, 38)}...',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -194,7 +191,7 @@ class _AllContractsState extends State<AllContracts> {
                           Container(
                             height: 1,
                           ),
-                          Container(height: 0.5, color: Color(0xffd92328)),
+                          Container(height: 0.5, color: const Color(0xffd92328)),
                           Container(
                             height: 1,
                           ),
@@ -202,10 +199,9 @@ class _AllContractsState extends State<AllContracts> {
                             (controller.Contracts![index].Description!.length <=
                                     100)
                                 ? controller.Contracts![index].Description!
-                                : controller.Contracts![index].Description!
-                                        .substring(0, 100) +
-                                    '...',
-                            style: TextStyle(fontWeight: FontWeight.w400),
+                                : '${controller.Contracts![index].Description!
+                                        .substring(0, 100)}...',
+                            style: const TextStyle(fontWeight: FontWeight.w400),
                           ),
                           Container(
                             height: 5,
@@ -215,7 +211,7 @@ class _AllContractsState extends State<AllContracts> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Price: ",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -224,7 +220,7 @@ class _AllContractsState extends State<AllContracts> {
                                   Text(
                                     controller.Contracts![index].Price!
                                         .toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
                                         color: Color(0xffd92328)),
@@ -233,7 +229,7 @@ class _AllContractsState extends State<AllContracts> {
                               ),
                               Row(
                                 children: [
-                                  Text(
+                                  const Text(
                                     "Contract status: ",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -242,7 +238,7 @@ class _AllContractsState extends State<AllContracts> {
                                   Text(
                                     controller
                                         .Contracts![index].ContractStatus!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,
                                         color: Color(0xffd92328)),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:client/core/class/crud.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
 import 'package:client/data/login.dart';
@@ -42,7 +41,6 @@ class LoginControllerImp extends LoginController {
         print("========================================================= User");
         print(sharepref!.getString("user"));
         Get.offAllNamed("/bottom-bar");
-        sharepref!.setString("visitor", "no");
       } else {
         Get.defaultDialog(
             title: "ُWarning",

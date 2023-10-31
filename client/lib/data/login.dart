@@ -1,4 +1,3 @@
-import 'package:client/core/class/crud.dart';
 import 'package:client/link_api.dart';
 import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
@@ -8,21 +7,12 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class LoginData {
-
-<<<<<<< HEAD
-  postdata(String password, String email) async {
-=======
-
   static postdata(String password, String email) async {
->>>>>>> d19e12219740318d11d500af635f633b653ce0be
     var data = {
       "email": email,
       "password": password,
     };
-<<<<<<< HEAD
-=======
 
->>>>>>> d19e12219740318d11d500af635f633b653ce0be
     if (await checkInternet()) {
       var response = await http.post(Uri.parse(AppLink.login),
           headers: <String, String>{
