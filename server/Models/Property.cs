@@ -7,20 +7,22 @@ namespace RedHouse_Server.Models
     public class Property
     {
         [Key]
-        public int Id { get; set; }
+        public int PropertyId { get; set; }
         public string PropertyType { get; set; }
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
         [ForeignKey(nameof(Location))]
         public int LocationId { get; set; }
-        [ForeignKey(nameof(Neighborhood))]
-        public int NeighborhoodId { get; set; }
-        public int  Price { get; set; } 
+        public Location Location { get; set; }
+
+        // [ForeignKey(nameof(Neighborhood))]
+        // public int NeighborhoodId { get; set; }
+        public int Price { get; set; }
         public int NumberOfBedRooms { get; set; }
-        public int NumberOfBathRooms { get;set; }
+        public int NumberOfBathRooms { get; set; }
         public float SquareMetersArea { get; set; }
         public string PropertyDescription { get; set; }
-        public DateTime BuiltYear  { get; set; } = DateTime.Now;
+        public DateTime BuiltYear { get; set; } = DateTime.Now;
         public string View { get; set; }
         public DateTime AvailableOn { get; set; } = DateTime.Now;
         public string PropertyStatus { get; set; } = "Accepting offers";

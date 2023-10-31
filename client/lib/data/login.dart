@@ -7,12 +7,13 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class LoginData {
+
+
   static postdata(String password, String email) async {
     var data = {
       "email": email,
       "password": password,
     };
-
     if (await checkInternet()) {
       var response = await http.post(Uri.parse(AppLink.login),
           headers: <String, String>{
@@ -26,12 +27,13 @@ class LoginData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody);
-        return Right(responsebody);
+        
+        return (responsebody);
       } else {
-        return const Left(StatusRequest.serverfailure);
+        return (StatusRequest.serverfailure);
       }
     } else {
-      return const Left(StatusRequest.offlinefailure);
+      return (StatusRequest.offlinefailure);
     }
   }
 }

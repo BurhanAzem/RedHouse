@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 
 using Cooking_School.Core.ModelUsed;
-using RedHouse_Server.Migrations;
 using RedHouse_Server.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using RedHouse_Server.Dtos.AuthDtos;

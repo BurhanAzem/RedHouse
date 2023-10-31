@@ -39,12 +39,12 @@ class SignUpData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody);
-        return Right(responsebody);
+        return (responsebody);
       } else {
-        return const Left(StatusRequest.serverfailure);
+        return (StatusRequest.serverfailure);
       }
     } else {
-      return const Left(StatusRequest.offlinefailure);
+      return (StatusRequest.offlinefailure);
     }
   }
 }

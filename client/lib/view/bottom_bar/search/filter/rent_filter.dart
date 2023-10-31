@@ -203,6 +203,11 @@ class _RentFilterState extends State<RentFilter> {
                   controller.rentView = controller.rentViewTemp;
                   controller.buyView = "Any view";
 
+
+
+                  controller.getProperties();
+                  
+
                   Navigator.pop(context);
                 }
               },

@@ -7,7 +7,7 @@ namespace RedHouse_Server.Models
     public class Contract
     {
         [Key]
-        public int Id { get; set; }
+        public int ContractId { get; set; }
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
         [ForeignKey(nameof(User))]

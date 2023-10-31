@@ -18,4 +18,6 @@ class Location {
     this.Latitude,
     this.Longitude,
   });
+  // Location(this.StreetAddress, this.City, this.Region, this.PostalCode,
+  //          this.Country, this.Latitude, this.Longitude);
 }

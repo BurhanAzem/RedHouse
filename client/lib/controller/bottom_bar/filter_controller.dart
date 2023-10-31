@@ -1,8 +1,21 @@
+import 'package:client/core/class/statusrequest.dart';
+import 'package:client/data/properties.dart';
+import 'package:client/model/location.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FilterController extends GetxController {
   bool listingType = true; // true --> Buy, false --> Rent
+
+  Location? location = Location(
+    StreetAddress: "",
+    City: "",
+    Region: "",
+    PostalCode: "",
+    Country: "",
+    Latitude: 0.0,
+    Longitude: 0.0,
+  );
 
   bool buyHouse = true;
   bool buyHouseTemp = true;
@@ -36,15 +49,15 @@ class FilterController extends GetxController {
   final rentMaxControllerTemp = TextEditingController();
   final rentMinControllerTemp = TextEditingController();
 
-  String buyView = "Any view";
+  String buyView = "Any";
   String buyViewTemp = "";
 
-  String rentView = "Any view";
+  String rentView = "Any";
   String rentViewTemp = "";
 
   RxString bedButtonTemp = "Any".obs;
   RxString bedButton = "Any".obs;
-  
+
   RxString bathButtonTemp = "Any".obs;
   RxString bathButton = "Any".obs;
 
@@ -67,12 +80,103 @@ class FilterController extends GetxController {
     '5+',
   ];
 
+  getProperties() async {
+    List<String>? propertyTypes = [];
+    String? minPrice;
+    String? maxPrice;
+    String? numberOfBathrooms;
+    String? numberOfBedrooms;
+    String? view;
+    String? listingPropertyType;
 
-getProperties(){
-  
-}
+    if (listingType) {
+      if (buyHouse)
+        propertyTypes!.add("House");
+      else
+        propertyTypes!.add("");
+      if (buyApartment)
+        propertyTypes!.add("Apartment Unit");
+      else
+        propertyTypes!.add("");
+      if (buyTownhouse)
+        propertyTypes!.add("Townhouse");
+      else
+        propertyTypes!.add("");
+      if (buyCastle)
+        propertyTypes!.add("Castle");
+      else
+        propertyTypes!.add("");
+      if (buyDepartment)
+        propertyTypes!.add("Entire Department Community");
+      else
+        propertyTypes!.add("");
+      minPrice = buyMinController.text;
+      maxPrice = buyMaxController.text;
+      view = buyView;
+    } else {
+      if (rentHouse)
+        propertyTypes!.add("House");
+      else
+        propertyTypes!.add("");
+      if (rentApartment)
+        propertyTypes!.add("Apartment Unit");
+      else
+        propertyTypes!.add("");
+      if (rentTownhouse)
+        propertyTypes!.add("Townhouse");
+      else
+        propertyTypes!.add("");
+      if (rentCastle)
+        propertyTypes!.add("Castle");
+      else
+        propertyTypes!.add("");
+      if (rentDepartment)
+        propertyTypes!.add("Entire Department Community");
+      else
+        propertyTypes!.add("");
 
+      minPrice = rentMinController.text;
+      maxPrice = rentMaxController.text;
+      view = rentView;
+    }
 
+    if (bedButton.toString().length <= 2)
+      numberOfBedrooms = bedButton.string.substring(0, 1);
+    else
+      numberOfBedrooms = "";
+
+    if (bathButton.toString().length <= 2)
+      numberOfBathrooms = bathButton.string.substring(0, 1);
+    else
+      numberOfBathrooms = "";
+    // Rest of your code
+    if (listingType)
+      listingPropertyType = "For sell";
+    else
+      listingPropertyType = "For rent";
+    var response = await PropertyData.getdata(
+        propertyTypes,
+        minPrice,
+        maxPrice,
+        numberOfBathrooms,
+        numberOfBedrooms,
+        view,
+        listingPropertyType.toString(),
+        location!);
+
+    if (response['statusCode'] == 200) {
+      print("================================================== LsitDto");
+      print(response["listDto"]);
+
+      // Get.offNamed(AppRoute.verfiyCodeSignUp);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
 
   void setBedButtonTemp(String label) {
     bedButtonTemp.value = label;

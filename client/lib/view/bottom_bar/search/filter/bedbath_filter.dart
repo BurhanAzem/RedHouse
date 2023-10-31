@@ -14,6 +14,8 @@ class _BedBathState extends State<BedBath> {
 
   @override
   Widget build(BuildContext context) {
+  FilterController controller = Get.put(FilterController());
+
     return MaterialButton(
       onPressed: () {
         bedBathController.copyBathButtonTemp();
@@ -72,8 +74,11 @@ class _BedBathState extends State<BedBath> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           onPressed: () {
+
                             bedBathController.copyBathButton();
                             bedBathController.copyBedButton();
+                            controller.getProperties();
+
                             Navigator.pop(context);
                           },
                           minWidth: 300,
