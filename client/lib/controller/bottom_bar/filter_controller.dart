@@ -1,43 +1,50 @@
+import 'dart:convert';
+
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
+import 'package:client/model/list_property.dart';
 import 'package:client/model/location.dart';
+import 'package:client/model/property.dart';
+import 'package:client/view/bottom_bar/search/map_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FilterController extends GetxController {
-  bool listingType = true; // true --> Buy, false --> Rent
-
-  Location? location = Location(
+  bool listingType = false; // true --> Buy, false --> Rent
+  ListProperty? listProperty;
+  Rx<Location> location = Location(
+    Id: 0,
     StreetAddress: "",
     City: "",
     Region: "",
     PostalCode: "",
     Country: "",
-    Latitude: 0.0,
-    Longitude: 0.0,
-  );
+    Latitude: 0,
+    Longitude: 0,
+  ).obs;
 
-  bool buyHouse = true;
-  bool buyHouseTemp = true;
-  bool buyApartment = true;
-  bool buyApartmentTemp = true;
-  bool buyTownhouse = true;
-  bool buyTownhouseTemp = true;
-  bool buyCastle = true;
-  bool buyCastleTemp = true;
-  bool buyDepartment = true;
-  bool buyDepartmentTemp = true;
+  bool buyHouse = false;
+  bool buyHouseTemp = false;
+  bool buyApartment = false;
+  bool buyApartmentTemp = false;
+  bool buyTownhouse = false;
+  bool buyTownhouseTemp = false;
+  bool buyCastle = false;
+  bool buyCastleTemp = false;
+  bool buyDepartment = false;
+  bool buyDepartmentTemp = false;
 
-  bool rentHouse = true;
-  bool rentHouseTemp = true;
-  bool rentApartment = true;
-  bool rentApartmentTemp = true;
-  bool rentTownhouse = true;
-  bool rentTownhouseTemp = true;
-  bool rentCastle = true;
-  bool rentCastleTemp = true;
-  bool rentDepartment = true;
-  bool rentDepartmentTemp = true;
+  bool rentHouse = false;
+  bool rentHouseTemp = false;
+  bool rentApartment = false;
+  bool rentApartmentTemp = false;
+  bool rentTownhouse = false;
+  bool rentTownhouseTemp = false;
+  bool rentCastle = false;
+  bool rentCastleTemp = false;
+  bool rentDepartment = false;
+  bool rentDepartmentTemp = false;
 
   final buyMaxController = TextEditingController();
   final buyMinController = TextEditingController();
@@ -92,48 +99,48 @@ class FilterController extends GetxController {
     if (listingType) {
       if (buyHouse)
         propertyTypes!.add("House");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (buyApartment)
         propertyTypes!.add("Apartment Unit");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (buyTownhouse)
         propertyTypes!.add("Townhouse");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (buyCastle)
         propertyTypes!.add("Castle");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (buyDepartment)
         propertyTypes!.add("Entire Department Community");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       minPrice = buyMinController.text;
       maxPrice = buyMaxController.text;
       view = buyView;
     } else {
       if (rentHouse)
         propertyTypes!.add("House");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (rentApartment)
         propertyTypes!.add("Apartment Unit");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (rentTownhouse)
         propertyTypes!.add("Townhouse");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (rentCastle)
         propertyTypes!.add("Castle");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
       if (rentDepartment)
         propertyTypes!.add("Entire Department Community");
-      else
-        propertyTypes!.add("");
+      // else
+      //   propertyTypes!.add("");
 
       minPrice = rentMinController.text;
       maxPrice = rentMaxController.text;
@@ -165,10 +172,17 @@ class FilterController extends GetxController {
         location!);
 
     if (response['statusCode'] == 200) {
-      print("================================================== LsitDto");
-      print(response["listDto"]);
-
-      // Get.offNamed(AppRoute.verfiyCodeSignUp);
+      // final Map<String, dynamic> listDto = response['listDto'];
+      // if (listDto is List) {
+        // Cast each item to a map
+        listProperty =  ListProperty.fromJson(response);
+        print(listProperty!.listDto);
+      // } else {
+      //   Get.defaultDialog(
+      //     title: "Error",
+      //     middleText: "Invalid data format in 'listDto'",
+      //   );
+      // }
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -176,6 +190,18 @@ class FilterController extends GetxController {
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
     }
+  }
+
+  List<MapMarker> getMarkerLocations(List<Property> properties) {
+    return properties.map((property) {
+      return MapMarker(
+        property: property,
+        position: LatLng(
+          property.location?.Latitude ?? 0.0,
+          property.location?.Longitude ?? 0.0,
+        ),
+      );
+    }).toList();
   }
 
   void setBedButtonTemp(String label) {

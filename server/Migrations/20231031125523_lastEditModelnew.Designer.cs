@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedHouse_Server.Models;
 
@@ -11,9 +12,11 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    partial class RedHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231031125523_lastEditModelnew")]
+    partial class lastEditModelnew
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -431,9 +434,7 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PropertyId");
-
-                    b.ToTable("PropertyFiles");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.User", b =>
@@ -527,20 +528,6 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Location");
-                });
-
-            modelBuilder.Entity("RedHouse_Server.Models.PropertyFile", b =>
-                {
-                    b.HasOne("RedHouse_Server.Models.Property", null)
-                        .WithMany("propertyFiles")
-                        .HasForeignKey("PropertyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("RedHouse_Server.Models.Property", b =>
-                {
-                    b.Navigation("propertyFiles");
                 });
 #pragma warning restore 612, 618
         }

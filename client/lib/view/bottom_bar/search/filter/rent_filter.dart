@@ -22,7 +22,7 @@ class _RentFilterState extends State<RentFilter> {
   @override
   Widget build(BuildContext context) {
     const options = [
-      "Any view",
+      "Any",
       "City",
       "Village",
       "Mountain",

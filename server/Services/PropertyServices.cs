@@ -37,6 +37,7 @@ namespace RedHouse_Server.Services
                 Longitude = propertyDto.LocationDto.Longitude,
             };
             var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
+            await _redHouseDbContext.SaveChangesAsync();
             Property property = new Property
             {
                 AvailableOn = propertyDto.AvailableOn,
@@ -44,7 +45,7 @@ namespace RedHouse_Server.Services
                 IsAvailableBasement = propertyDto.IsAvailableBasement,
                 ListingBy = propertyDto.ListingBy,
                 ListingType = propertyDto.ListingType,
-                LocationId = locationRes.Entity.LocationId,
+                LocationId = locationRes.Entity.Id,
                 // NeighborhoodId = 0,
                 NumberOfBathRooms = propertyDto.NumberOfBathRooms,
                 NumberOfBedRooms = propertyDto.NumberOfBedRooms,
@@ -60,7 +61,7 @@ namespace RedHouse_Server.Services
             };
             var propertyRes = await _redHouseDbContext.Properties.AddAsync(property);
             await _redHouseDbContext.SaveChangesAsync();
-            int propertyId = propertyRes.Entity.PropertyId;
+            int propertyId = propertyRes.Entity.Id;
             foreach (var file in propertyDto.PropertyFiles)
             {
                 PropertyFile propertyFile = new PropertyFile
@@ -68,7 +69,7 @@ namespace RedHouse_Server.Services
                     PropertyId = propertyId,
                     DownloadUrls = file
                 };
-                await _redHouseDbContext.Files.AddAsync(propertyFile);
+                await _redHouseDbContext.PropertyFiles.AddAsync(propertyFile);
                 await _redHouseDbContext.SaveChangesAsync();
             }
             return new ResponsDto<Property>
@@ -105,8 +106,9 @@ namespace RedHouse_Server.Services
             // Create a queryable variable based on the DbSet
             var query = _redHouseDbContext.Properties.AsQueryable();
 
-            query = query.Where(p => p.PropertyId >= 0);
-
+            query = query.Where(p => p.Id >= 0);
+            query = _redHouseDbContext.Properties
+                                .Include(p => p.propertyFiles);
             // Apply filtering based on the filterDto, if provided
 
             if (!string.IsNullOrEmpty(filterDto.MinPrice) && !string.IsNullOrEmpty(filterDto.MaxPrice))
@@ -143,13 +145,15 @@ namespace RedHouse_Server.Services
 
             if (!string.IsNullOrEmpty(filterDto.ListingType))
             {
-                query = query.Where(p => p.ListingType == filterDto.ListingType);
+                query = query.Where(p => p.ListingType.Equals(filterDto.ListingType));
             }
-
+            if(filterDto.PropertyTypes[0] == "[]") filterDto.PropertyTypes = null ;
             if (filterDto.PropertyTypes != null)
             {
                 query = query.Where(p => filterDto.PropertyTypes.Contains(p.PropertyType));
             }
+
+
 
 
 
@@ -159,7 +163,7 @@ namespace RedHouse_Server.Services
 
             foreach (var property in properties)
             {
-                var locationRes = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.LocationId == property.LocationId);
+                var locationRes = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.Id == property.LocationId);
                 property.Location = locationRes;
             }
 
@@ -201,6 +205,7 @@ namespace RedHouse_Server.Services
                     }
                 }
             }
+
 
 
             return new ResponsDto<Property>

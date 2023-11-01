@@ -7,7 +7,7 @@ namespace RedHouse_Server.Models
     public class PropertyFile
     {
         [Key]
-        public int PropertyFileId { get; set; }
+        public int Id { get; set; }
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
         public string DownloadUrls { get; set; }

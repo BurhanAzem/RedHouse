@@ -18,6 +18,7 @@ class MapWidget extends StatefulWidget {
 
 class _MapWidgetState extends State<MapWidget> {
   MapListController controller = Get.put(MapListController());
+  FilterController filterControllerr = Get.put(FilterController());
   GoogleMapController? mapController;
   CameraPosition _currentPosition =
       const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
@@ -31,7 +32,8 @@ class _MapWidgetState extends State<MapWidget> {
     super.initState();
     _currentPosition = controller.currentPosition ?? _currentPosition;
     controller.allMarkers =
-        controller.getMarkerLocations(controller.allProperties);
+        // controller.getMarkerLocations(controller.allProperties);
+        filterControllerr.getMarkerLocations(filterControllerr.listProperty!.listDto);
 
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -80,13 +82,13 @@ class _MapWidgetState extends State<MapWidget> {
       (bounds.southwest.longitude + bounds.northeast.longitude) / 2,
     );
 
-    Set<Property> newVisibleProperties = controller.allProperties
+    Set<Property> newVisibleProperties = filterControllerr.listProperty!.listDto!
         .where((property) =>
-            property.PropertyLocation!.Latitude! >= bounds.southwest.latitude &&
-            property.PropertyLocation!.Latitude! <= bounds.northeast.latitude &&
-            property.PropertyLocation!.Longitude! >=
+            property.location!.Latitude! >= bounds.southwest.latitude &&
+            property.location!.Latitude! <= bounds.northeast.latitude &&
+            property.location!.Longitude! >=
                 bounds.southwest.longitude &&
-            property.PropertyLocation!.Longitude! <= bounds.northeast.longitude)
+            property.location!.Longitude! <= bounds.northeast.longitude)
         .toSet();
 
     Set<Marker> visibleMarkers = controller.allMarkers
@@ -121,9 +123,19 @@ class _MapWidgetState extends State<MapWidget> {
         coordinates.longitude,
       );
       if (placemarks.isNotEmpty) {
+        var city =  placemarks[0].locality ?? '';
         controller.currentLocationName.value =
             "Area in ${placemarks[0].locality ?? ''}";
         print('Location Name: ${controller.currentLocationName}');
+
+        if (city != filterControllerr.location.value.City){
+          filterControllerr.location.value.City = placemarks[0].locality ?? '';
+          filterControllerr.getProperties();
+          setState(() {
+            
+          });
+        }
+        
       }
     } catch (e) {}
   }
@@ -177,7 +189,7 @@ class MapMarker extends Clusterable {
   get context => null;
 
   Marker toMarker() => Marker(
-      markerId: MarkerId(property.PropertyId.toString()),
+      markerId: MarkerId(property.Id.toString()),
       position: LatLng(
         position.latitude,
         position.longitude,
@@ -218,7 +230,7 @@ class MapMarker extends Clusterable {
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(30)),
                             child: Image.asset(
-                              property.PropertyFiles![0],
+                              property.PropertyFiles![0].DownloadUrls!,
                               width: double.infinity,
                               height: 190,
                               fit: BoxFit.cover,
@@ -272,7 +284,7 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "ID = ${property.PropertyId}",
+                              "ID = ${property.Id}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
@@ -283,12 +295,12 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.SquareMeter)} meters",
+                              "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.PropertyLocation!.StreetAddress}, ${property.PropertyLocation!.City}, ${property.PropertyLocation!.Country}",
+                              "${property.location!.StreetAddress}, ${property.location!.City}, ${property.location!.Country}",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),

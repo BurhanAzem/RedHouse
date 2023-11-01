@@ -102,7 +102,7 @@ class ListWidget extends StatelessWidget {
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: Image.asset(
-                        property.PropertyFiles![0],
+                        property.PropertyFiles![0].DownloadUrls!,
                         width: double.infinity,
                         height: 220,
                         fit: BoxFit.cover,
@@ -156,7 +156,7 @@ class ListWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "ID = ${property.PropertyId}",
+                        "ID = ${property.Id}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
@@ -167,7 +167,7 @@ class ListWidget extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.SquareMeter)} meters",
+                        "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
                         style: const TextStyle(fontSize: 15),
                       ),
                       const SizedBox(height: 14),
@@ -178,12 +178,12 @@ class ListWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${property.PropertyLocation!.StreetAddress}",
+                                "${property.location!.StreetAddress}",
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                               const SizedBox(height: 1),
                               Text(
-                                "${property.PropertyLocation!.City}, ${property.PropertyLocation!.Country}",
+                                "${property.location!.City}, ${property.location!.Country}",
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                             ],

@@ -4,6 +4,7 @@ import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/link_api.dart';
 import 'package:client/model/location.dart';
 import 'package:client/shared_preferences.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
@@ -86,7 +87,7 @@ class PropertyData {
         return (StatusRequest.serverfailure);
       }
     } else {
-      return  (StatusRequest.offlinefailure);
+      return (StatusRequest.offlinefailure);
     }
     // return response.fold((l) => l, (r) => r);
   }
@@ -99,45 +100,47 @@ class PropertyData {
   String numberOfBedrooms,
   String view,
   String listingType,
-  Location location
+  Rx<Location> location,
 ) async {
-  final String propertyTypesParam = propertyTypes.join(',');
-  final Map<String, dynamic> filters = {
-  "propertyTypes": propertyTypes,
-  "minPrice": minPrice.toString(),
-  "maxPrice": maxPrice.toString(),
-  "numberOfBedrooms": numberOfBedrooms.toString(),
-  "numberOfBathrooms": numberOfBathrooms.toString(),
-  "view": view,
-  "listingType": listingType,
-  "StreetAddress": location.StreetAddress,
-  "City": location.City,
-  "Region": location.Region,
-  "PostalCode": location.PostalCode,
-  "Country": location.Country,
-  "Latitude": location.Latitude == 0 ? "" : location.Latitude.toString(),
-  "Longitude": location.Longitude == 0 ? "" : location.Longitude.toString(),
-};
+   String? propertyTypesParam = propertyTypes.toString();
+  if(propertyTypes.length != 0)   propertyTypesParam = propertyTypes.join(',');
+  final Map<String, String?> filters = {
+    "PropertyTypes": propertyTypesParam!,
+    "MinPrice": minPrice.toString(),
+    "MaxPrice": maxPrice.toString(),
+    "NumberOfBedRooms": numberOfBedrooms.toString(),
+    "NumberOfBathRooms": numberOfBathrooms.toString(),
+    "View": view == "Any" ? "" : view,
+    "ListingType": listingType,
+    "LocationDto.StreetAddress": location.value.StreetAddress!,
+    "LocationDto.City": location.value.City!,
+    "LocationDto.Region": location.value.Region!,
+    "LocationDto.PostalCode": location.value.PostalCode!,
+    "LocationDto.Country": location.value.Country!,
+    "LocationDto.Latitude": location.value.Latitude == 0.0 ? "" : location.value.Latitude!.toString(),
+    "LocationDto.Longitude": location.value.Longitude == 0.0 ? "" : location.value.Longitude!.toString(),
+  };
 
   if (await checkInternet()) {
-    final uri = Uri.https("10.0.2.2:7042", "/properties", filters);
+    final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
 
     var response = await http.get(uri, headers: <String, String>{
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ${getToken()}',
     });
     print(response.statusCode);
+    // print(response.body.listDto);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       Map responsebody = json.decode(response.body);
-      print(responsebody);
-      
+      print(responsebody["listDto"]);
+
       return (responsebody);
     } else {
-      return  StatusRequest.serverfailure;
+      return StatusRequest.serverfailure;
     }
   } else {
-    return  StatusRequest.offlinefailure;
+    return StatusRequest.offlinefailure;
   }
 }
 

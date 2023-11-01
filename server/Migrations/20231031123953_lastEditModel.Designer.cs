@@ -12,8 +12,8 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    [Migration("20231030183530_lastEditModelnew")]
-    partial class lastEditModelnew
+    [Migration("20231031123953_lastEditModel")]
+    partial class lastEditModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,11 +225,11 @@ namespace RedHouse_Server.Migrations
 
             modelBuilder.Entity("RedHouse_Server.Models.Application", b =>
                 {
-                    b.Property<int>("ApplicationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApplicationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
@@ -248,18 +248,18 @@ namespace RedHouse_Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ApplicationId");
+                    b.HasKey("Id");
 
                     b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.Contract", b =>
                 {
-                    b.Property<int>("ContractId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContractId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContractType")
                         .IsRequired()
@@ -284,18 +284,18 @@ namespace RedHouse_Server.Migrations
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
-                    b.HasKey("ContractId");
+                    b.HasKey("Id");
 
                     b.ToTable("Contracts");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.Location", b =>
                 {
-                    b.Property<int>("LocationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
@@ -318,18 +318,18 @@ namespace RedHouse_Server.Migrations
                     b.Property<string>("StreetAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LocationId");
+                    b.HasKey("Id");
 
                     b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.Neighborhood", b =>
                 {
-                    b.Property<int>("NeighborhoodId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NeighborhoodId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("NeighborhoodName")
                         .IsRequired()
@@ -339,18 +339,18 @@ namespace RedHouse_Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("NeighborhoodId");
+                    b.HasKey("Id");
 
                     b.ToTable("Neighborhoods");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.Property", b =>
                 {
-                    b.Property<int>("PropertyId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PropertyId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AvailableOn")
                         .HasColumnType("datetime2");
@@ -410,7 +410,7 @@ namespace RedHouse_Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PropertyId");
+                    b.HasKey("Id");
 
                     b.HasIndex("LocationId");
 
@@ -419,11 +419,11 @@ namespace RedHouse_Server.Migrations
 
             modelBuilder.Entity("RedHouse_Server.Models.PropertyFile", b =>
                 {
-                    b.Property<int>("PropertyFileId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PropertyFileId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("DownloadUrls")
                         .IsRequired()
@@ -432,7 +432,7 @@ namespace RedHouse_Server.Migrations
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
-                    b.HasKey("PropertyFileId");
+                    b.HasKey("Id");
 
                     b.ToTable("Files");
                 });

@@ -71,7 +71,7 @@ namespace RedHouse_Server.Services
                 var resLocation = await _redHouseDbContext.Locations.AddAsync(location);
                 await _redHouseDbContext.SaveChangesAsync(); // Persist changes to the database
 
-                user.LocationId = resLocation.Entity.LocationId; // Access the ID of the added location
+                user.LocationId = resLocation.Entity.Id; // Access the ID of the added location
 
                 await _redHouseDbContext.Users.AddAsync(user);
                 await _redHouseDbContext.SaveChangesAsync();
