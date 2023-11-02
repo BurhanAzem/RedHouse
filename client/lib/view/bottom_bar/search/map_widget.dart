@@ -33,7 +33,7 @@ class _MapWidgetState extends State<MapWidget> {
     _currentPosition = controller.currentPosition ?? _currentPosition;
     controller.allMarkers =
         // controller.getMarkerLocations(controller.allProperties);
-        filterControllerr.getMarkerLocations(filterControllerr.listProperty!.listDto);
+        filterControllerr.getMarkerLocations(filterControllerr.listProperty.listDto);
 
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -62,7 +62,7 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
 
-    if (zoom < 12) {
+    if (zoom < 10) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -82,13 +82,13 @@ class _MapWidgetState extends State<MapWidget> {
       (bounds.southwest.longitude + bounds.northeast.longitude) / 2,
     );
 
-    Set<Property> newVisibleProperties = filterControllerr.listProperty!.listDto!
+    Set<Property> newVisibleProperties = filterControllerr.listProperty.listDto
         .where((property) =>
-            property.location!.Latitude! >= bounds.southwest.latitude &&
-            property.location!.Latitude! <= bounds.northeast.latitude &&
-            property.location!.Longitude! >=
+            property.location.Latitude >= bounds.southwest.latitude &&
+            property.location.Latitude <= bounds.northeast.latitude &&
+            property.location.Longitude >=
                 bounds.southwest.longitude &&
-            property.location!.Longitude! <= bounds.northeast.longitude)
+            property.location.Longitude <= bounds.northeast.longitude)
         .toSet();
 
     Set<Marker> visibleMarkers = controller.allMarkers
@@ -103,7 +103,7 @@ class _MapWidgetState extends State<MapWidget> {
     setState(() {
       controller.visibleMarkers.clear();
       controller.visibleProperties.clear();
-      if (zoom >= 12) {
+      if (zoom >= 10) {
         controller.visibleMarkers.addAll(visibleMarkers);
         controller.visibleProperties.addAll(newVisibleProperties);
         reverseGeocode(centerCoordinates);
@@ -114,6 +114,10 @@ class _MapWidgetState extends State<MapWidget> {
       );
       controller.currentPosition = _currentPosition;
     });
+    controller.allMarkers =
+        // controller.getMarkerLocations(controller.allProperties);
+        filterControllerr.getMarkerLocations(filterControllerr.listProperty.listDto);
+        print("object");
   }
 
   Future<void> reverseGeocode(LatLng coordinates) async {
@@ -300,14 +304,14 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.location!.StreetAddress}, ${property.location!.City}, ${property.location!.Country}",
+                              "${property.location.StreetAddress}, ${property.location.City}, ${property.location!.Country}",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              (property.PropertyDescription!.length <= 100)
-                                  ? property.PropertyDescription!
-                                  : '${property.PropertyDescription!.substring(0, 45)}...',
+                              (property.PropertyDescription.length <= 100)
+                                  ? property.PropertyDescription
+                                  : '${property.PropertyDescription.substring(0, 45)}...',
                               style: const TextStyle(),
                             ),
                           ],

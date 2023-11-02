@@ -12,7 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
-  ListProperty? listProperty;
+  ListProperty listProperty = ListProperty(listDto: []);
   Rx<Location> location = Location(
     Id: 0,
     StreetAddress: "",
@@ -193,7 +193,7 @@ class FilterController extends GetxController {
   }
 
   List<MapMarker> getMarkerLocations(List<Property> properties) {
-    return properties.map((property) {
+    return properties == [] ? [] : properties.map((property) {
       return MapMarker(
         property: property,
         position: LatLng(
