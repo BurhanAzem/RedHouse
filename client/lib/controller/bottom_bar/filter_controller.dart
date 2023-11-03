@@ -50,10 +50,10 @@ class FilterController extends GetxController {
   final rentMinControllerTemp = TextEditingController();
 
   String buyView = "Any";
-  String buyViewTemp = "";
+  String buyViewTemp = "Any";
 
   String rentView = "Any";
-  String rentViewTemp = "";
+  String rentViewTemp = "Any";
 
   RxString bedButtonTemp = "Any".obs;
   RxString bedButton = "Any".obs;

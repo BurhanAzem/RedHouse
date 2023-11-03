@@ -1,28 +1,47 @@
-import 'package:client/view/bottom_bar/notification/email_notifications%20.dart';
-import 'package:client/view/bottom_bar/notification/notifications_tab.dart';
-import 'package:client/view/bottom_bar/notification/push_notifications.dart';
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class NotificationsSettings extends StatelessWidget {
-  const NotificationsSettings({Key? key}) : super(key: key);
+class AccountInformation extends StatelessWidget {
+  const AccountInformation({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AccountInfoContoller controller = Get.put(AccountInfoContoller());
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notifications Settings",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
+        title: const Text(
+          "Account Information",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
+          Center(
+              child: Image.asset("assets/images/guest.png",
+                  height: 100, width: 100)),
+          const SizedBox(height: 13),
+          Text(
+            controller.userDto?["name"] ?? "",
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          Text(
+            controller.userDto?["email"] ?? "",
+            style: const TextStyle(fontSize: 17),
+          ),
+          Text(
+            controller.userDto?["phoneNumber"]?.toString() ?? "",
+            style: const TextStyle(fontSize: 17),
+          ),
+          const SizedBox(height: 60),
           InkWell(
-            onTap: () {
-              Get.to(() => const PushNotifications());
-            },
+            onTap: () {},
             child: const Row(
               children: [
                 SizedBox(width: 25),
@@ -37,9 +56,7 @@ class NotificationsSettings extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           InkWell(
-            onTap: () {
-              Get.to(() => const NotificationsTab());
-            },
+            onTap: () {},
             child: const Row(
               children: [
                 SizedBox(width: 25),
@@ -54,9 +71,7 @@ class NotificationsSettings extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           InkWell(
-            onTap: () {
-              Get.to(() => const EmailNotifications());
-            },
+            onTap: () {},
             child: const Row(
               children: [
                 SizedBox(width: 25),

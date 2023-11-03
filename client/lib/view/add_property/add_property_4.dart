@@ -28,7 +28,7 @@ class _AddProperty4State extends State<AddProperty4> {
         Get.put(AddPropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Text(
               "Red",
@@ -50,7 +50,7 @@ class _AddProperty4State extends State<AddProperty4> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Form(
           child: ListView(
             children: [
@@ -58,10 +58,10 @@ class _AddProperty4State extends State<AddProperty4> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   EasyStepper(
-                    finishedStepBackgroundColor: Color(0xffd92328),
+                    finishedStepBackgroundColor: const Color(0xffd92328),
                     activeStepBorderColor: Colors.black,
                     stepShape: StepShape.circle,
-                    lineStyle: LineStyle(),
+                    lineStyle: const LineStyle(),
 
                     activeStep: controller.activeStep,
                     activeStepTextColor: Colors.black87,
@@ -80,7 +80,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 0
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -93,7 +93,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 1
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -107,7 +107,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 2
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -120,7 +120,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 3
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -134,7 +134,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 4
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -147,7 +147,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 5
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -160,7 +160,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 6
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -173,7 +173,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 7
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -186,7 +186,7 @@ class _AddProperty4State extends State<AddProperty4> {
                           child: CircleAvatar(
                             radius: 7,
                             backgroundColor: controller.activeStep >= 8
-                                ? Color(0xffd92328)
+                                ? const Color(0xffd92328)
                                 : Colors.grey,
                           ),
                         ),
@@ -198,12 +198,12 @@ class _AddProperty4State extends State<AddProperty4> {
                   ),
                   Image.asset("assets/images/logo.png", scale: 10),
                   Container(height: 5),
-                  Text(
+                  const Text(
                     "How much is the monthly rent?",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
                   ),
                   Container(height: 20),
-                  Text(
+                  const Text(
                     "Property price",
                     style: TextStyle(
                         fontSize: 18,
@@ -214,12 +214,12 @@ class _AddProperty4State extends State<AddProperty4> {
                   Container(
                     child: TextFormField(
                       controller: controller.price,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.money),
+                        suffixIcon: const Icon(Icons.money),
                         hintText: "Example: 2000",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -227,7 +227,7 @@ class _AddProperty4State extends State<AddProperty4> {
                     ),
                   ),
                   Container(height: 20),
-                  Text(
+                  const Text(
                     "Parking Spots",
                     style: TextStyle(
                         fontSize: 18,
@@ -238,12 +238,12 @@ class _AddProperty4State extends State<AddProperty4> {
                   Container(
                     child: TextFormField(
                       controller: controller.parkingSpots,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.numbers),
+                        suffixIcon: const Icon(Icons.numbers),
                         hintText: "Example: 3",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -251,7 +251,7 @@ class _AddProperty4State extends State<AddProperty4> {
                     ),
                   ),
                   Container(height: 20),
-                  Text(
+                  const Text(
                     "Is Avaliable Basement",
                     style: TextStyle(
                         fontSize: 18,
@@ -260,7 +260,7 @@ class _AddProperty4State extends State<AddProperty4> {
                   ),
                   Container(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -285,11 +285,11 @@ class _AddProperty4State extends State<AddProperty4> {
                         }
                       },
                       isExpanded: true,
-                      underline: SizedBox(),
+                      underline: const SizedBox(),
                     ),
                   ),
                   Container(height: 20),
-                  Text(
+                  const Text(
                     "Property view",
                     style: TextStyle(
                         fontSize: 18,
@@ -298,7 +298,7 @@ class _AddProperty4State extends State<AddProperty4> {
                   ),
                   Container(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     width: double.infinity,
                     decoration: BoxDecoration(
                       border: Border.all(
@@ -323,7 +323,7 @@ class _AddProperty4State extends State<AddProperty4> {
                         }
                       },
                       isExpanded: true,
-                      underline: SizedBox(),
+                      underline: const SizedBox(),
                     ),
                   ),
                 ],
@@ -336,8 +336,8 @@ class _AddProperty4State extends State<AddProperty4> {
                   });
                   controller.goToAddProperty5();
                 },
-                color: Color(0xffd92328),
-                child: Text(
+                color: const Color(0xffd92328),
+                child: const Text(
                   "Continue",
                   style: TextStyle(
                     color: Colors.black,

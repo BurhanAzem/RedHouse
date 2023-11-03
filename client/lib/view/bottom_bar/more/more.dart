@@ -1,5 +1,6 @@
-import 'dart:convert';
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/main.dart';
+import 'package:client/view/bottom_bar/more/account_information.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,11 +14,11 @@ class More extends StatefulWidget {
 }
 
 class _MoreState extends State<More> {
+  AccountInfoContoller controller = Get.put(AccountInfoContoller());
+
   @override
   Widget build(BuildContext context) {
     // final visitor = sharepref!.getString("visitor") ?? "";
-    String? userDtoJson = sharepref!.getString("user");
-    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
 
     return Scaffold(
       body: Container(
@@ -32,13 +33,20 @@ class _MoreState extends State<More> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.only(left: 10),
-                        child: Text(userDto["email"],
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
+                        padding: const EdgeInsets.only(left: 10),
+                        child: InkWell(
+                          onTap: () {
+                            if (controller.userDto != null) {
+                              Get.to(() => AccountInformation());
+                            }
+                          },
+                          child: Text(controller.userDto?["email"] ?? "",
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              )),
+                        ),
                       ),
                       MaterialButton(
                         onPressed: () {

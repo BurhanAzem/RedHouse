@@ -12,14 +12,17 @@ class Properties extends StatelessWidget {
       body: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
+            margin: const EdgeInsets.symmetric(vertical: 10),
             width: 200,
             child: MaterialButton(
               onPressed: () {
                 controller.goToAddProperty1();
               },
-              color: Color(0xFFD82228),
-              child: Row(
+              color: const Color(0xFFD82228), // Provide a child for the bu),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
@@ -34,9 +37,6 @@ class Properties extends StatelessWidget {
                         fontSize: 18),
                   )
                 ],
-              ), // Provide a child for the bu),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
               ),
             ),
           ),
@@ -50,16 +50,16 @@ class Properties extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10), // Rounded corners
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Padding(
                     padding:
                         const EdgeInsets.all(16.0), // Add padding for spacing
                     child: Text(
                       "Property $index",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: const Color.fromARGB(255, 1, 1, 1),
+                        color: Color.fromARGB(255, 1, 1, 1),
                       ),
                     ),
                   ),

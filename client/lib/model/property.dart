@@ -1,5 +1,4 @@
 // ignore_for_file: non_constant_identifier_names
-
 import 'package:client/model/location.dart';
 
 class Property {
@@ -15,6 +14,7 @@ class Property {
   String? PropertyDescription;
   DateTime? BuiltYear;
   String? View;
+  //this
   DateTime? AvailableOn;
   String? PropertyStatus;
   int? NumberOfUnits;

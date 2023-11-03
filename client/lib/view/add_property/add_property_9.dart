@@ -17,6 +17,7 @@ class _AddProperty9State extends State<AddProperty9> {
     const options = [
       "House",
       "Apartment Unit",
+      "Castel",
       "Townhouse",
       "Entire Department Community"
     ];
@@ -24,7 +25,7 @@ class _AddProperty9State extends State<AddProperty9> {
         Get.put(AddPropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Text(
               "Red",
@@ -46,7 +47,7 @@ class _AddProperty9State extends State<AddProperty9> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Form(
           child: ListView(
             children: [
@@ -54,10 +55,10 @@ class _AddProperty9State extends State<AddProperty9> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   EasyStepper(
-                    finishedStepBackgroundColor: Color(0xffd92328),
+                    finishedStepBackgroundColor: const Color(0xffd92328),
                     activeStepBorderColor: Colors.black,
                     stepShape: StepShape.circle,
-                    lineStyle: LineStyle(),
+                    lineStyle: const LineStyle(),
 
                     activeStep: controller.activeStep,
                     activeStepTextColor: Colors.black87,
@@ -75,8 +76,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 0 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 0
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Waiting',
@@ -87,8 +89,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 1 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 1
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Order Received',
@@ -100,8 +103,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 2 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 2
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Preparing',
@@ -112,8 +116,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 3 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 3
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'On Way',
@@ -125,8 +130,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 4 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 4
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -137,8 +143,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 5 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 5
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -149,8 +156,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 6 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 6
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -161,8 +169,9 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 7 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 7
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
@@ -173,25 +182,25 @@ class _AddProperty9State extends State<AddProperty9> {
                           backgroundColor: Colors.grey,
                           child: CircleAvatar(
                             radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 8 ? Color(0xffd92328) : Colors.grey,
+                            backgroundColor: controller.activeStep >= 8
+                                ? const Color(0xffd92328)
+                                : Colors.grey,
                           ),
                         ),
                         // title: 'Delivered',
                       ),
-                      
                     ],
                     onStepReached: (index) =>
                         setState(() => controller.activeStep = index),
                   ),
                   Image.asset("assets/images/logo.png", scale: 10),
                   Container(height: 5),
-                  Text(
+                  const Text(
                     "Let's start creating your property",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
                   ),
                   Container(height: 20),
-                  Text(
+                  const Text(
                     "Square meter",
                     style: TextStyle(
                         fontSize: 18,
@@ -201,18 +210,18 @@ class _AddProperty9State extends State<AddProperty9> {
                   Container(height: 5),
                   TextFormField(
                     controller: controller.squareMeter,
-                    style: TextStyle(),
+                    style: const TextStyle(),
                     decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.square_foot),
+                      suffixIcon: const Icon(Icons.square_foot),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                   Container(height: 25),
-                  Text(
+                  const Text(
                     "Total bedrooms",
                     style: TextStyle(
                         fontSize: 18,
@@ -221,19 +230,19 @@ class _AddProperty9State extends State<AddProperty9> {
                   ),
                   TextFormField(
                     controller: controller.numberOfUnits,
-                    style: TextStyle(height: 0.8),
+                    style: const TextStyle(height: 0.8),
                     decoration: InputDecoration(
                       hintText: "",
-                      suffixIcon: Icon(Icons.numbers),
+                      suffixIcon: const Icon(Icons.numbers),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                   Container(height: 25),
-                  Text(
+                  const Text(
                     "Total bathrooms",
                     style: TextStyle(
                         fontSize: 18,
@@ -242,23 +251,22 @@ class _AddProperty9State extends State<AddProperty9> {
                   ),
                   TextFormField(
                     controller: controller.numberOfUnits,
-                    style: TextStyle(height: 0.8),
+                    style: const TextStyle(height: 0.8),
                     decoration: InputDecoration(
                       hintText: "",
-                      suffixIcon: Icon(Icons.numbers),
+                      suffixIcon: const Icon(Icons.numbers),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(5),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
                   Container(height: 5),
-
                   Container(
-                    alignment: Alignment.center,
-                    child: Image.asset("assets/images/red-tree.png", scale: 3)
-                    ),
+                      alignment: Alignment.center,
+                      child:
+                          Image.asset("assets/images/red-tree.png", scale: 3)),
                 ],
               ),
               Container(height: 25),
@@ -266,16 +274,16 @@ class _AddProperty9State extends State<AddProperty9> {
                 onPressed: () {
                   controller.AddProperty();
                 },
-                color: Color(0xffd92328),
-                child: Text(
+                color: const Color(0xffd92328),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
                   "Save property",
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               Container(height: 15),

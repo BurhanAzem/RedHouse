@@ -1,7 +1,7 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list_controller.dart';
 import 'package:client/model/property.dart';
-import 'package:client/view/bottom_bar/search/home_information.dart';
+import 'package:client/view/bottom_bar/search/home%20information/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -207,7 +207,7 @@ class MapMarker extends Clusterable {
                 width: 500,
                 child: InkWell(
                   onTap: () {
-                    Get.to(() => const HomeInformation());
+                    Get.to(() => HomeInformation(property: property));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,28 +225,30 @@ class MapMarker extends Clusterable {
                             ),
                           ),
                           Positioned(
-                              bottom: 16,
-                              right: 16,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: 42,
-                                    height: 42,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.black,
-                                        size: 25,
-                                      ),
-                                      onPressed: () {},
-                                    ),
+                            bottom: 16,
+                            right: 16,
+                            child: InkWell(
+                              onTap: () {
+                                print(
+                                    "=============================================================love");
+                              },
+                              child: Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.favorite_border,
+                                    color: Colors.black,
+                                    size: 23,
                                   ),
-                                ],
-                              )),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       Container(

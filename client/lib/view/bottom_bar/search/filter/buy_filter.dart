@@ -139,7 +139,7 @@ class _BuyFilterState extends State<BuyFilter> {
           Container(height: 10),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 13),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(

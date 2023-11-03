@@ -1,5 +1,5 @@
 import 'package:client/model/property.dart';
-import 'package:client/view/bottom_bar/search/home_information.dart';
+import 'package:client/view/bottom_bar/search/home%20information/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -75,7 +75,7 @@ class ListWidget extends StatelessWidget {
         Property property = properties.elementAt(index);
         return InkWell(
           onTap: () {
-            Get.to(() => const HomeInformation());
+            Get.to(() => HomeInformation(property: property));
           },
           child: Container(
             margin: const EdgeInsets.only(bottom: 35, left: 15, right: 15),
@@ -88,7 +88,7 @@ class ListWidget extends StatelessWidget {
                       "Brokered by Foster Realty", // landlord name
                       style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
                     ),
-                    SizedBox(width: 1),
+                    const SizedBox(width: 1),
                     Icon(
                       Icons.check_circle_outline,
                       size: 14,
@@ -96,7 +96,7 @@ class ListWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 1),
+                const SizedBox(height: 1),
                 Stack(
                   children: [
                     ClipRRect(
@@ -109,28 +109,30 @@ class ListWidget extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                        bottom: 16,
-                        right: 16,
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.black,
-                                  size: 25,
-                                ),
-                                onPressed: () {},
-                              ),
+                      bottom: 16,
+                      right: 16,
+                      child: InkWell(
+                        onTap: () {
+                          print(
+                              "=============================================================love");
+                        },
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.favorite_border,
+                              color: Colors.black,
+                              size: 23,
                             ),
-                          ],
-                        )),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Container(
@@ -197,7 +199,8 @@ class ListWidget extends StatelessWidget {
                                     color: Colors.black, width: 1.4),
                               ),
                               onPressed: () {
-                                Get.to(() => HomeInformation());
+                                Get.to(
+                                    () => HomeInformation(property: property));
                               },
                               height: 37,
                               child: const Center(

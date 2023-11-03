@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class PushNotifications extends StatefulWidget {
-  const PushNotifications({Key? key}) : super(key: key);
+class EmailNotifications extends StatefulWidget {
+  const EmailNotifications({Key? key}) : super(key: key);
 
   @override
-  State<PushNotifications> createState() => _PushNotificationsState();
+  State<EmailNotifications> createState() => _EmailNotificationsState();
 }
 
-class _PushNotificationsState extends State<PushNotifications> {
+class _EmailNotificationsState extends State<EmailNotifications> {
   int _selectedValue = 1;
 
   void _handleRadioValueChange(int? value) {
@@ -21,7 +21,7 @@ class _PushNotificationsState extends State<PushNotifications> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Push Notifications",
+          "Email Notifications",
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
@@ -79,7 +79,7 @@ class _PushNotificationsState extends State<PushNotifications> {
             Container(
                 child: Column(
               children: <Widget>[
-                _buildRadioListTile(1, " Right away"),
+                _buildRadioListTile(1, " All time"),
                 _buildRadioListTile(2, " Once a day"),
                 _buildRadioListTile(3, " None"),
               ],

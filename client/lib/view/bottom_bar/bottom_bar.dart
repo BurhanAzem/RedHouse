@@ -1,4 +1,6 @@
-import 'package:client/view/bottom_bar/contract/mylistings.dart';
+import 'dart:convert';
+import 'package:client/controller/account_info_contoller.dart';
+import 'package:client/main.dart';
 import 'package:client/view/bottom_bar/more/more.dart';
 import 'package:client/view/bottom_bar/notification/notifications.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
@@ -6,6 +8,7 @@ import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class BottomBar extends StatefulWidget {
   BottomBar({Key? key}) : super(key: key);
@@ -15,6 +18,8 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+  AccountInfoContoller controller =
+      Get.put(AccountInfoContoller(), permanent: true);
   int _currentIndex = 0;
 
   final List<Icon> _unselectedIcons = [
@@ -41,6 +46,15 @@ class _BottomBarState extends State<BottomBar> {
     const Icon(Icons.home),
     const Icon(Icons.more_horiz),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.userDtoJson = sharepref!.getString("user");
+    controller.userDto = json.decode(controller.userDtoJson ?? "{}");
+    print(controller.userDtoJson);
+    print(controller.userDto);
+  }
 
   @override
   Widget build(BuildContext context) {
