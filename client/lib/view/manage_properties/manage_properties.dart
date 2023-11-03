@@ -1,3 +1,4 @@
+import 'package:client/view/manage_properties/all_applications.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +57,7 @@ class _TopNavigationBar extends State<ManageProperties>
         children: const <Widget>[
           Center(child: Properties()),
           Center(
-            child: Text("It's rainy here"),
+            child: AllApplications(),
           ),
           Center(
             child: Text("It's sunny here"),

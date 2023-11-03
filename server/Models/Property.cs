@@ -7,7 +7,9 @@ namespace RedHouse_Server.Models
     public class Property
     {
         [Key]
-        public int PropertyId { get; set; }
+        public int Id { get; set; }
+        public string PropertyCode { get; set; }
+
         public string PropertyType { get; set; }
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
@@ -31,5 +33,6 @@ namespace RedHouse_Server.Models
         public string ListingType { get; set; }
         public string IsAvailableBasement { get; set; } = "false";
         public string ListingBy { get; set; } = "Landlord";
+        public ICollection<PropertyFile>? propertyFiles { get; set; }
     }
 }

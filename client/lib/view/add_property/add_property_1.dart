@@ -342,9 +342,9 @@ class _AddProperty1State extends State<AddProperty1> {
                               setState(() {});
                             },
                             mapType: MapType.normal,
-                            initialCameraPosition: currentCameraPosition!,
+                            initialCameraPosition: jerusalem!,
                             onMapCreated: (mapcontroller) {
-                              // getLatAndLong();
+                              getLatAndLong();
                               mapController = mapcontroller;
                             },
                           ),

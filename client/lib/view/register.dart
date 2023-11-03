@@ -1,4 +1,5 @@
 import 'package:client/controller/auth/signup_controller.dart';
+import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -218,6 +219,7 @@ class _RegisterState extends State<Register> {
               MaterialButton(
                 onPressed: () {
                   controller.signUp();
+                  Get.toNamed(AppRoute.login);
                 },
                 color: const Color(0xffd92328),
                 child: const Text(

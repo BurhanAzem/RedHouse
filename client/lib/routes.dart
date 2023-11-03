@@ -41,6 +41,7 @@ class AppRoute {
   static const String addProperty9 = "/add-property9";
   static const String allContracts = "/all-contracts";
   static const String contract = "/contract";
+  static const String login = "/login";
   static const String properties = "/properties";
   static const String manageProperties = "/manage-properties";
   
@@ -65,6 +66,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty9: (context) => AddProperty9(),
   AppRoute.allContracts: (context) => AllContracts(),
   AppRoute.contract: (context) => const Contract(),
+  AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
 
