@@ -8,6 +8,8 @@ namespace RedHouse_Server.Models
     {
         [Key]
         public int Id { get; set; }
+        public string PropertyCode { get; set; }
+
         public string PropertyType { get; set; }
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }

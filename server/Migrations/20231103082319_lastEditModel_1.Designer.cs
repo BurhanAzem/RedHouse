@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedHouse_Server.Models;
 
@@ -11,9 +12,11 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    partial class RedHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231103082319_lastEditModel_1")]
+    partial class lastEditModel_1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,10 +234,6 @@ namespace RedHouse_Server.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("ApplicationStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ApplicationType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -248,6 +247,10 @@ namespace RedHouse_Server.Migrations
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

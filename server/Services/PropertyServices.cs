@@ -38,6 +38,13 @@ namespace RedHouse_Server.Services
             };
             var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
             await _redHouseDbContext.SaveChangesAsync();
+
+            Random random = new Random();
+            // Generate two random 5-digit numbers and concatenate them to form a 10-digit number
+            int firstPart = random.Next(10000, 99999);
+            int secondPart = random.Next(10000, 99999);
+            string random_number_str = $"{firstPart:D5}{secondPart:D5}";
+
             Property property = new Property
             {
                 AvailableOn = propertyDto.AvailableOn,
@@ -46,6 +53,7 @@ namespace RedHouse_Server.Services
                 ListingBy = propertyDto.ListingBy,
                 ListingType = propertyDto.ListingType,
                 LocationId = locationRes.Entity.Id,
+                PropertyCode = random_number_str,
                 // NeighborhoodId = 0,
                 NumberOfBathRooms = propertyDto.NumberOfBathRooms,
                 NumberOfBedRooms = propertyDto.NumberOfBedRooms,
@@ -147,7 +155,7 @@ namespace RedHouse_Server.Services
             {
                 query = query.Where(p => p.ListingType.Equals(filterDto.ListingType));
             }
-            if(filterDto.PropertyTypes[0] == "[]") filterDto.PropertyTypes = null ;
+            if (filterDto.PropertyTypes[0] == "[]") filterDto.PropertyTypes = null;
             if (filterDto.PropertyTypes != null)
             {
                 query = query.Where(p => filterDto.PropertyTypes.Contains(p.PropertyType));

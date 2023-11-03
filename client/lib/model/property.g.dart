@@ -7,28 +7,28 @@ part of 'property.dart';
 // **************************************************************************
 
 Property _$PropertyFromJson(Map<String, dynamic> json) => Property(
-      Id: json['id'] as int,
-      PropertyType: json['propertyType'] as String,
-      UserId: json['userId'] as int,
-      PropertyFiles: (json['propertyFiles'] as List<dynamic>)
+      Id: json['Id'] as int,
+      PropertyType: json['PropertyType'] as String,
+      UserId: json['UserId'] as int,
+      PropertyFiles: (json['PropertyFiles'] as List<dynamic>)
           .map((e) => PropertyFile.fromJson(e as Map<String, dynamic>))
           .toList(),
-      LocationId: json['locationId'] as int,
+      LocationId: json['LocationId'] as int,
       location: Location.fromJson(json['location'] as Map<String, dynamic>),
-      Price: json['price'] as int,
-      NumberOfBedRooms: json['numberOfBedRooms'] as int,
-      NumberOfBathRooms: json['numberOfBathRooms'] as int,
+      Price: json['Price'] as int,
+      NumberOfBedRooms: json['NumberOfBedRooms'] as int,
+      NumberOfBathRooms: json['NumberOfBathRooms'] as int,
       squareMetersArea: json['squareMetersArea'] as int,
-      PropertyDescription: json['propertyDescription'] as String,
-      BuiltYear: DateTime.parse(json['builtYear'] as String),
-      View: json['view'] as String,
-      AvailableOn: DateTime.parse(json['availableOn'] as String),
-      PropertyStatus: json['propertyStatus'] as String,
-      NumberOfUnits: json['numberOfUnits'] as int,
-      ParkingSpots: json['parkingSpots'] as int,
-      ListingType: json['listingType'] as String,
-      IsAvailableBasement: json['isAvailableBasement'] as String,
-      ListingBy: json['listingBy'] as String,
+      PropertyDescription: json['PropertyDescription'] as String,
+      BuiltYear: DateTime.parse(json['BuiltYear'] as String),
+      View: json['View'] as String,
+      AvailableOn: DateTime.parse(json['AvailableOn'] as String),
+      PropertyStatus: json['PropertyStatus'] as String,
+      NumberOfUnits: json['NumberOfUnits'] as int,
+      ParkingSpots: json['ParkingSpots'] as int,
+      ListingType: json['ListingType'] as String,
+      IsAvailableBasement: json['IsAvailableBasement'] as String,
+      ListingBy: json['ListingBy'] as String,
     );
 
 Map<String, dynamic> _$PropertyToJson(Property instance) => <String, dynamic>{
@@ -41,7 +41,7 @@ Map<String, dynamic> _$PropertyToJson(Property instance) => <String, dynamic>{
       'Price': instance.Price,
       'NumberOfBedRooms': instance.NumberOfBedRooms,
       'NumberOfBathRooms': instance.NumberOfBathRooms,
-      'SquareMeter': instance.squareMetersArea,
+      'squareMetersArea': instance.squareMetersArea,
       'PropertyDescription': instance.PropertyDescription,
       'BuiltYear': instance.BuiltYear.toIso8601String(),
       'View': instance.View,
