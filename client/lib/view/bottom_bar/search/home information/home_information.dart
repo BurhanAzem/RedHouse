@@ -1,4 +1,3 @@
-// AvailableOn and PropertyStatus
 import 'dart:math';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';

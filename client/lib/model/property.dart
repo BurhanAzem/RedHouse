@@ -1,5 +1,4 @@
 import 'dart:ffi';
-
 import 'package:client/model/location.dart';
 import 'package:client/model/property_files.dart';
 import 'package:intl/intl.dart';

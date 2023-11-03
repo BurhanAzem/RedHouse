@@ -129,7 +129,7 @@ class _MapWidgetState extends State<MapWidget> {
       if (placemarks.isNotEmpty) {
         var city =  placemarks[0].locality ?? '';
         controller.currentLocationName.value =
-            "Area in ${placemarks[0].locality ?? ''}";
+            "Area in $city";
         print('Location Name: ${controller.currentLocationName}');
 
         if (city != filterControllerr.location.value.City){
