@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
+  String currentCity = "";
   ListProperty listProperty = ListProperty(listDto: []);
   Rx<Location> location = Location(
     Id: 0,
@@ -161,7 +162,7 @@ class FilterController extends GetxController {
       listingPropertyType = "For sell";
     else
       listingPropertyType = "For rent";
-    var response = await PropertyData.getdata(
+    var response = await PropertyData.getProperties(
         propertyTypes,
         minPrice,
         maxPrice,

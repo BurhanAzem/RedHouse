@@ -1,5 +1,5 @@
 import 'package:client/core/class/statusrequest.dart';
-import 'package:client/data/signup.dart';
+import 'package:client/data/users.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,7 +36,7 @@ class SignUpControllerImp extends SignUpController {
   signUp() async {
     if (formstateRegister.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await SignUpData.postdata(
+      var response = await UserData.SignUp(
           firstName.text,
           lastName.text,
           password.text,

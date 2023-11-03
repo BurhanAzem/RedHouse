@@ -10,7 +10,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class PropertyData {
-  static postdata(
+  static addProperty(
       String propertyType,
       String price,
       String numberOfBedrooms,
@@ -92,56 +92,84 @@ class PropertyData {
     // return response.fold((l) => l, (r) => r);
   }
 
-  static getdata(
-  List<String> propertyTypes,
-  String minPrice,
-  String maxPrice,
-  String numberOfBathrooms,
-  String numberOfBedrooms,
-  String view,
-  String listingType,
-  Rx<Location> location,
-) async {
-   String? propertyTypesParam = propertyTypes.toString();
-  if(propertyTypes.length != 0)   propertyTypesParam = propertyTypes.join(',');
-  final Map<String, String?> filters = {
-    "PropertyTypes": propertyTypesParam!,
-    "MinPrice": minPrice.toString(),
-    "MaxPrice": maxPrice.toString(),
-    "NumberOfBedRooms": numberOfBedrooms.toString(),
-    "NumberOfBathRooms": numberOfBathrooms.toString(),
-    "View": view == "Any" ? "" : view,
-    "ListingType": listingType,
-    "LocationDto.StreetAddress": location.value.StreetAddress!,
-    "LocationDto.City": location.value.City!,
-    "LocationDto.Region": location.value.Region!,
-    "LocationDto.PostalCode": location.value.PostalCode!,
-    "LocationDto.Country": location.value.Country!,
-    "LocationDto.Latitude": location.value.Latitude == 0.0 ? "" : location.value.Latitude!.toString(),
-    "LocationDto.Longitude": location.value.Longitude == 0.0 ? "" : location.value.Longitude!.toString(),
-  };
+  static getProperties(
+    List<String> propertyTypes,
+    String minPrice,
+    String maxPrice,
+    String numberOfBathrooms,
+    String numberOfBedrooms,
+    String view,
+    String listingType,
+    Rx<Location> location,
+  ) async {
+    String? propertyTypesParam = propertyTypes.toString();
+    if (propertyTypes.length != 0) propertyTypesParam = propertyTypes.join(',');
+    final Map<String, String?> filters = {
+      "PropertyTypes": propertyTypesParam!,
+      "MinPrice": minPrice.toString(),
+      "MaxPrice": maxPrice.toString(),
+      "NumberOfBedRooms": numberOfBedrooms.toString(),
+      "NumberOfBathRooms": numberOfBathrooms.toString(),
+      "View": view == "Any" ? "" : view,
+      "ListingType": listingType,
+      "LocationDto.StreetAddress": location.value.StreetAddress!,
+      "LocationDto.City": location.value.City!,
+      "LocationDto.Region": location.value.Region!,
+      "LocationDto.PostalCode": location.value.PostalCode!,
+      "LocationDto.Country": location.value.Country!,
+      "LocationDto.Latitude": location.value.Latitude == 0.0
+          ? ""
+          : location.value.Latitude!.toString(),
+      "LocationDto.Longitude": location.value.Longitude == 0.0
+          ? ""
+          : location.value.Longitude!.toString(),
+    };
 
-  if (await checkInternet()) {
-    final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
+    if (await checkInternet()) {
+      final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
 
-    var response = await http.get(uri, headers: <String, String>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${getToken()}',
-    });
-    print(response.statusCode);
-    // print(response.body.listDto);
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+      print(response.statusCode);
+      // print(response.body.listDto);
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Map responsebody = json.decode(response.body);
-      print(responsebody["listDto"]);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["listDto"]);
 
-      return (responsebody);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
     } else {
-      return StatusRequest.serverfailure;
+      return StatusRequest.offlinefailure;
     }
-  } else {
-    return StatusRequest.offlinefailure;
   }
-}
 
+  static getProperty(int id) async {
+    if (await checkInternet()) {
+      // final Uri uri = Uri.https("10.0.2.2:7042", "/properties",);
+
+      var response = await http.get(Uri.parse(AppLink.properties + '/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+      // print(response.body.listDto);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+      print(responsebody["dto"]);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
 }

@@ -164,7 +164,7 @@ class AllContractsControllerImp extends AllContractsController {
   AddProperty() async {
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await PropertyData.postdata(
+      var response = await PropertyData.addProperty(
           propertyType,
           price.text,
           numberOfBedrooms.text,

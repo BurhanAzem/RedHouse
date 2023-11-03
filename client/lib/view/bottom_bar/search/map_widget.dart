@@ -62,7 +62,7 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
 
-    if (zoom < 10) {
+    if (zoom < 9) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -103,7 +103,7 @@ class _MapWidgetState extends State<MapWidget> {
     setState(() {
       controller.visibleMarkers.clear();
       controller.visibleProperties.clear();
-      if (zoom >= 10) {
+      if (zoom >= 9) {
         controller.visibleMarkers.addAll(visibleMarkers);
         controller.visibleProperties.addAll(newVisibleProperties);
         reverseGeocode(centerCoordinates);
@@ -127,13 +127,14 @@ class _MapWidgetState extends State<MapWidget> {
         coordinates.longitude,
       );
       if (placemarks.isNotEmpty) {
-        var city =  placemarks[0].locality ?? '';
+        var city =  placemarks[0].administrativeArea ?? '';
         controller.currentLocationName.value =
             "Area in ${placemarks[0].locality ?? ''}";
-        print('Location Name: ${controller.currentLocationName}');
+        print('Location Name: ${filterControllerr.currentCity}');
 
-        if (city != filterControllerr.location.value.City){
-          filterControllerr.location.value.City = placemarks[0].locality ?? '';
+        if (city != filterControllerr.currentCity){
+          filterControllerr.currentCity = placemarks[0].administrativeArea ?? '';
+          // filterControllerr.location.value.City = placemarks[0].locality ?? '';
           filterControllerr.getProperties();
           setState(() {
             
