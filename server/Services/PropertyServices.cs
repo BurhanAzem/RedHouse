@@ -175,11 +175,6 @@ namespace RedHouse_Server.Services
                 
             }
 
-
-
-
-
-
             // Execute the query and return the results
             var properties = await query.ToArrayAsync();
 

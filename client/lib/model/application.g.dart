@@ -7,13 +7,15 @@ part of 'application.dart';
 // **************************************************************************
 
 Application _$ApplicationFromJson(Map<String, dynamic> json) => Application(
-      Id: json['Id'] as int,
-      PropertyId: json['PropertyId'] as int,
-      UserId: json['UserId'] as int,
-      ApplicationDate: DateTime.parse(json['ApplicationDate'] as String),
-      ApplicationStatus: json['ApplicationStatus'] as String,
-      Message: json['Message'] as String,
-      ApplicationType: json['ApplicationType'] as String,
+      Id: json['id'] as int,
+      PropertyId: json['propertyId'] as int,
+      UserId: json['userId'] as int,
+      ApplicationDate: DateTime.parse(json['applicationDate'] as String),
+      ApplicationStatus: json['applicationStatus'] as String,
+      Message: json['message'] as String,
+      ApplicationType: json['applicationType'] as String,
+      property: Property.fromJson(json['property'] as Map<String, dynamic>),
+      user: User.fromJson(json['user'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ApplicationToJson(Application instance) =>
@@ -25,4 +27,6 @@ Map<String, dynamic> _$ApplicationToJson(Application instance) =>
       'ApplicationStatus': instance.ApplicationStatus,
       'Message': instance.Message,
       'ApplicationType': instance.ApplicationType,
+      'user': instance.user,
+      'property': instance.property,
     };

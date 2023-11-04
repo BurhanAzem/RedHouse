@@ -11,8 +11,9 @@ class Property {
   int Id;
   String PropertyType;
   int UserId;
+  String PropertyCode;
   int LocationId;
-  List<PropertyFile> PropertyFiles;
+  List<PropertyFile>? PropertyFiles;
   Location location;
   int Price;
   int NumberOfBedRooms;
@@ -33,7 +34,8 @@ class Property {
    required this.Id,
    required this.PropertyType,
    required this.UserId,
-   required this.PropertyFiles,
+   required this.PropertyCode,
+   this.PropertyFiles,
    required this.LocationId,
    required this.location,
    required this.Price,

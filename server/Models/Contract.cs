@@ -13,7 +13,7 @@ namespace RedHouse_Server.Models
         [ForeignKey(nameof(User))]
         public int LandlordId { get; set; }
         [ForeignKey(nameof(User))]
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

@@ -1,3 +1,5 @@
+import 'package:client/model/property.dart';
+import 'package:client/model/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part "application.g.dart";
@@ -11,7 +13,8 @@ class Application {
   String ApplicationStatus;
   String Message;
   String ApplicationType;
-
+  User user;
+  Property property;
   Application(
       {required this.Id,
       required this.PropertyId,
@@ -20,6 +23,8 @@ class Application {
       required this.ApplicationStatus,
       required this.Message,
       required this.ApplicationType,
+      required this.property,
+      required this.user,
       });
 
   factory Application.fromJson(Map<String, dynamic> json) =>

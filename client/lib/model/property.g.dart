@@ -10,10 +10,11 @@ Property _$PropertyFromJson(Map<String, dynamic> json) => Property(
       Id: json['id'] as int,
       PropertyType: json['propertyType'] as String,
       UserId: json['userId'] as int,
-      PropertyFiles: (json['propertyFiles'] as List<dynamic>)
-          .map((e) => PropertyFile.fromJson(e as Map<String, dynamic>))
+      PropertyCode: json['propertyCode'] as String,
+      PropertyFiles: (json['propertyFiles'] as List<dynamic>?)
+          ?.map((e) => PropertyFile.fromJson(e as Map<String, dynamic>))
           .toList(),
-      LocationId: json['locationId'] as int,
+      LocationId: json['locationId'] as int, 
       location: Location.fromJson(json['location'] as Map<String, dynamic>),
       Price: json['price'] as int,
       NumberOfBedRooms: json['numberOfBedRooms'] as int,
