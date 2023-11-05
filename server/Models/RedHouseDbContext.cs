@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using server.Models;
 using System.ComponentModel;
 using System.Reflection.Emit;
 
@@ -26,5 +27,13 @@ namespace RedHouse_Server.Models
         public DbSet<PropertyFile> PropertyFiles { get; set; }
         public DbSet<Application> Applications { get; set; }
         public DbSet<Contract> Contracts { get; set; }
+        public DbSet<ContractStep> ContractSteps { get; set; }
+        public DbSet<ContractActivity> ContractActivities { get; set; }
+        public DbSet<UserHistory> UserHistoryRecords { get; set; }
+        public DbSet<SavedProperties> SavedProperties { get; set; }
+
+
+
+
     }
 }

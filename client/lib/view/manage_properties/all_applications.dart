@@ -1,7 +1,6 @@
 import 'package:client/controller/applications/applications_controller.dart';
-import 'package:client/controller/contracts/all_contracts_controller.dart';
+import 'package:client/model/application.dart';
 import 'package:client/routes.dart';
-import 'package:client/view/contracts/contract.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -14,16 +13,37 @@ class AllApplications extends StatefulWidget {
 }
 
 class _AllApplicationsState extends State<AllApplications> {
-  ApplicationsControllerImp controller =
-      Get.put(ApplicationsControllerImp(), permanent: true);
+  bool isLoading = true; // Add a boolean variable for loading state
+
   @override
   void initState() {
-    controller.getApplications(1);
     super.initState();
+    loadData();
+    setState(() {
+      
+    });
+  }
+
+  void loadData() async {
+    ApplicationsControllerImp controller =
+        Get.put(ApplicationsControllerImp(), permanent: true);
+    await controller.getApplications(1);
+    setState(() {
+      isLoading = false; // Set isLoading to false when data is loaded
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    ApplicationsControllerImp controller = Get.find<ApplicationsControllerImp>();
+
+    // Check if data is still loading
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(), // Show a loading indicator
+      );
+    }
+
     const contractStatus = [
       "All",
       "Approved App",
@@ -112,7 +132,7 @@ class _AllApplicationsState extends State<AllApplications> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: controller.applications!.length,
+              itemCount: controller.applications.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
@@ -151,12 +171,12 @@ class _AllApplicationsState extends State<AllApplications> {
 
                               Text(
                                 (controller.applications![index]
-                                            .ApplicationDate!
+                                            .applicationDate!
                                             .toString()
                                             .length <=
                                         10)
-                                    ? "       ${controller.applications![index].ApplicationDate!.toString()!}"
-                                    : "       ${controller.applications![index].ApplicationDate!.toString().substring(0, 9)}",
+                                    ? "       ${controller.applications![index].applicationDate!.toString()!}"
+                                    : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w600, fontSize: 12),
                               ),
@@ -223,7 +243,7 @@ class _AllApplicationsState extends State<AllApplications> {
                                   ),
                                   Text(
                                     controller
-                                        .applications![index].ApplicationStatus!
+                                        .applications![index].applicationStatus!
                                         .toString(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -242,7 +262,7 @@ class _AllApplicationsState extends State<AllApplications> {
                                   ),
                                   Text(
                                     controller.applications![index].property
-                                        .PropertyCode!,
+                                        .propertyCode!,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12,

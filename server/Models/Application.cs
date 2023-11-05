@@ -19,6 +19,7 @@ namespace RedHouse_Server.Models
         public string Message { get; set; }
         public string ApplicationStatus { get; set; }
         public string ApplicationType { get; set; }
+        public double SuggestedPrice { get; set; }
 
     }
 }

@@ -15,14 +15,14 @@ class FilterController extends GetxController {
   String currentCity = "";
   ListProperty listProperty = ListProperty(listDto: []);
   Rx<Location> location = Location(
-    Id: 0,
-    StreetAddress: "",
-    City: "",
-    Region: "",
-    PostalCode: "",
-    Country: "",
-    Latitude: 0,
-    Longitude: 0,
+    id: 0,
+    streetAddress: "",
+    city: "",
+    region: "",
+    postalCode: "",
+    country: "",
+    latitude: 0,
+    longitude: 0,
   ).obs;
 
   bool buyHouse = false;
@@ -198,8 +198,8 @@ class FilterController extends GetxController {
       return MapMarker(
         property: property,
         position: LatLng(
-          property.location?.Latitude ?? 0.0,
-          property.location?.Longitude ?? 0.0,
+          property.location?.latitude ?? 0.0,
+          property.location?.longitude ?? 0.0,
         ),
       );
     }).toList();

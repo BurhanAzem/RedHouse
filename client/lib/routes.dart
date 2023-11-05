@@ -13,6 +13,7 @@ import 'package:client/view/bottom_bar/notification/notifications_settings.dart'
 import 'package:client/view/bottom_bar/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/contracts/contract.dart';
+import 'package:client/view/history_dart/user_history.dart';
 import 'package:client/view/login.dart';
 import 'package:client/view/manage_properties/application.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
@@ -41,11 +42,13 @@ class AppRoute {
   static const String addProperty8 = "/add-property8";
   static const String addProperty9 = "/add-property9";
   static const String allContracts = "/all-contracts";
-  static const String applicationDetails = "/application_details";
+  static const String applicationDetails = "/application-details";
   static const String contract = "/contract";
   static const String login = "/login";
   static const String properties = "/properties";
   static const String manageProperties = "/manage-properties";
+  static const String userHistory = "/user-history";
+
   
 
 
@@ -72,6 +75,8 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
+  AppRoute.userHistory: (context) => UserHistory(),
+
 
 
 

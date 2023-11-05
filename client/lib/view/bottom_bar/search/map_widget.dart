@@ -84,11 +84,11 @@ class _MapWidgetState extends State<MapWidget> {
 
     Set<Property> newVisibleProperties = filterControllerr.listProperty.listDto
         .where((property) =>
-            property.location.Latitude >= bounds.southwest.latitude &&
-            property.location.Latitude <= bounds.northeast.latitude &&
-            property.location.Longitude >=
+            property.location.latitude >= bounds.southwest.latitude &&
+            property.location.latitude <= bounds.northeast.latitude &&
+            property.location.longitude >=
                 bounds.southwest.longitude &&
-            property.location.Longitude <= bounds.northeast.longitude)
+            property.location.longitude <= bounds.northeast.longitude)
         .toSet();
 
     Set<Marker> visibleMarkers = controller.allMarkers
@@ -194,7 +194,7 @@ class MapMarker extends Clusterable {
   get context => null;
 
   Marker toMarker() => Marker(
-      markerId: MarkerId(property.Id.toString()),
+      markerId: MarkerId(property.id.toString()),
       position: LatLng(
         position.latitude,
         position.longitude,
@@ -235,7 +235,7 @@ class MapMarker extends Clusterable {
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(30)),
                             child: Image.asset(
-                              property.PropertyFiles![0].DownloadUrls!,
+                              property.propertyFiles![0].downloadUrls!,
                               width: double.infinity,
                               height: 190,
                               fit: BoxFit.cover,
@@ -282,37 +282,37 @@ class MapMarker extends Clusterable {
                                   ),
                                 ),
                                 Text(
-                                  " ${property.PropertyStatus}",
+                                  " ${property.propertyStatus}",
                                   style: const TextStyle(fontSize: 17.5),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              "ID = ${property.Id}",
+                              "ID = ${property.id}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             Text(
-                              "\$${NumberFormat.decimalPattern().format(property.Price)}${property.PropertyStatus == "For Rent" ? "/mo" : ""}",
+                              "\$${NumberFormat.decimalPattern().format(property.price)}${property.propertyStatus == "For Rent" ? "/mo" : ""}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
+                              "${property.numberOfBedRooms} bedroom, ${property.numberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.location.StreetAddress}, ${property.location.City}, ${property.location!.Country}",
+                              "${property.location.streetAddress}, ${property.location.city}, ${property.location!.country}",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              (property.PropertyDescription.length <= 100)
-                                  ? property.PropertyDescription
-                                  : '${property.PropertyDescription.substring(0, 45)}...',
+                              (property.propertyDescription.length <= 100)
+                                  ? property.propertyDescription
+                                  : '${property.propertyDescription.substring(0, 45)}...',
                               style: const TextStyle(),
                             ),
                           ],

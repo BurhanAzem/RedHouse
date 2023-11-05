@@ -5,24 +5,24 @@ part "location.g.dart";
 
 @JsonSerializable()
 class Location {
-  int Id;
-  String StreetAddress;
-  String City;
-  String Region;
-  String PostalCode;
-  String Country;
-  double Latitude;
-  double Longitude;
+  int id;
+  String streetAddress;
+  String city;
+  String region;
+  String postalCode;
+  String country;
+  double latitude;
+  double longitude;
 
   Location({
-    required this.Id,
-    required this.StreetAddress,
-    required this.City,
-    required this.Region,
-    required this.PostalCode,
-    required this.Country,
-    required this.Latitude,
-    required this.Longitude,
+    required this.id,
+    required this.streetAddress,
+    required this.city,
+    required this.region,
+    required this.postalCode,
+    required this.country,
+    required this.latitude,
+    required this.longitude,
   });
 
   factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);

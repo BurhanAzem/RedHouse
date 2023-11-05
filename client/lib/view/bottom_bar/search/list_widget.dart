@@ -102,7 +102,7 @@ class ListWidget extends StatelessWidget {
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: Image.asset(
-                        property.PropertyFiles![0].DownloadUrls!,
+                        property.propertyFiles![0].downloadUrls!,
                         width: double.infinity,
                         height: 220,
                         fit: BoxFit.cover,
@@ -149,25 +149,25 @@ class ListWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            " ${property.PropertyStatus}",
+                            " ${property.propertyStatus}",
                             style: const TextStyle(fontSize: 17.5),
                           ),
                         ],
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        "ID = ${property.Id}",
+                        "ID = ${property.id}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       Text(
-                        "\$${NumberFormat.decimalPattern().format(property.Price)}${property.PropertyStatus == "For Rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(property.price)}${property.propertyStatus == "For Rent" ? "/mo" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
+                        "${property.numberOfBedRooms} bedroom, ${property.numberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
                         style: const TextStyle(fontSize: 15),
                       ),
                       const SizedBox(height: 14),
@@ -178,12 +178,12 @@ class ListWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${property.location!.StreetAddress}",
+                                "${property.location!.streetAddress}",
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                               const SizedBox(height: 1),
                               Text(
-                                "${property.location!.City}, ${property.location!.Country}",
+                                "${property.location!.city}, ${property.location!.country}",
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                             ],

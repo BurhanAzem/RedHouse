@@ -7,26 +7,28 @@ part of 'application.dart';
 // **************************************************************************
 
 Application _$ApplicationFromJson(Map<String, dynamic> json) => Application(
-      Id: json['id'] as int,
-      PropertyId: json['propertyId'] as int,
-      UserId: json['userId'] as int,
-      ApplicationDate: DateTime.parse(json['applicationDate'] as String),
-      ApplicationStatus: json['applicationStatus'] as String,
-      Message: json['message'] as String,
-      ApplicationType: json['applicationType'] as String,
+      id: json['id'] as int,
+      propertyId: json['propertyId'] as int,
+      userId: json['userId'] as int,
+      applicationDate: DateTime.parse(json['applicationDate'] as String),
+      applicationStatus: json['applicationStatus'] as String,
+      message: json['message'] as String,
+      applicationType: json['applicationType'] as String,
       property: Property.fromJson(json['property'] as Map<String, dynamic>),
       user: User.fromJson(json['user'] as Map<String, dynamic>),
+      suggestedPrice: (json['suggestedPrice'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$ApplicationToJson(Application instance) =>
     <String, dynamic>{
-      'Id': instance.Id,
-      'PropertyId': instance.PropertyId,
-      'UserId': instance.UserId,
-      'ApplicationDate': instance.ApplicationDate.toIso8601String(),
-      'ApplicationStatus': instance.ApplicationStatus,
-      'Message': instance.Message,
-      'ApplicationType': instance.ApplicationType,
+      'id': instance.id,
+      'propertyId': instance.propertyId,
+      'userId': instance.userId,
+      'applicationDate': instance.applicationDate.toIso8601String(),
+      'applicationStatus': instance.applicationStatus,
+      'message': instance.message,
+      'applicationType': instance.applicationType,
       'user': instance.user,
       'property': instance.property,
+      'suggestedPrice': instance.suggestedPrice,
     };

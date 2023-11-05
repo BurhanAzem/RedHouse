@@ -6,25 +6,27 @@ part "application.g.dart";
 
 @JsonSerializable()
 class Application {
-  int Id;
-  int PropertyId;
-  int UserId;
-  DateTime ApplicationDate;
-  String ApplicationStatus;
-  String Message;
-  String ApplicationType;
+  int id;
+  int propertyId;
+  int userId;
+  DateTime applicationDate;
+  String applicationStatus;
+  String message;
+  String applicationType;
   User user;
   Property property;
+  double ?suggestedPrice;
   Application(
-      {required this.Id,
-      required this.PropertyId,
-      required this.UserId,
-      required this.ApplicationDate,
-      required this.ApplicationStatus,
-      required this.Message,
-      required this.ApplicationType,
+      {required this.id,
+      required this.propertyId,
+      required this.userId,
+      required this.applicationDate,
+      required this.applicationStatus,
+      required this.message,
+      required this.applicationType,
       required this.property,
       required this.user,
+      this.suggestedPrice,
       });
 
   factory Application.fromJson(Map<String, dynamic> json) =>

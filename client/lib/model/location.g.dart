@@ -7,23 +7,23 @@ part of 'location.dart';
 // **************************************************************************
 
 Location _$LocationFromJson(Map<String, dynamic> json) => Location(
-      Id: json['id'] as int,
-      StreetAddress: json['streetAddress'] as String,
-      City: json['city'] as String,
-      Region: json['region'] as String,
-      PostalCode: json['postalCode'] as String,
-      Country: json['country'] as String,
-      Latitude: (json['latitude'] as num).toDouble(),
-      Longitude: (json['longitude'] as num).toDouble(),
+      id: json['id'] as int,
+      streetAddress: json['streetAddress'] as String,
+      city: json['city'] as String,
+      region: json['region'] as String,
+      postalCode: json['postalCode'] as String,
+      country: json['country'] as String,
+      latitude: (json['latitude'] as num).toDouble(),
+      longitude: (json['longitude'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$LocationToJson(Location instance) => <String, dynamic>{
-      'Id': instance.Id,
-      'StreetAddress': instance.StreetAddress,
-      'City': instance.City,
-      'Region': instance.Region,
-      'PostalCode': instance.PostalCode,
-      'Country': instance.Country,
-      'Latitude': instance.Latitude,
-      'Longitude': instance.Longitude,
+      'id': instance.id,
+      'streetAddress': instance.streetAddress,
+      'city': instance.city,
+      'region': instance.region,
+      'postalCode': instance.postalCode,
+      'country': instance.country,
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
     };
