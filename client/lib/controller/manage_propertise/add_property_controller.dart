@@ -1,3 +1,4 @@
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/routes.dart';
@@ -18,6 +19,8 @@ abstract class AddPropertyController extends GetxController {
 }
 
 class AddPropertyControllerImp extends AddPropertyController {
+  AccountInfoContoller controller = Get.put(AccountInfoContoller());
+  
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
   int activeStep = 0;
   late TextEditingController price;
@@ -36,7 +39,7 @@ class AddPropertyControllerImp extends AddPropertyController {
   String isAvaliableBasement = "Yes";
   late TextEditingController streetAddress;
   String listingBy = "Landlord";
-  int userId = 1;
+  int userId = 0;
   List<String> downloadUrls = [];
   // PropertyData propertyData = PropertyData(Crud());
   StatusRequest statusRequest = StatusRequest.loading;
@@ -54,7 +57,7 @@ class AddPropertyControllerImp extends AddPropertyController {
   AddProperty() async {
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await PropertyData.postdata(
+      var response = await PropertyData.addProperty(
           propertyType,
           price.text,
           numberOfBedrooms.text,

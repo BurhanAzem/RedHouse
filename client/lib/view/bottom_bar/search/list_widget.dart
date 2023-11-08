@@ -84,9 +84,26 @@ class ListWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      "Brokered by Foster Realty", // landlord name
-                      style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Brokered by the ${property.ListingBy} ',
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 12.5,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Ayman Dwikat',
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 196, 39, 27),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(width: 1),
                     Icon(
@@ -101,8 +118,8 @@ class ListWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: Image.asset(
-                        property.PropertyFiles![0].DownloadUrls!,
+                      child: Image.network(
+                        property.PropertyFiles[0].DownloadUrls!,
                         width: double.infinity,
                         height: 220,
                         fit: BoxFit.cover,
@@ -112,10 +129,7 @@ class ListWidget extends StatelessWidget {
                       bottom: 16,
                       right: 16,
                       child: InkWell(
-                        onTap: () {
-                          print(
-                              "=============================================================love");
-                        },
+                        onTap: () {},
                         child: Container(
                           width: 35,
                           height: 35,
@@ -147,32 +161,83 @@ class ListWidget extends StatelessWidget {
                             height: 12,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Color.fromARGB(255, 44, 162, 46),
+                              color: Color.fromARGB(255, 196, 39, 27),
                             ),
                           ),
                           Text(
-                            " ${property.PropertyStatus}",
+                            " ${property.ListingType}",
                             style: const TextStyle(fontSize: 17.5),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
-                        "ID = ${property.Id}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      Text(
-                        "\$${NumberFormat.decimalPattern().format(property.Price)}${property.PropertyStatus == "For Rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(property.Price)}${property.ListingType == "For rent" ? "/mo" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
-                        style: const TextStyle(fontSize: 15),
+                        property.PropertyType,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 196, 39, 27),
+                        ),
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 2),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${property.NumberOfBedRooms} ',
+                              style: const TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 196, 39, 27),
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'bedrooms, ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '${property.NumberOfBathRooms} ',
+                              style: const TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 196, 39, 27),
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'bathrooms, ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '${property.squareMetersArea} ',
+                              style: const TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 196, 39, 27),
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'meters',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -180,7 +245,7 @@ class ListWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${property.location!.StreetAddress}",
+                                property.location.StreetAddress,
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                               const SizedBox(height: 1),

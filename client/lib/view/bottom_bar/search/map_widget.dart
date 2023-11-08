@@ -1,3 +1,4 @@
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list_controller.dart';
 import 'package:client/model/property.dart';
@@ -17,11 +18,10 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  MapListController controller = Get.put(MapListController());
+  AccountInfoContoller accountController = Get.put(AccountInfoContoller());
+  MapListController mapListController = Get.put(MapListController());
   FilterController filterControllerr = Get.put(FilterController());
   GoogleMapController? mapController;
-  CameraPosition _currentPosition =
-      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
   bool isLoading = true;
   bool isLoadingMap = false;
   bool userNotified = false;
@@ -30,10 +30,8 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   void initState() {
     super.initState();
-    _currentPosition = controller.currentPosition ?? _currentPosition;
-    controller.allMarkers =
-        // controller.getMarkerLocations(controller.allProperties);
-        filterControllerr.getMarkerLocations(filterControllerr.listProperty.listDto);
+    mapListController.allMarkers = filterControllerr
+        .getMarkerLocations(filterControllerr.listProperty.listDto);
 
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -48,11 +46,7 @@ class _MapWidgetState extends State<MapWidget> {
     });
   }
 
-  Future<void> updateMarkers(double zoom) async {
-    print("======================================================== markers");
-    print(controller.allMarkers);
-    print("========================================================Zoom $zoom");
-
+  Future<void> updateMarkers() async {
     if (mapController == null) {
       return;
     }
@@ -62,7 +56,7 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
 
-    if (zoom < 10) {
+    if (mapListController.newZoom < 10) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -84,14 +78,14 @@ class _MapWidgetState extends State<MapWidget> {
 
     Set<Property> newVisibleProperties = filterControllerr.listProperty.listDto
         .where((property) =>
+            property.UserId != accountController.userDto?["id"] &&
             property.location.Latitude >= bounds.southwest.latitude &&
             property.location.Latitude <= bounds.northeast.latitude &&
-            property.location.Longitude >=
-                bounds.southwest.longitude &&
+            property.location.Longitude >= bounds.southwest.longitude &&
             property.location.Longitude <= bounds.northeast.longitude)
         .toSet();
 
-    Set<Marker> visibleMarkers = controller.allMarkers
+    Set<Marker> visibleMarkers = mapListController.allMarkers
         .where((marker) =>
             marker.position.latitude >= bounds.southwest.latitude &&
             marker.position.latitude <= bounds.northeast.latitude &&
@@ -101,23 +95,20 @@ class _MapWidgetState extends State<MapWidget> {
         .toSet();
 
     setState(() {
-      controller.visibleMarkers.clear();
-      controller.visibleProperties.clear();
-      if (zoom >= 10) {
-        controller.visibleMarkers.addAll(visibleMarkers);
-        controller.visibleProperties.addAll(newVisibleProperties);
+      mapListController.visibleMarkers.clear();
+      mapListController.visibleProperties.clear();
+      if (mapListController.newZoom >= 10) {
+        mapListController.visibleMarkers.addAll(visibleMarkers);
+        mapListController.visibleProperties.addAll(newVisibleProperties);
         reverseGeocode(centerCoordinates);
       }
-      _currentPosition = CameraPosition(
+      mapListController.currentPosition = CameraPosition(
         target: centerCoordinates,
-        zoom: zoom,
+        zoom: mapListController.newZoom,
       );
-      controller.currentPosition = _currentPosition;
     });
-    controller.allMarkers =
-        // controller.getMarkerLocations(controller.allProperties);
-        filterControllerr.getMarkerLocations(filterControllerr.listProperty.listDto);
-        print("object");
+    mapListController.allMarkers = filterControllerr
+        .getMarkerLocations(filterControllerr.listProperty.listDto);
   }
 
   Future<void> reverseGeocode(LatLng coordinates) async {
@@ -127,26 +118,24 @@ class _MapWidgetState extends State<MapWidget> {
         coordinates.longitude,
       );
       if (placemarks.isNotEmpty) {
-        var city =  placemarks[0].locality ?? '';
-        controller.currentLocationName.value =
-            "Area in $city";
-        print('Location Name: ${controller.currentLocationName}');
+        var city = placemarks[0].administrativeArea ?? '';
+        mapListController.currentLocationName.value =
+            "Area in ${placemarks[0].locality ?? ''}";
 
-        if (city != filterControllerr.location.value.City){
-          filterControllerr.location.value.City = placemarks[0].locality ?? '';
+        if (city != filterControllerr.currentCity) {
+          filterControllerr.currentCity =
+              placemarks[0].administrativeArea ?? '';
+          print(
+              "=====================================================================Call to api");
           filterControllerr.getProperties();
-          setState(() {
-            
-          });
         }
-        
       }
     } catch (e) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    controller.mapContext = context;
+    mapListController.mapContext = context;
 
     return Stack(
       children: [
@@ -154,15 +143,17 @@ class _MapWidgetState extends State<MapWidget> {
           visible: isLoadingMap,
           child: GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: _currentPosition,
+            initialCameraPosition: mapListController.currentPosition,
             onMapCreated: (controller) {
               setState(() {
                 mapController = controller;
               });
             },
-            markers: controller.visibleMarkers,
+            markers: mapListController.visibleMarkers,
             onCameraMove: (CameraPosition position) {
-              updateMarkers(position.zoom);
+              print("============================================Camera move");
+              mapListController.newZoom = position.zoom;
+              updateMarkers();
             },
           ),
         ),
@@ -219,7 +210,7 @@ class MapMarker extends Clusterable {
                     color: Colors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(30))),
-                height: MediaQuery.of(context).size.height / 2, //2.3
+                height: MediaQuery.of(context).size.height / 2.15,
                 width: 500,
                 child: InkWell(
                   onTap: () {
@@ -233,8 +224,8 @@ class MapMarker extends Clusterable {
                           ClipRRect(
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(30)),
-                            child: Image.asset(
-                              property.PropertyFiles![0].DownloadUrls!,
+                            child: Image.network(
+                              property.PropertyFiles[0].DownloadUrls!,
                               width: double.infinity,
                               height: 190,
                               fit: BoxFit.cover,
@@ -244,10 +235,7 @@ class MapMarker extends Clusterable {
                             bottom: 16,
                             right: 16,
                             child: InkWell(
-                              onTap: () {
-                                print(
-                                    "=============================================================love");
-                              },
+                              onTap: () {},
                               child: Container(
                                 width: 35,
                                 height: 35,
@@ -268,7 +256,8 @@ class MapMarker extends Clusterable {
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.only(left: 25, top: 15),
+                        padding:
+                            const EdgeInsets.only(left: 25, top: 15, right: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -279,30 +268,72 @@ class MapMarker extends Clusterable {
                                   height: 12,
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 44, 162, 46),
+                                    color: Color.fromARGB(255, 196, 39, 27),
                                   ),
                                 ),
                                 Text(
-                                  " ${property.PropertyStatus}",
+                                  " ${property.ListingType}",
                                   style: const TextStyle(fontSize: 17.5),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
-                              "ID = ${property.Id}",
+                              "\$${NumberFormat.decimalPattern().format(property.Price)}${property.ListingType == "For rent" ? "/mo" : ""}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                            Text(
-                              "\$${NumberFormat.decimalPattern().format(property.Price)}${property.PropertyStatus == "For Rent" ? "/mo" : ""}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              "${property.NumberOfBedRooms} bedroom, ${property.NumberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
-                              style: const TextStyle(fontSize: 15),
+                            const SizedBox(height: 6),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '${property.NumberOfBedRooms} ',
+                                    style: const TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'bedrooms, ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '${property.NumberOfBathRooms} ',
+                                    style: const TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'bathrooms, ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '${property.squareMetersArea} ',
+                                    style: const TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'meters',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 2),
                             Text(
@@ -311,10 +342,10 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              (property.PropertyDescription.length <= 100)
-                                  ? property.PropertyDescription
-                                  : '${property.PropertyDescription.substring(0, 45)}...',
+                              property.PropertyDescription,
                               style: const TextStyle(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ],
                         ),

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
-import 'package:client/data/login.dart';
+import 'package:client/data/users.dart';
 import 'package:client/main.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class LoginControllerImp extends LoginController {
   @override
   login() async {
     if (formstate.currentState!.validate()) {
-      var response = await LoginData.postdata(password.text, email.text);
+      var response = await UserData.Login(password.text, email.text);
       print("=============================== Controller $response ");
       statusRequest = handlingData(response);
       if (response['statusCode'] == 200) {

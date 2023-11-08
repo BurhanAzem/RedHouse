@@ -1,3 +1,4 @@
+import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/controller/contracts/all_contracts_controller.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/contracts/contract.dart';
@@ -15,8 +16,8 @@ class AllApplications extends StatefulWidget {
 class _AllApplicationsState extends State<AllApplications> {
   @override
   Widget build(BuildContext context) {
-    AllContractsControllerImp controller =
-        Get.put(AllContractsControllerImp(), permanent: true);
+    ApplicationsControllerImp controller =
+        Get.put(ApplicationsControllerImp(), permanent: true);
     const contractStatus = [
       "All",
       "Approved App",
@@ -24,8 +25,8 @@ class _AllApplicationsState extends State<AllApplications> {
     ];
     const contractType = [
       "All",
-      "Rent contract",
-      "Buy contract",
+      "Rent App          ",
+      "Buy App",
     ];
     return Scaffold(
       // appBar: AppBar(
@@ -130,7 +131,7 @@ class _AllApplicationsState extends State<AllApplications> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoute.contract);
+                    controller.getProperty();
                     setState(() {
                       
                     });
@@ -159,30 +160,30 @@ class _AllApplicationsState extends State<AllApplications> {
                                 FontAwesomeIcons.solidFileZipper,
                                 size: 25,
                               ),
-                              Text(
-                                (controller.Contracts![index].CreatedDate!
-                                            .toString()
-                                            .length <=
-                                        10)
-                                    ? "       ${controller
-                                            .Contracts![index].CreatedDate!
-                                            .toString()!}"
-                                    : "       ${controller
-                                            .Contracts![index].CreatedDate!
-                                            .toString()
-                                            .substring(0, 9)}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                              ),
+                              // Text(
+                              //   (controller.Contracts![index].CreatedDate!
+                              //               .toString()
+                              //               .length <=
+                              //           10)
+                              //       ? "       ${controller
+                              //               .Contracts![index].CreatedDate!
+                              //               .toString()!}"
+                              //       : "       ${controller
+                              //               .Contracts![index].CreatedDate!
+                              //               .toString()
+                              //               .substring(0, 9)}",
+                              //   style: const TextStyle(
+                              //       fontWeight: FontWeight.w600, fontSize: 12),
+                              // ),
                             ],
                           ),
-                          Text(
-                            (controller.Contracts![index].Title!.length <= 38)
-                                ? controller.Contracts![index].Title!
-                                : '${controller.Contracts![index].Title!
-                                        .substring(0, 38)}...',
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
+                          // Text(
+                          //   (controller.Contracts![index].Title!.length <= 38)
+                          //       ? controller.Contracts![index].Title!
+                          //       : '${controller.Contracts![index].Title!
+                          //               .substring(0, 38)}...',
+                          //   style: const TextStyle(fontWeight: FontWeight.w600),
+                          // ),
                         ],
                       ),
                       isThreeLine:
@@ -196,14 +197,14 @@ class _AllApplicationsState extends State<AllApplications> {
                           Container(
                             height: 1,
                           ),
-                          Text(
-                            (controller.Contracts![index].Description!.length <=
-                                    100)
-                                ? controller.Contracts![index].Description!
-                                : '${controller.Contracts![index].Description!
-                                        .substring(0, 100)}...',
-                            style: const TextStyle(fontWeight: FontWeight.w400),
-                          ),
+                          // Text(
+                          //   (controller.Contracts![index].Description!.length <=
+                          //           100)
+                          //       ? controller.Contracts![index].Description!
+                          //       : '${controller.Contracts![index].Description!
+                          //               .substring(0, 100)}...',
+                          //   style: const TextStyle(fontWeight: FontWeight.w400),
+                          // ),
                           Container(
                             height: 5,
                           ),
@@ -218,14 +219,14 @@ class _AllApplicationsState extends State<AllApplications> {
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12),
                                   ),
-                                  Text(
-                                    controller.Contracts![index].Price!
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        color: Color(0xffd92328)),
-                                  ),
+                                  // Text(
+                                  //   controller.Contracts![index].Price!
+                                  //       .toString(),
+                                  //   style: const TextStyle(
+                                  //       fontWeight: FontWeight.w600,
+                                  //       fontSize: 12,
+                                  //       color: Color(0xffd92328)),
+                                  // ),
                                 ],
                               ),
                               Row(
@@ -236,14 +237,14 @@ class _AllApplicationsState extends State<AllApplications> {
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12),
                                   ),
-                                  Text(
-                                    controller
-                                        .Contracts![index].ContractStatus!,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        color: Color(0xffd92328)),
-                                  ),
+                                  // Text(
+                                  //   controller
+                                  //       .Contracts![index].ContractStatus!,
+                                  //   style: const TextStyle(
+                                  //       fontWeight: FontWeight.w600,
+                                  //       fontSize: 12,
+                                  //       color: Color(0xffd92328)),
+                                  // ),
                                 ],
                               ),
                             ],

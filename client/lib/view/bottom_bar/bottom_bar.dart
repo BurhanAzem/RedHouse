@@ -23,28 +23,44 @@ class _BottomBarState extends State<BottomBar> {
   int _currentIndex = 0;
 
   final List<Icon> _unselectedIcons = [
-    const Icon(Icons.search),
-    const Icon(
-      FontAwesomeIcons.handshake,
-      size: 25,
+     Icon(
+     FontAwesomeIcons.magnifyingGlassLocation,
+      color: Colors.grey[800],
     ),
-    const Icon(Icons.notifications_active_outlined),
-    const Icon(Icons.home_outlined),
-    const Icon(Icons.more_horiz_outlined),
+     Icon(
+     FontAwesomeIcons.solidHandshake,
+      color: Colors.grey[800],
+    ),
+     Icon(
+      FontAwesomeIcons.solidBell,
+      color: Colors.grey[800],
+    ),
+     Icon(
+      FontAwesomeIcons.house,
+      color: Colors.grey[800],
+    ),
+     Icon(
+      FontAwesomeIcons.ellipsis,
+      color: Colors.grey[800],
+    ),
   ];
 
   final List<Icon> _selectedIcons = [
     const Icon(
       FontAwesomeIcons.magnifyingGlassLocation,
-      size: 22,
     ),
     const Icon(
       FontAwesomeIcons.solidHandshake,
-      size: 23,
     ),
-    const Icon(Icons.notifications_active_rounded),
-    const Icon(Icons.home),
-    const Icon(Icons.more_horiz),
+    const Icon(
+      FontAwesomeIcons.solidBell,
+    ),
+    const Icon(
+      FontAwesomeIcons.house,
+    ),
+    const Icon(
+      FontAwesomeIcons.ellipsis,
+    ),
   ];
 
   @override
@@ -61,23 +77,24 @@ class _BottomBarState extends State<BottomBar> {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: [
-          const Search(),
-          const AllContracts(),
-          const Notifications(),
-          const ManageProperties(),
+        children: const [
+          Search(),
+          AllContracts(),
+          Notifications(),
+          ManageProperties(),
           More(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        iconSize: 32,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
+        iconSize: 20,
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
         unselectedItemColor: Colors.black,
+        unselectedLabelStyle: const TextStyle(fontSize: 11.5),
         selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5),
+            const TextStyle(fontWeight: FontWeight.w600, fontSize: 11.5),
         items: [
           _buildBottomNavigationBarItem(0),
           _buildBottomNavigationBarItem(1),
@@ -112,7 +129,7 @@ class _BottomBarState extends State<BottomBar> {
       case 2:
         return "Notifications";
       case 3:
-        return "Manage Property";
+        return "Properties";
       case 4:
         return "More";
       default:

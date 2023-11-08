@@ -201,10 +201,9 @@ class _RentFilterState extends State<RentFilter> {
                   controller.copyBedButton();
 
                   controller.rentView = controller.rentViewTemp;
-                  controller.buyView = "Any view";
+                  controller.buyView = "Any";
 
                   controller.getProperties();
-
                   Navigator.pop(context);
                 }
               },

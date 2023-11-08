@@ -1,7 +1,8 @@
+import 'package:client/model/property_files.dart';
 import 'package:flutter/material.dart';
 
 class ImageSliderWidget extends StatefulWidget {
-  final List<String> propertyFiles;
+  final List<PropertyFile> propertyFiles;
 
   ImageSliderWidget({required this.propertyFiles});
 
@@ -27,8 +28,8 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
             itemCount: widget.propertyFiles!.length,
             itemBuilder: (context, index) {
               slider = index + 1;
-              return Image.asset(
-                widget.propertyFiles![index],
+              return Image.network(
+                widget.propertyFiles[index].DownloadUrls!,
                 width: double.infinity,
                 height: 260,
                 fit: BoxFit.cover,

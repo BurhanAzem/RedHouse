@@ -2,6 +2,7 @@ import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/contract.dart';
+import 'package:client/model/property.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -152,7 +153,7 @@ class ApplicationsControllerImp extends ContractsController {
   AddProperty() async {
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
-      var response = await PropertyData.postdata(
+      var response = await PropertyData.addProperty(
           propertyType,
           price.text,
           numberOfBedrooms.text,
@@ -191,6 +192,23 @@ class ApplicationsControllerImp extends ContractsController {
       }
     }
     update();
+  }
+
+
+  getProperty() async {
+    var response = await PropertyData.getProperty(4);
+
+    if (response['statusCode'] == 200) {
+        var property =  Property.fromJson(response['dto']);
+        print(property);
+
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
   }
 
   @override
