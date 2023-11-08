@@ -11,7 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class BottomBar extends StatefulWidget {
-  BottomBar({Key? key}) : super(key: key);
+  const BottomBar({Key? key}) : super(key: key);
 
   @override
   State<BottomBar> createState() => _BottomBarState();
@@ -21,29 +21,6 @@ class _BottomBarState extends State<BottomBar> {
   AccountInfoContoller controller =
       Get.put(AccountInfoContoller(), permanent: true);
   int _currentIndex = 0;
-
-  final List<Icon> _unselectedIcons = [
-     Icon(
-     FontAwesomeIcons.magnifyingGlassLocation,
-      color: Colors.grey[800],
-    ),
-     Icon(
-     FontAwesomeIcons.solidHandshake,
-      color: Colors.grey[800],
-    ),
-     Icon(
-      FontAwesomeIcons.solidBell,
-      color: Colors.grey[800],
-    ),
-     Icon(
-      FontAwesomeIcons.house,
-      color: Colors.grey[800],
-    ),
-     Icon(
-      FontAwesomeIcons.ellipsis,
-      color: Colors.grey[800],
-    ),
-  ];
 
   final List<Icon> _selectedIcons = [
     const Icon(
@@ -91,7 +68,7 @@ class _BottomBarState extends State<BottomBar> {
         iconSize: 20,
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey[800],
         unselectedLabelStyle: const TextStyle(fontSize: 11.5),
         selectedLabelStyle:
             const TextStyle(fontWeight: FontWeight.w600, fontSize: 11.5),
@@ -113,9 +90,7 @@ class _BottomBarState extends State<BottomBar> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(int index) {
     return BottomNavigationBarItem(
-      icon: _currentIndex == index
-          ? _selectedIcons[index]
-          : _unselectedIcons[index],
+      icon: _selectedIcons[index],
       label: _getLabel(index),
     );
   }
