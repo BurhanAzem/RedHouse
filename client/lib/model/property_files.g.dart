@@ -7,14 +7,14 @@ part of 'property_files.dart';
 // **************************************************************************
 
 PropertyFile _$PropertyFileFromJson(Map<String, dynamic> json) => PropertyFile(
-      Id: json['id'] as int?,
-      PropertyId: json['propertyId'] as int?,
-      DownloadUrls: json['downloadUrls'] as String?,
+      id: json['id'] as int?,
+      propertyId: json['propertyId'] as int?,
+      downloadUrls: json['downloadUrls'] as String?,
     );
 
 Map<String, dynamic> _$PropertyFileToJson(PropertyFile instance) =>
     <String, dynamic>{
-      'Id': instance.Id,
-      'PropertyId': instance.PropertyId,
-      'DownloadUrls': instance.DownloadUrls,
+      'id': instance.id,
+      'propertyId': instance.propertyId,
+      'downloadUrls': instance.downloadUrls,
     };

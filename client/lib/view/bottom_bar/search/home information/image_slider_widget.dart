@@ -29,7 +29,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
             itemBuilder: (context, index) {
               slider = index + 1;
               return Image.network(
-                widget.propertyFiles[index].DownloadUrls!,
+                widget.propertyFiles[index].downloadUrls!,
                 width: double.infinity,
                 height: 260,
                 fit: BoxFit.cover,

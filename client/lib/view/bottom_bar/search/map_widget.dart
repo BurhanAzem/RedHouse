@@ -78,11 +78,11 @@ class _MapWidgetState extends State<MapWidget> {
 
     Set<Property> newVisibleProperties = filterControllerr.listProperty.listDto
         .where((property) =>
-            property.UserId != accountController.userDto?["id"] &&
-            property.location.Latitude >= bounds.southwest.latitude &&
-            property.location.Latitude <= bounds.northeast.latitude &&
-            property.location.Longitude >= bounds.southwest.longitude &&
-            property.location.Longitude <= bounds.northeast.longitude)
+            property.location!.latitude >= bounds.southwest.latitude &&
+            property.location!.latitude <= bounds.northeast.latitude &&
+            property.location!.longitude >=
+                bounds.southwest.longitude &&
+            property.location!.longitude <= bounds.northeast.longitude)
         .toSet();
 
     Set<Marker> visibleMarkers = mapListController.allMarkers
@@ -184,7 +184,7 @@ class MapMarker extends Clusterable {
   get context => null;
 
   Marker toMarker() => Marker(
-      markerId: MarkerId(property.Id.toString()),
+      markerId: MarkerId(property.id.toString()),
       position: LatLng(
         position.latitude,
         position.longitude,
@@ -225,7 +225,7 @@ class MapMarker extends Clusterable {
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(30)),
                             child: Image.network(
-                              property.PropertyFiles[0].DownloadUrls!,
+                              property.propertyFiles![0].downloadUrls!,
                               width: double.infinity,
                               height: 190,
                               fit: BoxFit.cover,
@@ -272,14 +272,14 @@ class MapMarker extends Clusterable {
                                   ),
                                 ),
                                 Text(
-                                  " ${property.ListingType}",
+                                  " ${property.listingType}",
                                   style: const TextStyle(fontSize: 17.5),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "\$${NumberFormat.decimalPattern().format(property.Price)}${property.ListingType == "For rent" ? "/mo" : ""}",
+                              "\$${NumberFormat.decimalPattern().format(property.price)}${property.listingType == "For rent" ? "/mo" : ""}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
@@ -288,7 +288,7 @@ class MapMarker extends Clusterable {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: '${property.NumberOfBedRooms} ',
+                                    text: '${property.numberOfBedRooms} ',
                                     style: const TextStyle(
                                       fontSize: 16.5,
                                       fontWeight: FontWeight.bold,
@@ -303,7 +303,7 @@ class MapMarker extends Clusterable {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: '${property.NumberOfBathRooms} ',
+                                    text: '${property.numberOfBathRooms} ',
                                     style: const TextStyle(
                                       fontSize: 16.5,
                                       fontWeight: FontWeight.bold,
@@ -337,12 +337,12 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.location.StreetAddress}, ${property.location.City}, ${property.location!.Country}",
+                              "${property.location!.streetAddress}, ${property.location!.city}, ${property.location!.country}",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              property.PropertyDescription,
+                              property.propertyDescription,
                               style: const TextStyle(),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,

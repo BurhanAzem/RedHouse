@@ -13,6 +13,8 @@ namespace RedHouse_Server.Models
         public string PropertyType { get; set; }
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
+        public User User { get; set; }
+        
         [ForeignKey(nameof(Location))]
         public int LocationId { get; set; }
         public Location Location { get; set; }

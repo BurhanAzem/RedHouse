@@ -184,7 +184,7 @@ class TextFieldWithLabel extends StatelessWidget {
       if (label == "Message") {
         return "Add your message";
       } else if (label == "The price you pay for this property") {
-        if (property?.ListingType == "For rent") {
+        if (property?.listingType == "For rent") {
           return "Enter the monthly rental price";
         } else {
           return "Enter the buy price";
@@ -195,7 +195,7 @@ class TextFieldWithLabel extends StatelessWidget {
 
     String suffixText() {
       if (label == "The price you pay for this property") {
-        if (property?.ListingType == "For rent") {
+        if (property?.listingType == "For rent") {
           return '\$/mo';
         } else {
           return "\$";

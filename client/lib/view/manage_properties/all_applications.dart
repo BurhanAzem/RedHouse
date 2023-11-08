@@ -1,67 +1,79 @@
+import 'dart:convert';
+
 import 'package:client/controller/applications/applications_controller.dart';
-import 'package:client/controller/contracts/all_contracts_controller.dart';
+import 'package:client/main.dart';
+import 'package:client/model/application.dart';
+import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
-import 'package:client/view/contracts/contract.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class AllApplications extends StatefulWidget {
-   const AllApplications({Key? key});
+  const AllApplications({Key? key});
 
   @override
   _AllApplicationsState createState() => _AllApplicationsState();
 }
 
 class _AllApplicationsState extends State<AllApplications> {
+  bool isLoading = true; // Add a boolean variable for loading state
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+    setState(() {});
+  }
+
+  void loadData() async {
+    ApplicationsControllerImp controller =
+        Get.put(ApplicationsControllerImp(), permanent: true);
+    String? userDtoJson = sharepref!.getString("user");
+    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
+    User user = User.fromJson(userDto);
+    await controller.getApplications(user.id);
+
+    setState(() {
+      isLoading = false; // Set isLoading to false when data is loaded
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ApplicationsControllerImp controller =
-        Get.put(ApplicationsControllerImp(), permanent: true);
+        Get.find<ApplicationsControllerImp>();
+
+    // Check if data is still loading
+    if (isLoading) {
+      return Center(
+        child: CircularProgressIndicator(), // Show a loading indicator
+      );
+    }
+
     const contractStatus = [
       "All",
       "Approved App",
-      "Wating App",
+      "Pending App",
     ];
     const contractType = [
       "All",
-      "Rent App          ",
-      "Buy App",
+      "Rent Appications",
+      "Buy Appications",
     ];
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Row(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: [
-      //       Text(
-      //         "All ",
-      //         style: TextStyle(
-      //           color: Color(0xffd92328),
-      //           fontSize: 20,
-      //           fontWeight: FontWeight.bold,
-      //         ),
-      //       ),
-      //       Text(
-      //         "Contracts",
-      //         style: TextStyle(
-      //           color: Colors.black,
-      //           fontSize: 20,
-      //           fontWeight: FontWeight.bold,
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Column(
         children: [
-          Container(height: 8,),
+          Container(
+            height: 8,
+          ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
             child: TextFormField(
               // Use your controller here if needed
               style: const TextStyle(height: 1.2),
               decoration: InputDecoration(
-                hintText: "Search by contract, customer, landlord name",
+                hintText: "Search by property code, customer, landlord name",
                 suffixIcon: const Icon(Icons.search),
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 contentPadding: const EdgeInsets.all(10),
@@ -83,10 +95,10 @@ class _AllApplicationsState extends State<AllApplications> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: DropdownButton<String>(
-                  value: controller.contractStatus,
+                  value: controller.applicationStatus,
                   onChanged: (String? newValue) {
                     setState(() {
-                      controller.contractStatus = newValue!;
+                      controller.applicationStatus = newValue!;
                     });
                   },
                   items: contractStatus.map((String option) {
@@ -106,10 +118,10 @@ class _AllApplicationsState extends State<AllApplications> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: DropdownButton<String>(
-                  value: controller.contractType,
+                  value: controller.applicationType,
                   onChanged: (String? newValue) {
                     setState(() {
-                      controller.contractType = newValue!;
+                      controller.applicationType = newValue!;
                     });
                   },
                   items: contractType.map((String option) {
@@ -127,14 +139,14 @@ class _AllApplicationsState extends State<AllApplications> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: controller.Contracts!.length,
+              itemCount: controller.applications.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    controller.getProperty();
-                    setState(() {
-                      
-                    });
+                    // controller.getProperty();
+                    Get.toNamed(AppRoute.applicationDetails,
+                        arguments: controller.applications[index]);
+                    setState(() {});
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -149,7 +161,8 @@ class _AllApplicationsState extends State<AllApplications> {
                         ),
                       ],
                     ),
-                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
                     child: ListTile(
                       title: Column(
                         children: [
@@ -157,33 +170,34 @@ class _AllApplicationsState extends State<AllApplications> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Icon(
-                                FontAwesomeIcons.solidFileZipper,
+                                FontAwesomeIcons.circleDot,
                                 size: 25,
+                                color: const Color(0xffd92328),
                               ),
-                              // Text(
-                              //   (controller.Contracts![index].CreatedDate!
-                              //               .toString()
-                              //               .length <=
-                              //           10)
-                              //       ? "       ${controller
-                              //               .Contracts![index].CreatedDate!
-                              //               .toString()!}"
-                              //       : "       ${controller
-                              //               .Contracts![index].CreatedDate!
-                              //               .toString()
-                              //               .substring(0, 9)}",
-                              //   style: const TextStyle(
-                              //       fontWeight: FontWeight.w600, fontSize: 12),
-                              // ),
+                              // Image.asset("assets/images/application_icon.jpg",
+                              //     scale: 18),
+
+                              Text(
+                                (controller.applications![index]
+                                            .applicationDate!
+                                            .toString()
+                                            .length <=
+                                        10)
+                                    ? "       ${controller.applications![index].applicationDate!.toString()!}"
+                                    : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 12),
+                              ),
                             ],
                           ),
-                          // Text(
-                          //   (controller.Contracts![index].Title!.length <= 38)
-                          //       ? controller.Contracts![index].Title!
-                          //       : '${controller.Contracts![index].Title!
-                          //               .substring(0, 38)}...',
-                          //   style: const TextStyle(fontWeight: FontWeight.w600),
-                          // ),
+                          Text(
+                            (controller.applications![index].user!.name!
+                                        .length <=
+                                    38)
+                                ? controller.applications![index].user!.name!
+                                : '${controller.applications![index].user!.name!.substring(0, 38)}...',
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
                         ],
                       ),
                       isThreeLine:
@@ -193,16 +207,32 @@ class _AllApplicationsState extends State<AllApplications> {
                           Container(
                             height: 1,
                           ),
-                          Container(height: 0.5, color: const Color(0xffd92328)),
+                          Container(
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black,
+                                width: 1, // Adjust the width as needed
+                              ),
+                            ),
+                            child: const Icon(
+                              FontAwesomeIcons.solidFileZipper,
+                              size: 25,
+                              color: const Color(0xffd92328),
+                            ),
+                          ),
+
                           Container(
                             height: 1,
                           ),
                           // Text(
-                          //   (controller.Contracts![index].Description!.length <=
-                          //           100)
-                          //       ? controller.Contracts![index].Description!
-                          //       : '${controller.Contracts![index].Description!
-                          //               .substring(0, 100)}...',
+                          //   (controller.applications![index].Message!.length <=
+                          //           50)
+                          //       ? controller.applications![index].Message!
+                          //       : '${controller.applications![index].Message!
+                          //               .substring(0, 50)}...',
                           //   style: const TextStyle(fontWeight: FontWeight.w400),
                           // ),
                           Container(
@@ -214,37 +244,38 @@ class _AllApplicationsState extends State<AllApplications> {
                               Row(
                                 children: [
                                   const Text(
-                                    "Price: ",
+                                    "status: ",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12),
                                   ),
-                                  // Text(
-                                  //   controller.Contracts![index].Price!
-                                  //       .toString(),
-                                  //   style: const TextStyle(
-                                  //       fontWeight: FontWeight.w600,
-                                  //       fontSize: 12,
-                                  //       color: Color(0xffd92328)),
-                                  // ),
+                                  Text(
+                                    controller
+                                        .applications![index].applicationStatus!
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: Color(0xffd92328)),
+                                  ),
                                 ],
                               ),
                               Row(
                                 children: [
                                   const Text(
-                                    "Contract status: ",
+                                    "Property Code: ",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12),
                                   ),
-                                  // Text(
-                                  //   controller
-                                  //       .Contracts![index].ContractStatus!,
-                                  //   style: const TextStyle(
-                                  //       fontWeight: FontWeight.w600,
-                                  //       fontSize: 12,
-                                  //       color: Color(0xffd92328)),
-                                  // ),
+                                  Text(
+                                    controller.applications![index].property
+                                        .propertyCode!,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        color: Color(0xffd92328)),
+                                  ),
                                 ],
                               ),
                             ],

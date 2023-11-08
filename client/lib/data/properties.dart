@@ -112,17 +112,17 @@ class PropertyData {
       "NumberOfBathRooms": numberOfBathrooms.toString(),
       "View": view == "Any" ? "" : view,
       "ListingType": listingType,
-      "LocationDto.StreetAddress": location.value.StreetAddress!,
-      "LocationDto.City": location.value.City!,
-      "LocationDto.Region": location.value.Region!,
-      "LocationDto.PostalCode": location.value.PostalCode!,
-      "LocationDto.Country": location.value.Country!,
-      "LocationDto.Latitude": location.value.Latitude == 0.0
+      "LocationDto.StreetAddress": location.value.streetAddress!,
+      "LocationDto.City": location.value.city!,
+      "LocationDto.Region": location.value.region!,
+      "LocationDto.PostalCode": location.value.postalCode!,
+      "LocationDto.Country": location.value.country!,
+      "LocationDto.Latitude": location.value.latitude == 0.0
           ? ""
-          : location.value.Latitude!.toString(),
-      "LocationDto.Longitude": location.value.Longitude == 0.0
+          : location.value.latitude!.toString(),
+      "LocationDto.Longitude": location.value.longitude == 0.0
           ? ""
-          : location.value.Longitude!.toString(),
+          : location.value.longitude!.toString(),
     };
 
     if (await checkInternet()) {

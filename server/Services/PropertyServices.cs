@@ -116,17 +116,26 @@ namespace RedHouse_Server.Services
 
             query = query.Where(p => p.Id >= 0);
             query = _redHouseDbContext.Properties
-                                .Include(p => p.propertyFiles);
+                                .Include(p => p.propertyFiles).Include(p => p.User);
             // Apply filtering based on the filterDto, if provided
 
-            if (!string.IsNullOrEmpty(filterDto.MinPrice) && !string.IsNullOrEmpty(filterDto.MaxPrice))
+            if (!string.IsNullOrEmpty(filterDto.MinPrice))
             {
                 int minPrice;
+
+                if (int.TryParse(filterDto.MinPrice, out minPrice))
+                {
+                    query = query.Where(p => p.Price >= minPrice);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.MaxPrice))
+            {
                 int maxPrice;
 
-                if (int.TryParse(filterDto.MinPrice, out minPrice) && int.TryParse(filterDto.MaxPrice, out maxPrice))
+                if (int.TryParse(filterDto.MaxPrice, out maxPrice))
                 {
-                    query = query.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+                    query = query.Where(p => p.Price <= maxPrice);
                 }
             }
 
@@ -156,15 +165,15 @@ namespace RedHouse_Server.Services
                 query = query.Where(p => p.ListingType.Equals(filterDto.ListingType));
             }
             if (filterDto.PropertyTypes[0] == "[]") filterDto.PropertyTypes = null;
+
             if (filterDto.PropertyTypes != null)
             {
-                query = query.Where(p => filterDto.PropertyTypes.Contains(p.PropertyType));
+                foreach (var propertyType in filterDto.PropertyTypes)
+                {
+                    query = query.Where(p => propertyType == p.PropertyType);
+                }
+                
             }
-
-
-
-
-
 
             // Execute the query and return the results
             var properties = await query.ToArrayAsync();

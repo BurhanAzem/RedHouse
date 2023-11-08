@@ -14,14 +14,14 @@ class FilterController extends GetxController {
   ListProperty listProperty = ListProperty(listDto: []);
   AccountInfoContoller accountController = Get.put(AccountInfoContoller());
   Rx<Location> location = Location(
-    Id: 0,
-    StreetAddress: "",
-    City: "",
-    Region: "",
-    PostalCode: "",
-    Country: "",
-    Latitude: 0,
-    Longitude: 0,
+    id: 0,
+    streetAddress: "",
+    city: "",
+    region: "",
+    postalCode: "",
+    country: "",
+    latitude: 0,
+    longitude: 0,
   ).obs;
 
   bool buyHouse = false;
@@ -186,20 +186,15 @@ class FilterController extends GetxController {
   }
 
   List<MapMarker> getMarkerLocations(List<Property> properties) {
-    return properties == []
-        ? []
-        : properties
-            .where((property) =>
-                property.UserId != accountController.userDto?["id"])
-            .map((property) {
-            return MapMarker(
-              property: property,
-              position: LatLng(
-                property.location.Latitude,
-                property.location.Longitude,
-              ),
-            );
-          }).toList();
+    return properties == [] ? [] : properties.map((property) {
+      return MapMarker(
+        property: property,
+        position: LatLng(
+          property.location?.latitude ?? 0.0,
+          property.location?.longitude ?? 0.0,
+        ),
+      );
+    }).toList();
   }
 
   void setBedButtonTemp(String label) {

@@ -88,7 +88,7 @@ class ListWidget extends StatelessWidget {
                       TextSpan(
                         children: [
                           TextSpan(
-                            text: 'Brokered by the ${property.ListingBy} ',
+                            text: 'Brokered by the ${property.listingBy} ',
                             style: TextStyle(
                               color: Colors.grey[700],
                               fontSize: 12.5,
@@ -119,7 +119,7 @@ class ListWidget extends StatelessWidget {
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
                       child: Image.network(
-                        property.PropertyFiles[0].DownloadUrls!,
+                        property.propertyFiles![0].downloadUrls!,
                         width: double.infinity,
                         height: 220,
                         fit: BoxFit.cover,
@@ -165,20 +165,20 @@ class ListWidget extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            " ${property.ListingType}",
+                            " ${property.listingType}",
                             style: const TextStyle(fontSize: 17.5),
                           ),
                         ],
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "\$${NumberFormat.decimalPattern().format(property.Price)}${property.ListingType == "For rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(property.price)}${property.listingType == "For rent" ? "/mo" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        property.PropertyType,
+                        property.propertyType,
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class ListWidget extends StatelessWidget {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '${property.NumberOfBedRooms} ',
+                              text: '${property.numberOfBedRooms} ',
                               style: const TextStyle(
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold,
@@ -205,7 +205,7 @@ class ListWidget extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${property.NumberOfBathRooms} ',
+                              text: '${property.numberOfBathRooms} ',
                               style: const TextStyle(
                                 fontSize: 16.5,
                                 fontWeight: FontWeight.bold,
@@ -245,12 +245,12 @@ class ListWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                property.location.StreetAddress,
+                                property.location!.streetAddress,
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                               const SizedBox(height: 1),
                               Text(
-                                "${property.location!.City}, ${property.location!.Country}",
+                                "${property.location!.city}, ${property.location!.country}",
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                             ],

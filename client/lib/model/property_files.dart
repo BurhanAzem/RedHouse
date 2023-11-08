@@ -5,14 +5,14 @@ part "property_files.g.dart";
 @JsonSerializable()
 
 class PropertyFile {
-  int? Id;
-  int? PropertyId;
-  String? DownloadUrls;
+  int? id;
+  int? propertyId;
+  String? downloadUrls;
 
   PropertyFile({
-    this.Id,
-    this.PropertyId,
-    this.DownloadUrls,
+    this.id,
+    this.propertyId,
+    this.downloadUrls,
   });
 
 factory PropertyFile.fromJson(Map<String, dynamic> json) => _$PropertyFileFromJson(json);

@@ -10,13 +10,16 @@ namespace RedHouse_Server.Models
         public int Id { get; set; }
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
+        public Property Property {get; set;}
 
         [ForeignKey(nameof(User))]
-        public int CustomerId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         public DateTime ApplicationDate { get; set; }
         public string Message { get; set; }
         public string ApplicationStatus { get; set; }
         public string ApplicationType { get; set; }
+        public double SuggestedPrice { get; set; }
 
     }
 }

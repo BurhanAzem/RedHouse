@@ -7,29 +7,43 @@ part of 'contract.dart';
 // **************************************************************************
 
 Contract _$ContractFromJson(Map<String, dynamic> json) => Contract(
-      Title: json['Title'] as String,
-      CustomerName: json['CustomerName'] as String,
-      LandlordName: json['LandlordName'] as String,
-      Description: json['Description'] as String,
-      PropertyId: json['PropertyId'] as int,
-      CreatedDate: DateTime.parse(json['CreatedDate'] as String),
-      Price: (json['Price'] as num).toDouble(),
-      ContractType: json['ContractType'] as String,
-      ContractStatus: json['ContractStatus'] as String,
-      Earnings: (json['Earnings'] as num).toDouble(),
-      IsShouldPay: json['IsShouldPay'] as bool,
+      id: json['id'] as int,
+      customerId: json['customerId'] as int,
+      landlordId: json['landlordId'] as int,
+      description: json['description'] as String,
+      propertyId: json['propertyId'] as int,
+      startDate: DateTime.parse(json['startDate'] as String),
+      endDate: DateTime.parse(json['endDate'] as String),
+      price: (json['price'] as num).toDouble(),
+      contractType: json['contractType'] as String,
+      contractStatus: json['contractStatus'] as String,
+      earnings: (json['earnings'] as num).toDouble(),
+      isShouldPay: json['isShouldPay'] as int,
+      customer: json['customer'] == null
+          ? null
+          : User.fromJson(json['customer'] as Map<String, dynamic>),
+      landlord: json['landlord'] == null
+          ? null
+          : User.fromJson(json['landlord'] as Map<String, dynamic>),
+      property: json['property'] == null
+          ? null
+          : Property.fromJson(json['property'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ContractToJson(Contract instance) => <String, dynamic>{
-      'Title': instance.Title,
-      'CustomerName': instance.CustomerName,
-      'LandlordName': instance.LandlordName,
-      'Description': instance.Description,
-      'PropertyId': instance.PropertyId,
-      'CreatedDate': instance.CreatedDate.toIso8601String(),
-      'Price': instance.Price,
-      'ContractType': instance.ContractType,
-      'ContractStatus': instance.ContractStatus,
-      'Earnings': instance.Earnings,
-      'IsShouldPay': instance.IsShouldPay,
+      'id': instance.id,
+      'propertyId': instance.propertyId,
+      'landlordId': instance.landlordId,
+      'customerId': instance.customerId,
+      'startDate': instance.startDate.toIso8601String(),
+      'endDate': instance.endDate.toIso8601String(),
+      'description': instance.description,
+      'price': instance.price,
+      'contractType': instance.contractType,
+      'contractStatus': instance.contractStatus,
+      'earnings': instance.earnings,
+      'isShouldPay': instance.isShouldPay,
+      'customer': instance.customer,
+      'landlord': instance.landlord,
+      'property': instance.property,
     };

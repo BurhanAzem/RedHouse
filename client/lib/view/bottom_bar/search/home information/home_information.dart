@@ -38,18 +38,18 @@ class _HomeInformationState extends State<HomeInformation> {
     super.initState();
     homePosition = CameraPosition(
       target: LatLng(
-        widget.property.location.Latitude,
-        widget.property.location.Longitude,
+        widget.property!.location!.latitude,
+        widget.property!.location!.longitude,
       ),
       zoom: 13,
     );
 
     homeMarker = [
       Marker(
-        markerId: MarkerId(widget.property.Id.toString()),
+        markerId: MarkerId(widget.property.id.toString()),
         position: LatLng(
-          widget.property.location.Latitude,
-          widget.property.location.Longitude,
+          widget.property!.location!.latitude,
+          widget.property!.location!.longitude,
         ),
         icon: filterController.listingType
             ? BitmapDescriptor.defaultMarker
@@ -67,7 +67,8 @@ class _HomeInformationState extends State<HomeInformation> {
           Expanded(
             child: ListView(
               children: <Widget>[
-                ImageSliderWidget(propertyFiles: widget.property.PropertyFiles),
+                ImageSliderWidget(
+                    propertyFiles: widget.property!.propertyFiles!),
                 Container(
                   padding: const EdgeInsets.only(left: 25, top: 15, right: 17),
                   child: Column(
@@ -84,7 +85,7 @@ class _HomeInformationState extends State<HomeInformation> {
                             ),
                           ),
                           Text(
-                            " ${widget.property.ListingType}",
+                            " ${widget.property!.listingType}",
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w500),
                           ),
@@ -92,7 +93,7 @@ class _HomeInformationState extends State<HomeInformation> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "\$${NumberFormat.decimalPattern().format(widget.property.Price)}${widget.property.ListingType == "For rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(widget.property.price)}${widget.property!.listingType == "For rent" ? "/mo" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 22),
                       ),
@@ -124,7 +125,7 @@ class _HomeInformationState extends State<HomeInformation> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: '${widget.property.NumberOfBedRooms} ',
+                              text: '${widget.property!.numberOfBedRooms} ',
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -140,7 +141,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               ),
                             ),
                             TextSpan(
-                              text: '${widget.property.NumberOfBathRooms} ',
+                              text: '${widget.property!.numberOfBathRooms} ',
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -164,7 +165,7 @@ class _HomeInformationState extends State<HomeInformation> {
                           children: [
                             TextSpan(
                               text:
-                                  '${NumberFormat.decimalPattern().format(widget.property.squareMetersArea)} ',
+                                  '${NumberFormat.decimalPattern().format(widget.property!.squareMetersArea)} ',
                               style: const TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -206,7 +207,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                           ),
                                           TextSpan(
                                             text:
-                                                '${widget.property.BuiltYear.year}',
+                                                '${widget.property.builtYear.year}',
                                             style: const TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.bold,
@@ -232,7 +233,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(widget.property.View,
+                                    Text(widget.property.view,
                                         style: const TextStyle(
                                             color: Color.fromARGB(
                                                 255, 196, 39, 27),
@@ -263,14 +264,14 @@ class _HomeInformationState extends State<HomeInformation> {
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: '${widget.property.PropertyType} ',
+                                      text: '${widget.property.propertyType} ',
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 196, 39, 27),
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    if (widget.property.NumberOfUnits != 0)
+                                    if (widget.property.numberOfUnits != 0)
                                       const TextSpan(
                                         text: '/ ',
                                         style: TextStyle(
@@ -279,10 +280,10 @@ class _HomeInformationState extends State<HomeInformation> {
                                           color: Colors.black,
                                         ),
                                       ),
-                                    if (widget.property.NumberOfUnits != 0)
+                                    if (widget.property.numberOfUnits != 0)
                                       TextSpan(
                                         text:
-                                            '${widget.property.NumberOfUnits} ',
+                                            '${widget.property.numberOfUnits} ',
                                         style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 196, 39, 27),
@@ -290,7 +291,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    if (widget.property.NumberOfUnits != 0)
+                                    if (widget.property.numberOfUnits != 0)
                                       const TextSpan(
                                         text: 'Units',
                                         style: TextStyle(
@@ -323,7 +324,7 @@ class _HomeInformationState extends State<HomeInformation> {
                             color: Color.fromARGB(255, 196, 39, 27),
                           ),
                           title: Text(
-                            "${widget.property.location.StreetAddress}, ${widget.property.location.City}",
+                            "${widget.property.location?.streetAddress}, ${widget.property.location?.city}",
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
@@ -331,7 +332,7 @@ class _HomeInformationState extends State<HomeInformation> {
                             ),
                           ),
                           subtitle: Text(
-                            "${widget.property.location.Country}",
+                            "${widget.property.location?.country}",
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
@@ -342,7 +343,7 @@ class _HomeInformationState extends State<HomeInformation> {
                       ),
                       const SizedBox(height: 30),
                       // here Parking Spots
-                      if (widget.property.ParkingSpots == 0)
+                      if (widget.property.parkingSpots == 0)
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -394,7 +395,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: '${widget.property.ParkingSpots}',
+                                    text: '${widget.property.parkingSpots}',
                                     style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -446,7 +447,7 @@ class _HomeInformationState extends State<HomeInformation> {
                           color: Color.fromARGB(255, 196, 39, 27),
                         ),
                       ),
-                      if (widget.property.PropertyStatus == "Coming soon")
+                      if (widget.property.propertyStatus == "Coming soon")
                         Text.rich(
                           TextSpan(
                             children: [
@@ -461,7 +462,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               ),
                               TextSpan(
                                 text:
-                                    '${DateFormat.MMMM().format(widget.property.BuiltYear)} ${DateFormat.d().format(widget.property.BuiltYear)}, ${DateFormat.y().format(widget.property.BuiltYear)}.',
+                                    '${DateFormat.MMMM().format(widget.property.builtYear)} ${DateFormat.d().format(widget.property.builtYear)}, ${DateFormat.y().format(widget.property.builtYear)}.',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -471,7 +472,7 @@ class _HomeInformationState extends State<HomeInformation> {
                             ],
                           ),
                         )
-                      else if (widget.property.PropertyStatus ==
+                      else if (widget.property.propertyStatus ==
                           "Accepting offers")
                         const Text(
                             ' This property is available, accepts requests and offers.',
@@ -510,7 +511,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               fontWeight: FontWeight.w500),
                         ),
                         TextSpan(
-                          text: '${widget.property.ListingBy}',
+                          text: '${widget.property.listingBy}',
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -543,10 +544,10 @@ class _HomeInformationState extends State<HomeInformation> {
                           ),
                         ),
                       ),
-                      const Expanded(
+                      Expanded(
                           child: ListTile(
                         title: Text(
-                          "Ayman Dwikat",
+                          widget.property.user!.name!,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text("Click here to check history"),
@@ -604,7 +605,8 @@ class _HomeInformationState extends State<HomeInformation> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(left: 25, top: 15, right: 17),
+                  padding: const EdgeInsets.only(
+                      left: 25, top: 15, right: 17, bottom: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -617,7 +619,7 @@ class _HomeInformationState extends State<HomeInformation> {
                         ),
                       ),
                       Text(
-                        " ${widget.property.PropertyDescription}",
+                        " ${widget.property.propertyDescription}",
                         style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w500,
@@ -630,7 +632,7 @@ class _HomeInformationState extends State<HomeInformation> {
               ],
             ),
           ),
-          if (widget.property.UserId != accountController.userDto?["id"])
+          if (widget.property.userId != accountController.userDto?["id"])
             ActionButtonsWidget(property: widget.property),
         ],
       ),
