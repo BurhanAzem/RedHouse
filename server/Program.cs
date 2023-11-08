@@ -11,6 +11,7 @@ using AutoMapper;
 using System.Reflection;
 using Cooking_School_ASP.NET.Configurations;
 using server.Services;
+using server.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,8 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<IPropertyServices, PropertyServices>();
 builder.Services.AddScoped<IApplicationServices, ApplicationServices>();
+builder.Services.AddScoped<IUserHistoryServices, UserHistoryServices>();
+
 
 var app = builder.Build();
 app.UseMiddleware<ErrorHandlingMiddlewareExtensions>();

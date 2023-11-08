@@ -93,15 +93,31 @@ namespace server.Services
                 };
             }
 
-            List<Application> applications = _redHouseDbContext.Applications.Where(a => a.UserId == userId).ToList();
-            foreach (var application in applications)
-            {
-                var appUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(u => u.Id == application.UserId);
-                var appProperty = await _redHouseDbContext.Properties.Include(p => p.propertyFiles).FirstOrDefaultAsync(p => p.Id == application.PropertyId);
-                var location = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.Id == appProperty.LocationId);
-                application.User = appUser;
-                application.Property = appProperty;
-            }
+    //         var applications = _redHouseDbContext.Applications
+    // .Where(a => a.UserId == userId)
+    // .ToList();
+
+    //         foreach (var application in applications)
+    //         {
+    //             var appUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(u => u.Id == application.UserId);
+    //             var appProperty = await _redHouseDbContext.Properties
+    //                 .Include(p => p.propertyFiles)
+    //                 .FirstOrDefaultAsync(p => p.Id == application.PropertyId);
+    //             var location = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.Id == appProperty.LocationId);
+
+    //             application.User = appUser;
+    //             application.Property = appProperty;
+    //             application.Property.Location = location;
+    //         }
+
+            var query = from p in _redHouseDbContext.Properties
+            join a in _redHouseDbContext.Applications on p.Id equals a.PropertyId
+            where p.UserId == userId
+            select a;
+
+            var applications = query.Include(a => a.User).Include(a => a.Property).ThenInclude(p => p.Location).ToList();
+
+
             return new ResponsDto<Application>
             {
                 ListDto = applications,

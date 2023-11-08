@@ -9,17 +9,19 @@ namespace server.Models
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey(nameof(User))]
 
-        public int CustomerId { get; set; }
-        [ForeignKey(nameof(User))]
+        [ForeignKey(nameof(Contract))]
+        public int ContractId { get; set; }
+        public Contract Contract { get; set; }
 
-        public int LandlordId { get; set; }
+        public string FeedbackToLandlord { get; set; }
+        public string FeedbackToCustomer { get; set; }
 
-        public DateTime TimeStamp { get; set; }
+        public int CustomerRating { get; set; }
+        public int LandlordRating { get; set; }
 
-        public string Comment { get; set; }
-
-        public int Rating { get; set; }
     }
 }
+
+// INSERT INTO UserHistoryRecords(ContractId, FeedbackToLandlord, FeedbackToCustomer, CustomerRating, LandlordRating)
+// VALUES (7, 'Feedback to Landlord Text', 'Feedback to Customer Text', 5, 4);

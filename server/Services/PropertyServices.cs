@@ -116,7 +116,7 @@ namespace RedHouse_Server.Services
 
             query = query.Where(p => p.Id >= 0);
             query = _redHouseDbContext.Properties
-                                .Include(p => p.propertyFiles);
+                                .Include(p => p.propertyFiles).Include(p => p.User);
             // Apply filtering based on the filterDto, if provided
 
             if (!string.IsNullOrEmpty(filterDto.MinPrice))

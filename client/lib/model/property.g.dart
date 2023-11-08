@@ -10,12 +10,17 @@ Property _$PropertyFromJson(Map<String, dynamic> json) => Property(
       id: json['id'] as int,
       propertyType: json['propertyType'] as String,
       userId: json['userId'] as int,
+      user: json['user'] == null
+          ? null
+          : User.fromJson(json['user'] as Map<String, dynamic>),
       propertyCode: json['propertyCode'] as String,
       propertyFiles: (json['propertyFiles'] as List<dynamic>?)
           ?.map((e) => PropertyFile.fromJson(e as Map<String, dynamic>))
           .toList(),
       locationId: json['locationId'] as int,
-      location: Location.fromJson(json['location'] as Map<String, dynamic>),
+      location: json['location'] == null
+          ? null
+          : Location.fromJson(json['location'] as Map<String, dynamic>),
       price: json['price'] as int,
       numberOfBedRooms: json['numberOfBedRooms'] as int,
       numberOfBathRooms: json['numberOfBathRooms'] as int,
@@ -36,6 +41,7 @@ Map<String, dynamic> _$PropertyToJson(Property instance) => <String, dynamic>{
       'id': instance.id,
       'propertyType': instance.propertyType,
       'userId': instance.userId,
+      'user': instance.user,
       'propertyCode': instance.propertyCode,
       'locationId': instance.locationId,
       'propertyFiles': instance.propertyFiles,

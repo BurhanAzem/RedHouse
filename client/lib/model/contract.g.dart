@@ -7,29 +7,43 @@ part of 'contract.dart';
 // **************************************************************************
 
 Contract _$ContractFromJson(Map<String, dynamic> json) => Contract(
-      title: json['title'] as String,
-      customerName: json['customerName'] as String,
-      landlordName: json['landlordName'] as String,
+      id: json['id'] as int,
+      customerId: json['customerId'] as int,
+      landlordId: json['landlordId'] as int,
       description: json['description'] as String,
       propertyId: json['propertyId'] as int,
-      createdDate: DateTime.parse(json['createdDate'] as String),
+      startDate: DateTime.parse(json['startDate'] as String),
+      endDate: DateTime.parse(json['endDate'] as String),
       price: (json['price'] as num).toDouble(),
       contractType: json['contractType'] as String,
       contractStatus: json['contractStatus'] as String,
       earnings: (json['earnings'] as num).toDouble(),
-      isShouldPay: json['isShouldPay'] as bool,
+      isShouldPay: json['isShouldPay'] as int,
+      customer: json['customer'] == null
+          ? null
+          : User.fromJson(json['customer'] as Map<String, dynamic>),
+      landlord: json['landlord'] == null
+          ? null
+          : User.fromJson(json['landlord'] as Map<String, dynamic>),
+      property: json['property'] == null
+          ? null
+          : Property.fromJson(json['property'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ContractToJson(Contract instance) => <String, dynamic>{
-      'title': instance.title,
-      'customerName': instance.customerName,
-      'landlordName': instance.landlordName,
-      'description': instance.description,
+      'id': instance.id,
       'propertyId': instance.propertyId,
-      'createdDate': instance.createdDate.toIso8601String(),
+      'landlordId': instance.landlordId,
+      'customerId': instance.customerId,
+      'startDate': instance.startDate.toIso8601String(),
+      'endDate': instance.endDate.toIso8601String(),
+      'description': instance.description,
       'price': instance.price,
       'contractType': instance.contractType,
       'contractStatus': instance.contractStatus,
       'earnings': instance.earnings,
       'isShouldPay': instance.isShouldPay,
+      'customer': instance.customer,
+      'landlord': instance.landlord,
+      'property': instance.property,
     };

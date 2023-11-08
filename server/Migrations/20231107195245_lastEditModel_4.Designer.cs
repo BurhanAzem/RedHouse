@@ -12,8 +12,8 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    [Migration("20231031123953_lastEditModel")]
-    partial class lastEditModel
+    [Migration("20231107195245_lastEditModel_4")]
+    partial class lastEditModel_4
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -234,8 +234,13 @@ namespace RedHouse_Server.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
+                    b.Property<string>("ApplicationStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApplicationType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -244,11 +249,17 @@ namespace RedHouse_Server.Migrations
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<double>("SuggestedPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Applications");
                 });
@@ -261,12 +272,13 @@ namespace RedHouse_Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ContractType")
+                    b.Property<string>("ContractStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ContractType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -275,14 +287,26 @@ namespace RedHouse_Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("Earnings")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IsShouldPay")
+                        .HasColumnType("int");
+
                     b.Property<int>("LandlordId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
 
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -388,6 +412,10 @@ namespace RedHouse_Server.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
+                    b.Property<string>("PropertyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PropertyDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -434,7 +462,9 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("PropertyFiles");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.User", b =>
@@ -466,6 +496,110 @@ namespace RedHouse_Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("server.Models.ContractActivity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ActivityDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ActivityDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ActivityType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContractActivities");
+                });
+
+            modelBuilder.Entity("server.Models.ContractStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StepBudget")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StepDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StepType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContractSteps");
+                });
+
+            modelBuilder.Entity("server.Models.SavedProperties", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SavedProperties");
+                });
+
+            modelBuilder.Entity("server.Models.UserHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerRating")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FeedbackToCustomer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeedbackToLandlord")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("LandlordRating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("UserHistoryRecords");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -519,6 +653,25 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RedHouse_Server.Models.Application", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.Property", "Property")
+                        .WithMany()
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RedHouse_Server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("RedHouse_Server.Models.Property", b =>
                 {
                     b.HasOne("RedHouse_Server.Models.Location", "Location")
@@ -528,6 +681,31 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("RedHouse_Server.Models.PropertyFile", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.Property", null)
+                        .WithMany("propertyFiles")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("server.Models.UserHistory", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.Contract", "contract")
+                        .WithMany()
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("contract");
+                });
+
+            modelBuilder.Entity("RedHouse_Server.Models.Property", b =>
+                {
+                    b.Navigation("propertyFiles");
                 });
 #pragma warning restore 612, 618
         }

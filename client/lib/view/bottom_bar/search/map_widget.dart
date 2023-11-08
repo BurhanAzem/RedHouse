@@ -84,11 +84,11 @@ class _MapWidgetState extends State<MapWidget> {
 
     Set<Property> newVisibleProperties = filterControllerr.listProperty.listDto
         .where((property) =>
-            property.location.latitude >= bounds.southwest.latitude &&
-            property.location.latitude <= bounds.northeast.latitude &&
-            property.location.longitude >=
+            property.location!.latitude >= bounds.southwest.latitude &&
+            property.location!.latitude <= bounds.northeast.latitude &&
+            property.location!.longitude >=
                 bounds.southwest.longitude &&
-            property.location.longitude <= bounds.northeast.longitude)
+            property.location!.longitude <= bounds.northeast.longitude)
         .toSet();
 
     Set<Marker> visibleMarkers = controller.allMarkers
@@ -305,7 +305,7 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.location.streetAddress}, ${property.location.city}, ${property.location!.country}",
+                              "${property.location!.streetAddress}, ${property.location!.city}, ${property.location!.country}",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),

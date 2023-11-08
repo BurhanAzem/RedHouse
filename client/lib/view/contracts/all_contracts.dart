@@ -159,15 +159,15 @@ class _AllContractsState extends State<AllContracts> {
                                 size: 25,
                               ),
                               Text(
-                                (controller.Contracts![index].createdDate!
+                                (controller.Contracts![index].startDate!
                                             .toString()
                                             .length <=
                                         10)
                                     ? "       ${controller
-                                            .Contracts![index].createdDate!
+                                            .Contracts![index].startDate!
                                             .toString()!}"
                                     : "       ${controller
-                                            .Contracts![index].createdDate!
+                                            .Contracts![index].startDate!
                                             .toString()
                                             .substring(0, 9)}",
                                 style: const TextStyle(
@@ -176,9 +176,9 @@ class _AllContractsState extends State<AllContracts> {
                             ],
                           ),
                           Text(
-                            (controller.Contracts![index].title!.length <= 38)
-                                ? controller.Contracts![index].title!
-                                : '${controller.Contracts![index].title!
+                            (controller.Contracts![index].description!.length <= 38)
+                                ? controller.Contracts![index].description!
+                                : '${controller.Contracts![index].description!
                                         .substring(0, 38)}...',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),

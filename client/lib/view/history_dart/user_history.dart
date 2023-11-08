@@ -17,7 +17,7 @@ class _UserHistoryState extends State<UserHistory> {
   @override
   Widget build(BuildContext context) {
     HistoryControllerImp controller = Get.put(HistoryControllerImp());
-    Application application = Get.arguments as Application;
+    final userId = Get.arguments as int; // Assuming it's an int
 
     return Scaffold(
       appBar: AppBar(

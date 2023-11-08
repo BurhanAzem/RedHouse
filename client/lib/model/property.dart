@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:client/model/location.dart';
 import 'package:client/model/property_files.dart';
+import 'package:client/model/user.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 part "property.g.dart";
@@ -11,10 +12,11 @@ class Property {
   int id;
   String propertyType;
   int userId;
+  User ?user;
   String propertyCode;
   int locationId;
   List<PropertyFile>? propertyFiles;
-  Location location;
+  Location? location;
   int price;
   int numberOfBedRooms;
   int numberOfBathRooms;
@@ -34,10 +36,11 @@ class Property {
    required this.id,
    required this.propertyType,
    required this.userId,
+   this.user,
    required this.propertyCode,
    this.propertyFiles,
    required this.locationId,
-   required this.location,
+   this.location,
    required this.price,
    required this.numberOfBedRooms,
    required this.numberOfBathRooms,

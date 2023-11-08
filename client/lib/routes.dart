@@ -87,4 +87,5 @@ Map<String, Widget Function(BuildContext)> routes = {
   "/notificatins-settings": (context) => const NotificationsSettings(),
   "/login": (context) => Login(),
   "/register": (context) => Register(),
+  
 };

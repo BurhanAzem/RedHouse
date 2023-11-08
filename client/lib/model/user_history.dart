@@ -1,32 +1,36 @@
- import 'package:json_annotation/json_annotation.dart';
+import 'package:client/model/contract.dart';
+import 'package:client/model/user.dart';
+import 'package:get/get.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part "user_history.g.dart";
 
 @JsonSerializable()
-class UserHistory
-    {
-         int id ;
+class UserHistory {
+  int id;
 
-         int customerId ;
+  int contractId;
+  Contract contract;
 
-         int landlordId ;
+  String feedbackToLandlord;
+  String feedbackToCustomer;
 
-         DateTime timeStamp ;
+  int customerRating;
+  int landlordRating;
 
-         String comment ;
-
-         int rating ;
-         
-    
   UserHistory({
     required this.id,
-    required this.customerId,
-    required this.landlordId,
-    required this.timeStamp,
-    required this.comment,
-    required this.rating,
+    required this.contractId,
+    required this.feedbackToLandlord,
+    required this.feedbackToCustomer,
+    required this.customerRating,
+    required this.landlordRating,
+    required this.contract,
+    // required this.user,
+  
   });
 
-  factory UserHistory.fromJson(Map<String, dynamic> json) => _$UserHistoryFromJson(json);
+  factory UserHistory.fromJson(Map<String, dynamic> json) =>
+      _$UserHistoryFromJson(json);
   Map<String, dynamic> toJson() => _$UserHistoryToJson(this);
 }

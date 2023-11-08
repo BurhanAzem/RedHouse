@@ -2,18 +2,19 @@ import 'package:client/data/applications.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/property.dart';
+import 'package:client/model/user_history.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 abstract class HistoryController extends GetxController {
   HistoryController();
-  
 
 }
 
 class HistoryControllerImp extends HistoryController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
+  UserHistory? userHistory;
 
   // List<Application> applications = [];
   // String? applicationType = "All";
@@ -24,12 +25,11 @@ class HistoryControllerImp extends HistoryController {
     var response = await ApplicationData.getApplications(userId);
 
     if (response['statusCode'] == 200) {
-      var userHistory = (response['dto'] as List<dynamic>)
-          .map((e) => Application.fromJson(e as Map<String, dynamic>))
-          .toList();
+      userHistory = (response['dto']);
+         
       // applications = Application.fromJson(response);
       print(userHistory);
-      return userHistory;
+      // return userHistorys;
     } else {
       Get.defaultDialog(
         title: "Error",

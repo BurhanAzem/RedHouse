@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/link_api.dart';
+import 'package:client/main.dart';
 import 'package:client/model/application.dart';
+import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -14,22 +19,37 @@ class ApplicationDetails extends StatefulWidget {
 class _StepperDemoState extends State<ApplicationDetails> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
+  late Application application;
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+    setState(() {});
+  }
+
+  void loadData() async {
+    ApplicationsControllerImp controller =
+        Get.put(ApplicationsControllerImp(), permanent: true);
+    application = Get.arguments as Application;
+
+    await controller.getHistoryUser(application.userId);
+  }
 
   @override
   Widget build(BuildContext context) {
     ApplicationsControllerImp controller = Get.put(ApplicationsControllerImp());
-    Application application = Get.arguments as Application;
 
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: Text('Payments timeline'),
+        title: Text('Application Details'),
         centerTitle: true,
       ),
-      body: Container(
-        child: ListView(
-          children: [
-            ListTile(
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          Container(
+            child: ListTile(
               title: Column(
                 children: [
                   Row(
@@ -53,9 +73,9 @@ class _StepperDemoState extends State<ApplicationDetails> {
                     ],
                   ),
                   Text(
-                    (application.user!.Name!.length <= 38)
-                        ? application.user!.Name!
-                        : '${application.user!.Name!.substring(0, 38)}...',
+                    (application.user!.name!.length <= 38)
+                        ? application.user!.name!
+                        : '${application.user!.name!.substring(0, 38)}...',
                     style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ],
@@ -250,20 +270,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                     ],
                   ),
                   Container(height: 6),
-                  MaterialButton(
-                    onPressed: () {
-                      Get.toNamed(AppRoute.userHistory);
-                    },
-                    child: Text(
-                      "Click here to check user history",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xffd92328),
-                        decoration: TextDecoration
-                            .underline, // Add underline decoration
-                      ),
-                    ),
-                  ),
+                  
                   MaterialButton(
                     onPressed: () {},
                     child: Text(
@@ -275,13 +282,176 @@ class _StepperDemoState extends State<ApplicationDetails> {
                             .underline, // Add underline decoration
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               // Add other widgets here for displaying additional information
             ),
-          ],
-        ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: controller.userHistory.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: Column(children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.businessTime,
+                              size: 25,
+                              color: const Color(0xffd92328),
+                            ),
+                            // Image.asset("assets/images/application_icon.jpg",
+                            //     scale: 18),
+                            
+                            Text(
+                              application.property.propertyCode!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14,
+                                color: Color(0xffd92328),
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  (controller.userHistory![index].contract
+                                              .startDate!
+                                              .toString()
+                                              .length <=
+                                          10)
+                                      ? "       ${controller.userHistory![index].contract.startDate!.toString()!}"
+                                      : "       ${controller.userHistory![index].contract.startDate!.toString().substring(0, 9)} ",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12),
+                                ),
+                                Text("-"),
+                                Text(
+                                  (controller.userHistory![index].contract
+                                              .startDate!
+                                              .toString()
+                                              .length <=
+                                          10)
+                                      ? " ${controller.userHistory![index].contract.endDate!.toString()!}"
+                                      : " ${controller.userHistory![index].contract.endDate!.toString().substring(0, 9)}",
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "To ${controller.userHistory![index].contract.customer!.name!}: ",
+                              style: TextStyle(fontSize: 11),
+                            ),
+                            RatingBar.builder(
+                              initialRating: controller
+                                  .userHistory![index].customerRating
+                                  .toDouble(),
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 0.2),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Color(0xffd92328),
+                                size: 10,
+                              ),
+                              itemSize: 20,
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                          ],
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "    ${controller.userHistory![index].feedbackToCustomer!}",
+                            style: TextStyle(fontSize: 14),
+                            softWrap:
+                                true, // This will make text wrap to a new line when it overflows.
+                          ),
+                        ),
+
+                        Row(
+                          children: [
+                            Text(
+                              "To landlord ${controller.userHistory![index].contract.landlord!.name}: ",
+                              style: TextStyle(fontSize: 11),
+                            ),
+                            RatingBar.builder(
+                              initialRating: controller
+                                  .userHistory![index].landlordRating
+                                  .toDouble(),
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemPadding:
+                                  EdgeInsets.symmetric(horizontal: 0.2),
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Color(0xffd92328),
+                                size: 10,
+                              ),
+                              itemSize: 15,
+                              onRatingUpdate: (rating) {
+                                print(rating);
+                              },
+                            ),
+                          ],
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "    ${controller.userHistory![index].feedbackToLandlord!}",
+                            style: TextStyle(fontSize: 14, color: Colors.black),
+                            softWrap:
+                                true, // This will make text wrap to a new line when it overflows.
+                          ),
+                        ),
+                        // Add other widgets here for displaying additional information
+                      ]),
+                    ),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
     );
   }

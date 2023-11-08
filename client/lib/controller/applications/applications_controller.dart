@@ -1,9 +1,11 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/applications.dart';
 import 'package:client/data/properties.dart';
+import 'package:client/data/user_history.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/model/property.dart';
+import 'package:client/model/user_history.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,8 @@ class ApplicationsControllerImp extends ContractsController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
   List<Application> applications = [];
+  List<UserHistory> userHistory = [];
+
   String? applicationType = "All";
   String? applicationStatus = "All";
 
@@ -31,6 +35,25 @@ class ApplicationsControllerImp extends ContractsController {
           .toList();
       // applications = Application.fromJson(response);
       print(applications);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+
+  getHistoryUser(int userId) async {
+    var response = await UserHistoryData.getUserHistory(userId);
+
+    if (response['statusCode'] == 200) {
+      userHistory = (response['listDto'] as List<dynamic>)
+          .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
+          .toList();
+      // applications = Application.fromJson(response);
+      print(userHistory);
     } else {
       Get.defaultDialog(
         title: "Error",

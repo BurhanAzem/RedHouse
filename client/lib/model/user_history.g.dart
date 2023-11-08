@@ -8,19 +8,21 @@ part of 'user_history.dart';
 
 UserHistory _$UserHistoryFromJson(Map<String, dynamic> json) => UserHistory(
       id: json['id'] as int,
-      customerId: json['customerId'] as int,
-      landlordId: json['landlordId'] as int,
-      timeStamp: DateTime.parse(json['timeStamp'] as String),
-      comment: json['comment'] as String,
-      rating: json['rating'] as int,
+      contractId: json['contractId'] as int,
+      feedbackToLandlord: json['feedbackToLandlord'] as String,
+      feedbackToCustomer: json['feedbackToCustomer'] as String,
+      customerRating: json['customerRating'] as int,
+      landlordRating: json['landlordRating'] as int,
+      contract: Contract.fromJson(json['contract'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$UserHistoryToJson(UserHistory instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'customerId': instance.customerId,
-      'landlordId': instance.landlordId,
-      'timeStamp': instance.timeStamp.toIso8601String(),
-      'comment': instance.comment,
-      'rating': instance.rating,
+      'contractId': instance.contractId,
+      'contract': instance.contract,
+      'feedbackToLandlord': instance.feedbackToLandlord,
+      'feedbackToCustomer': instance.feedbackToCustomer,
+      'customerRating': instance.customerRating,
+      'landlordRating': instance.landlordRating,
     };

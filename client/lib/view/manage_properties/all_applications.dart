@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/main.dart';
 import 'package:client/model/application.dart';
+import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,15 +23,17 @@ class _AllApplicationsState extends State<AllApplications> {
   void initState() {
     super.initState();
     loadData();
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   void loadData() async {
     ApplicationsControllerImp controller =
         Get.put(ApplicationsControllerImp(), permanent: true);
-    await controller.getApplications(1);
+    String? userDtoJson = sharepref!.getString("user");
+    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
+    User user = User.fromJson(userDto);
+    await controller.getApplications(user.id);
+
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded
     });
@@ -35,7 +41,8 @@ class _AllApplicationsState extends State<AllApplications> {
 
   @override
   Widget build(BuildContext context) {
-    ApplicationsControllerImp controller = Get.find<ApplicationsControllerImp>();
+    ApplicationsControllerImp controller =
+        Get.find<ApplicationsControllerImp>();
 
     // Check if data is still loading
     if (isLoading) {
@@ -137,7 +144,8 @@ class _AllApplicationsState extends State<AllApplications> {
                 return GestureDetector(
                   onTap: () {
                     // controller.getProperty();
-                    Get.toNamed(AppRoute.applicationDetails, arguments: controller.applications[index]);
+                    Get.toNamed(AppRoute.applicationDetails,
+                        arguments: controller.applications[index]);
                     setState(() {});
                   },
                   child: Container(
@@ -183,11 +191,11 @@ class _AllApplicationsState extends State<AllApplications> {
                             ],
                           ),
                           Text(
-                            (controller.applications![index].user!.Name!
+                            (controller.applications![index].user!.name!
                                         .length <=
                                     38)
-                                ? controller.applications![index].user!.Name!
-                                : '${controller.applications![index].user!.Name!.substring(0, 38)}...',
+                                ? controller.applications![index].user!.name!
+                                : '${controller.applications![index].user!.name!.substring(0, 38)}...',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         ],
@@ -209,11 +217,11 @@ class _AllApplicationsState extends State<AllApplications> {
                                 width: 1, // Adjust the width as needed
                               ),
                             ),
-                            child:  const Icon(
-                                FontAwesomeIcons.solidFileZipper,
-                                size: 25,
-                                color: const Color(0xffd92328),
-                              ),
+                            child: const Icon(
+                              FontAwesomeIcons.solidFileZipper,
+                              size: 25,
+                              color: const Color(0xffd92328),
+                            ),
                           ),
 
                           Container(
