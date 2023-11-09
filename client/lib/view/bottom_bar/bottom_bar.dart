@@ -1,4 +1,6 @@
-import 'package:client/view/bottom_bar/contract/mylistings.dart';
+import 'dart:convert';
+import 'package:client/controller/account_info_contoller.dart';
+import 'package:client/main.dart';
 import 'package:client/view/bottom_bar/more/more.dart';
 import 'package:client/view/bottom_bar/notification/notifications.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
@@ -6,64 +8,70 @@ import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class BottomBar extends StatefulWidget {
-  BottomBar({Key? key}) : super(key: key);
+  const BottomBar({Key? key}) : super(key: key);
 
   @override
   State<BottomBar> createState() => _BottomBarState();
 }
 
 class _BottomBarState extends State<BottomBar> {
+  AccountInfoContoller controller =
+      Get.put(AccountInfoContoller(), permanent: true);
   int _currentIndex = 0;
-
-  final List<Icon> _unselectedIcons = [
-    const Icon(Icons.search),
-    const Icon(
-      FontAwesomeIcons.handshake,
-      size: 25,
-    ),
-    const Icon(Icons.notifications_active_outlined),
-    const Icon(Icons.home_outlined),
-    const Icon(Icons.more_horiz_outlined),
-  ];
 
   final List<Icon> _selectedIcons = [
     const Icon(
       FontAwesomeIcons.magnifyingGlassLocation,
-      size: 22,
     ),
     const Icon(
       FontAwesomeIcons.solidHandshake,
-      size: 23,
     ),
-    const Icon(Icons.notifications_active_rounded),
-    const Icon(Icons.home),
-    const Icon(Icons.more_horiz),
+    const Icon(
+      FontAwesomeIcons.solidBell,
+    ),
+    const Icon(
+      FontAwesomeIcons.house,
+    ),
+    const Icon(
+      FontAwesomeIcons.ellipsis,
+    ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.userDtoJson = sharepref!.getString("user");
+    controller.userDto = json.decode(controller.userDtoJson ?? "{}");
+    print(controller.userDtoJson);
+    print(controller.userDto);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: [
-          const Search(),
-          const AllContracts(),
-          const Notifications(),
-          const ManageProperties(),
+        children: const [
+          Search(),
+          AllContracts(),
+          Notifications(),
+          ManageProperties(),
           More(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        iconSize: 32,
-        type: BottomNavigationBarType.shifting,
+        type: BottomNavigationBarType.fixed,
+        iconSize: 20,
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
-        unselectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey[800],
+        unselectedLabelStyle: const TextStyle(fontSize: 11.5),
         selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.bold, fontSize: 11.5),
+            const TextStyle(fontWeight: FontWeight.w600, fontSize: 11.5),
         items: [
           _buildBottomNavigationBarItem(0),
           _buildBottomNavigationBarItem(1),
@@ -82,9 +90,7 @@ class _BottomBarState extends State<BottomBar> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(int index) {
     return BottomNavigationBarItem(
-      icon: _currentIndex == index
-          ? _selectedIcons[index]
-          : _unselectedIcons[index],
+      icon: _selectedIcons[index],
       label: _getLabel(index),
     );
   }
@@ -98,7 +104,7 @@ class _BottomBarState extends State<BottomBar> {
       case 2:
         return "Notifications";
       case 3:
-        return "Manage Property";
+        return "Properties";
       case 4:
         return "More";
       default:

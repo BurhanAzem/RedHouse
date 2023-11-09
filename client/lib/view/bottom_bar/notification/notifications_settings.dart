@@ -1,6 +1,8 @@
+import 'package:client/view/bottom_bar/notification/email_notifications%20.dart';
 import 'package:client/view/bottom_bar/notification/notifications_tab.dart';
 import 'package:client/view/bottom_bar/notification/push_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NotificationsSettings extends StatelessWidget {
   const NotificationsSettings({Key? key}) : super(key: key);
@@ -9,22 +11,19 @@ class NotificationsSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notifications Settings",
+        title: const Text("Notifications Settings",
             style: TextStyle(
               fontWeight: FontWeight.bold,
             )),
-        centerTitle: true,
       ),
       body: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => PushNotifications()),
-              );
+              Get.to(() => const PushNotifications());
             },
-            child: Row(
+            child: const Row(
               children: [
                 SizedBox(width: 25),
                 Text("Push notifications",
@@ -36,14 +35,12 @@ class NotificationsSettings extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => NotificationsTab()),
-              );
+              Get.to(() => const NotificationsTab());
             },
-            child: Row(
+            child: const Row(
               children: [
                 SizedBox(width: 25),
                 Text("Notifications tab",
@@ -55,14 +52,12 @@ class NotificationsSettings extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           InkWell(
             onTap: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(builder: (context) => NotificationsTab()),
-              // );
+              Get.to(() => const EmailNotifications());
             },
-            child: Row(
+            child: const Row(
               children: [
                 SizedBox(width: 25),
                 Text("Email",

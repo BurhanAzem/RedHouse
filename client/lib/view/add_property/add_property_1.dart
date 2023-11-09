@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:geocoding/geocoding.dart';
 
 import 'package:client/controller/manage_propertise/add_property_controller.dart';
@@ -35,7 +36,7 @@ class _AddProperty1State extends State<AddProperty1> {
     lat = cl!.latitude;
     long = cl!.longitude;
     currentCameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 14);
-    setState(() {}); // Update the state to rebuild the widget.
+    setState(() {});
   }
 
   CameraPosition jerusalem = CameraPosition(
@@ -66,6 +67,7 @@ class _AddProperty1State extends State<AddProperty1> {
     ];
     AddPropertyControllerImp controller =
         Get.put(AddPropertyControllerImp(), permanent: true);
+    AccountInfoContoller userController = Get.put(AccountInfoContoller());
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -329,9 +331,7 @@ class _AddProperty1State extends State<AddProperty1> {
                                   print('Latitude: ${controller.Latitude}');
                                   print('Longitude: ${controller.Longitude}');
                                   arePlacemarksAvailable = true;
-                                  setState(() {
-                                    
-                                  });
+                                  setState(() {});
                                 }
                               } catch (e) {
                                 Get.defaultDialog(
@@ -362,10 +362,13 @@ class _AddProperty1State extends State<AddProperty1> {
                           setState(() {
                             controller.activeStep++;
                           });
+                          controller.userId = userController.userDto?["id"];
                           controller.goToAddProperty2();
                         }
-                      : (){},
-                  color:arePlacemarksAvailable ? Color(0xffd92328) : Color.fromARGB(255, 251, 169, 169),
+                      : () {},
+                  color: arePlacemarksAvailable
+                      ? Color(0xffd92328)
+                      : Color.fromARGB(255, 251, 169, 169),
                   child: Text(
                     "Continue",
                     style: TextStyle(

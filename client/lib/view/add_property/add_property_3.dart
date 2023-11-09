@@ -18,7 +18,8 @@ class _AddProperty3State extends State<AddProperty3> {
       "House",
       "Apartment Unit",
       "Townhouse",
-      "Entire Department Community"
+      "Castel",
+      "Entire Department Community",
     ];
     AddPropertyControllerImp controller =
         Get.put(AddPropertyControllerImp(), permanent: true);

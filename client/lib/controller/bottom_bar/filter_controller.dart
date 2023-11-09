@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:client/core/class/statusrequest.dart';
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/model/list_property.dart';
 import 'package:client/model/location.dart';
@@ -14,6 +12,7 @@ class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
   String currentCity = "";
   ListProperty listProperty = ListProperty(listDto: []);
+  AccountInfoContoller accountController = Get.put(AccountInfoContoller());
   Rx<Location> location = Location(
     id: 0,
     streetAddress: "",
@@ -58,10 +57,10 @@ class FilterController extends GetxController {
   final rentMinControllerTemp = TextEditingController();
 
   String buyView = "Any";
-  String buyViewTemp = "";
+  String buyViewTemp = "Any";
 
   String rentView = "Any";
-  String rentViewTemp = "";
+  String rentViewTemp = "Any";
 
   RxString bedButtonTemp = "Any".obs;
   RxString bedButton = "Any".obs;
@@ -98,70 +97,72 @@ class FilterController extends GetxController {
     String? listingPropertyType;
 
     if (listingType) {
-      if (buyHouse)
-        propertyTypes!.add("House");
-      // else
-      //   propertyTypes!.add("");
-      if (buyApartment)
-        propertyTypes!.add("Apartment Unit");
-      // else
-      //   propertyTypes!.add("");
-      if (buyTownhouse)
-        propertyTypes!.add("Townhouse");
-      // else
-      //   propertyTypes!.add("");
-      if (buyCastle)
-        propertyTypes!.add("Castle");
-      // else
-      //   propertyTypes!.add("");
-      if (buyDepartment)
-        propertyTypes!.add("Entire Department Community");
-      // else
-      //   propertyTypes!.add("");
+      if (buyHouse) {
+        propertyTypes.add("House");
+      }
+
+      if (buyApartment) {
+        propertyTypes.add("Apartment Unit");
+      }
+
+      if (buyTownhouse) {
+        propertyTypes.add("Townhouse");
+      }
+
+      if (buyCastle) {
+        propertyTypes.add("Castle");
+      }
+
+      if (buyDepartment) {
+        propertyTypes.add("Entire Department Community");
+      }
+
       minPrice = buyMinController.text;
       maxPrice = buyMaxController.text;
       view = buyView;
     } else {
-      if (rentHouse)
-        propertyTypes!.add("House");
-      // else
-      //   propertyTypes!.add("");
-      if (rentApartment)
-        propertyTypes!.add("Apartment Unit");
-      // else
-      //   propertyTypes!.add("");
-      if (rentTownhouse)
-        propertyTypes!.add("Townhouse");
-      // else
-      //   propertyTypes!.add("");
-      if (rentCastle)
-        propertyTypes!.add("Castle");
-      // else
-      //   propertyTypes!.add("");
-      if (rentDepartment)
-        propertyTypes!.add("Entire Department Community");
-      // else
-      //   propertyTypes!.add("");
+      if (rentHouse) {
+        propertyTypes.add("House");
+      }
+
+      if (rentApartment) {
+        propertyTypes.add("Apartment Unit");
+      }
+
+      if (rentTownhouse) {
+        propertyTypes.add("Townhouse");
+      }
+
+      if (rentCastle) {
+        propertyTypes.add("Castle");
+      }
+
+      if (rentDepartment) {
+        propertyTypes.add("Entire Department Community");
+      }
 
       minPrice = rentMinController.text;
       maxPrice = rentMaxController.text;
       view = rentView;
     }
 
-    if (bedButton.toString().length <= 2)
+    if (bedButton.toString().length <= 2) {
       numberOfBedrooms = bedButton.string.substring(0, 1);
-    else
+    } else {
       numberOfBedrooms = "";
+    }
 
-    if (bathButton.toString().length <= 2)
+    if (bathButton.toString().length <= 2) {
       numberOfBathrooms = bathButton.string.substring(0, 1);
-    else
+    } else {
       numberOfBathrooms = "";
+    }
     // Rest of your code
-    if (listingType)
+    if (listingType) {
       listingPropertyType = "For sell";
-    else
+    } else {
       listingPropertyType = "For rent";
+    }
     var response = await PropertyData.getProperties(
         propertyTypes,
         minPrice,
@@ -170,20 +171,11 @@ class FilterController extends GetxController {
         numberOfBedrooms,
         view,
         listingPropertyType.toString(),
-        location!);
+        location);
 
     if (response['statusCode'] == 200) {
-      // final Map<String, dynamic> listDto = response['listDto'];
-      // if (listDto is List) {
-        // Cast each item to a map
-        listProperty =  ListProperty.fromJson(response);
-        print(listProperty!.listDto);
-      // } else {
-      //   Get.defaultDialog(
-      //     title: "Error",
-      //     middleText: "Invalid data format in 'listDto'",
-      //   );
-      // }
+      listProperty = ListProperty.fromJson(response);
+      print(listProperty.listDto);
     } else {
       Get.defaultDialog(
         title: "Error",

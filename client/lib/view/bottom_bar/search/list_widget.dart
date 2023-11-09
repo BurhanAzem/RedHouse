@@ -1,5 +1,5 @@
 import 'package:client/model/property.dart';
-import 'package:client/view/bottom_bar/search/home_information.dart';
+import 'package:client/view/bottom_bar/search/home%20information/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -75,7 +75,7 @@ class ListWidget extends StatelessWidget {
         Property property = properties.elementAt(index);
         return InkWell(
           onTap: () {
-            Get.to(() => const HomeInformation());
+            Get.to(() => HomeInformation(property: property));
           },
           child: Container(
             margin: const EdgeInsets.only(bottom: 35, left: 15, right: 15),
@@ -84,11 +84,28 @@ class ListWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      "Brokered by Foster Realty", // landlord name
-                      style: TextStyle(fontSize: 12.5, color: Colors.grey[600]),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Brokered by the ${property.listingBy} ',
+                            style: TextStyle(
+                              color: Colors.grey[700],
+                              fontSize: 12.5,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Ayman Dwikat',
+                            style: const TextStyle(
+                              fontSize: 12.5,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 196, 39, 27),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    SizedBox(width: 1),
+                    const SizedBox(width: 1),
                     Icon(
                       Icons.check_circle_outline,
                       size: 14,
@@ -96,12 +113,12 @@ class ListWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 1),
+                const SizedBox(height: 1),
                 Stack(
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: Image.asset(
+                      child: Image.network(
                         property.propertyFiles![0].downloadUrls!,
                         width: double.infinity,
                         height: 220,
@@ -109,28 +126,27 @@ class ListWidget extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                        bottom: 16,
-                        right: 16,
-                        child: Stack(
-                          children: [
-                            Container(
-                              width: 42,
-                              height: 42,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                shape: BoxShape.circle,
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.black,
-                                  size: 25,
-                                ),
-                                onPressed: () {},
-                              ),
+                      bottom: 16,
+                      right: 16,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.favorite_border,
+                              color: Colors.black,
+                              size: 23,
                             ),
-                          ],
-                        )),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 Container(
@@ -145,32 +161,83 @@ class ListWidget extends StatelessWidget {
                             height: 12,
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Color.fromARGB(255, 44, 162, 46),
+                              color: Color.fromARGB(255, 196, 39, 27),
                             ),
                           ),
                           Text(
-                            " ${property.propertyStatus}",
+                            " ${property.listingType}",
                             style: const TextStyle(fontSize: 17.5),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
-                        "ID = ${property.id}",
-                        style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      Text(
-                        "\$${NumberFormat.decimalPattern().format(property.price)}${property.propertyStatus == "For Rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(property.price)}${property.listingType == "For rent" ? "/mo" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        "${property.numberOfBedRooms} bedroom, ${property.numberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
-                        style: const TextStyle(fontSize: 15),
+                        property.propertyType,
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 196, 39, 27),
+                        ),
                       ),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 2),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${property.numberOfBedRooms} ',
+                              style: const TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 196, 39, 27),
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'bedrooms, ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '${property.numberOfBathRooms} ',
+                              style: const TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 196, 39, 27),
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'bathrooms, ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '${property.squareMetersArea} ',
+                              style: const TextStyle(
+                                fontSize: 16.5,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 196, 39, 27),
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'meters',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -178,7 +245,7 @@ class ListWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${property.location!.streetAddress}",
+                                property.location!.streetAddress,
                                 style: const TextStyle(fontSize: 14.5),
                               ),
                               const SizedBox(height: 1),
@@ -197,7 +264,8 @@ class ListWidget extends StatelessWidget {
                                     color: Colors.black, width: 1.4),
                               ),
                               onPressed: () {
-                                Get.to(() => HomeInformation());
+                                Get.to(
+                                    () => HomeInformation(property: property));
                               },
                               height: 37,
                               child: const Center(

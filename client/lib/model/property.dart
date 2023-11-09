@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:client/model/location.dart';
 import 'package:client/model/property_files.dart';
 import 'package:client/model/user.dart';
@@ -12,7 +10,7 @@ class Property {
   int id;
   String propertyType;
   int userId;
-  User ?user;
+  User? user;
   String propertyCode;
   int locationId;
   List<PropertyFile>? propertyFiles;
@@ -33,32 +31,35 @@ class Property {
   String listingBy;
 
   Property({
-   required this.id,
-   required this.propertyType,
-   required this.userId,
-   this.user,
-   required this.propertyCode,
-   this.propertyFiles,
-   required this.locationId,
-   this.location,
-   required this.price,
-   required this.numberOfBedRooms,
-   required this.numberOfBathRooms,
-   required this.squareMetersArea,
-   required this.propertyDescription,
-   required this.builtYear,
-   required this.view,
-   required this.availableOn,
-   required this.propertyStatus,
-   required this.numberOfUnits,
-   required this.parkingSpots,
-   required this.listingType,
-   required this.isAvailableBasement,
-   required this.listingBy,
+    required this.id,
+    required this.propertyType,
+    required this.userId,
+    this.user,
+    required this.propertyCode,
+    this.propertyFiles,
+    required this.locationId,
+    this.location,
+    required this.price,
+    required this.numberOfBedRooms,
+    required this.numberOfBathRooms,
+    required this.squareMetersArea,
+    required this.propertyDescription,
+    required this.builtYear,
+    required this.view,
+    required this.availableOn,
+    required this.propertyStatus,
+    required this.numberOfUnits,
+    required this.parkingSpots,
+    required this.listingType,
+    required this.isAvailableBasement,
+    required this.listingBy,
   });
 
   factory Property.fromJson(Map<String, dynamic> json) =>
       _$PropertyFromJson(json);
   Map<String, dynamic> toJson() => _$PropertyToJson(this);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b565718b96f33d4a8deae7f518245f06e0d9b9ff
 }

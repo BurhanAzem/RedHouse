@@ -139,7 +139,7 @@ class _RentFilterState extends State<RentFilter> {
           Container(height: 10),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 13),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(
@@ -201,13 +201,9 @@ class _RentFilterState extends State<RentFilter> {
                   controller.copyBedButton();
 
                   controller.rentView = controller.rentViewTemp;
-                  controller.buyView = "Any view";
-
-
+                  controller.buyView = "Any";
 
                   controller.getProperties();
-                  
-
                   Navigator.pop(context);
                 }
               },

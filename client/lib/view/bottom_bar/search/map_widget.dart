@@ -1,7 +1,8 @@
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list_controller.dart';
 import 'package:client/model/property.dart';
-import 'package:client/view/bottom_bar/search/home_information.dart';
+import 'package:client/view/bottom_bar/search/home%20information/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -17,11 +18,10 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget> {
-  MapListController controller = Get.put(MapListController());
+  AccountInfoContoller accountController = Get.put(AccountInfoContoller());
+  MapListController mapListController = Get.put(MapListController());
   FilterController filterControllerr = Get.put(FilterController());
   GoogleMapController? mapController;
-  CameraPosition _currentPosition =
-      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
   bool isLoading = true;
   bool isLoadingMap = false;
   bool userNotified = false;
@@ -30,10 +30,8 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   void initState() {
     super.initState();
-    _currentPosition = controller.currentPosition ?? _currentPosition;
-    controller.allMarkers =
-        // controller.getMarkerLocations(controller.allProperties);
-        filterControllerr.getMarkerLocations(filterControllerr.listProperty.listDto);
+    mapListController.allMarkers = filterControllerr
+        .getMarkerLocations(filterControllerr.listProperty.listDto);
 
     Future.delayed(const Duration(seconds: 1), () {
       setState(() {
@@ -48,11 +46,7 @@ class _MapWidgetState extends State<MapWidget> {
     });
   }
 
-  Future<void> updateMarkers(double zoom) async {
-    print("======================================================== markers");
-    print(controller.allMarkers);
-    print("========================================================Zoom $zoom");
-
+  Future<void> updateMarkers() async {
     if (mapController == null) {
       return;
     }
@@ -62,7 +56,7 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
 
-    if (zoom < 9) {
+    if (mapListController.newZoom < 10) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -91,7 +85,7 @@ class _MapWidgetState extends State<MapWidget> {
             property.location!.longitude <= bounds.northeast.longitude)
         .toSet();
 
-    Set<Marker> visibleMarkers = controller.allMarkers
+    Set<Marker> visibleMarkers = mapListController.allMarkers
         .where((marker) =>
             marker.position.latitude >= bounds.southwest.latitude &&
             marker.position.latitude <= bounds.northeast.latitude &&
@@ -101,23 +95,20 @@ class _MapWidgetState extends State<MapWidget> {
         .toSet();
 
     setState(() {
-      controller.visibleMarkers.clear();
-      controller.visibleProperties.clear();
-      if (zoom >= 9) {
-        controller.visibleMarkers.addAll(visibleMarkers);
-        controller.visibleProperties.addAll(newVisibleProperties);
+      mapListController.visibleMarkers.clear();
+      mapListController.visibleProperties.clear();
+      if (mapListController.newZoom >= 10) {
+        mapListController.visibleMarkers.addAll(visibleMarkers);
+        mapListController.visibleProperties.addAll(newVisibleProperties);
         reverseGeocode(centerCoordinates);
       }
-      _currentPosition = CameraPosition(
+      mapListController.currentPosition = CameraPosition(
         target: centerCoordinates,
-        zoom: zoom,
+        zoom: mapListController.newZoom,
       );
-      controller.currentPosition = _currentPosition;
     });
-    controller.allMarkers =
-        // controller.getMarkerLocations(controller.allProperties);
-        filterControllerr.getMarkerLocations(filterControllerr.listProperty.listDto);
-        print("object");
+    mapListController.allMarkers = filterControllerr
+        .getMarkerLocations(filterControllerr.listProperty.listDto);
   }
 
   Future<void> reverseGeocode(LatLng coordinates) async {
@@ -127,27 +118,24 @@ class _MapWidgetState extends State<MapWidget> {
         coordinates.longitude,
       );
       if (placemarks.isNotEmpty) {
-        var city =  placemarks[0].administrativeArea ?? '';
-        controller.currentLocationName.value =
+        var city = placemarks[0].administrativeArea ?? '';
+        mapListController.currentLocationName.value =
             "Area in ${placemarks[0].locality ?? ''}";
-        print('Location Name: ${filterControllerr.currentCity}');
 
-        if (city != filterControllerr.currentCity){
-          filterControllerr.currentCity = placemarks[0].administrativeArea ?? '';
-          // filterControllerr.location.value.City = placemarks[0].locality ?? '';
+        if (city != filterControllerr.currentCity) {
+          filterControllerr.currentCity =
+              placemarks[0].administrativeArea ?? '';
+          print(
+              "=====================================================================Call to api");
           filterControllerr.getProperties();
-          setState(() {
-            
-          });
         }
-        
       }
     } catch (e) {}
   }
 
   @override
   Widget build(BuildContext context) {
-    controller.mapContext = context;
+    mapListController.mapContext = context;
 
     return Stack(
       children: [
@@ -155,15 +143,17 @@ class _MapWidgetState extends State<MapWidget> {
           visible: isLoadingMap,
           child: GoogleMap(
             mapType: MapType.normal,
-            initialCameraPosition: _currentPosition,
+            initialCameraPosition: mapListController.currentPosition,
             onMapCreated: (controller) {
               setState(() {
                 mapController = controller;
               });
             },
-            markers: controller.visibleMarkers,
+            markers: mapListController.visibleMarkers,
             onCameraMove: (CameraPosition position) {
-              updateMarkers(position.zoom);
+              print("============================================Camera move");
+              mapListController.newZoom = position.zoom;
+              updateMarkers();
             },
           ),
         ),
@@ -220,11 +210,11 @@ class MapMarker extends Clusterable {
                     color: Colors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(30))),
-                height: MediaQuery.of(context).size.height / 2, //2.3
+                height: MediaQuery.of(context).size.height / 2.15,
                 width: 500,
                 child: InkWell(
                   onTap: () {
-                    Get.to(() => const HomeInformation());
+                    Get.to(() => HomeInformation(property: property));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +224,7 @@ class MapMarker extends Clusterable {
                           ClipRRect(
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(30)),
-                            child: Image.asset(
+                            child: Image.network(
                               property.propertyFiles![0].downloadUrls!,
                               width: double.infinity,
                               height: 190,
@@ -242,32 +232,32 @@ class MapMarker extends Clusterable {
                             ),
                           ),
                           Positioned(
-                              bottom: 16,
-                              right: 16,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: 42,
-                                    height: 42,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[300],
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.black,
-                                        size: 25,
-                                      ),
-                                      onPressed: () {},
-                                    ),
+                            bottom: 16,
+                            right: 16,
+                            child: InkWell(
+                              onTap: () {},
+                              child: Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.favorite_border,
+                                    color: Colors.black,
+                                    size: 23,
                                   ),
-                                ],
-                              )),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       Container(
-                        padding: const EdgeInsets.only(left: 25, top: 15),
+                        padding:
+                            const EdgeInsets.only(left: 25, top: 15, right: 20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -278,30 +268,72 @@ class MapMarker extends Clusterable {
                                   height: 12,
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 44, 162, 46),
+                                    color: Color.fromARGB(255, 196, 39, 27),
                                   ),
                                 ),
                                 Text(
-                                  " ${property.propertyStatus}",
+                                  " ${property.listingType}",
                                   style: const TextStyle(fontSize: 17.5),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 6),
                             Text(
-                              "ID = ${property.id}",
+                              "\$${NumberFormat.decimalPattern().format(property.price)}${property.listingType == "For rent" ? "/mo" : ""}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                            Text(
-                              "\$${NumberFormat.decimalPattern().format(property.price)}${property.propertyStatus == "For Rent" ? "/mo" : ""}",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              "${property.numberOfBedRooms} bedroom, ${property.numberOfBathRooms} bathroom, ${NumberFormat.decimalPattern().format(property.squareMetersArea)} meters",
-                              style: const TextStyle(fontSize: 15),
+                            const SizedBox(height: 6),
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '${property.numberOfBedRooms} ',
+                                    style: const TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'bedrooms, ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '${property.numberOfBathRooms} ',
+                                    style: const TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'bathrooms, ',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '${property.squareMetersArea} ',
+                                    style: const TextStyle(
+                                      fontSize: 16.5,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: 'meters',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(height: 2),
                             Text(
@@ -310,10 +342,10 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              (property.propertyDescription.length <= 100)
-                                  ? property.propertyDescription
-                                  : '${property.propertyDescription.substring(0, 45)}...',
+                              property.propertyDescription,
                               style: const TextStyle(),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                             ),
                           ],
                         ),

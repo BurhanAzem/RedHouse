@@ -1,4 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/controller/map_list_controller.dart';
 import 'package:client/view/bottom_bar/search/filter/bedbath_filter.dart';
 import 'package:client/view/bottom_bar/search/filter/propertytype_filter.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class BuyFilter extends StatefulWidget {
 
 class _BuyFilterState extends State<BuyFilter> {
   FilterController controller = Get.put(FilterController());
+
   late bool house;
   late bool apartment;
   late bool townhouse;
@@ -139,7 +141,7 @@ class _BuyFilterState extends State<BuyFilter> {
           Container(height: 10),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 13),
             width: double.infinity,
             decoration: BoxDecoration(
               border: Border.all(
@@ -201,11 +203,10 @@ class _BuyFilterState extends State<BuyFilter> {
                   controller.copyBedButton();
 
                   controller.buyView = controller.buyViewTemp;
-                  controller.rentView = "Any view";
-
+                  controller.rentView = "Any";
 
                   controller.getProperties();
-
+                  // Call the updateMarkers function here
                   Navigator.pop(context);
                 }
               },

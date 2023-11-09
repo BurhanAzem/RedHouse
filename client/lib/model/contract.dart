@@ -1,7 +1,6 @@
 import 'package:client/model/property.dart';
 import 'package:client/model/user.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 part "contract.g.dart";
 
 @JsonSerializable()
@@ -36,11 +35,9 @@ class Contract {
       required this.contractStatus,
       required this.earnings,
       required this.isShouldPay,
-       this.customer,
-       this.landlord,
-       this.property
-      
-      });
+      this.customer,
+      this.landlord,
+      this.property});
 
   factory Contract.fromJson(Map<String, dynamic> json) =>
       _$ContractFromJson(json);

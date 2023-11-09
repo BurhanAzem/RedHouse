@@ -6,6 +6,7 @@ import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
+import 'package:client/view/bottom_bar/search/home%20information/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -270,7 +271,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                     ],
                   ),
                   Container(height: 6),
-                  
+
                   MaterialButton(
                     onPressed: () {},
                     child: Text(
@@ -321,16 +322,21 @@ class _StepperDemoState extends State<ApplicationDetails> {
                               size: 25,
                               color: const Color(0xffd92328),
                             ),
-                            // Image.asset("assets/images/application_icon.jpg",
-                            //     scale: 18),
-                            
-                            Text(
-                              application.property.propertyCode!,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                color: Color(0xffd92328),
-                                decoration: TextDecoration.underline,
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => HomeInformation(
+                                    property: controller.userHistory[index]
+                                        .contract.property!));
+                              },
+                              child: Text(
+                                controller.userHistory[index].contract.property!
+                                    .propertyCode,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  color: Color(0xffd92328),
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
                             Row(
