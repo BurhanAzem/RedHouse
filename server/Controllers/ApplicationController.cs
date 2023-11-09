@@ -113,6 +113,42 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+
+        [HttpPost("/applications/{id}/approve")]
+        public async Task<IActionResult> ApproveApplication(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _applicationServices.ApproveApplication(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+        [HttpPost("/applications/{id}/reject")]
+        public async Task<IActionResult> RejectApplication(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _applicationServices.RejectApplication(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
     }
 }
 

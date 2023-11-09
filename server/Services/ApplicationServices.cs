@@ -93,27 +93,27 @@ namespace server.Services
                 };
             }
 
-    //         var applications = _redHouseDbContext.Applications
-    // .Where(a => a.UserId == userId)
-    // .ToList();
+            //         var applications = _redHouseDbContext.Applications
+            // .Where(a => a.UserId == userId)
+            // .ToList();
 
-    //         foreach (var application in applications)
-    //         {
-    //             var appUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(u => u.Id == application.UserId);
-    //             var appProperty = await _redHouseDbContext.Properties
-    //                 .Include(p => p.propertyFiles)
-    //                 .FirstOrDefaultAsync(p => p.Id == application.PropertyId);
-    //             var location = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.Id == appProperty.LocationId);
+            //         foreach (var application in applications)
+            //         {
+            //             var appUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(u => u.Id == application.UserId);
+            //             var appProperty = await _redHouseDbContext.Properties
+            //                 .Include(p => p.propertyFiles)
+            //                 .FirstOrDefaultAsync(p => p.Id == application.PropertyId);
+            //             var location = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.Id == appProperty.LocationId);
 
-    //             application.User = appUser;
-    //             application.Property = appProperty;
-    //             application.Property.Location = location;
-    //         }
+            //             application.User = appUser;
+            //             application.Property = appProperty;
+            //             application.Property.Location = location;
+            //         }
 
             var query = from p in _redHouseDbContext.Properties
-            join a in _redHouseDbContext.Applications on p.Id equals a.PropertyId
-            where p.UserId == userId
-            select a;
+                        join a in _redHouseDbContext.Applications on p.Id equals a.PropertyId
+                        where p.UserId == userId
+                        select a;
 
             var applications = query.Include(a => a.User).Include(a => a.Property).ThenInclude(p => p.Location).ToList();
 
@@ -171,6 +171,50 @@ namespace server.Services
             return new ResponsDto<Application>
             {
                 Message = $"Application with {applicationId} Id Updated succssfully",
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ResponsDto<Application>> ApproveApplication(int applicationId)
+        {
+            var application = await _redHouseDbContext.Applications.FindAsync(applicationId);
+            if (application == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception($"Application with {applicationId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            application.ApplicationStatus = "Approved";
+            _redHouseDbContext.Applications.Update(application);
+            _redHouseDbContext.SaveChanges();
+            return new ResponsDto<Application>
+            {
+                Dto = application,
+                Exception = new Exception($"Application with {applicationId} Approved succussfuly"),
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ResponsDto<Application>> RejectApplication(int applicationId)
+        {
+            var application = await _redHouseDbContext.Applications.FindAsync(applicationId);
+            if (application == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception($"Application with {applicationId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            application.ApplicationStatus = "Rejected";
+            _redHouseDbContext.Applications.Update(application);
+            _redHouseDbContext.SaveChanges();
+            return new ResponsDto<Application>
+            {
+                Dto = application,
+                Exception = new Exception($"Application with {applicationId} Rejected succussfuly"),
                 StatusCode = HttpStatusCode.OK,
             };
         }

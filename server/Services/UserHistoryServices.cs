@@ -36,11 +36,7 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            // List<Contract> contracts = _redHouseDbContext.Contracts.Where(c => c.CustomerId == userId).ToList();
-            // List<int> contractIds = contracts.Select(c => c.Id).ToList();
-            // List<UserHistory> userHistories = _redHouseDbContext.UserHistoryRecords
-            //     .Where(u => contractIds.Contains(u.ContractId))
-            //     .ToList();
+
 
 
             var contracts = _redHouseDbContext.Contracts
@@ -50,24 +46,24 @@ namespace server.Services
     .Include(c => c.Customer) // Include the Customer navigation property
     .ToList();
 
-var userHistories = _redHouseDbContext.UserHistoryRecords
-    .ToList()
-    .Join(
-        contracts,
-        uh => uh.ContractId,
-        c => c.Id,
-        (uh, c) => new UserHistory
-        {
-            Id = uh.Id,
-            ContractId = uh.ContractId,
-            FeedbackToLandlord = uh.FeedbackToLandlord,
-            FeedbackToCustomer = uh.FeedbackToCustomer,
-            CustomerRating = uh.CustomerRating,
-            LandlordRating = uh.LandlordRating,
-            Contract = c
-        }
-    )
-    .ToList();
+            var userHistories = _redHouseDbContext.UserHistoryRecords
+                .ToList()
+                .Join(
+                    contracts,
+                    uh => uh.ContractId,
+                    c => c.Id,
+                    (uh, c) => new UserHistory
+                    {
+                        Id = uh.Id,
+                        ContractId = uh.ContractId,
+                        FeedbackToLandlord = uh.FeedbackToLandlord,
+                        FeedbackToCustomer = uh.FeedbackToCustomer,
+                        CustomerRating = uh.CustomerRating,
+                        LandlordRating = uh.LandlordRating,
+                        Contract = c
+                    }
+                )
+                .ToList();
 
 
 

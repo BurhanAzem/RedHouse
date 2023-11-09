@@ -4,6 +4,7 @@ using Cooking_School.Dtos;
 using System.Net;
 using server.Dtos.PropertyDtos;
 using Microsoft.EntityFrameworkCore;
+using server.Models;
 
 namespace RedHouse_Server.Services
 {
@@ -172,7 +173,7 @@ namespace RedHouse_Server.Services
                 {
                     query = query.Where(p => propertyType == p.PropertyType);
                 }
-                
+
             }
 
             // Execute the query and return the results
@@ -224,6 +225,22 @@ namespace RedHouse_Server.Services
             }
 
 
+
+            return new ResponsDto<Property>
+            {
+                ListDto = properties,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId)
+        {
+            // Create a queryable variable based on the DbSet
+            var query = _redHouseDbContext.Properties.AsQueryable();
+
+            query = query.Where(p => p.UserId == userId);
+            query = query.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location);
+            var properties = query.ToArray();
 
             return new ResponsDto<Property>
             {
@@ -292,5 +309,55 @@ namespace RedHouse_Server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+        public async Task<ResponsDto<UserHistory>> GetPropertyHistory(int propertyId)
+        {
+
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<UserHistory>
+                {
+                    Message = $"Property with {propertyId} Id Dose Not Exist",
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+
+
+
+            var contracts = _redHouseDbContext.Contracts
+                .Where(c => c.PropertyId == propertyId)
+                .Include(c => c.Property) // Include the Property navigation property
+                .Include(c => c.Landlord) // Include the Landlord navigation property
+                .Include(c => c.Customer) // Include the Customer navigation property
+                .ToList();
+
+            var userHistories = _redHouseDbContext.UserHistoryRecords
+                .ToList()
+                .Join(
+                    contracts,
+                    uh => uh.ContractId,
+                    c => c.Id,
+                    (uh, c) => new UserHistory
+                    {
+                        Id = uh.Id,
+                        ContractId = uh.ContractId,
+                        FeedbackToLandlord = uh.FeedbackToLandlord,
+                        FeedbackToCustomer = uh.FeedbackToCustomer,
+                        CustomerRating = uh.CustomerRating,
+                        LandlordRating = uh.LandlordRating,
+                        Contract = c
+                    }
+                )
+                .ToList();
+
+            return new ResponsDto<UserHistory>
+            {
+                ListDto = userHistories,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
     }
 }
