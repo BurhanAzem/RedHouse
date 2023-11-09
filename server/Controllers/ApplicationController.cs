@@ -8,7 +8,6 @@ using server.Dtos.PropertyDtos;
 using Microsoft.AspNetCore.Authorization;
 using server.Services;
 using RedHouse_Server.Dtos.ApplicationDtos;
-using AutoMapper.Internal.Mappers;
 
 namespace RedHouse_Server.Controllers
 {
