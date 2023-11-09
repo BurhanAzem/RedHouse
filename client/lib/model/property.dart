@@ -58,8 +58,5 @@ class Property {
   factory Property.fromJson(Map<String, dynamic> json) =>
       _$PropertyFromJson(json);
   Map<String, dynamic> toJson() => _$PropertyToJson(this);
-<<<<<<< HEAD
 
-=======
->>>>>>> b565718b96f33d4a8deae7f518245f06e0d9b9ff
 }
