@@ -1,9 +1,11 @@
+import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list_controller.dart';
 import 'package:client/view/bottom_bar/search/filter/bedbath_filter.dart';
 import 'package:client/view/bottom_bar/search/filter/propertytype_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class BuyFilter extends StatefulWidget {
   BuyFilter({Key? key}) : super(key: key);
@@ -14,12 +16,21 @@ class BuyFilter extends StatefulWidget {
 
 class _BuyFilterState extends State<BuyFilter> {
   FilterController controller = Get.put(FilterController());
+  MapListController mapListController = Get.put(MapListController());
 
   late bool house;
   late bool apartment;
   late bool townhouse;
   late bool castle;
   late bool department;
+
+  AccountInfoContoller accountController = Get.put(AccountInfoContoller());
+  FilterController filterControllerr = Get.put(FilterController());
+  GoogleMapController? mapController;
+
+  bool userNotified = false;
+  String snackBarMessage = "You are too far out, please zoom in";
+  MapType _currentMapType = MapType.normal;
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +217,7 @@ class _BuyFilterState extends State<BuyFilter> {
                   controller.rentView = "Any";
 
                   controller.getProperties();
-                  // Call the updateMarkers function here
+                  mapListController.enterToMap = true;
                   Navigator.pop(context);
                 }
               },

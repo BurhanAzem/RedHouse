@@ -1,6 +1,8 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/controller/map_list_controller.dart';
 import 'package:client/view/bottom_bar/search/filter/buy_filter.dart';
 import 'package:client/view/bottom_bar/search/filter/rent_filter.dart';
+import 'package:client/view/bottom_bar/search/map_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +17,7 @@ class Price extends StatefulWidget {
 
 class _PriceState extends State<Price> {
   FilterController controller = Get.put(FilterController());
+  MapListController mapListController = Get.put(MapListController());
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +122,7 @@ class _PriceState extends State<Price> {
                                 controller.rentMinController.text =
                                     controller.rentMinControllerTemp.text;
 
-                                    
                                 controller.getProperties();
-
                                 Navigator.pop(context);
                               }
                             }

@@ -22,47 +22,46 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(top: 40),
-              child: Column(
-                children: [
-                  SearchBarRow(
-                    isListIcons: _isListIcon,
-                    onToggleView: () {
-                      setState(() {
-                        _isListIcon = !_isListIcon;
-                      });
-                    },
-                  ),
-                ],
-              ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 40),
+            child: Column(
+              children: [
+                SearchBarRow(
+                  isListIcons: _isListIcon,
+                  onToggleView: () {
+                    setState(() {
+                      _isListIcon = !_isListIcon;
+                    });
+                  },
+                ),
+              ],
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              child: const FilterListView(),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 15),
+            child: const FilterListView(),
+          ),
+          SortOptionsWidget(
+            isListIcon: _isListIcon,
+            resultsCount: resultsCount,
+          ),
+          Visibility(
+            visible: _isListIcon,
+            child: const Expanded(
+              child: MapWidget(),
             ),
-            SortOptionsWidget(
-              isListIcon: _isListIcon,
-              resultsCount: resultsCount,
+          ),
+          Visibility(
+            visible: !_isListIcon,
+            child: Expanded(
+              child: ListWidget(properties: controller.visibleProperties),
             ),
-            Visibility(
-              visible: _isListIcon,
-              child: const Expanded(
-                child: MapWidget(),
-              ),
-            ),
-            Visibility(
-              visible: !_isListIcon,
-              child: Expanded(
-                child: ListWidget(properties: controller.visibleProperties),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+

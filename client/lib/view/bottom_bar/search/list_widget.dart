@@ -95,7 +95,7 @@ class ListWidget extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: 'Ayman Dwikat',
+                            text: property.user!.name,
                             style: const TextStyle(
                               fontSize: 12.5,
                               fontWeight: FontWeight.bold,

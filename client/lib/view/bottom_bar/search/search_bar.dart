@@ -59,7 +59,7 @@ class _SearchBarRowState extends State<SearchBarRow> {
                       return Text(
                         controller.currentLocationName.value == ""
                             ? "City, ZIP, School, AddressAddress"
-                            : controller.currentLocationName.value,
+                            : "Area in ${controller.currentLocationName.value}",
                         style: const TextStyle(
                           fontSize: 17,
                           color: Colors.black45,

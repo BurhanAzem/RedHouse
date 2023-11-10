@@ -9,37 +9,18 @@ class Properties extends StatelessWidget {
   Widget build(BuildContext context) {
     AddPropertyControllerImp controller = Get.put(AddPropertyControllerImp());
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.goToAddProperty1();
+        },
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.add,
+          size: 25,
+        ),
+      ),
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            width: 200,
-            child: MaterialButton(
-              onPressed: () {
-                controller.goToAddProperty1();
-              },
-              color: const Color(0xFFD82228), // Provide a child for the bu),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.add,
-                    size: 26,
-                  ),
-                  Text(
-                    " Add property",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18),
-                  )
-                ],
-              ),
-            ),
-          ),
           Expanded(
             child: ListView.builder(
               itemCount: 10, // Set the number of items you want in the list
@@ -50,7 +31,8 @@ class Properties extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10), // Rounded corners
                   ),
-                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Padding(
                     padding:
                         const EdgeInsets.all(16.0), // Add padding for spacing

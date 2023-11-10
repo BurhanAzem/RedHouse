@@ -22,6 +22,29 @@ class _BottomBarState extends State<BottomBar> {
       Get.put(AccountInfoContoller(), permanent: true);
   int _currentIndex = 0;
 
+  final List<Icon> _unselectedIcons = [
+    Icon(
+      FontAwesomeIcons.magnifyingGlassLocation,
+      color: Colors.grey[700],
+    ),
+    Icon(
+      FontAwesomeIcons.solidHandshake,
+      color: Colors.grey[700],
+    ),
+    Icon(
+      FontAwesomeIcons.solidBell,
+      color: Colors.grey[700],
+    ),
+    Icon(
+      FontAwesomeIcons.house,
+      color: Colors.grey[700],
+    ),
+    Icon(
+      FontAwesomeIcons.ellipsis,
+      color: Colors.grey[700],
+    ),
+  ];
+
   final List<Icon> _selectedIcons = [
     const Icon(
       FontAwesomeIcons.magnifyingGlassLocation,
@@ -68,8 +91,9 @@ class _BottomBarState extends State<BottomBar> {
         iconSize: 20,
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
-        unselectedItemColor: Colors.grey[800],
-        unselectedLabelStyle: const TextStyle(fontSize: 11.5),
+        unselectedItemColor: Colors.grey[900],
+        unselectedLabelStyle:
+            const TextStyle(fontWeight: FontWeight.w500, fontSize: 11.5),
         selectedLabelStyle:
             const TextStyle(fontWeight: FontWeight.w600, fontSize: 11.5),
         items: [
@@ -90,7 +114,9 @@ class _BottomBarState extends State<BottomBar> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(int index) {
     return BottomNavigationBarItem(
-      icon: _selectedIcons[index],
+      icon: _currentIndex == index
+          ? _selectedIcons[index]
+          : _unselectedIcons[index],
       label: _getLabel(index),
     );
   }

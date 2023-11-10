@@ -115,9 +115,19 @@ class _StepperDemoState extends State<OverView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.list),
         onPressed: switchStepsType,
+        // backgroundColor: Colors.white,
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.list,
+          size: 25,
+          // color: Colors.black,
+        ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: switchStepsType,
+      //   child: const Icon(Icons.list, size: 30),
+      // ),
     );
   }
 

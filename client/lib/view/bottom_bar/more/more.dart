@@ -1,6 +1,7 @@
 import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/bottom_bar/more/account_information.dart';
+import 'package:client/view/bottom_bar/more/messages.dart';
 import 'package:client/view/bottom_bar/more/my_feedback.dart';
 import 'package:client/view/bottom_bar/more/my_properties.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
@@ -190,12 +191,12 @@ class _MoreState extends State<More> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const MyFeedback());
+              Get.to(() => const Messages());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "Feedback",
+                "Messages",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -218,6 +219,22 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const MyFeedback());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Feedback",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          
           const SizedBox(height: 15),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
