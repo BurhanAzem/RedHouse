@@ -61,6 +61,8 @@ builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<IPropertyServices, PropertyServices>();
 builder.Services.AddScoped<IApplicationServices, ApplicationServices>();
 builder.Services.AddScoped<IUserHistoryServices, UserHistoryServices>();
+builder.Services.AddScoped<IContractServices, ContractServices>();
+
 
 
 var app = builder.Build();

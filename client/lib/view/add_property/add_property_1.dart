@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:client/controller/account_info_contoller.dart';
 import 'package:geocoding/geocoding.dart';
 
-import 'package:client/controller/manage_propertise/add_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_property_controller.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';

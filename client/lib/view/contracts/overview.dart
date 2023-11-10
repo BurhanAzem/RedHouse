@@ -14,75 +14,103 @@ class _StepperDemoState extends State<OverView> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Payments timeline'),
+        title: Text(
+          'Milestone timeline',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         centerTitle: true,
       ),
       body: Container(
-        child: Column(
+        child: ListView(
           children: [
             Expanded(
-              child: Stepper(
-                type: stepperType,
-                physics: ScrollPhysics(),
-                currentStep: _currentStep,
-                onStepTapped: (step) => tapped(step),
-                onStepContinue: continued,
-                onStepCancel: cancel,
-                steps: <Step>[
-                  Step(
-                    title: new Text('Account'),
-                    content: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration:
-                              InputDecoration(labelText: 'Email Address'),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Password'),
-                        ),
-                      ],
+              child: Theme(
+                data: ThemeData(
+                    primarySwatch: Colors.orange,
+                    colorScheme: ColorScheme.light(
+                        primary:
+                            Color(0xffd92328)) // Set the desired color here
                     ),
-                    isActive: _currentStep >= 0,
-                    state: _currentStep >= 0
-                        ? StepState.complete
-                        : StepState.disabled,
-                  ),
-                  Step(
-                    title: new Text('Address'),
-                    content: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration:
-                              InputDecoration(labelText: 'Home Address'),
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(labelText: 'Postcode'),
-                        ),
-                      ],
+                child: Stepper(
+                  type: stepperType,
+                  physics: ScrollPhysics(),
+                  currentStep: _currentStep,
+                  onStepTapped: (step) => tapped(step),
+                  onStepContinue: continued,
+                  onStepCancel: cancel,
+                  steps: <Step>[
+                    Step(
+                      title: Text('  ...................... '),
+                      content: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            decoration: InputDecoration(labelText: ''),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(labelText: ''),
+                          ),
+                        ],
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep >= 0
+                          ? StepState.complete
+                          : StepState.disabled,
                     ),
-                    isActive: _currentStep >= 0,
-                    state: _currentStep >= 1
-                        ? StepState.complete
-                        : StepState.disabled,
-                  ),
-                  Step(
-                    title: new Text('Mobile Number'),
-                    content: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration:
-                              InputDecoration(labelText: 'Mobile Number'),
-                        ),
-                      ],
+                    Step(
+                      title: Text('.....'),
+                      content: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            decoration:
+                                InputDecoration(labelText: 'Home Address'),
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(labelText: 'Postcode'),
+                          ),
+                        ],
+                      ),
+                      isActive: _currentStep >= 0,
+                      state: _currentStep >= 1
+                          ? StepState.complete
+                          : StepState.disabled,
                     ),
-                    isActive: _currentStep >= 0,
-                    state: _currentStep >= 2
-                        ? StepState.complete
-                        : StepState.disabled,
-                  ),
-                ],
+                    Step(
+                      title: Text(
+                        "Propose new milestone",
+                        style: TextStyle(color: Colors.black,decoration: TextDecoration.underline,),
+                      ),
+                      content: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            decoration:
+                                InputDecoration(labelText: 'Mobile Number'),
+                          ),
+                        ],
+                      ),
+                      // isActive: _currentStep >= 0,
+                      // state: _currentStep >= 2
+                      //     ? StepState.complete
+                      //     : StepState.disabled,
+                    ),
+                  ],
+                ),
               ),
             ),
+            // Container(
+            //   alignment: Alignment.topLeft,
+            //   child: MaterialButton(
+            //     onPressed: () {},
+
+            //     child: Text(
+            //       "Propose new milestone",
+            //       style: TextStyle(
+            //         color: Colors.black,
+            //         decoration: TextDecoration.underline,
+            //       ),
+            //     ),
+            //     // color: Colors.black,
+            //   ),
+            // )
           ],
         ),
       ),

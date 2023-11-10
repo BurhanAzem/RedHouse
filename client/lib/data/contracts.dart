@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
-class PropertyData {
-  static addProperty(
+class ContractsData {
+  static createContract(
       String propertyType,
       String price,
       String numberOfBedrooms,
@@ -92,46 +92,22 @@ class PropertyData {
     // return response.fold((l) => l, (r) => r);
   }
 
-  static getProperties(
-    List<String> propertyTypes,
-    String minPrice,
-    String maxPrice,
-    String numberOfBathrooms,
-    String numberOfBedrooms,
-    String view,
-    String listingType,
-    Rx<Location> location,
-  ) async {
-    String? propertyTypesParam = propertyTypes.toString();
-    if (propertyTypes.length != 0) propertyTypesParam = propertyTypes.join(',');
-    final Map<String, String?> filters = {
-      "PropertyTypes": propertyTypesParam!,
-      "MinPrice": minPrice.toString(),
-      "MaxPrice": maxPrice.toString(),
-      "NumberOfBedRooms": numberOfBedrooms.toString(),
-      "NumberOfBathRooms": numberOfBathrooms.toString(),
-      "View": view == "Any" ? "" : view,
-      "ListingType": listingType,
-      "LocationDto.StreetAddress": location.value.streetAddress!,
-      "LocationDto.City": location.value.city!,
-      "LocationDto.Region": location.value.region!,
-      "LocationDto.PostalCode": location.value.postalCode!,
-      "LocationDto.Country": location.value.country!,
-      "LocationDto.Latitude": location.value.latitude == 0.0
-          ? ""
-          : location.value.latitude!.toString(),
-      "LocationDto.Longitude": location.value.longitude == 0.0
-          ? ""
-          : location.value.longitude!.toString(),
+  static getContrcats(int userId, String contractStatus, String contractType,
+      String contractTo) async {
+    final Map<String, dynamic> filters = {
+      "contractStatus": contractStatus,
+      "contractType": contractType,
+      "contractTo": contractTo,
     };
 
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
+      final Uri uri = Uri.https("10.0.2.2:7042", "/users/$userId/contracts", filters);
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
+
       print(response.statusCode);
       // print(response.body.listDto);
 
@@ -148,35 +124,7 @@ class PropertyData {
     }
   }
 
-
-  static getPropertiesForUser(
-    int userId
-  ) async {
-    
-    if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/users/$userId/properties");
-
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}',
-      });
-      print(response.statusCode);
-      // print(response.body.listDto);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
-
-        return (responsebody);
-      } else {
-        return StatusRequest.serverfailure;
-      }
-    } else {
-      return StatusRequest.offlinefailure;
-    }
-  }
-
-  static getProperty(int id) async {
+  static getApplication(int id) async {
     if (await checkInternet()) {
       // final Uri uri = Uri.https("10.0.2.2:7042", "/properties",);
 
@@ -190,7 +138,7 @@ class PropertyData {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-      print(responsebody["dto"]);
+        print(responsebody["dto"]);
 
         return (responsebody);
       } else {
@@ -200,6 +148,4 @@ class PropertyData {
       return StatusRequest.offlinefailure;
     }
   }
-
-  
 }

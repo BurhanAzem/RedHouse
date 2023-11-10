@@ -1,24 +1,17 @@
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using RedHouse_Server.Models;
+using Property = RedHouse_Server.Models.Property;
 
-namespace RedHouse_Server.Models
+namespace RedHouse_Server.Dtos.ContractDtos
 {
-    public class Contract
+   public class ContractDto
     {
-        [Key]
         public int Id { get; set; }
-        [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
-        public Property Property { get; set; }
-
-        [ForeignKey(nameof(User))]
+        public Property? Property { get; set; }
         public int LandlordId { get; set; }
-        public User Landlord { get; set; }
-
-        [ForeignKey(nameof(User))]
+        public User? Landlord { get; set; }
         public int CustomerId { get; set; }
-        public User Customer { get; set; }        
+        public User? Customer { get; set; }        
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
