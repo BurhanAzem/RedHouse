@@ -11,8 +11,8 @@ class AddProperty6 extends StatefulWidget {
 }
 
 class _AddProperty6State extends State<AddProperty6> {
-  AddPropertyControllerImp controller =
-      Get.put(AddPropertyControllerImp(), permanent: true);
+  ManagePropertyControllerImp controller =
+      Get.put(ManagePropertyControllerImp(), permanent: true);
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(

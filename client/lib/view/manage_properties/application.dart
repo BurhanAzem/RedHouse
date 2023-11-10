@@ -4,6 +4,7 @@ import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/link_api.dart';
 import 'package:client/main.dart';
 import 'package:client/model/application.dart';
+import 'package:client/model/property.dart';
 import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/search/home%20information/home_information.dart';
@@ -34,6 +35,8 @@ class _StepperDemoState extends State<ApplicationDetails> {
     application = Get.arguments as Application;
 
     await controller.getHistoryUser(application.userId);
+    setState(() {});
+
   }
 
   @override
@@ -324,9 +327,10 @@ class _StepperDemoState extends State<ApplicationDetails> {
                             ),
                             InkWell(
                               onTap: () {
+                                Property property = controller.userHistory![index]
+                                        .contract!.property!;
                                 Get.to(() => HomeInformation(
-                                    property: controller.userHistory[index]
-                                        .contract.property!));
+                                    property: property));
                               },
                               child: Text(
                                 controller.userHistory[index].contract.property!

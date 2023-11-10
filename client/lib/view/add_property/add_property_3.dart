@@ -21,8 +21,8 @@ class _AddProperty3State extends State<AddProperty3> {
       "Castel",
       "Entire Department Community",
     ];
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
+    ManagePropertyControllerImp controller =
+        Get.put(ManagePropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         title: Row(

@@ -17,8 +17,8 @@ class AddProperty7 extends StatefulWidget {
 
 class _AddProperty7State extends State<AddProperty7> {
   // final PageController pageController;
-  AddPropertyControllerImp controller =
-      Get.put(AddPropertyControllerImp(), permanent: true);
+  ManagePropertyControllerImp controller =
+      Get.put(ManagePropertyControllerImp(), permanent: true);
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -89,8 +89,8 @@ class _AddProperty7State extends State<AddProperty7> {
       "Townhouse",
       "Entire Department Community"
     ];
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
+    ManagePropertyControllerImp controller =
+        Get.put(ManagePropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         title: Row(

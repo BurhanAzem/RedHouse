@@ -21,8 +21,8 @@ class _AddProperty9State extends State<AddProperty9> {
       "Townhouse",
       "Entire Department Community"
     ];
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
+    ManagePropertyControllerImp controller =
+        Get.put(ManagePropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         title: const Row(

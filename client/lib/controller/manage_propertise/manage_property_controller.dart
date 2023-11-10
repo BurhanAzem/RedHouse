@@ -1,12 +1,14 @@
 import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
+import 'package:client/model/list_property.dart';
+import 'package:client/model/property.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class AddPropertyController extends GetxController {
-  AddPropertyController();
+abstract class ManagePropertyController extends GetxController {
+  ManagePropertyController();
   goToAddProperty1();
   goToAddProperty2();
   goToAddProperty3();
@@ -18,9 +20,11 @@ abstract class AddPropertyController extends GetxController {
   goToAddProperty9();
 }
 
-class AddPropertyControllerImp extends AddPropertyController {
+class ManagePropertyControllerImp extends ManagePropertyController {
   AccountInfoContoller controller = Get.put(AccountInfoContoller());
-  
+  int propertiesUserId = 0;
+  List<Property> userProperties = [];
+
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
   int activeStep = 0;
   late TextEditingController price;
@@ -118,6 +122,24 @@ class AddPropertyControllerImp extends AddPropertyController {
     super.onInit();
   }
 
+
+
+getPropertiesUser() async {
+    var response = await PropertyData.getPropertiesForUser(propertiesUserId);
+
+    if (response['statusCode'] == 200) {
+      userProperties = (response['listDto'] as List<dynamic>)
+          .map((e) => Property.fromJson(e as Map<String, dynamic>))
+          .toList();
+      print(userProperties);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
   @override
   goToAddProperty1() {
     Get.toNamed(AppRoute.addProperty1);

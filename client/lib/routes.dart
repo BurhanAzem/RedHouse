@@ -76,6 +76,8 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
   AppRoute.userHistory: (context) => UserHistory(),
+  // AppRoute.userHistory: (context) => Home(),
+
 
 
 

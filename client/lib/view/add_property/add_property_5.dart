@@ -11,8 +11,8 @@ class AddProperty5 extends StatefulWidget {
 }
 
 class _AddProperty5State extends State<AddProperty5> {
-  AddPropertyControllerImp controller =
-      Get.put(AddPropertyControllerImp(), permanent: true);
+  ManagePropertyControllerImp controller =
+      Get.put(ManagePropertyControllerImp(), permanent: true);
 
   @override
   Widget build(BuildContext context) {

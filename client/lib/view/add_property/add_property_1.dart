@@ -65,8 +65,8 @@ class _AddProperty1State extends State<AddProperty1> {
       "Townhouse",
       "Entire Department Community"
     ];
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
+    ManagePropertyControllerImp controller =
+        Get.put(ManagePropertyControllerImp(), permanent: true);
     AccountInfoContoller userController = Get.put(AccountInfoContoller());
     return Scaffold(
       appBar: AppBar(

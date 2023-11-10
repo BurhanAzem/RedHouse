@@ -41,7 +41,7 @@ namespace server.Services
 
             var contracts = _redHouseDbContext.Contracts
     .Where(c => c.CustomerId == userId)
-    .Include(c => c.Property) // Include the Property navigation property
+    .Include(c => c.Property).ThenInclude(p => p.Location).Include(p => p.Property.propertyFiles) // Include the Property navigation property
     .Include(c => c.Landlord) // Include the Landlord navigation property
     .Include(c => c.Customer) // Include the Customer navigation property
     .ToList();

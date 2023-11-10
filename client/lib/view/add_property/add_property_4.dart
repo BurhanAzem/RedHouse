@@ -24,8 +24,8 @@ class _AddProperty4State extends State<AddProperty4> {
       "Island",
     ];
     const optionBool = ["Yes", "No"];
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
+    ManagePropertyControllerImp controller =
+        Get.put(ManagePropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         title: const Row(

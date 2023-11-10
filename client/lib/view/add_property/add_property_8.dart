@@ -22,8 +22,8 @@ class _AddProperty8State extends State<AddProperty8> {
     ];
     final List<String> options = ["Landlord", "Agent"];
 
-    AddPropertyControllerImp controller =
-        Get.put(AddPropertyControllerImp(), permanent: true);
+    ManagePropertyControllerImp controller =
+        Get.put(ManagePropertyControllerImp(), permanent: true);
     return Scaffold(
       appBar: AppBar(
         title: Row(
