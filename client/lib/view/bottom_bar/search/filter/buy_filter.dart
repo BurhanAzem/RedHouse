@@ -217,6 +217,7 @@ class _BuyFilterState extends State<BuyFilter> {
                   controller.rentView = "Any";
 
                   controller.getProperties();
+                  mapListController.enterToMap = true;
                   Navigator.pop(context);
                 }
               },

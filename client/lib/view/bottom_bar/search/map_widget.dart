@@ -27,11 +27,27 @@ class _MapWidgetState extends State<MapWidget> {
   bool userNotified = false;
   String snackBarMessage = "You are too far out, please zoom in";
   MapType _currentMapType = MapType.normal;
+  String locality = "";
 
   @override
   void initState() {
     super.initState();
     filterControllerr.getProperties();
+
+    mapListController.isLoading = true;
+    mapListController.isLoadingMap = false;
+
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        mapListController.isLoading = false;
+      });
+    });
+
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        mapListController.isLoadingMap = true;
+      });
+    });
   }
 
   Future<void> updateMarkers() async {
@@ -41,12 +57,14 @@ class _MapWidgetState extends State<MapWidget> {
     final allMarkers = await filterControllerr
         .getMarkerLocations(filterControllerr.listProperty.listDto);
 
-    final visibleMarkers =
-        allMarkers.map((marker) => marker.toMarker()).toSet();
-
     setState(() {
-      mapListController.allMarkers = allMarkers;
-      mapListController.visibleMarkers = visibleMarkers;
+      final visibleMarkers =
+          allMarkers.map((marker) => marker.toMarker()).toSet();
+
+      if (mapListController.newZoom >= 11) {
+        mapListController.allMarkers = allMarkers;
+        mapListController.visibleMarkers = visibleMarkers;
+      }
     });
   }
 
@@ -62,7 +80,7 @@ class _MapWidgetState extends State<MapWidget> {
       return;
     }
 
-    if (mapListController.newZoom < 10) {
+    if (mapListController.newZoom < 11) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -91,7 +109,7 @@ class _MapWidgetState extends State<MapWidget> {
       mapListController.visibleMarkers.clear();
       mapListController.visibleProperties.clear();
 
-      if (mapListController.newZoom >= 10) {
+      if (mapListController.newZoom >= 11) {
         mapListController.visibleProperties = filterControllerr
             .listProperty.listDto
             .where((property) =>
@@ -120,10 +138,11 @@ class _MapWidgetState extends State<MapWidget> {
         coordinates.longitude,
       );
       if (placemarks.isNotEmpty) {
-        var locality = placemarks[0].locality ?? '';
+        locality = placemarks[0].locality!;
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
-          mapListController.currentLocationName.value = "Area in $locality";
+          mapListController.currentLocationName.value = locality;
+          print("Area in ${mapListController.currentLocationName.value}");
         }
       }
     } catch (e) {}
@@ -132,19 +151,19 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     mapListController.mapContext = context;
-    updateMarkers();
+    // updateMarkers();
 
     return Stack(
       children: [
         Visibility(
-          visible: mapListController.isLoading,
+          visible: mapListController.isLoading ?? false,
           child: const LinearProgressIndicator(
               backgroundColor: Colors.black,
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
               minHeight: 2),
         ),
         Visibility(
-          visible: mapListController.isLoadingMap,
+          visible: mapListController.isLoadingMap ?? true,
           child: GoogleMap(
             zoomControlsEnabled: true,
             mapType: _currentMapType,

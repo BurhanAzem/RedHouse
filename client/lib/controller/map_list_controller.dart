@@ -15,6 +15,7 @@ class MapListController extends GetxController {
   Set<Marker> visibleMarkers = <Marker>{};
   Set<Property> visibleProperties = <Property>{};
 
-  bool isLoading = false;
-  bool isLoadingMap = true;
+  bool? isLoading;
+  bool? isLoadingMap;
+  bool? enterToMap ;
 }

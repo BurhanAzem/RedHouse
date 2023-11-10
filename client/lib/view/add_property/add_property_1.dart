@@ -28,7 +28,7 @@ class _AddProperty1State extends State<AddProperty1> {
   CameraPosition? currentCameraPosition;
   StreamSubscription<Position>? positionStream;
   Set<Marker>? marker = {
-    Marker(markerId: MarkerId("1"), position: LatLng(20, 20))
+    const Marker(markerId: MarkerId("1"), position: LatLng(20, 20))
   };
   Future<void> getLatAndLong() async {
     LocationPermission permission = await Geolocator.requestPermission();
@@ -39,7 +39,7 @@ class _AddProperty1State extends State<AddProperty1> {
     setState(() {});
   }
 
-  CameraPosition jerusalem = CameraPosition(
+  CameraPosition jerusalem = const CameraPosition(
     target: LatLng(32.438909, 35.295625),
     zoom: 8,
   );
@@ -70,7 +70,7 @@ class _AddProperty1State extends State<AddProperty1> {
     AccountInfoContoller userController = Get.put(AccountInfoContoller());
     return Scaffold(
       appBar: AppBar(
-        title: Row(
+        title: const Row(
           children: [
             Text(
               "Red",
@@ -92,17 +92,17 @@ class _AddProperty1State extends State<AddProperty1> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         child: Form(
           key: controller.formstate,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               EasyStepper(
-                finishedStepBackgroundColor: Color(0xffd92328),
+                finishedStepBackgroundColor: const Color(0xffd92328),
                 activeStepBorderColor: Colors.black,
                 stepShape: StepShape.circle,
-                lineStyle: LineStyle(),
+                lineStyle: const LineStyle(),
 
                 activeStep: controller.activeStep,
                 activeStepTextColor: Colors.black87,
@@ -121,7 +121,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 0
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -134,7 +134,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 1
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -148,7 +148,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 2
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -161,7 +161,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 3
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -175,7 +175,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 4
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -188,7 +188,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 5
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -201,7 +201,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 6
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -214,7 +214,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 7
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -227,7 +227,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       child: CircleAvatar(
                         radius: 7,
                         backgroundColor: controller.activeStep >= 8
-                            ? Color(0xffd92328)
+                            ? const Color(0xffd92328)
                             : Colors.grey,
                       ),
                     ),
@@ -238,19 +238,19 @@ class _AddProperty1State extends State<AddProperty1> {
                     setState(() => controller.activeStep = index),
               ),
               Container(
-                  margin: EdgeInsets.only(left: 12),
+                  margin: const EdgeInsets.only(left: 12),
                   child: Image.asset("assets/images/logo.png", scale: 10)),
               Container(
-                margin: EdgeInsets.only(left: 12),
-                child: Text(
+                margin: const EdgeInsets.only(left: 12),
+                child: const Text(
                   "First, let's add your property",
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
                 ),
               ),
               Container(height: 20),
               Container(
-                margin: EdgeInsets.only(left: 12),
-                child: Text(
+                margin: const EdgeInsets.only(left: 12),
+                child: const Text(
                   "Street address",
                   style: TextStyle(
                     fontSize: 18,
@@ -262,14 +262,14 @@ class _AddProperty1State extends State<AddProperty1> {
               Container(height: 5),
               Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 12),
+                margin: const EdgeInsets.only(left: 12),
                 child: TextFormField(
                   controller: controller.streetAddress,
-                  style: TextStyle(),
+                  style: const TextStyle(),
                   decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.map),
+                    suffixIcon: const Icon(Icons.map),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -278,7 +278,7 @@ class _AddProperty1State extends State<AddProperty1> {
               ),
               Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 12),
+                margin: const EdgeInsets.only(left: 12),
                 child: Text(
                   "Enter the USPS-validated address. You won't be able to edit the address once you create the listing.",
                   style: TextStyle(
@@ -291,7 +291,7 @@ class _AddProperty1State extends State<AddProperty1> {
               Container(height: 5),
               Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 12),
+                margin: const EdgeInsets.only(left: 12),
                 decoration: BoxDecoration(border: Border.all()),
                 height: 300,
                 child: Visibility(
@@ -299,13 +299,13 @@ class _AddProperty1State extends State<AddProperty1> {
                   child: currentCameraPosition == null
                       ? Container(
                           alignment: Alignment.center,
-                          child: CircularProgressIndicator())
+                          child: const CircularProgressIndicator())
                       : Expanded(
                           child: GoogleMap(
                             markers: marker!,
                             onTap: (latlng) async {
                               marker!.add(Marker(
-                                  markerId: MarkerId("9"), position: latlng));
+                                  markerId: const MarkerId("9"), position: latlng));
                               try {
                                 List<Placemark> placemarks =
                                     await placemarkFromCoordinates(
@@ -354,7 +354,7 @@ class _AddProperty1State extends State<AddProperty1> {
               Container(height: 5),
               Container(
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(left: 12),
+                margin: const EdgeInsets.only(left: 12),
                 child: MaterialButton(
                   minWidth: 400,
                   onPressed: arePlacemarksAvailable
@@ -367,9 +367,9 @@ class _AddProperty1State extends State<AddProperty1> {
                         }
                       : () {},
                   color: arePlacemarksAvailable
-                      ? Color(0xffd92328)
-                      : Color.fromARGB(255, 251, 169, 169),
-                  child: Text(
+                      ? const Color(0xffd92328)
+                      : const Color.fromARGB(255, 251, 169, 169),
+                  child: const Text(
                     "Continue",
                     style: TextStyle(
                       color: Colors.black,
