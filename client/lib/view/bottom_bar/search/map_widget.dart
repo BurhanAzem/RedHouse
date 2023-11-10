@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list_controller.dart';
@@ -11,7 +12,7 @@ import 'package:fluster/fluster.dart';
 import 'package:intl/intl.dart';
 
 class MapWidget extends StatefulWidget {
-  const MapWidget({super.key});
+  const MapWidget({Key? key}) : super(key: key);
 
   @override
   State<MapWidget> createState() => _MapWidgetState();
@@ -22,31 +23,36 @@ class _MapWidgetState extends State<MapWidget> {
   MapListController mapListController = Get.put(MapListController());
   FilterController filterControllerr = Get.put(FilterController());
   GoogleMapController? mapController;
-  bool isLoading = true;
-  bool isLoadingMap = false;
+
   bool userNotified = false;
   String snackBarMessage = "You are too far out, please zoom in";
+  MapType _currentMapType = MapType.normal;
 
   @override
   void initState() {
     super.initState();
-    mapListController.allMarkers = filterControllerr
-        .getMarkerLocations(filterControllerr.listProperty.listDto);
-
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        isLoading = false;
-      });
-    });
-
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        isLoadingMap = true;
-      });
-    });
+    filterControllerr.getProperties();
   }
 
   Future<void> updateMarkers() async {
+    print(
+        "============================================================ updateMarkers");
+
+    final allMarkers = await filterControllerr
+        .getMarkerLocations(filterControllerr.listProperty.listDto);
+
+    final visibleMarkers =
+        allMarkers.map((marker) => marker.toMarker()).toSet();
+
+    setState(() {
+      mapListController.allMarkers = allMarkers;
+      mapListController.visibleMarkers = visibleMarkers;
+    });
+  }
+
+  Future<void> whenCameraMove() async {
+    print(
+        "============================================================ whenCameraMove");
     if (mapController == null) {
       return;
     }
@@ -76,39 +82,35 @@ class _MapWidgetState extends State<MapWidget> {
       (bounds.southwest.longitude + bounds.northeast.longitude) / 2,
     );
 
-    Set<Property> newVisibleProperties = filterControllerr.listProperty.listDto
-        .where((property) =>
-            property.location!.latitude >= bounds.southwest.latitude &&
-            property.location!.latitude <= bounds.northeast.latitude &&
-            property.location!.longitude >=
-                bounds.southwest.longitude &&
-            property.location!.longitude <= bounds.northeast.longitude)
-        .toSet();
-
-    Set<Marker> visibleMarkers = mapListController.allMarkers
-        .where((marker) =>
-            marker.position.latitude >= bounds.southwest.latitude &&
-            marker.position.latitude <= bounds.northeast.latitude &&
-            marker.position.longitude >= bounds.southwest.longitude &&
-            marker.position.longitude <= bounds.northeast.longitude)
-        .map((marker) => marker.toMarker())
-        .toSet();
+    mapListController.currentPosition = CameraPosition(
+      target: centerCoordinates,
+      zoom: mapListController.newZoom,
+    );
 
     setState(() {
       mapListController.visibleMarkers.clear();
       mapListController.visibleProperties.clear();
+
       if (mapListController.newZoom >= 10) {
-        mapListController.visibleMarkers.addAll(visibleMarkers);
-        mapListController.visibleProperties.addAll(newVisibleProperties);
+        mapListController.visibleProperties = filterControllerr
+            .listProperty.listDto
+            .where((property) =>
+                property.location!.latitude >= bounds.southwest.latitude &&
+                property.location!.latitude <= bounds.northeast.latitude &&
+                property.location!.longitude >= bounds.southwest.longitude &&
+                property.location!.longitude <= bounds.northeast.longitude)
+            .toSet();
+
+        mapListController.allMarkers = filterControllerr
+            .getMarkerLocations(filterControllerr.listProperty.listDto);
+
+        mapListController.visibleMarkers = mapListController.allMarkers
+            .map((marker) => marker.toMarker())
+            .toSet();
+
         reverseGeocode(centerCoordinates);
       }
-      mapListController.currentPosition = CameraPosition(
-        target: centerCoordinates,
-        zoom: mapListController.newZoom,
-      );
     });
-    mapListController.allMarkers = filterControllerr
-        .getMarkerLocations(filterControllerr.listProperty.listDto);
   }
 
   Future<void> reverseGeocode(LatLng coordinates) async {
@@ -118,16 +120,10 @@ class _MapWidgetState extends State<MapWidget> {
         coordinates.longitude,
       );
       if (placemarks.isNotEmpty) {
-        var city = placemarks[0].administrativeArea ?? '';
-        mapListController.currentLocationName.value =
-            "Area in ${placemarks[0].locality ?? ''}";
-
-        if (city != filterControllerr.currentCity) {
-          filterControllerr.currentCity =
-              placemarks[0].administrativeArea ?? '';
-          print(
-              "=====================================================================Call to api");
-          filterControllerr.getProperties();
+        var locality = placemarks[0].locality ?? '';
+        if (locality != mapListController.currentLocationName.value &&
+            locality != "") {
+          mapListController.currentLocationName.value = "Area in $locality";
         }
       }
     } catch (e) {}
@@ -136,13 +132,22 @@ class _MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
     mapListController.mapContext = context;
+    updateMarkers();
 
     return Stack(
       children: [
         Visibility(
-          visible: isLoadingMap,
+          visible: mapListController.isLoading,
+          child: const LinearProgressIndicator(
+              backgroundColor: Colors.black,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              minHeight: 2),
+        ),
+        Visibility(
+          visible: mapListController.isLoadingMap,
           child: GoogleMap(
-            mapType: MapType.normal,
+            zoomControlsEnabled: true,
+            mapType: _currentMapType,
             initialCameraPosition: mapListController.currentPosition,
             onMapCreated: (controller) {
               setState(() {
@@ -151,18 +156,10 @@ class _MapWidgetState extends State<MapWidget> {
             },
             markers: mapListController.visibleMarkers,
             onCameraMove: (CameraPosition position) {
-              print("============================================Camera move");
               mapListController.newZoom = position.zoom;
-              updateMarkers();
+              whenCameraMove();
             },
           ),
-        ),
-        Visibility(
-          visible: isLoading,
-          child: const LinearProgressIndicator(
-              backgroundColor: Colors.black,
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              minHeight: 2),
         ),
       ],
     );
@@ -210,7 +207,7 @@ class MapMarker extends Clusterable {
                     color: Colors.white,
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(30))),
-                height: MediaQuery.of(context).size.height / 2.15,
+                height: MediaQuery.of(context).size.height / 2.17,
                 width: 500,
                 child: InkWell(
                   onTap: () {
