@@ -11,6 +11,7 @@ import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/bottom_bar/notification/notifications.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
 import 'package:client/view/bottom_bar/search/search.dart';
+import 'package:client/view/contracts/add_milestone.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/contracts/contract.dart';
 import 'package:client/view/history_dart/user_history.dart';
@@ -48,6 +49,8 @@ class AppRoute {
   static const String properties = "/properties";
   static const String manageProperties = "/manage-properties";
   static const String userHistory = "/user-history";
+  static const String addMilestone = "/add-milestone";
+
 
   
 
@@ -71,12 +74,12 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty9: (context) => AddProperty9(),
   AppRoute.allContracts: (context) => AllContracts(),
   AppRoute.applicationDetails: (context) => ApplicationDetails(),
-  AppRoute.contract: (context) => const Contract(),
+  // AppRoute.contract: (context) => const ContractReview(),
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
   AppRoute.userHistory: (context) => UserHistory(),
-  // AppRoute.userHistory: (context) => Home(),
+  AppRoute.addMilestone: (context) => AddMilestone(),
 
 
 
