@@ -56,7 +56,6 @@ namespace RedHouse_Server.Controllers
             }
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
-
         }
 
         [HttpGet("/applications")]

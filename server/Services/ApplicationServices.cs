@@ -42,7 +42,6 @@ namespace server.Services
                 PropertyId = applicationDto.PropertyId,
                 ApplicationDate = DateTime.Now,
                 ApplicationStatus = "Pending",
-                ApplicationType = applicationDto.ApplicationType
             };
             var applicationRes = await _redHouseDbContext.Applications.AddAsync(application);
             await _redHouseDbContext.SaveChangesAsync();
@@ -161,7 +160,6 @@ namespace server.Services
             {
                 ApplicationDate = applicationDto.ApplicationDate,
                 ApplicationStatus = applicationDto.ApplicationStatus,
-                ApplicationType = applicationDto.ApplicationType,
                 Message = applicationDto.Message,
                 PropertyId = applicationDto.PropertyId,
                 UserId = applicationDto.UserId

@@ -5,5 +5,11 @@ class AppLink {
   static const String login = "$server/auth/login";
   static const String users = "$server/users";
   static const String properties = "$server/properties";
+  static const String offers = "$server/offers";
+  static const String contracts = "$server/contracts";
+  static const String milestones = "$server/milestones";
+
+
+
 
 }

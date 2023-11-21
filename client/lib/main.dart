@@ -1,6 +1,8 @@
 import 'package:client/core/services/network_controller.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/contracts/create_offer.dart';
+import 'package:client/view/offers/all_offers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';

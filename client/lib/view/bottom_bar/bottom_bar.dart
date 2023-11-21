@@ -28,19 +28,19 @@ class _BottomBarState extends State<BottomBar> {
   final List<Icon> _unselectedIcons = [
     Icon(
       FontAwesomeIcons.magnifyingGlassLocation,
-      color: Colors.grey[700],
+      color: Colors.grey[600],
     ),
     Icon(
       FontAwesomeIcons.solidHandshake,
-      color: Colors.grey[700],
+      color: Colors.grey[600],
     ),
     Icon(
       FontAwesomeIcons.solidBell,
-      color: Colors.grey[700],
+      color: Colors.grey[600],
     ),
     Icon(
       FontAwesomeIcons.house,
-      color: Colors.grey[700],
+      color: Colors.grey[600],
     ),
     Icon(
       FontAwesomeIcons.ellipsis,
@@ -96,7 +96,7 @@ class _BottomBarState extends State<BottomBar> {
         iconSize: 18,
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
-        unselectedItemColor: Colors.grey[900],
+        unselectedItemColor: Colors.grey[800],
         unselectedLabelStyle:
             const TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
         selectedLabelStyle:

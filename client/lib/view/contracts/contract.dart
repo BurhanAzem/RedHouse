@@ -1,17 +1,21 @@
+import 'package:client/model/contract.dart';
+import 'package:client/view/contracts/details.dart';
 import 'package:client/view/contracts/overview.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
 
-class Contract extends StatefulWidget {
-  const Contract({Key? key}) : super(key: key);
+class ContractReview extends StatefulWidget {
+  final Contract contract;
+  const ContractReview({Key? key, required this.contract}) : super(key: key);
 
   @override
-  State<Contract> createState() => _TopNavigationBar();
+  State<ContractReview> createState() => _TopNavigationBar();
 }
 
 /// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
-class _TopNavigationBar extends State<Contract> with TickerProviderStateMixin {
+class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -24,14 +28,41 @@ class _TopNavigationBar extends State<Contract> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         centerTitle: true,
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (String choice) {
+              // Handle the selected choice
+              print('Selected: $choice');
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem<String>(
+                  value: 'Option 1',
+                  child: Text('Proppose new contract'),
+                ),
+                PopupMenuItem<String>(
+                  value: 'Option 2',
+                  child: Text('Request public feedback'),
+                ),
+                PopupMenuItem<String>(
+                  value: 'Option 3',
+                  child: Text('End contract'),
+                ),
+              ];
+            },
+            icon: Icon(Icons.more_vert_outlined, color: Colors.white),
+          ),
+        ],
+        iconTheme: IconThemeData(
+            color: Colors.white), // Set the color of the leading button
         title: const Row(
-          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "                   C",
               style: TextStyle(
-                color: Color(0xffd92328),
+                color: Color.fromARGB(255, 255, 255, 255),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -39,93 +70,47 @@ class _TopNavigationBar extends State<Contract> with TickerProviderStateMixin {
             Text(
               "ontract",
               style: TextStyle(
-                color: Colors.black,
+                color: Color.fromARGB(255, 255, 255, 255),
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
+
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+        )),
       ),
       body: Column(
+        // shrinkWrap: true,
+        
         children: [
           Row(
             children: [
               const SizedBox(width: 25),
-              Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey[400],
-                ),
-                child: Center(
-                  child: Icon(
-                    FontAwesomeIcons.person,
-                    size: 28,
-                    color: Colors.grey[100],
-                  ),
-                ),
-              ),
               Expanded(
                   child: ListTile(
                 title: Text(
-                  "hfvgih",
+                  widget.contract!.offer!.landlord!.name!,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text("Landlord"),
               )),
               IconButton(
                 icon: const Icon(
-                  Icons.more_horiz_outlined,
-                  size: 32,
+                  FontAwesomeIcons.handshake,
+                  size: 28,
                 ),
                 onPressed: () {},
               ),
               const SizedBox(width: 25),
             ],
           ),
-          Container(
-            margin: EdgeInsets.all(10), // Adjust the margin as needed
-            padding: EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: Column(children: [
-              Row(
-                children: [
-                  Icon(Icons.circle),
-                  Text("    Property price"),
-                  Text("                                   500\$")
-                ],
-              ),
-              Row(
-                children: [
-                  Icon(Icons.circle,
-                  color: Color(0xffd92328),),
-                  Text("    Received"),
-                  Text("                                            500\$")
-                ],
-              ),  
-              // Row(
-              //   children: [
-              //     Icon(Icons.circle,
-              //     color: Colors.grey,),
-              //     Text("    Receved"),
-              //     Text("                                            500\$")
-              //   ],
-              // )
-            ]),
-          ),
+          
           Expanded(
             child: Container(
               child: DefaultTabController(
@@ -159,12 +144,12 @@ class _TopNavigationBar extends State<Contract> with TickerProviderStateMixin {
                   ),
                   body: TabBarView(
                     children: [
-                      Center(child: OverView()),
+                      Center(child: OverView(contract: widget.contract)),
                       Center(
                         child: Text("It's rainy here"),
                       ),
                       Center(
-                        child: Text("It's sunny here"),
+                        child: Details(contract: widget.contract),
                       ),
                     ],
                   ),

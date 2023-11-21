@@ -211,6 +211,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+          
           InkWell(
             onTap: () {
               Get.to(() => const MyProperties());
@@ -234,6 +235,20 @@ class _MoreState extends State<More> {
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
                 "Feedback",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),InkWell(
+            onTap: () {
+              Get.to(() => const AllOffers());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Offers",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,

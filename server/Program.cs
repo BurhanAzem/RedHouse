@@ -12,6 +12,8 @@ using System.Reflection;
 using Cooking_School_ASP.NET.Configurations;
 using server.Services;
 using server.Models;
+using Hangfire;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,12 +58,33 @@ var mapperConfig = new MapperConfiguration(mc =>
 });
 
 var mapper = mapperConfig.CreateMapper();
-builder.Services.AddSingleton(mapper); 
+builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<IPropertyServices, PropertyServices>();
 builder.Services.AddScoped<IApplicationServices, ApplicationServices>();
 builder.Services.AddScoped<IUserHistoryServices, UserHistoryServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
+builder.Services.AddScoped<IMilestoneServices, MilestoneServices>();
+builder.Services.AddScoped<IOfferServices, OfferServices>();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
+
+builder.Services.AddHangfire((Span, config) =>
+{
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+builder.Services.AddHangfireServer();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+    // other SwaggerGen configuration...
+});
 
 
 
@@ -74,7 +97,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
- 
+app.UseHangfireServer();
+
+app.UseHangfireDashboard();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

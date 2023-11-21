@@ -5,14 +5,16 @@ using System.Diagnostics.Contracts;
 
 namespace server.Models
 {
-    public class ContractStep
+    public class Milestone
     {
         [Key]
         public int Id { get; set; }
         [ForeignKey(nameof(Contract))]
         public int ContractId { get; set; }
-        public string StepType { get; set; }
-        public DateTime StepDate { get; set; }
-        public int StepBudget { get; set; }
+        public string MilestoneName { get; set; }
+        public string Description { get; set; }
+        public string MilestoneStatus { get; set; }
+        public DateTime MilestoneDate { get; set; }
+        public double Amount { get; set; }
     }
 }

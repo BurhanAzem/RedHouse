@@ -12,7 +12,6 @@ import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/notification/notifications_settings.dart';
 import 'package:client/view/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
-import 'package:client/view/contracts/contract.dart';
 import 'package:client/view/auth/login.dart';
 import 'package:client/view/manage_properties/application.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
@@ -47,6 +46,7 @@ class AppRoute {
   static const String properties = "/properties";
   static const String manageProperties = "/manage-properties";
   static const String userHistory = "/user-history";
+  static const String addMilestone = "/add-milestone";
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
@@ -66,10 +66,12 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty9: (context) => AddProperty9(),
   AppRoute.allContracts: (context) => AllContracts(),
   AppRoute.applicationDetails: (context) => ApplicationDetails(),
-  AppRoute.contract: (context) => const Contract(),
+  // AppRoute.contract: (context) => const ContractReview(),
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
+  // AppRoute.userHistory: (context) => UserHistory(),
+  // AppRoute.addMilestone: (context) => AddMilestone(),
 
   //________________________________________________________
   "/search": (context) => const Search(),
