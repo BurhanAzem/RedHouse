@@ -69,6 +69,7 @@ class ApplicationData {
       // "neighborhoodDto":{},
       "propertyFiles": downloadUrls
     };
+
     if (await checkInternet()) {
       var response = await http.post(Uri.parse(AppLink.properties),
           headers: <String, String>{

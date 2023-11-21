@@ -6,7 +6,6 @@ import 'package:client/model/location.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class PropertyData {
@@ -148,11 +147,7 @@ class PropertyData {
     }
   }
 
-
-  static getPropertiesForUser(
-    int userId
-  ) async {
-    
+  static getPropertiesForUser(int userId) async {
     if (await checkInternet()) {
       final Uri uri = Uri.https("10.0.2.2:7042", "/users/$userId/properties");
 
@@ -160,6 +155,7 @@ class PropertyData {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
+      
       print(response.statusCode);
       // print(response.body.listDto);
 
@@ -190,7 +186,7 @@ class PropertyData {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-      print(responsebody["dto"]);
+        print(responsebody["dto"]);
 
         return (responsebody);
       } else {
@@ -200,6 +196,4 @@ class PropertyData {
       return StatusRequest.offlinefailure;
     }
   }
-
-  
 }

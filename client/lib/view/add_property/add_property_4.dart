@@ -1,5 +1,4 @@
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
-import 'package:client/view/firebase.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

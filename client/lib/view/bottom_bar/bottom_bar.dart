@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:client/controller/account_info_contoller.dart';
+import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/map_list_controller.dart';
 import 'package:client/main.dart';
-import 'package:client/view/bottom_bar/more/more.dart';
-import 'package:client/view/bottom_bar/notification/notifications.dart';
-import 'package:client/view/bottom_bar/search/search.dart';
+import 'package:client/view/more/more.dart';
+import 'package:client/view/notification/notifications.dart';
+import 'package:client/view/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,10 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-  AccountInfoContoller controller =
-      Get.put(AccountInfoContoller(), permanent: true);
+  LoginControllerImp loginController =
+      Get.put(LoginControllerImp(), permanent: true);
+  MapListController mapListController =
+      Get.put(MapListController(), permanent: true);
   int _currentIndex = 0;
 
   final List<Icon> _unselectedIcons = [
@@ -66,10 +69,12 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     super.initState();
-    controller.userDtoJson = sharepref!.getString("user");
-    controller.userDto = json.decode(controller.userDtoJson ?? "{}");
-    print(controller.userDtoJson);
-    print(controller.userDto);
+    loginController.userDto = json.decode(sharepref.getString("user") ?? "{}");
+    print(loginController.userDto);
+    print(loginController.userDto);
+
+    mapListController.isListIcon = true;
+    // mapListController.favoriteProperties.clear();
   }
 
   @override
@@ -88,14 +93,14 @@ class _BottomBarState extends State<BottomBar> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
-        iconSize: 20,
+        iconSize: 18,
         backgroundColor: Colors.white,
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
         unselectedItemColor: Colors.grey[900],
         unselectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.w500, fontSize: 11.5),
+            const TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
         selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.w600, fontSize: 11.5),
+            const TextStyle(fontWeight: FontWeight.w600, fontSize: 10),
         items: [
           _buildBottomNavigationBarItem(0),
           _buildBottomNavigationBarItem(1),

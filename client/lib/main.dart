@@ -17,7 +17,7 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-SharedPreferences? sharepref;
+late SharedPreferences sharepref;
 
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
@@ -25,8 +25,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   sharepref = await SharedPreferences.getInstance();
-  sharepref!.setString("first", "yes"); // first: yes or no
+  sharepref.setString("first", "yes"); // first: yes or no
   runApp(const MyApp());
   Get.put<NetworkController>(NetworkController(), permanent: true);
 }
@@ -43,6 +44,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
         fontFamily: "Poppins",
+        // appBarTheme: AppBarTheme(
+        //   backgroundColor:
+        //       Colors.red[900], // Set the background color for all AppBar widgets
+        // ),
       ),
       home: BottomBar(),
       routes: routes,

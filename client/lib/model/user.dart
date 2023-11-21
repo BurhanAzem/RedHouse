@@ -4,7 +4,7 @@ part "user.g.dart";
 
 @JsonSerializable()
 class User {
-  int id;
+  int? id;
   String? name;
   String? email;
   bool isVerified;

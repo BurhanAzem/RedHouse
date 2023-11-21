@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/main.dart';
-import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +30,7 @@ class _AllApplicationsState extends State<AllApplications> {
     String? userDtoJson = sharepref!.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
-    await controller.getApplications(user.id);
+    await controller.getApplications(user.id!);
 
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded
@@ -46,7 +44,7 @@ class _AllApplicationsState extends State<AllApplications> {
 
     // Check if data is still loading
     if (isLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(), // Show a loading indicator
       );
     }
@@ -56,11 +54,13 @@ class _AllApplicationsState extends State<AllApplications> {
       "Approved App",
       "Pending App",
     ];
+
     const contractType = [
       "All",
       "Rent Appications",
       "Buy Appications",
     ];
+
     return Scaffold(
       body: Column(
         children: [
@@ -143,10 +143,10 @@ class _AllApplicationsState extends State<AllApplications> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    // controller.getProperty();
-                    Get.toNamed(AppRoute.applicationDetails,
-                        arguments: controller.applications[index]);
-                    setState(() {});
+                    setState(() {
+                      Get.toNamed(AppRoute.applicationDetails,
+                          arguments: controller.applications[index]);
+                    });
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -155,8 +155,8 @@ class _AllApplicationsState extends State<AllApplications> {
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
+                          spreadRadius: 4,
+                          blurRadius: 5,
                           offset: const Offset(0, 3),
                         ),
                       ],
@@ -174,9 +174,6 @@ class _AllApplicationsState extends State<AllApplications> {
                                 size: 25,
                                 color: const Color(0xffd92328),
                               ),
-                              // Image.asset("assets/images/application_icon.jpg",
-                              //     scale: 18),
-
                               Text(
                                 (controller.applications![index]
                                             .applicationDate!
@@ -223,18 +220,9 @@ class _AllApplicationsState extends State<AllApplications> {
                               color: const Color(0xffd92328),
                             ),
                           ),
-
                           Container(
                             height: 1,
                           ),
-                          // Text(
-                          //   (controller.applications![index].Message!.length <=
-                          //           50)
-                          //       ? controller.applications![index].Message!
-                          //       : '${controller.applications![index].Message!
-                          //               .substring(0, 50)}...',
-                          //   style: const TextStyle(fontWeight: FontWeight.w400),
-                          // ),
                           Container(
                             height: 5,
                           ),
@@ -282,7 +270,6 @@ class _AllApplicationsState extends State<AllApplications> {
                           ),
                         ],
                       ),
-                      // Add other widgets here for displaying additional information
                     ),
                   ),
                 );

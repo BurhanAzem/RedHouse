@@ -1,5 +1,5 @@
 import 'package:client/model/property.dart';
-import 'package:client/view/bottom_bar/search/map_widget.dart';
+import 'package:client/view/search/map_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -16,6 +16,9 @@ class MapListController extends GetxController {
   Set<Property> visibleProperties = <Property>{};
 
   bool? isLoading;
-  bool? isLoadingMap;
-  bool? enterToMap ;
+  bool? isLoadingImage;
+  bool isListIcon = true;
+
+  // Favorite properties
+  List<Property> favoriteProperties = <Property>[];
 }

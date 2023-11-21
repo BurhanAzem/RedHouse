@@ -1,5 +1,6 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/users.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,6 +20,9 @@ class SignUpControllerImp extends SignUpController {
 
   final formstateRegister = GlobalKey<FormState>();
   List data = [];
+
+  // instance of fireStore
+  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   @override
   void onInit() {
@@ -48,8 +52,9 @@ class SignUpControllerImp extends SignUpController {
 
       if (response['statusCode'] == 200) {
         print(response['dto']);
-        // Get.offAllNamed("/login");
-        // Get.offNamed(AppRoute.verfiyCodeSignUp);
+
+        // after creating user, create a new document for the user in the ussers collection
+        Get.offAllNamed("/login");
       } else {
         Get.defaultDialog(
           title: "Error",

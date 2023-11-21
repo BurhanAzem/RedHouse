@@ -36,7 +36,7 @@ class _AllContractsState extends State<AllContracts>
     String? userDtoJson = sharepref!.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
-    controller.userId = user.id;
+    controller.userId = user.id!;
     await controller.getAllContrcats();
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded

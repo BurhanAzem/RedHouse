@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:client/controller/account_info_contoller.dart';
+import 'package:client/controller/auth/login_controller.dart';
 import 'package:geocoding/geocoding.dart';
-
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class _AddProperty1State extends State<AddProperty1> {
     ];
     ManagePropertyControllerImp controller =
         Get.put(ManagePropertyControllerImp(), permanent: true);
-    AccountInfoContoller userController = Get.put(AccountInfoContoller());
+    LoginControllerImp loginController = Get.put(LoginControllerImp());
     return Scaffold(
       appBar: AppBar(
         title: const Row(
@@ -305,7 +304,8 @@ class _AddProperty1State extends State<AddProperty1> {
                             markers: marker!,
                             onTap: (latlng) async {
                               marker!.add(Marker(
-                                  markerId: const MarkerId("9"), position: latlng));
+                                  markerId: const MarkerId("9"),
+                                  position: latlng));
                               try {
                                 List<Placemark> placemarks =
                                     await placemarkFromCoordinates(
@@ -362,22 +362,22 @@ class _AddProperty1State extends State<AddProperty1> {
                           setState(() {
                             controller.activeStep++;
                           });
-                          controller.userId = userController.userDto?["id"];
+                          controller.userId = loginController.userDto?["id"];
                           controller.goToAddProperty2();
                         }
                       : () {},
                   color: arePlacemarksAvailable
                       ? const Color(0xffd92328)
                       : const Color.fromARGB(255, 251, 169, 169),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: const Text(
                     "Continue",
                     style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.w700,
                     ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
               ),

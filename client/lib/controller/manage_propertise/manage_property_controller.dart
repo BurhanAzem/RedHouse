@@ -1,7 +1,5 @@
-import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
-import 'package:client/model/list_property.dart';
 import 'package:client/model/property.dart';
 import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +19,6 @@ abstract class ManagePropertyController extends GetxController {
 }
 
 class ManagePropertyControllerImp extends ManagePropertyController {
-  AccountInfoContoller controller = Get.put(AccountInfoContoller());
   int propertiesUserId = 0;
   List<Property> userProperties = [];
 
@@ -122,11 +119,9 @@ class ManagePropertyControllerImp extends ManagePropertyController {
     super.onInit();
   }
 
-
-
-getPropertiesUser() async {
+  getPropertiesUser() async {
     var response = await PropertyData.getPropertiesForUser(propertiesUserId);
-
+  
     if (response['statusCode'] == 200) {
       userProperties = (response['listDto'] as List<dynamic>)
           .map((e) => Property.fromJson(e as Map<String, dynamic>))
@@ -140,6 +135,7 @@ getPropertiesUser() async {
       );
     }
   }
+
   @override
   goToAddProperty1() {
     Get.toNamed(AppRoute.addProperty1);
