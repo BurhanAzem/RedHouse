@@ -1,31 +1,37 @@
-﻿using RedHouse_Server.Dtos.AuthDtos;
+using RedHouse_Server.Dtos.AuthDtos;
+using RedHouse_Server.Dtos.PropertyDtos;
 using RedHouse_Server.Services;
 using Cooking_School.Core.ModelUsed;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using server.Dtos.PropertyDtos;
+using Microsoft.AspNetCore.Authorization;
 using server.Services;
+using RedHouse_Server.Dtos.ApplicationDtos;
+using RedHouse_Server.Dtos.NeighborhoodDtos;
+
 namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class NeighborhoodController : ControllerBase
     {
-        private IUserServices _userServices;
-        public UserController(IUserServices userServices)
-        {
-            _userServices = userServices;
-        }
+        private INeighborhoodServices _neighborhoodServices;
 
-        [HttpGet("/users/{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        public NeighborhoodController(INeighborhoodServices neighborhoodServices)
+        {
+            _neighborhoodServices = neighborhoodServices;
+        }
+        
+        // [Authorize]
+        [HttpPost("/neighborhoods")]
+        public async Task<IActionResult> CreateAppication([FromBody] NeighborhoodDto neighborhoodDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetUser(id);
+            var result = await _neighborhoodServices.AddNeighborhood(neighborhoodDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -36,14 +42,16 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpGet("/users")]
-        public async Task<IActionResult> GetAllUsers()
+        
+
+        [HttpGet("/neighborhoods")]
+        public async Task<IActionResult> GetAllNeighborhood(int propertyId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAllUsers();
+            var result = await _neighborhoodServices.GetNeighborhoods(propertyId);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -53,15 +61,17 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+    
 
-        [HttpGet("/agents/{userName}")]
-        public async Task<IActionResult> GetAllAgents(string userName)
+
+        [HttpPost("/applications/range")]
+        public async Task<IActionResult> RejectApplication([FromBody] ListNeighborhoodDto listNeighborhoodDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAgents(userName);
+            var result = await _neighborhoodServices.AddRangeNeighborhood(listNeighborhoodDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -69,7 +79,10 @@ namespace RedHouse_Server.Controllers
             }
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
-        }
 
+        }
     }
 }
+
+
+
