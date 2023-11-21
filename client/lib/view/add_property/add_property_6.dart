@@ -252,29 +252,41 @@ class _AddProperty6State extends State<AddProperty6> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  Container(height: 30),
                   Container(
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                    
-                      onPressed: _selectDateAvialableOn,
-                      child: Text('Pick a Date'),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5,),
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                     ),
-                  ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(controller.availableDate.toString().substring(0, 10)),
+                          IconButton(onPressed: _selectDateAvialableOn, icon: Icon(Icons.date_range_outlined))
+                        ],
+                      )),
                   SizedBox(height: 15),
                   Text(
                     "Built year",
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
                   ),
-                  Container(height: 20),
-
+                  Container(height: 30),
                   Container(
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                    
-                      onPressed: _selectDateBuitYear,
-                      child: Text('Pick a Date'),
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5,),
+                      borderRadius: BorderRadius.all(Radius.circular(8))
                     ),
-                  ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(controller.builtYear.toString().substring(0, 10)),
+                          IconButton(onPressed: _selectDateBuitYear, icon: Icon(Icons.date_range_outlined))
+                        ],
+                      )),
                 ],
               ),
               Container(height: 25),

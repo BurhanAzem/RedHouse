@@ -8,42 +8,32 @@ part of 'contract.dart';
 
 Contract _$ContractFromJson(Map<String, dynamic> json) => Contract(
       id: json['id'] as int,
-      customerId: json['customerId'] as int,
-      landlordId: json['landlordId'] as int,
-      description: json['description'] as String,
-      propertyId: json['propertyId'] as int,
+      offerId: json['offerId'] as int,
       startDate: DateTime.parse(json['startDate'] as String),
-      endDate: DateTime.parse(json['endDate'] as String),
-      price: (json['price'] as num).toDouble(),
+      endDate: json['endDate'] == null
+          ? null
+          : DateTime.parse(json['endDate'] as String),
       contractType: json['contractType'] as String,
       contractStatus: json['contractStatus'] as String,
       earnings: (json['earnings'] as num).toDouble(),
       isShouldPay: json['isShouldPay'] as int,
-      customer: json['customer'] == null
+      offer: json['offer'] == null
           ? null
-          : User.fromJson(json['customer'] as Map<String, dynamic>),
-      landlord: json['landlord'] == null
-          ? null
-          : User.fromJson(json['landlord'] as Map<String, dynamic>),
-      property: json['property'] == null
-          ? null
-          : Property.fromJson(json['property'] as Map<String, dynamic>),
+          : Offer.fromJson(json['offer'] as Map<String, dynamic>),
+      milestones: (json['milestones'] as List<dynamic>?)
+          ?.map((e) => Milestone.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$ContractToJson(Contract instance) => <String, dynamic>{
       'id': instance.id,
-      'propertyId': instance.propertyId,
-      'landlordId': instance.landlordId,
-      'customerId': instance.customerId,
+      'offerId': instance.offerId,
       'startDate': instance.startDate.toIso8601String(),
-      'endDate': instance.endDate.toIso8601String(),
-      'description': instance.description,
-      'price': instance.price,
+      'endDate': instance.endDate?.toIso8601String(),
       'contractType': instance.contractType,
       'contractStatus': instance.contractStatus,
       'earnings': instance.earnings,
       'isShouldPay': instance.isShouldPay,
-      'customer': instance.customer,
-      'landlord': instance.landlord,
-      'property': instance.property,
+      'offer': instance.offer,
+      'milestones': instance.milestones,
     };

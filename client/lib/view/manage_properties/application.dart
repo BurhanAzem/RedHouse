@@ -328,12 +328,12 @@ class _StepperDemoState extends State<ApplicationDetails> {
                             InkWell(
                               onTap: () {
                                 Property property = controller.userHistory![index]
-                                        .contract!.property!;
+                                        .contract!.offer!.property!;
                                 Get.to(() => HomeInformation(
                                     property: property));
                               },
                               child: Text(
-                                controller.userHistory[index].contract.property!
+                                controller.userHistory[index].contract.offer!.property!
                                     .propertyCode,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -381,7 +381,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                         Row(
                           children: [
                             Text(
-                              "To ${controller.userHistory![index].contract.customer!.name!}: ",
+                              "To ${controller.userHistory![index].contract.offer!.customer!.name!}: ",
                               style: TextStyle(fontSize: 11),
                             ),
                             RatingBar.builder(
@@ -419,7 +419,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                         Row(
                           children: [
                             Text(
-                              "To landlord ${controller.userHistory![index].contract.landlord!.name}: ",
+                              "To landlord ${controller.userHistory![index].contract.offer!.landlord!.name}: ",
                               style: TextStyle(fontSize: 11),
                             ),
                             RatingBar.builder(

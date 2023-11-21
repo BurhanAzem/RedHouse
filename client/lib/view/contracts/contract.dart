@@ -95,7 +95,7 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
               Expanded(
                   child: ListTile(
                 title: Text(
-                  widget.contract!.landlord!.name!,
+                  widget.contract!.offer!.landlord!.name!,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text("Landlord"),

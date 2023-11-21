@@ -1,5 +1,6 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/users.dart';
+import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,6 +49,7 @@ class SignUpControllerImp extends SignUpController {
 
       if (response['statusCode'] == 200) {
         print(response['dto']);
+        Get.toNamed(AppRoute.login);
         // Get.offAllNamed("/login");
         // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {

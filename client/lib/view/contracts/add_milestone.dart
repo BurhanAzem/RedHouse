@@ -1,12 +1,16 @@
 import 'package:client/controller/contracts/contracts_controller.dart';
 import 'package:client/controller/contracts/milestone_controller.dart';
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/model/contract.dart';
+import 'package:client/view/contracts/contract.dart';
+import 'package:client/view/contracts/overview.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddMilestone extends StatefulWidget {
-  AddMilestone({Key? key}) : super(key: key);
+  final Contract contract;
+  const AddMilestone({Key? key, required this.contract}) : super(key: key);
 
   @override
   _AddMilestoneState createState() => _AddMilestoneState();
@@ -40,6 +44,12 @@ class _AddMilestoneState extends State<AddMilestone> {
       //   cancelStyle: TextStyle(color: Color(0xffd92328)),
       // ),
     );
+
+    void loadData() async {
+
+    await controller.getAllMilestonesForContract(widget.contract.id);
+
+  }
 
     if (pickedDate != null) {
       setState(() {
@@ -114,7 +124,7 @@ class _AddMilestoneState extends State<AddMilestone> {
                   Container(height: 5),
                   Container(
                     child: TextFormField(
-                      controller: controller.milestoneName,
+                      controller: controller.amount,
                       style: TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
@@ -188,11 +198,12 @@ class _AddMilestoneState extends State<AddMilestone> {
               ),
               Container(height: 25),
               MaterialButton(
-                onPressed: () {
+                onPressed: () async {
                   // setState(() {
                   //   controller.activeStep++;
                   // });
-                  controller.addMilestone();
+                  await controller.addMilestone(widget.contract.id);
+                  Get.to(ContractReview(contract: widget.contract));
                 },
                 color: Color.fromARGB(255, 0, 0, 0),
                 child: Text(

@@ -31,14 +31,14 @@ namespace server.Services
 
         public async Task<ResponsDto<Contract>> GetAllContractsForUser(int userId, ContractFilter contractFilter)
         {
-            var query = _redHouseDbContext.Contracts.Include(c => c.Landlord).Include(c => c.Customer).Include(c => c.Property).AsQueryable();
+            var query = _redHouseDbContext.Contracts.Include(c => c.Offer.Landlord).Include(c => c.Offer.Customer).Include(c => c.Offer.Property).AsQueryable();
             if (contractFilter.ContractTo.Trim() == "Landlord")
             {
-                query = query.Where(c => c.LandlordId == userId);
+                query = query.Where(c => c.Offer.LandlordId == userId);
             }
             if (contractFilter.ContractTo.Trim() == "Customer")
             {
-                query = query.Where(c => c.CustomerId == userId);
+                query = query.Where(c => c.Offer.CustomerId == userId);
             }
             if (contractFilter.ContractType.Trim() != "All")
             {

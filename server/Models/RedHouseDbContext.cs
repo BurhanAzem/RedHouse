@@ -11,12 +11,39 @@ namespace RedHouse_Server.Models
     public class RedHouseDbContext : IdentityDbContext
     {
         public const DateTimeKind DefaultDateTimeKind = DateTimeKind.Utc;
-        public RedHouseDbContext(DbContextOptions<RedHouseDbContext> options) : base(options) { 
-            
+        public RedHouseDbContext(DbContextOptions<RedHouseDbContext> options) : base(options)
+        {
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //         builder.Entity<Contract>()
+            // .HasMany(c => c.Customer)
+            // .WithMany()
+            // .WillCascadeOnDelete(false);
+            // builder.Entity<Application>()
+            // .HasOne(a => a.User)
+            // .WithMany(u => u.Applications)
+            // .HasForeignKey(a => a.UserId)
+            // .OnDelete(DeleteBehavior.NoAction);
+
+            // builder.Entity<Contract>()
+            // .HasOne(a => a.Customer)
+            // .WithMany(u => u.Contracts)
+            // .HasForeignKey(a => a.CustomerId)
+            // .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Offer>()
+    .HasOne(e => e.Customer)
+    .WithMany()
+    .HasForeignKey(e => e.CustomerId)
+    .OnDelete(DeleteBehavior.NoAction); // Change to NoAction
+
+
+
+
+
             base.OnModelCreating(builder);
         }
 
@@ -27,7 +54,8 @@ namespace RedHouse_Server.Models
         public DbSet<PropertyFile> PropertyFiles { get; set; }
         public DbSet<Application> Applications { get; set; }
         public DbSet<Contract> Contracts { get; set; }
-        public DbSet<ContractStep> ContractSteps { get; set; }
+        public DbSet<Milestone> Milestones { get; set; }
+        public DbSet<Offer> Offers { get; set; }
         public DbSet<ContractActivity> ContractActivities { get; set; }
         public DbSet<UserHistory> UserHistoryRecords { get; set; }
         public DbSet<SavedProperties> SavedProperties { get; set; }

@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:client/controller/contracts/contracts_controller.dart';
+import 'package:client/controller/contracts/milestone_controller.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/routes.dart';
+import 'package:client/view/contracts/add_milestone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
@@ -18,28 +20,25 @@ class OverView extends StatefulWidget {
 class _StepperDemoState extends State<OverView> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
-// bool isLoading = true; // Add a boolean variable for loading state
+  bool isLoading = true; // Add a boolean variable for loading state
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadData();
-//     setState(() {});
-//   }
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+    setState(() {});
+  }
 
-//   void loadData() async {
-//     AllContractsControllerImp controller =
-//         Get.put(AllContractsControllerImp(), permanent: true);
-//     String? userDtoJson = sharepref!.getString("user");
-//     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
-//     User user = User.fromJson(userDto);
-//     controller.userId = user.id;
-//     await controller.getAllContrcats();
+  void loadData() async {
+    MilestoneControllerImp milestonesController =
+        Get.put(MilestoneControllerImp());
 
-//     setState(() {
-//       isLoading = false; // Set isLoading to false when data is loaded
-//     });
-//   }
+    await milestonesController.getAllMilestonesForContract(widget.contract.id);
+
+    setState(() {
+      isLoading = false; // Set isLoading to false when data is loaded
+    });
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -47,6 +46,8 @@ class _StepperDemoState extends State<OverView> {
   @override
   Widget build(BuildContext context) {
     ContractsControllerImp controller = Get.put(ContractsControllerImp());
+    MilestoneControllerImp milestonesController =
+        Get.put(MilestoneControllerImp());
 
     // if (isLoading) {
     //   return Center(
@@ -155,23 +156,25 @@ class _StepperDemoState extends State<OverView> {
                 child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: controller.milestones!.length + 1,
+                  itemCount: milestonesController.milestones!.length + 1,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                         onTap: () {
                           // controller.getProperty();
                           setState(() {});
                         },
-                        child: controller.milestones!.length != index
+                        child: milestonesController.milestones!.length != index
                             ? Container(
                                 // height: 180, // Adjust the height as needed
                                 margin: EdgeInsets.only(right: 25, left: 5),
                                 child: TimelineTile(
                                   isFirst: index == 0,
                                   isLast: index ==
-                                      controller.milestones!.length - 1,
+                                      milestonesController.milestones!.length -
+                                          1,
                                   beforeLineStyle: LineStyle(
-                                    color: controller.milestones![index]
+                                    color: milestonesController
+                                                .milestones![index]
                                                 .milestoneStatus! ==
                                             'Paid'
                                         ? Color(0xffd92328)
@@ -183,19 +186,22 @@ class _StepperDemoState extends State<OverView> {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
                                     indicatorXY: 0,
-                                    color: controller.milestones![index]
+                                    color: milestonesController
+                                                .milestones![index]
                                                 .milestoneStatus! ==
                                             'Paid'
                                         ? Color(0xffd92328)
                                         : Color.fromARGB(255, 211, 211, 211),
                                     width: 28,
                                     iconStyle: IconStyle(
-                                      iconData: controller.milestones![index]
+                                      iconData: milestonesController
+                                                  .milestones![index]
                                                   .milestoneStatus ==
                                               'Paid'
                                           ? Icons.done
                                           : Icons.question_mark,
-                                      color: controller.milestones![index]
+                                      color: milestonesController
+                                                  .milestones![index]
                                                   .milestoneStatus ==
                                               'Paid'
                                           ? Colors.white
@@ -204,21 +210,22 @@ class _StepperDemoState extends State<OverView> {
                                   ),
                                   endChild: Container(
                                     padding: EdgeInsets.only(top: 20),
-                                    alignment: Alignment(10.0, 0),
+                                    alignment: Alignment(0.0, 0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         Container(
-                                          margin: EdgeInsets.only(left: 10),
+                                          // margin: EdgeInsets.only(left: 10),
                                           child: Text(
-                                            controller
-                                                .milestones![index].milestoneName,
+                                            milestonesController
+                                                .milestones![index]
+                                                .milestoneName,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                         SizedBox(height: 10),
-                                        Text(controller
+                                        Text(milestonesController
                                             .milestones![index].description),
                                         Container(
                                           height: 8,
@@ -230,7 +237,7 @@ class _StepperDemoState extends State<OverView> {
                                                   EdgeInsets.only(right: 10),
                                               child: Text(
                                                 "\$" +
-                                                    controller
+                                                    milestonesController
                                                         .milestones![index]
                                                         .amount
                                                         .toString(),
@@ -240,22 +247,28 @@ class _StepperDemoState extends State<OverView> {
                                               ),
                                             ),
                                             Chip(
-                                              padding: EdgeInsets.symmetric(horizontal: 10),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10),
                                               shadowColor: Color(0xffd92328),
                                               label: Text(
-                                                controller.milestones![index]
+                                                milestonesController
+                                                    .milestones![index]
                                                     .milestoneStatus,
                                                 style: TextStyle(fontSize: 12),
                                               ),
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          12.0),
-                                                   // Adjust the border radius as needed
-                                                  ),
-                                              backgroundColor: Color.fromARGB(255, 255, 255, 255), // Set your desired background color
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                                // Adjust the border radius as needed
+                                              ),
+                                              backgroundColor: Color.fromARGB(
+                                                  255,
+                                                  255,
+                                                  255,
+                                                  255), // Set your desired background color
                                               labelStyle: TextStyle(
-                                                color: Color(0xffd92328), // Set your desired text color
+                                                color: Color(
+                                                    0xffd92328), // Set your desired text color
                                               ),
                                             )
                                           ],
@@ -287,7 +300,8 @@ class _StepperDemoState extends State<OverView> {
                                     alignment: Alignment(-1.0, 0),
                                     child: MaterialButton(
                                       onPressed: () {
-                                        Get.toNamed(AppRoute.addMilestone);
+                                        Get.to(AddMilestone(
+                                            contract: widget.contract));
                                       },
                                       child: Text(
                                         "Propose new milestone",
@@ -307,73 +321,6 @@ class _StepperDemoState extends State<OverView> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: switchStepsType,
-        shape: const CircleBorder(),
-        child: const Icon(
-          Icons.list,
-          size: 25,
-        ),
-      ),
     );
   }
-
-  switchStepsType() {
-    setState(() => stepperType == StepperType.vertical
-        ? stepperType = StepperType.horizontal
-        : stepperType = StepperType.vertical);
-  }
-
-  tapped(int step) {
-    setState(() => _currentStep = step);
-  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-          //  Stepper(
-          //         type: stepperType,
-          //         physics: ScrollPhysics(),
-          //         currentStep: _currentStep,
-          //         onStepTapped: (step) => tapped(step),
-          //         steps: List<Step>.generate(
-          //           stepData.length + 1,
-          //           (index) {
-          //             if (index < stepData.length) {
-          //               return Step(
-          //                 title: Text(stepData[index].title),
-          //                 content: Column(
-          //                   children: <Widget>[
-          //                     Text(stepData[index].content),
-          //                   ],
-          //                 ),
-          //                 isActive: _currentStep >= index,
-          //                 state: _currentStep >= index
-          //                     ? StepState.complete
-          //                     : StepState.disabled,
-          //               );
-          //             } else {
-          //               return Step(
-          //                 title: Text('Create New Step'),
-          //                 content: Column(
-          //                   children: <Widget>[
-          //                     Text('Content for creating a new step'),
-          //                   ],
-          //                 ),
-          //                 isActive: _currentStep >= index,
-          //                 state: _currentStep >= index
-          //                     ? StepState.complete
-          //                     : StepState.disabled,
-          //               );
-          //             }
-          //           },
-          //         ),

@@ -151,8 +151,7 @@ class _StepperDemoState extends State<Details> {
                                         child: Text("Landlord")),
                                   ],
                                 ),
-                                Text(widget.contract.landlord!.name!
-                                    )
+                                Text(widget.contract.offer!.landlord!.name!)
                               ],
                             ),
                             Container(
@@ -174,7 +173,7 @@ class _StepperDemoState extends State<Details> {
                                         child: Text("Price")),
                                   ],
                                 ),
-                                Text(widget.contract.price.toString())
+                                Text(widget.contract.offer!.price.toString())
                               ],
                             ),
                           ],
@@ -227,7 +226,7 @@ class _StepperDemoState extends State<Details> {
                   ),
                   Container(child: Text(
                       // "Hi, everyone. I will do my best to be as straightforward, to the point and descriptive as possible. I am looking for a web designer/programmer to help me create an online 'tutoring' website that will potentially allow high schoolers to earn volunteer hours for posting their own made foreign language material onto the website. Foreign language material can include things like vocab sets, worksheets, and other educational materials that can be used in a classroom. It is designed to essentially allow high school students who know a second language to provide material that can be used in classrooms and by")),
-                      widget.contract.description)),
+                      widget.contract.offer!.description)),
                   Container(
                     height: 15,
                   ),
@@ -281,9 +280,10 @@ class _StepperDemoState extends State<Details> {
                     ]),
                   ),
                   Container(
-                      height: 0.5,
-                      margin: EdgeInsets.symmetric(vertical: 5),
-                      color: Colors.grey),
+                    height: 0.8,
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    color: Color.fromARGB(255, 80, 80, 80),
+                  ),
                   Container(
                     // margin: EdgeInsets.only(left: 25, bottom: 40),
                     child: ListView.builder(
@@ -292,35 +292,48 @@ class _StepperDemoState extends State<Details> {
                       itemCount: activities!.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                            onTap: () {
-                              // controller.getProperty();
-                              setState(() {});
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                    // height: 180, // Adjust the height as needed
-                                    // margin: EdgeInsets.only(right: 25, left: 5),
-                                    child: Row(
+                          onTap: () {
+                            // controller.getProperty();
+                            // Consider adding state changes here if needed
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                // height: 180, // Adjust the height as needed
+                                // margin: EdgeInsets.only(right: 25, left: 5),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                        margin: EdgeInsets.only(right: 30),
-                                        child: Text(activities[index]
+                                      margin: EdgeInsets.only(right: 30),
+                                      child: Text(
+                                        activities[index]
                                             .activityDate
                                             .toString()
-                                            .substring(0, 10))),
-                                    Text(activities[index].activityDescription),
+                                            .substring(0, 10),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          activities[index].activityDescription,
+                                          softWrap: true,
+                                          // Other styling options go here
+                                        ),
+                                      ),
+                                    ),
                                   ],
-                                )),
-                                activities!.length - 1 != index
-                                    ? Container(
-                                        height: 0.5,
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 10),
-                                        color: Colors.grey)
-                                    : Container(),
-                              ],
-                            ));
+                                ),
+                              ),
+                              if (activities!.length - 1 != index)
+                                Container(
+                                  height: 0.8,
+                                  margin: EdgeInsets.symmetric(vertical: 10),
+                                  color: Color.fromARGB(255, 80, 80, 80),
+                                ),
+                            ],
+                          ),
+                        );
                       },
                     ),
                   ),

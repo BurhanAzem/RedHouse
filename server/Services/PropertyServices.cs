@@ -327,10 +327,10 @@ namespace RedHouse_Server.Services
 
 
             var contracts = _redHouseDbContext.Contracts
-                .Where(c => c.PropertyId == propertyId)
-                .Include(c => c.Property) // Include the Property navigation property
-                .Include(c => c.Landlord) // Include the Landlord navigation property
-                .Include(c => c.Customer) // Include the Customer navigation property
+                .Where(c => c.Offer.PropertyId == propertyId)
+                .Include(c => c.Offer.Property) // Include the Property navigation property
+                .Include(c => c.Offer.Landlord) // Include the Landlord navigation property
+                .Include(c => c.Offer.Customer) // Include the Customer navigation property
                 .ToList();
 
             var userHistories = _redHouseDbContext.UserHistoryRecords

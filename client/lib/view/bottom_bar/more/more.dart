@@ -5,6 +5,7 @@ import 'package:client/view/bottom_bar/more/messages.dart';
 import 'package:client/view/bottom_bar/more/my_feedback.dart';
 import 'package:client/view/bottom_bar/more/my_properties.dart';
 import 'package:client/view/bottom_bar/notification/notifications_settings.dart';
+import 'package:client/view/offers/all_offers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -204,6 +205,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+          
           InkWell(
             onTap: () {
               Get.to(() => const MyProperties());
@@ -227,6 +229,20 @@ class _MoreState extends State<More> {
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
                 "Feedback",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),InkWell(
+            onTap: () {
+              Get.to(() => const AllOffers());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Offers",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,

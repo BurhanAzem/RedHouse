@@ -40,10 +40,10 @@ namespace server.Services
 
 
             var contracts = _redHouseDbContext.Contracts
-    .Where(c => c.CustomerId == userId)
-    .Include(c => c.Property).ThenInclude(p => p.Location).Include(p => p.Property.propertyFiles) // Include the Property navigation property
-    .Include(c => c.Landlord) // Include the Landlord navigation property
-    .Include(c => c.Customer) // Include the Customer navigation property
+    .Where(c => c.Offer.CustomerId == userId)
+    .Include(c => c.Offer.Property).ThenInclude(p => p.Location).Include(p => p.Offer.Property.propertyFiles) // Include the Property navigation property
+    .Include(c => c.Offer.Landlord) // Include the Landlord navigation property
+    .Include(c => c.Offer.Customer) // Include the Customer navigation property
     .ToList();
 
             var userHistories = _redHouseDbContext.UserHistoryRecords
