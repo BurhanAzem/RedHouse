@@ -65,6 +65,7 @@ builder.Services.AddScoped<IApplicationServices, ApplicationServices>();
 builder.Services.AddScoped<IUserHistoryServices, UserHistoryServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
+builder.Services.AddScoped<INeighborhoodServices, NeighborhoodServices>();
 builder.Services.AddScoped<IMilestoneServices, MilestoneServices>();
 builder.Services.AddScoped<IOfferServices, OfferServices>();
 builder.Services.AddControllers().AddJsonOptions(options =>
