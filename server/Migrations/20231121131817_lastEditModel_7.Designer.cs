@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedHouse_Server.Models;
 
@@ -11,9 +12,11 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    partial class RedHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231121131817_lastEditModel_7")]
+    partial class lastEditModel_7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,6 +344,7 @@ namespace RedHouse_Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NeighborhoodName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NeighborhoodType")
@@ -738,7 +742,7 @@ namespace RedHouse_Server.Migrations
                     b.HasOne("RedHouse_Server.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("RedHouse_Server.Models.Property", "Property")
