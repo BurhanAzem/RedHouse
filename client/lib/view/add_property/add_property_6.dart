@@ -1,5 +1,4 @@
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
-import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,24 +18,16 @@ class _AddProperty6State extends State<AddProperty6> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.utc(1800, 7, 20),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: Color(0xffd92328), // Change the color of the header
-            // accentColor: Color(0xffd92328), // Change the color of the selected date
+            primaryColor:
+                const Color(0xffd92328), // Change the color of the header
           ),
           child: child ?? Container(),
         );
       },
-      // Define the theme for the date picker buttons here
-      // To change the button color, you can define your custom DatePickerTheme
-      // and set the button color within it.
-      // Example:
-      // theme: DatePickerTheme(
-      //   doneStyle: TextStyle(color: Color(0xffd92328)),
-      //   cancelStyle: TextStyle(color: Color(0xffd92328)),
-      // ),
     );
 
     if (pickedDate != null) {
@@ -46,29 +37,21 @@ class _AddProperty6State extends State<AddProperty6> {
     }
   }
 
-    Future<void> _selectDateBuitYear() async {
+  Future<void> _selectDateBuitYear() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.utc(1800, 7, 20),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: Color(0xffd92328), // Change the color of the header
-            // accentColor: Color(0xffd92328), // Change the color of the selected date
+            primaryColor:
+                const Color(0xffd92328), // Change the color of the header
           ),
           child: child ?? Container(),
         );
       },
-      // Define the theme for the date picker buttons here
-      // To change the button color, you can define your custom DatePickerTheme
-      // and set the button color within it.
-      // Example:
-      // theme: DatePickerTheme(
-      //   doneStyle: TextStyle(color: Color(0xffd92328)),
-      //   cancelStyle: TextStyle(color: Color(0xffd92328)),
-      // ),
     );
 
     if (pickedDate != null) {
@@ -80,248 +63,139 @@ class _AddProperty6State extends State<AddProperty6> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text(
-              "Red",
+    return GetBuilder<ManagePropertyControllerImp>(
+      init: ManagePropertyControllerImp(),
+      builder: (ManagePropertyControllerImp controller) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  controller.decreaseActiveStep();
+                  print(controller.activeStep);
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            title: const Text(
+              "Property Date",
               style: TextStyle(
-                color: Color(0xffd92328),
+                color: Colors.white,
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            Text(
-              "House Manage Properties",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Form(
-          child: ListView(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          body: Container(
+            padding: const EdgeInsets.all(10),
+            child: Form(
+              child: ListView(
                 children: [
-                  EasyStepper(
-                    finishedStepBackgroundColor: Color(0xffd92328),
-                    activeStepBorderColor: Colors.black,
-                    stepShape: StepShape.circle,
-                    lineStyle: LineStyle(),
-
-                    activeStep: controller.activeStep,
-                    activeStepTextColor: Colors.black87,
-                    finishedStepTextColor: Colors.black87,
-                    internalPadding: 0,
-                    // showScrollbar: false,
-                    fitWidth: true,
-                    showLoadingAnimation: false,
-                    stepRadius: 5,
-                    showStepBorder: false,
-                    steps: [
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 0 ? Color(0xffd92328) : Colors.grey,
-                          ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      controller.easyStepper(),
+                      Image.asset("assets/images/logo.png", scale: 10),
+                      Container(height: 5),
+                      const Text(
+                        "When is your property available to rent?",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
                         ),
-                        // title: 'Waiting',
                       ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 1 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Order Received',
-                        topTitle: true,
+                      Container(height: 30),
+                      Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 0.5,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8))),
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(controller.availableDate
+                                  .toString()
+                                  .substring(0, 10)),
+                              IconButton(
+                                  onPressed: _selectDateAvialableOn,
+                                  icon: const Icon(Icons.date_range_outlined))
+                            ],
+                          )),
+                      const SizedBox(height: 15),
+                      const Text(
+                        "Built year",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 23),
                       ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 2 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Preparing',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 3 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'On Way',
-                        topTitle: true,
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 4 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 5 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 6 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 7 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor:
-                                controller.activeStep >= 8 ? Color(0xffd92328) : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      
+                      Container(height: 30),
+                      Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                width: 0.5,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8))),
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(controller.builtYear
+                                  .toString()
+                                  .substring(0, 10)),
+                              IconButton(
+                                  onPressed: _selectDateBuitYear,
+                                  icon: const Icon(Icons.date_range_outlined))
+                            ],
+                          )),
                     ],
-                    onStepReached: (index) =>
-                        setState(() => controller.activeStep = index),
                   ),
-                  Image.asset("assets/images/logo.png", scale: 10),
-                  Container(height: 5),
-                  Text(
-                    "When is your property available to rent?",
-                    style: TextStyle(
-                      fontSize: 22,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Container(height: 30),
+                  Container(height: 25),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.5,),
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                    ),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(controller.availableDate.toString().substring(0, 10)),
-                          IconButton(onPressed: _selectDateAvialableOn, icon: Icon(Icons.date_range_outlined))
-                        ],
-                      )),
-                  SizedBox(height: 15),
-                  Text(
-                    "Built year",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
+                    height: 0.2,
+                    color: Colors.black,
                   ),
-                  Container(height: 30),
+                  Container(height: 25),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.5,),
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                    ),
                       alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(controller.builtYear.toString().substring(0, 10)),
-                          IconButton(onPressed: _selectDateBuitYear, icon: Icon(Icons.date_range_outlined))
-                        ],
-                      )),
+                      child:
+                          Image.asset("assets/images/red-tree.png", scale: 3)),
+                  const SizedBox(height: 25),
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        controller.increaseActiveStep();
+                        print(controller.activeStep);
+                      });
+                      controller.goToAddProperty7();
+                    },
+                    color: const Color(0xffd92328),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Text(
+                      "Continue",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              Container(height: 25),
-              Container(height: 0.2, color: Colors.black,),
-              Container(height: 25),
-                  Container(
-                    alignment: Alignment.center,
-                    child: Image.asset("assets/images/red-tree.png", scale: 3)
-                    ),
-              SizedBox(height: 25),
-              MaterialButton(
-                onPressed: () {
-                  setState(() {
-                    controller.activeStep++;
-                  });
-                  controller.goToAddProperty7();
-                },
-                color: Color(0xffd92328),
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              
-
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

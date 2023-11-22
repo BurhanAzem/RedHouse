@@ -1,4 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/controller/map_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,8 @@ class BedBath extends StatefulWidget {
 }
 
 class _BedBathState extends State<BedBath> {
+  MapListController mapListController = Get.put(MapListController());
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FilterController>(
@@ -83,16 +86,17 @@ class _BedBathState extends State<BedBath> {
                                   controller.checkFiltersON();
 
                                   controller.getProperties();
+                                  // mapListController.isLoading = true;
                                   Navigator.pop(context);
                                 },
                                 minWidth: 300,
                                 height: 45,
                                 color: Colors.black87,
                                 child: const Text(
-                                  "See 0 homes",
+                                  "See  homes",
                                   style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),

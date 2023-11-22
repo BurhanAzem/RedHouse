@@ -20,10 +20,13 @@ class _EmailNotificationsState extends State<EmailNotifications> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
           "Email Notifications",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
@@ -32,17 +35,17 @@ class _EmailNotificationsState extends State<EmailNotifications> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 30),
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               "      Property updates",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 19,
               ),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: RichText(
                 text: const TextSpan(
                   children: <TextSpan>[
@@ -75,7 +78,7 @@ class _EmailNotificationsState extends State<EmailNotifications> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Container(
                 child: Column(
               children: <Widget>[
@@ -101,7 +104,7 @@ class _EmailNotificationsState extends State<EmailNotifications> {
         children: <Widget>[
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 17.5,
             ),
           ),

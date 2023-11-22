@@ -36,15 +36,15 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           widget.receiverUserEmail,
           style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
+            color: Colors.white,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
           ),
         ),
-        centerTitle: true,
         actions: [
           PopupMenuButton(
             onSelected: (value) {
@@ -196,9 +196,7 @@ class _ChatPageState extends State<ChatPage> {
                     data['message'],
                     style: TextStyle(
                       fontSize: 15,
-                      color: isMe
-                          ? Colors.white
-                          : Color.fromARGB(157, 0, 0, 0),
+                      color: isMe ? Colors.white : Colors.black87,
                     ),
                   ),
                 ),

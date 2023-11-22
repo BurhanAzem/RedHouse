@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/bottom_bar/bottom_bar.dart';
 import 'package:client/controller/map_list_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/more/more.dart';
@@ -19,11 +20,16 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
+int currentIndex = 0;
+
+  BottomBarController bottomBarController =
+      Get.put(BottomBarController(), permanent: true);
+
   LoginControllerImp loginController =
       Get.put(LoginControllerImp(), permanent: true);
+
   MapListController mapListController =
       Get.put(MapListController(), permanent: true);
-  int _currentIndex = 0;
 
   final List<Icon> _unselectedIcons = [
     Icon(
@@ -81,7 +87,7 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        index: _currentIndex,
+        index:currentIndex,
         children: const [
           Search(),
           AllContracts(),
@@ -91,7 +97,7 @@ class _BottomBarState extends State<BottomBar> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: currentIndex,
         type: BottomNavigationBarType.fixed,
         iconSize: 18,
         backgroundColor: Colors.white,
@@ -110,7 +116,7 @@ class _BottomBarState extends State<BottomBar> {
         ],
         onTap: (index) {
           setState(() {
-            _currentIndex = index;
+            currentIndex = index;
           });
         },
       ),
@@ -119,7 +125,7 @@ class _BottomBarState extends State<BottomBar> {
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(int index) {
     return BottomNavigationBarItem(
-      icon: _currentIndex == index
+      icon: currentIndex == index
           ? _selectedIcons[index]
           : _unselectedIcons[index],
       label: _getLabel(index),

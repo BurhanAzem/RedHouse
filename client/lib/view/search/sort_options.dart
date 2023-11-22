@@ -90,18 +90,20 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
+                                              const Text(
+                                                '  Sort by',
+                                                style: TextStyle(
+                                                    fontSize: 27,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
                                               IconButton(
-                                                icon: const Icon(Icons.close),
+                                                icon: const Icon(Icons.close,
+                                                    color: Colors.black,
+                                                    size: 27),
                                                 onPressed: () {
                                                   Navigator.pop(context);
                                                 },
-                                              ),
-                                              const Text(
-                                                'Sort by  ',
-                                                style: TextStyle(
-                                                  fontSize: 27,
-                                                  fontWeight: FontWeight.w900,
-                                                ),
                                               ),
                                             ],
                                           ),

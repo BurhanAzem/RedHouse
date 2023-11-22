@@ -1,4 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/controller/map_list_controller.dart';
 import 'package:client/view/filter/buy_filter.dart';
 import 'package:client/view/filter/rent_filter.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class Price extends StatefulWidget {
 }
 
 class _PriceState extends State<Price> {
+  MapListController mapListController = Get.put(MapListController());
+  
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FilterController>(
@@ -170,7 +173,7 @@ class _PriceState extends State<Price> {
                                   controller.checkFiltersON();
 
                                   controller.getProperties();
-
+                                  mapListController.isLoading = true;
                                   Navigator.pop(context);
                                 }
                               }
@@ -180,10 +183,10 @@ class _PriceState extends State<Price> {
                             color: Colors.black87,
                             child: const Center(
                               child: Text(
-                                "See 0 homes",
+                                "See  homes",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 17,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

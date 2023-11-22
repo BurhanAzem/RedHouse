@@ -18,10 +18,11 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Messages",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),

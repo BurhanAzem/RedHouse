@@ -14,10 +14,11 @@ class AccountInformation extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Account Information",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),

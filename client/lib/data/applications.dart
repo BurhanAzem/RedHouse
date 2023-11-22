@@ -144,4 +144,47 @@ class ApplicationData {
       return StatusRequest.offlinefailure;
     }
   }
+
+  static approvedApplication(int id) async {
+    if (await checkInternet()) {
+      var response = await http.post(
+          Uri.parse('${AppLink.applications}/$id/approve'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static deleteApplication(int id) async {
+    if (await checkInternet()) {
+      var response = await http.delete(Uri.parse('${AppLink.applications}/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
 }

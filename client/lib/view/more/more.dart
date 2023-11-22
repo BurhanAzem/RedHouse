@@ -6,6 +6,7 @@ import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';
 import 'package:client/view/more/my_properties.dart';
 import 'package:client/view/notification/notifications_settings.dart';
+import 'package:client/view/offers/all_offers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

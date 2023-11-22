@@ -364,14 +364,22 @@ class _ListWidgetState extends State<ListWidget>
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  property.location!.streetAddress,
-                                  style: const TextStyle(fontSize: 14.5),
+                                Container(
+                                  width: 170,
+                                  child: Text(
+                                    property.location!.streetAddress,
+                                    style: const TextStyle(fontSize: 14.5),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                                 const SizedBox(height: 1),
-                                Text(
-                                  "${property.location!.city}, ${property.location!.country}",
-                                  style: const TextStyle(fontSize: 14.5),
+                                Container(
+                                  width: 170,
+                                  child: Text(
+                                    "${property.location!.city}, ${property.location!.country}",
+                                    style: const TextStyle(fontSize: 14.5),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
                               ],
                             ),

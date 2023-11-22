@@ -34,22 +34,28 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Red",
-              style: TextStyle(
-                color: Color(0xffd92328),
-                fontSize: 42,
-                fontWeight: FontWeight.bold,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: RichText(
+          text: const TextSpan(
+            children: <TextSpan>[
+              TextSpan(
+                text: "Red ",
+                style: TextStyle(
+                  color: Color(0xffd92328),
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Text(
-              "House",
-              style: TextStyle(color: Colors.black, fontSize: 24),
-            ),
-          ],
+              TextSpan(
+                text: "House",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       body: loading

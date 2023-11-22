@@ -1,8 +1,6 @@
 import 'package:client/core/services/network_controller.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
-import 'package:client/view/contracts/create_offer.dart';
-import 'package:client/view/offers/all_offers.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -46,12 +44,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.black),
         useMaterial3: true,
         fontFamily: "Poppins",
-        // appBarTheme: AppBarTheme(
-        //   backgroundColor:
-        //       Colors.red[900], // Set the background color for all AppBar widgets
-        // ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          centerTitle: true,
+        ),
       ),
-      home: BottomBar(),
+      home: const BottomBar(),
       routes: routes,
     );
   }

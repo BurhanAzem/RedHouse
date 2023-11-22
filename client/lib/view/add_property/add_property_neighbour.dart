@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:client/controller/auth/login_controller.dart';
-import 'package:client/view/add_property/add_property_neighbour.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +7,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddProperty1 extends StatefulWidget {
-  AddProperty1({Key? key}) : super(key: key);
+class AddPropertyNeighbour extends StatefulWidget {
+  AddPropertyNeighbour({Key? key}) : super(key: key);
 
   @override
-  _AddProperty1State createState() => _AddProperty1State();
+  _AddPropertyNeighbourState createState() => _AddPropertyNeighbourState();
 }
 
-class _AddProperty1State extends State<AddProperty1> {
-  bool arePlacemarksAvailable = false;
+class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
+  String neighbourType = "Select neighbours type";
+  // bool arePlacemarksAvailable = false;
+
   final geocoding = GeocodingPlatform.instance;
 
   late double lat;
@@ -25,8 +26,8 @@ class _AddProperty1State extends State<AddProperty1> {
   CameraPosition? currentCameraPosition;
   StreamSubscription<Position>? positionStream;
 
-  // Empty marker
-  Set<Marker> marker = {};
+  // Empty markers
+  Set<Marker> markers = {};
 
   Future<void> getLatAndLong() async {
     cl = await Geolocator.getCurrentPosition().then((value) => value);
@@ -41,15 +42,10 @@ class _AddProperty1State extends State<AddProperty1> {
     zoom: 8,
   );
 
-  ManagePropertyControllerImp controller =
-      Get.put(ManagePropertyControllerImp(), permanent: true);
   LoginControllerImp loginController = Get.put(LoginControllerImp());
 
   @override
   void initState() {
-    setState(() {
-      controller.activeStep = 1;
-    });
     positionStream =
         Geolocator.getPositionStream().listen((Position? position) {
       print(position == null
@@ -62,6 +58,14 @@ class _AddProperty1State extends State<AddProperty1> {
 
   @override
   Widget build(BuildContext context) {
+    const options = [
+      "Select neighbours type",
+      "Parking",
+      "Mosque",
+      "University",
+      "School"
+    ];
+
     return GetBuilder<ManagePropertyControllerImp>(
       init: ManagePropertyControllerImp(),
       builder: (ManagePropertyControllerImp controller) {
@@ -81,7 +85,7 @@ class _AddProperty1State extends State<AddProperty1> {
               },
             ),
             title: const Text(
-              "Property Location",
+              "Neighbor Locations",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -89,26 +93,62 @@ class _AddProperty1State extends State<AddProperty1> {
               ),
             ),
           ),
+
+          // Body
           body: Container(
             margin: const EdgeInsets.all(15),
             child: Form(
-              key: controller.formKey1,
+              key: controller.formKey2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   controller.easyStepper(),
-                  Container(
-                      margin: const EdgeInsets.only(left: 12),
-                      child: Image.asset("assets/images/logo.png", scale: 10)),
+                  // Container(
+                  //   margin: const EdgeInsets.only(left: 12),
+                  //   child: Image.asset("assets/images/logo.png", scale: 10),
+                  // ),
                   Container(
                     margin: const EdgeInsets.only(left: 12),
                     child: const Text(
-                      "First, let's add your property",
+                      "Add neighbors to this property",
                       style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
                     ),
                   ),
                   Container(height: 20),
+
+                  // Dropdown Button
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: DropdownButton<String>(
+                      value: neighbourType,
+                      items: options.map((String option) {
+                        return DropdownMenuItem<String>(
+                          value: option,
+                          child: Text(option),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        if (newValue != null) {
+                          setState(() {
+                            neighbourType = newValue;
+                          });
+                        }
+                      },
+                      isExpanded: true,
+                      underline: const SizedBox(),
+                    ),
+                  ),
+
+                  Container(height: 10),
                   Container(
                     margin: const EdgeInsets.only(left: 12),
                     child: const Text(
@@ -120,6 +160,7 @@ class _AddProperty1State extends State<AddProperty1> {
                       ),
                     ),
                   ),
+
                   Container(height: 5),
                   Container(
                     alignment: Alignment.center,
@@ -137,21 +178,9 @@ class _AddProperty1State extends State<AddProperty1> {
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 12),
-                    child: Text(
-                      "Enter the USPS-validated address. You won't be able to edit the address once you create the listing.",
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: Colors.grey[700],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
                   Container(height: 5),
 
-                  // Google Map
+                  // Googel Map
                   Container(
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(left: 12),
@@ -165,12 +194,59 @@ class _AddProperty1State extends State<AddProperty1> {
                               child: const CircularProgressIndicator())
                           : Expanded(
                               child: GoogleMap(
-                                markers: marker,
+                                markers: markers,
                                 onTap: (latlng) async {
-                                  marker.add(Marker(
-                                    markerId: const MarkerId("9"),
-                                    position: latlng,
-                                  ));
+                                  print(neighbourType);
+                                  if (neighbourType == "Parking") {
+                                    markers.add(
+                                      Marker(
+                                        markerId: const MarkerId("1"),
+                                        position: latlng,
+                                        icon: BitmapDescriptor
+                                            .defaultMarkerWithHue(
+                                                BitmapDescriptor.hueViolet),
+                                        infoWindow:
+                                            const InfoWindow(title: 'Parking'),
+                                      ),
+                                    );
+                                  } else if (neighbourType == "Mosque") {
+                                    markers.add(
+                                      Marker(
+                                        markerId: const MarkerId("2"),
+                                        position: latlng,
+                                        icon: BitmapDescriptor
+                                            .defaultMarkerWithHue(
+                                                BitmapDescriptor.hueYellow),
+                                        infoWindow:
+                                            const InfoWindow(title: 'Mosque'),
+                                      ),
+                                    );
+                                  } else if (neighbourType == "University") {
+                                    markers.add(
+                                      Marker(
+                                        markerId: const MarkerId("3"),
+                                        position: latlng,
+                                        icon: BitmapDescriptor
+                                            .defaultMarkerWithHue(
+                                                BitmapDescriptor.hueBlue),
+                                        infoWindow: const InfoWindow(
+                                            title: 'University'),
+                                      ),
+                                    );
+                                  } else if (neighbourType == "School") {
+                                    markers.add(
+                                      Marker(
+                                        markerId: const MarkerId("4"),
+                                        position: latlng,
+                                        icon: BitmapDescriptor
+                                            .defaultMarkerWithHue(
+                                                BitmapDescriptor.hueGreen),
+                                        infoWindow:
+                                            const InfoWindow(title: 'School'),
+                                      ),
+                                    );
+                                  }
+
                                   try {
                                     List<Placemark> placemarks =
                                         await placemarkFromCoordinates(
@@ -198,14 +274,12 @@ class _AddProperty1State extends State<AddProperty1> {
                                       print('Latitude: ${controller.Latitude}');
                                       print(
                                           'Longitude: ${controller.Longitude}');
-                                      arePlacemarksAvailable = true;
                                       setState(() {});
                                     }
                                   } catch (e) {
                                     Get.defaultDialog(
                                         title: "ُEntered invalid location",
                                         middleText: 'Error: $e');
-                                    arePlacemarksAvailable = false;
                                   }
                                   setState(() {});
                                 },
@@ -213,7 +287,7 @@ class _AddProperty1State extends State<AddProperty1> {
                                 initialCameraPosition: jerusalem,
                                 onMapCreated: (mapcontroller) {
                                   getLatAndLong();
-                                  controller.mapController1 = mapcontroller;
+                                  controller.mapController2 = mapcontroller;
                                 },
                               ),
                             ),
@@ -225,20 +299,15 @@ class _AddProperty1State extends State<AddProperty1> {
                     margin: const EdgeInsets.only(left: 12),
                     child: MaterialButton(
                       minWidth: 400,
-                      onPressed: arePlacemarksAvailable
-                          ? () {
-                              setState(() {
-                                controller.increaseActiveStep();
-                                print(controller.activeStep);
-                              });
-                              controller.userId =
-                                  loginController.userDto?["id"];
-                              Get.to(() => AddPropertyNeighbour());
-                            }
-                          : () {},
-                      color: arePlacemarksAvailable
-                          ? const Color(0xffd92328)
-                          : const Color.fromARGB(255, 251, 169, 169),
+                      onPressed: () {
+                        setState(() {
+                          controller.increaseActiveStep();
+                          print(controller.activeStep);
+                        });
+                        controller.userId = loginController.userDto?["id"];
+                        controller.goToAddProperty2();
+                      },
+                      color: const Color(0xffd92328),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -261,3 +330,5 @@ class _AddProperty1State extends State<AddProperty1> {
     );
   }
 }
+
+

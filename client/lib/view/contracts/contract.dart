@@ -1,10 +1,8 @@
 import 'package:client/model/contract.dart';
 import 'package:client/view/contracts/details.dart';
 import 'package:client/view/contracts/overview.dart';
-import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
 
 class ContractReview extends StatefulWidget {
   final Contract contract;
@@ -14,8 +12,8 @@ class ContractReview extends StatefulWidget {
   State<ContractReview> createState() => _TopNavigationBar();
 }
 
-/// AnimationControllers can be created with `vsync: this` because of TickerProviderStateMixin.
-class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMixin {
+class _TopNavigationBar extends State<ContractReview>
+    with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -29,7 +27,6 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        centerTitle: true,
         actions: [
           PopupMenuButton<String>(
             onSelected: (String choice) {
@@ -38,56 +35,36 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
             },
             itemBuilder: (BuildContext context) {
               return [
-                PopupMenuItem<String>(
+                const PopupMenuItem<String>(
                   value: 'Option 1',
                   child: Text('Proppose new contract'),
                 ),
-                PopupMenuItem<String>(
+                const PopupMenuItem<String>(
                   value: 'Option 2',
                   child: Text('Request public feedback'),
                 ),
-                PopupMenuItem<String>(
+                const PopupMenuItem<String>(
                   value: 'Option 3',
                   child: Text('End contract'),
                 ),
               ];
             },
-            icon: Icon(Icons.more_vert_outlined, color: Colors.white),
+            icon: const Icon(Icons.more_vert_outlined, color: Colors.white),
           ),
         ],
-        iconTheme: IconThemeData(
-            color: Colors.white), // Set the color of the leading button
-        title: const Row(
-          children: [
-            Text(
-              "                   C",
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "ontract",
-              style: TextStyle(
-                color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "Contract",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15),
-          bottomRight: Radius.circular(15),
-        )),
       ),
       body: Column(
         // shrinkWrap: true,
-        
+
         children: [
           Row(
             children: [
@@ -96,9 +73,9 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
                   child: ListTile(
                 title: Text(
                   widget.contract!.offer!.landlord!.name!,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text("Landlord"),
+                subtitle: const Text("Landlord"),
               )),
               IconButton(
                 icon: const Icon(
@@ -110,7 +87,6 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
               const SizedBox(width: 25),
             ],
           ),
-          
           Expanded(
             child: Container(
               child: DefaultTabController(
@@ -133,7 +109,7 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
                     indicatorColor: Colors.black,
                     labelColor: Colors.black,
                     labelStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       fontSize: 17,
                     ),
                     unselectedLabelColor: Colors.grey[700],
@@ -145,7 +121,7 @@ class _TopNavigationBar extends State<ContractReview> with TickerProviderStateMi
                   body: TabBarView(
                     children: [
                       Center(child: OverView(contract: widget.contract)),
-                      Center(
+                      const Center(
                         child: Text("It's rainy here"),
                       ),
                       Center(

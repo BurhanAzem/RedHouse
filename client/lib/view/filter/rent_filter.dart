@@ -326,14 +326,14 @@ class _RentFilterState extends State<RentFilter> {
                         }
                       },
                       minWidth: 300,
-                      height: 47,
+                      height: 45,
                       color: Colors.black87,
                       child: const Center(
                         child: Text(
-                          "See 0 homes",
+                          "See  homes",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

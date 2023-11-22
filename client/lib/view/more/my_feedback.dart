@@ -38,15 +38,15 @@ class _MyFeedbackState extends State<MyFeedback> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "My Feedback",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),
-        centerTitle: true,
       ),
       body: bodyMyFeedback(),
     );

@@ -12,7 +12,6 @@ class Application {
   DateTime applicationDate;
   String applicationStatus;
   String message;
-  String applicationType;
   User user;
   Property property;
   double ?suggestedPrice;
@@ -23,7 +22,6 @@ class Application {
       required this.applicationDate,
       required this.applicationStatus,
       required this.message,
-      required this.applicationType,
       required this.property,
       required this.user,
       this.suggestedPrice,

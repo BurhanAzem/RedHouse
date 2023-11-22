@@ -56,13 +56,18 @@ class _FilterPageState extends State<FilterPage> {
       initialIndex: controller.listingType ? 0 : 1,
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           title: Row(
             children: <Widget>[
               const Padding(
                 padding: EdgeInsets.only(right: 10),
                 child: Text(
                   'Filters',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 27),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 23,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               MaterialButton(
@@ -91,9 +96,9 @@ class _FilterPageState extends State<FilterPage> {
                 child: const Text(
                   'Reset',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 18,
+                    fontSize: 17.5,
                   ),
                 ),
               ),
@@ -104,14 +109,14 @@ class _FilterPageState extends State<FilterPage> {
               Tab(text: 'Buy'),
               Tab(text: 'Rent'),
             ],
-            overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
-            indicatorColor: Colors.black,
-            labelColor: Colors.black,
+            overlayColor: MaterialStatePropertyAll(Colors.grey[700]),
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
             labelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
               fontSize: 17,
             ),
-            unselectedLabelColor: Colors.grey[700],
+            unselectedLabelColor: Colors.grey[400],
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.normal,
               fontSize: 17,

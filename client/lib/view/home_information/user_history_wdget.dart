@@ -165,7 +165,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                             InkWell(
                               onTap: () {
                                 Get.to(() => HomeInformation(
-                                    property: userHistory.contract.property!));
+                                    property: userHistory.contract.offer!.property!));
                               },
                               child: Container(
                                 decoration: const BoxDecoration(
@@ -201,7 +201,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                               child: Center(
                                 child: Text(
                                   LoginController.getShortenedName(
-                                      userHistory.contract.landlord!.name!),
+                                      userHistory.contract.offer!.landlord!.name!),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
@@ -213,7 +213,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                             Expanded(
                                 child: ListTile(
                               title: Text(
-                                userHistory.contract.landlord!.name!,
+                                userHistory.contract.offer!.landlord!.name!,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,
@@ -279,7 +279,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                               child: Center(
                                 child: Text(
                                   LoginController.getShortenedName(
-                                      userHistory.contract.customer!.name!),
+                                      userHistory.contract.offer!.customer!.name!),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
@@ -291,7 +291,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                             Expanded(
                                 child: ListTile(
                               title: Text(
-                                userHistory.contract.customer!.name!,
+                                userHistory.contract.offer!.customer!.name!,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,

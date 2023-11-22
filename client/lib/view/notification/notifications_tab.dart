@@ -17,10 +17,13 @@ class _NotificationsTabState extends State<NotificationsTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
           "Notifications tab",
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
@@ -29,19 +32,19 @@ class _NotificationsTabState extends State<NotificationsTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 30),
-            Text(
+            const SizedBox(height: 30),
+            const Text(
               "      Property updates",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 19,
               ),
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 6),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: RichText(
-                text: TextSpan(
+                text: const TextSpan(
                   children: <TextSpan>[
                     TextSpan(
                       text:
@@ -80,9 +83,9 @@ class _NotificationsTabState extends State<NotificationsTab> {
                 ),
               ),
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             CheckboxListTile(
-              title: Text(
+              title: const Text(
                 "New listings",
                 style: TextStyle(
                   fontSize: 17,
@@ -98,7 +101,7 @@ class _NotificationsTabState extends State<NotificationsTab> {
               activeColor: Colors.green, // Color when selected
             ),
             CheckboxListTile(
-              title: Text(
+              title: const Text(
                 "Price changes",
                 style: TextStyle(
                   fontSize: 17,
@@ -114,7 +117,7 @@ class _NotificationsTabState extends State<NotificationsTab> {
               activeColor: Colors.green,
             ),
             CheckboxListTile(
-              title: Text(
+              title: const Text(
                 "Open houses",
                 style: TextStyle(
                   fontSize: 17,
@@ -130,7 +133,7 @@ class _NotificationsTabState extends State<NotificationsTab> {
               activeColor: Colors.green,
             ),
             CheckboxListTile(
-              title: Text(
+              title: const Text(
                 "Status changes",
                 style: TextStyle(
                   fontSize: 17,

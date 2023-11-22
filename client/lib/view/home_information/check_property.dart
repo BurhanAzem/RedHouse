@@ -303,7 +303,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                       onTap: () {
                                         Get.to(() => HomeInformation(
                                             property: propertyHistory
-                                                .contract.property!));
+                                                .contract.offer!.property!));
                                       },
                                       child: Container(
                                         decoration: const BoxDecoration(
@@ -340,7 +340,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                         child: Text(
                                           LoginController.getShortenedName(
                                               propertyHistory
-                                                  .contract.landlord!.name!),
+                                                  .contract.offer!.landlord!.name!),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 17,
@@ -353,7 +353,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                         child: ListTile(
                                       title: Text(
                                         propertyHistory
-                                            .contract.landlord!.name!,
+                                            .contract.offer!.landlord!.name!,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,
@@ -420,7 +420,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                         child: Text(
                                           LoginController.getShortenedName(
                                               propertyHistory
-                                                  .contract.customer!.name!),
+                                                  .contract.offer!.customer!.name!),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 17,
@@ -433,7 +433,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                         child: ListTile(
                                       title: Text(
                                         propertyHistory
-                                            .contract.customer!.name!,
+                                            .contract.offer!.customer!.name!,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
                                           fontSize: 16,

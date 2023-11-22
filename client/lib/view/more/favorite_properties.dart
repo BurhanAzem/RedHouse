@@ -52,15 +52,15 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
 
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Favorite properties",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),
-        centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 13),
@@ -69,7 +69,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
                 const Icon(
                   FontAwesome.cart_plus,
                   size: 29,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
                 Positioned(
                   top: 0,
@@ -140,7 +140,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
                     borderRadius: BorderRadius.circular(100),
                   ),
                   onPressed: () {
-                    Get.to(() => const BottomBar());
+                    Get.offAll(() => const BottomBar());
                   },
                   height: 45,
                   color: Colors.black87,

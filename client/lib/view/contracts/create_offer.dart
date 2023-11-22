@@ -1,7 +1,4 @@
-import 'package:client/controller/contracts/contracts_controller.dart';
 import 'package:client/controller/contracts/milestone_controller.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
-import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,11 +18,11 @@ class _CreateOfferState extends State<CreateOffer> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.utc(1800, 7, 20),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: Color(0xffd92328), // Change the color of the header
+            primaryColor: const Color(0xffd92328), // Change the color of the header
             // accentColor: Color(0xffd92328), // Change the color of the selected date
           ),
           child: child ?? Container(),
@@ -61,17 +58,17 @@ class _CreateOfferState extends State<CreateOffer> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Create Offer to Customer",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Form(
           child: ListView(
             children: [
@@ -79,7 +76,7 @@ class _CreateOfferState extends State<CreateOffer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(height: 5),
-                  Text(
+                  const Text(
                     "Choose property",
                     style: TextStyle(
                         fontSize: 18,
@@ -90,12 +87,12 @@ class _CreateOfferState extends State<CreateOffer> {
                   Container(
                     child: TextFormField(
                       controller: controller.milestoneName,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
                         hintText: "Milestone name",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -104,7 +101,7 @@ class _CreateOfferState extends State<CreateOffer> {
                   ),
                   Container(height: 5),
                   Container(height: 15),
-                  Text(
+                  const Text(
                     "Price",
                     style: TextStyle(
                         fontSize: 18,
@@ -115,12 +112,12 @@ class _CreateOfferState extends State<CreateOffer> {
                   Container(
                     child: TextFormField(
                       controller: controller.milestoneName,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
                         hintText: "  \$0.00",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -129,7 +126,7 @@ class _CreateOfferState extends State<CreateOffer> {
                   ),
                   Container(height: 5),
                   Container(height: 15),
-                  Text(
+                  const Text(
                     "Offer Expire Date",
                     style: TextStyle(
                         fontSize: 18,
@@ -138,22 +135,25 @@ class _CreateOfferState extends State<CreateOffer> {
                   ),
                   Container(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.5,),
-                      borderRadius: BorderRadius.all(Radius.circular(8))
-                    ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.5,
+                          ),
+                          borderRadius: const BorderRadius.all(Radius.circular(8))),
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(controller.milestoneDate.toString()),
-                          IconButton(onPressed: _selectDateAvialableOn, icon: Icon(Icons.date_range_outlined))
+                          IconButton(
+                              onPressed: _selectDateAvialableOn,
+                              icon: const Icon(Icons.date_range_outlined))
                         ],
                       )),
                   Container(height: 5),
                   Container(height: 15),
-                  Text(
+                  const Text(
                     "Description (Optional)",
                     style: TextStyle(
                         fontSize: 18,
@@ -166,13 +166,13 @@ class _CreateOfferState extends State<CreateOffer> {
                       minLines: 7,
                       maxLines: 10,
                       controller: controller.description,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
                         hintText:
                             "Example: New house in the center of the city, there is close school and very beautiful view",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -194,16 +194,16 @@ class _CreateOfferState extends State<CreateOffer> {
                   // });
                   // controller.;
                 },
-                color: Color.fromARGB(255, 0, 0, 0),
-                child: Text(
+                color: const Color.fromARGB(255, 0, 0, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
                   "Save",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               Container(height: 15),

@@ -25,11 +25,11 @@ class _AddMilestoneState extends State<AddMilestone> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.utc(1800, 7, 20),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: Color(0xffd92328), // Change the color of the header
+            primaryColor: const Color(0xffd92328), // Change the color of the header
             // accentColor: Color(0xffd92328), // Change the color of the selected date
           ),
           child: child ?? Container(),
@@ -71,7 +71,7 @@ class _AddMilestoneState extends State<AddMilestone> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Add milestone",
           style: TextStyle(
             color: Colors.black,
@@ -81,7 +81,7 @@ class _AddMilestoneState extends State<AddMilestone> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Form(
           child: ListView(
             children: [
@@ -89,7 +89,7 @@ class _AddMilestoneState extends State<AddMilestone> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(height: 5),
-                  Text(
+                  const Text(
                     "Milestone Name",
                     style: TextStyle(
                         fontSize: 18,
@@ -100,12 +100,12 @@ class _AddMilestoneState extends State<AddMilestone> {
                   Container(
                     child: TextFormField(
                       controller: controller.milestoneName,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
                         hintText: "Milestone name",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -114,7 +114,7 @@ class _AddMilestoneState extends State<AddMilestone> {
                   ),
                   Container(height: 5),
                   Container(height: 15),
-                  Text(
+                  const Text(
                     "Amount",
                     style: TextStyle(
                         fontSize: 18,
@@ -125,12 +125,12 @@ class _AddMilestoneState extends State<AddMilestone> {
                   Container(
                     child: TextFormField(
                       controller: controller.amount,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
                         hintText: "  \$0.00",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -139,7 +139,7 @@ class _AddMilestoneState extends State<AddMilestone> {
                   ),
                   Container(height: 5),
                   Container(height: 15),
-                  Text(
+                  const Text(
                     "Due Date",
                     style: TextStyle(
                         fontSize: 18,
@@ -148,22 +148,22 @@ class _AddMilestoneState extends State<AddMilestone> {
                   ),
                   Container(height: 5),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       border: Border.all(width: 0.5,),
-                      borderRadius: BorderRadius.all(Radius.circular(8))
+                      borderRadius: const BorderRadius.all(Radius.circular(8))
                     ),
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(controller.milestoneDate.toString()),
-                          IconButton(onPressed: _selectDateAvialableOn, icon: Icon(Icons.date_range_outlined))
+                          IconButton(onPressed: _selectDateAvialableOn, icon: const Icon(Icons.date_range_outlined))
                         ],
                       )),
                   Container(height: 5),
                   Container(height: 15),
-                  Text(
+                  const Text(
                     "Description (Optional)",
                     style: TextStyle(
                         fontSize: 18,
@@ -176,13 +176,13 @@ class _AddMilestoneState extends State<AddMilestone> {
                       minLines: 7,
                       maxLines: 10,
                       controller: controller.description,
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
                         hintText:
                             "Example: New house in the center of the city, there is close school and very beautiful view",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(5),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -205,16 +205,16 @@ class _AddMilestoneState extends State<AddMilestone> {
                   await controller.addMilestone(widget.contract.id);
                   Get.to(ContractReview(contract: widget.contract));
                 },
-                color: Color.fromARGB(255, 0, 0, 0),
-                child: Text(
+                color: const Color.fromARGB(255, 0, 0, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Text(
                   "Save",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               Container(height: 15),

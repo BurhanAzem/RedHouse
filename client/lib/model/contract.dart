@@ -1,7 +1,5 @@
 import 'package:client/model/milestone.dart';
 import 'package:client/model/offer.dart';
-import 'package:client/model/property.dart';
-import 'package:client/model/user.dart';
 import 'package:json_annotation/json_annotation.dart';
 part "contract.g.dart";
 

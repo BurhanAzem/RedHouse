@@ -1,13 +1,6 @@
-import 'dart:developer';
-
-import 'package:client/controller/contracts/contracts_controller.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/model/contractActivity.dart';
-import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class Details extends StatefulWidget {
   final Contract contract;
@@ -21,50 +14,20 @@ class _StepperDemoState extends State<Details> {
   bool showMoreSummary = false;
   String summaryString = "Show more";
   StepperType stepperType = StepperType.vertical;
-// bool isLoading = true; // Add a boolean variable for loading state
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadData();
-//     setState(() {});
-//   }
-
-//   void loadData() async {
-//     AllContractsControllerImp controller =
-//         Get.put(AllContractsControllerImp(), permanent: true);
-//     String? userDtoJson = sharepref!.getString("user");
-//     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
-//     User user = User.fromJson(userDto);
-//     controller.userId = user.id;
-//     await controller.getAllContrcats();
-
-//     setState(() {
-//       isLoading = false; // Set isLoading to false when data is loaded
-//     });
-//   }
 
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    ContractsControllerImp controller = Get.put(ContractsControllerImp());
-
-    // if (isLoading) {
-    //   return Center(
-    //     child: CircularProgressIndicator(), // Show a loading indicator
-    //   );
-    // }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.all(15), // Adjust the margin as needed
-                padding: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(15), // Adjust the margin as needed
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -73,14 +36,14 @@ class _StepperDemoState extends State<Details> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 1,
                       blurRadius: 0,
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ],
                 ),
                 child: Column(children: [
                   Container(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: const Text(
                         "Summary",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
@@ -94,13 +57,13 @@ class _StepperDemoState extends State<Details> {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.circle,
                             size: 8,
                           ),
                           Container(
-                              margin: EdgeInsets.only(left: 8),
-                              child: Text("Contract type")),
+                              margin: const EdgeInsets.only(left: 8),
+                              child: const Text("Contract type")),
                         ],
                       ),
                       Text(widget.contract.contractType)
@@ -115,14 +78,14 @@ class _StepperDemoState extends State<Details> {
                     children: [
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.circle,
                             size: 8,
                             color: Colors.grey,
                           ),
                           Container(
-                              margin: EdgeInsets.only(left: 8),
-                              child: Text("Start date")),
+                              margin: const EdgeInsets.only(left: 8),
+                              child: const Text("Start date")),
                         ],
                       ),
                       Text(
@@ -141,14 +104,14 @@ class _StepperDemoState extends State<Details> {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.circle,
                                       size: 8,
                                       color: Colors.black,
                                     ),
                                     Container(
-                                        margin: EdgeInsets.only(left: 8),
-                                        child: Text("Landlord")),
+                                        margin: const EdgeInsets.only(left: 8),
+                                        child: const Text("Landlord")),
                                   ],
                                 ),
                                 Text(widget.contract.offer!.landlord!.name!)
@@ -163,14 +126,14 @@ class _StepperDemoState extends State<Details> {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(
+                                    const Icon(
                                       Icons.circle,
                                       size: 8,
                                       color: Colors.grey,
                                     ),
                                     Container(
-                                        margin: EdgeInsets.only(left: 8),
-                                        child: Text("Price")),
+                                        margin: const EdgeInsets.only(left: 8),
+                                        child: const Text("Price")),
                                   ],
                                 ),
                                 Text(widget.contract.offer!.price.toString())
@@ -186,21 +149,21 @@ class _StepperDemoState extends State<Details> {
                       });
                     },
                     child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                             border: Border.all(width: 1),
                             borderRadius: BorderRadius.circular(15)),
                         child: Text(
                           !showMoreSummary ? "Show more" : "Show less",
-                          style: TextStyle(fontWeight: FontWeight.w600),
+                          style: const TextStyle(fontWeight: FontWeight.w600),
                         )),
                   )
                 ]),
               ),
               Container(
-                margin: EdgeInsets.all(15), // Adjust the margin as needed
-                padding: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(15), // Adjust the margin as needed
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -209,14 +172,14 @@ class _StepperDemoState extends State<Details> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 1,
                       blurRadius: 0,
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ],
                 ),
                 child: Column(children: [
                   Container(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: const Text(
                         "Description",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
@@ -224,21 +187,21 @@ class _StepperDemoState extends State<Details> {
                   Container(
                     height: 15,
                   ),
-                  Container(child: Text(
-                      // "Hi, everyone. I will do my best to be as straightforward, to the point and descriptive as possible. I am looking for a web designer/programmer to help me create an online 'tutoring' website that will potentially allow high schoolers to earn volunteer hours for posting their own made foreign language material onto the website. Foreign language material can include things like vocab sets, worksheets, and other educational materials that can be used in a classroom. It is designed to essentially allow high school students who know a second language to provide material that can be used in classrooms and by")),
-                      widget.contract.offer!.description)),
+                  Container(
+                    child: Text(widget.contract.offer!.description),
+                  ),
                   Container(
                     height: 15,
                   ),
                   MaterialButton(
                     onPressed: () {},
                     child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                             border: Border.all(width: 1),
                             borderRadius: BorderRadius.circular(15)),
-                        child: Text(
+                        child: const Text(
                           "View original offer",
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )),
@@ -246,8 +209,8 @@ class _StepperDemoState extends State<Details> {
                 ]),
               ),
               Container(
-                margin: EdgeInsets.all(15), // Adjust the margin as needed
-                padding: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(15), // Adjust the margin as needed
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -256,14 +219,14 @@ class _StepperDemoState extends State<Details> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 1,
                       blurRadius: 0,
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ],
                 ),
                 child: Column(children: [
                   Container(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: const Text(
                         "Recent Activity",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
@@ -274,20 +237,20 @@ class _StepperDemoState extends State<Details> {
                   Container(
                     child: Row(children: [
                       Container(
-                          margin: EdgeInsets.only(right: 68),
-                          child: Text("Date")),
-                      Text("Description")
+                          margin: const EdgeInsets.only(right: 68),
+                          child: const Text("Date")),
+                      const Text("Description")
                     ]),
                   ),
                   Container(
                     height: 0.8,
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    color: Color.fromARGB(255, 80, 80, 80),
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    color: const Color.fromARGB(255, 80, 80, 80),
                   ),
                   Container(
                     // margin: EdgeInsets.only(left: 25, bottom: 40),
                     child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: activities!.length,
                       itemBuilder: (context, index) {
@@ -305,7 +268,7 @@ class _StepperDemoState extends State<Details> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      margin: EdgeInsets.only(right: 30),
+                                      margin: const EdgeInsets.only(right: 30),
                                       child: Text(
                                         activities[index]
                                             .activityDate
@@ -328,8 +291,9 @@ class _StepperDemoState extends State<Details> {
                               if (activities!.length - 1 != index)
                                 Container(
                                   height: 0.8,
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  color: Color.fromARGB(255, 80, 80, 80),
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 10),
+                                  color: const Color.fromARGB(255, 80, 80, 80),
                                 ),
                             ],
                           ),
@@ -340,8 +304,8 @@ class _StepperDemoState extends State<Details> {
                 ]),
               ),
               Container(
-                margin: EdgeInsets.all(15), // Adjust the margin as needed
-                padding: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(15), // Adjust the margin as needed
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -350,14 +314,14 @@ class _StepperDemoState extends State<Details> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 1,
                       blurRadius: 0,
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ],
                 ),
                 child: Column(children: [
                   Container(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: const Text(
                         "Feedback",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
@@ -367,39 +331,40 @@ class _StepperDemoState extends State<Details> {
                   ),
                   Container(
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         "This contract doesn’t have any feedback right now ",
                       )),
                   Container(
                     height: 5,
                   ),
                   Container(
-                      child: Icon(
+                      child: const Icon(
                     Icons.feed_rounded,
                     size: 50,
                   )),
                   MaterialButton(
                     onPressed: () {},
                     child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 26, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 26, vertical: 6),
                         decoration: BoxDecoration(
                             border: Border.all(width: 1),
                             borderRadius: BorderRadius.circular(15)),
-                        child: Text(
+                        child: const Text(
                           "Give Feedback",
                           style: TextStyle(fontWeight: FontWeight.w600),
                         )),
                   ),
                   MaterialButton(
                     color: Colors.black,
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                     shape: RoundedRectangleBorder(
                         // border: Border.all(width: 1),
                         borderRadius: BorderRadius.circular(18)),
                     onPressed: () {},
                     child: Container(
-                        child: Text(
+                        child: const Text(
                       "Request Feedback",
                       style: TextStyle(
                           fontWeight: FontWeight.w600, color: Colors.white),
@@ -419,28 +384,28 @@ class _StepperDemoState extends State<Details> {
 }
 
 List<ContractActivity> activities = [
-  new ContractActivity(
+  ContractActivity(
       id: 1,
       contractId: 1,
       activityDate: DateTime(2023, 11, 1),
       activityDescription: "Bassam create new milestone"),
-  new ContractActivity(
+  ContractActivity(
       id: 1,
       contractId: 1,
       activityDate: DateTime(2023, 11, 1),
       activityDescription:
           "Bassam create new milestone This contract doesn’t have any feedback right nowThis contract doesn’t have any feedback right now"),
-  new ContractActivity(
+  ContractActivity(
       id: 1,
       contractId: 1,
       activityDate: DateTime(2023, 11, 1),
       activityDescription: "Bassam create new milestone "),
-  new ContractActivity(
+  ContractActivity(
       id: 1,
       contractId: 1,
       activityDate: DateTime(2023, 11, 1),
       activityDescription: "Bassam create new milestone"),
-  new ContractActivity(
+  ContractActivity(
       id: 1,
       contractId: 1,
       activityDate: DateTime(2023, 11, 1),

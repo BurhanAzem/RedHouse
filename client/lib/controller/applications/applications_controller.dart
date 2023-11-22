@@ -89,6 +89,16 @@ class ApplicationsControllerImp extends ContractsController {
     }
   }
 
+  approvedApplication(int id) async {
+    var response = await ApplicationData.approvedApplication(id);
+    print(response['message']);
+  }
+
+  deleteApplication(int id) async {
+    var response = await ApplicationData.deleteApplication(id);
+    print(response['message']);
+  }
+
   @override
   void onInit() {
     super.onInit();

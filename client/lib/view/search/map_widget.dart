@@ -431,7 +431,7 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 2),
                             Text(
-                              "${property.location!.streetAddress}, ${property.location!.city}, ${property.location!.country}",
+                              "${property.location!.city}, ${property.location!.country}",
                               style: const TextStyle(fontSize: 15),
                             ),
                             const SizedBox(height: 2),

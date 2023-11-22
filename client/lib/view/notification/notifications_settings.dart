@@ -11,10 +11,15 @@ class NotificationsSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notifications Settings",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            )),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "Notifications Settings",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       body: Column(
         children: [

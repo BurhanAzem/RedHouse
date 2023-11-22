@@ -18,23 +18,28 @@ class _NotificationsState extends State<Notifications> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             const Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 0),
               child: Text(
-                'Notifications',
+                ' Notifications',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 0),
               child: IconButton(
-                iconSize: 32,
-                icon: Icon(Icons.settings_outlined), // Your settings icon
+                iconSize: 30,
+                icon: const Icon(
+                  Icons.settings,
+                  color: Colors.white,
+                ), // Your settings icon
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => NotificationsSettings()),
+                        builder: (context) => const NotificationsSettings()),
                   );
                 },
               ),

@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/main.dart';
 import 'package:client/model/application.dart';
+import 'package:client/model/user.dart';
 import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +31,19 @@ class _StepperDemoState extends State<ApplicationDetails> {
     setState(() {});
   }
 
+  void loadDataAllapliactions() async {
+    ApplicationsControllerImp controller =
+        Get.put(ApplicationsControllerImp(), permanent: true);
+    String? userDtoJson = sharepref.getString("user");
+    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
+    User user = User.fromJson(userDto);
+    await controller.getApplications(user.id!);
+
+    setState(() {
+      isLoading = false; // Set isLoading to false when data is loaded
+    });
+  }
+
   void loadData() async {
     application = Get.arguments as Application;
 
@@ -46,13 +63,22 @@ class _StepperDemoState extends State<ApplicationDetails> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        title: const Text('Application Details'),
         centerTitle: true,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text(
+          "Application Details",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+        margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
         child: Column(
           children: [
+            const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -142,16 +168,16 @@ class _StepperDemoState extends State<ApplicationDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
-                    const Text(
+                    Text(
                       "Type: ",
                       style:
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     Text(
-                      application.applicationType,
-                      style: const TextStyle(
+                      "Type",
+                      style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 12,
                           color: Color(0xffd92328)),
@@ -204,48 +230,59 @@ class _StepperDemoState extends State<ApplicationDetails> {
               ),
             ),
             Container(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  height: 40,
-                  width: 160,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(40),
-                    border: Border.all(
+            if (application.applicationStatus == "Pending")
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 160,
+                    decoration: BoxDecoration(
                       color: Colors.black,
-                      width: 1,
+                      borderRadius: BorderRadius.circular(40),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                    ),
+                    child: MaterialButton(
+                      onPressed: () {
+                        setState(() {
+                          application.applicationStatus = "Approved";
+                          controller.approvedApplication(application.id);
+                        });
+                      },
+                      child: const Text(
+                        "Approve",
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                      ),
                     ),
                   ),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Approve",
-                      style: TextStyle(fontSize: 16, color: Colors.white),
+                  Container(
+                    height: 40,
+                    width: 160,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 1,
+                      ),
+                    ),
+                    child: MaterialButton(
+                      onPressed: () {
+                        controller.deleteApplication(application.id);
+                        loadDataAllapliactions();
+                        setState(() {});
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        "Ignore",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  height: 40,
-                  width: 160,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1,
-                    ),
-                  ),
-                  child: MaterialButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Reject",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                ],
+              ),
             Container(height: 25),
             InkWell(
               onTap: () {

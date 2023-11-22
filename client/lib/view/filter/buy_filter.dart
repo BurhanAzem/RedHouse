@@ -327,10 +327,10 @@ class _BuyFilterState extends State<BuyFilter> {
                       color: Colors.black87,
                       child: const Center(
                         child: Text(
-                          "See 0 homes",
+                          "See  homes",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 16,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
