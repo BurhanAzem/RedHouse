@@ -11,11 +11,11 @@ class MapListController extends GetxController {
   double newZoom = 0.0;
   BuildContext? mapContext;
 
-  List<MapMarker> allMarkers = [];
+  // List<MapMarker> allMarkers = [];
   Set<Marker> visibleMarkers = <Marker>{};
   Set<Property> visibleProperties = <Property>{};
 
-  bool? isLoading;
+  bool isLoading = true;
   bool? isLoadingImage;
   bool isListIcon = true;
 

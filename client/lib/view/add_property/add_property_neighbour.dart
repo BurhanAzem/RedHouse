@@ -330,5 +330,3 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
     );
   }
 }
-
-

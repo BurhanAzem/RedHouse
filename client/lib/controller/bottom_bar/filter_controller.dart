@@ -330,19 +330,19 @@ class FilterController extends GetxController {
     }
   }
 
-  List<MapMarker> getMarkerLocations(List<Property> properties) {
-    return properties == []
-        ? []
-        : properties.map((property) {
-            return MapMarker(
-              property: property,
-              position: LatLng(
-                property.location?.latitude ?? 0.0,
-                property.location?.longitude ?? 0.0,
-              ),
-            );
-          }).toList();
-  }
+  // List<MapMarker> getMarkerLocations(List<Property> properties) {
+  //   return properties == []
+  //       ? []
+  //       : properties.map((property) {
+  //           return MapMarker(
+  //             property: property,
+  //             position: LatLng(
+  //               property.location?.latitude ?? 0.0,
+  //               property.location?.longitude ?? 0.0,
+  //             ),
+  //           );
+  //         }).toList();
+  // }
 
   void setBedButtonTemp(String label) {
     bedButtonTemp.value = label;
