@@ -189,7 +189,9 @@ class _MapWidgetState extends State<MapWidget>
             child: GoogleMap(
               zoomControlsEnabled: true,
               mapType: currentMapType,
-              initialCameraPosition: mapListController.currentPosition,
+              // initialCameraPosition: mapListController.currentPosition,
+              initialCameraPosition:
+                  CameraPosition(target: LatLng(33, 33), zoom: 15),
               onMapCreated: (controller) {
                 setState(() {
                   mapController = controller;

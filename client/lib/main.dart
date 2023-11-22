@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         ),
       ),
-      home: const BottomBar(),
+      home: BottomBar(),
       routes: routes,
     );
   }

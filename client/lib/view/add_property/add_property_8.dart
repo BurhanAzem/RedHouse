@@ -179,15 +179,14 @@ class _AddProperty8State extends State<AddProperty8> {
                       Future<void> addPropertyFuture() async {
                         await controller.AddProperty();
 
-                        // print(bottomBarController.currentIndex);
-                        // if (bottomBarController.currentIndex == 3) {
-                        //   Get.offAll(() => BottomBar());
-                        // } else if (bottomBarController.currentIndex == 4) {
-                        //   Get.offAll(() => BottomBar());
-                        //   Get.to(() => MyProperties());
-                        // }
+                        print(bottomBarController.currentIndex);
+                        if (bottomBarController.currentIndex == 3) {
+                          Get.offAll(() => BottomBar());
+                        } else if (bottomBarController.currentIndex == 4) {
+                          Get.offAll(() => BottomBar());
+                          Get.to(() => MyProperties());
+                        }
 
-                        Get.offAll(() => BottomBar());
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
 

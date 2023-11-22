@@ -20,8 +20,6 @@ class BottomBar extends StatefulWidget {
 }
 
 class _BottomBarState extends State<BottomBar> {
-int currentIndex = 0;
-
   BottomBarController bottomBarController =
       Get.put(BottomBarController(), permanent: true);
 
@@ -87,7 +85,7 @@ int currentIndex = 0;
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
-        index:currentIndex,
+        index: bottomBarController.currentIndex,
         children: const [
           Search(),
           AllContracts(),
@@ -97,7 +95,7 @@ int currentIndex = 0;
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
+        currentIndex: bottomBarController.currentIndex,
         type: BottomNavigationBarType.fixed,
         iconSize: 18,
         backgroundColor: Colors.white,
@@ -116,7 +114,7 @@ int currentIndex = 0;
         ],
         onTap: (index) {
           setState(() {
-            currentIndex = index;
+            bottomBarController.currentIndex = index;
           });
         },
       ),
@@ -125,7 +123,7 @@ int currentIndex = 0;
 
   BottomNavigationBarItem _buildBottomNavigationBarItem(int index) {
     return BottomNavigationBarItem(
-      icon: currentIndex == index
+      icon: bottomBarController.currentIndex == index
           ? _selectedIcons[index]
           : _unselectedIcons[index],
       label: _getLabel(index),

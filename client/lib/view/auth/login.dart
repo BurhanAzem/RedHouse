@@ -73,7 +73,10 @@ class _LoginState extends State<Login> {
           children: [
             const Text(
               "Login with your email and password\n or continue with social media",
-              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 12),
+              style: TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 13,
+              ),
               textAlign: TextAlign.center,
             ),
             Container(height: 60),

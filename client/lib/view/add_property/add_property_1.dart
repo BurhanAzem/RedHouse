@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/view/add_property/add_property_2.dart';
 import 'package:client/view/add_property/add_property_neighbour.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
@@ -234,6 +235,7 @@ class _AddProperty1State extends State<AddProperty1> {
                               controller.userId =
                                   loginController.userDto?["id"];
                               Get.to(() => AddPropertyNeighbour());
+                              // Get.to(() => AddProperty2());
                             }
                           : () {},
                       color: arePlacemarksAvailable

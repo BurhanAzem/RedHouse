@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:client/controller/auth/login_controller.dart';
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/view/add_property/add_property_neighbour.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -148,6 +149,7 @@ class _AllPropertiesState extends State<Properties>
             foregroundColor: Colors.white,
             onPressed: () {
               controller.goToAddProperty1();
+              // Get.to(() => AddPropertyNeighbour());
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),

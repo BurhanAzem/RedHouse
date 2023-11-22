@@ -6,7 +6,6 @@ import 'package:client/view/add_property/add_property_5.dart';
 import 'package:client/view/add_property/add_property_6.dart';
 import 'package:client/view/add_property/add_property_7.dart';
 import 'package:client/view/add_property/add_property_8.dart';
-import 'package:client/view/add_property/add_property_9.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/notification/notifications_settings.dart';
@@ -63,15 +62,11 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty6: (context) => AddProperty6(),
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
-  // AppRoute.addProperty9: (context) => AddProperty9(),
   AppRoute.allContracts: (context) => AllContracts(),
   AppRoute.applicationDetails: (context) => ApplicationDetails(),
-  // AppRoute.contract: (context) => const ContractReview(),
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
-  // AppRoute.userHistory: (context) => UserHistory(),
-  // AppRoute.addMilestone: (context) => AddMilestone(),
 
   //________________________________________________________
   "/search": (context) => const Search(),
