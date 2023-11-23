@@ -12,7 +12,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       isVerified: json['isVerified'] as bool,
       locationId: json['locationId'] as int,
       name: json['name'] as String?,
-      phoneNumber: json['phoneNumber'] as int,
+      phoneNumber: json['phoneNumber'] != null ? json['phoneNumber'] as int : 0,
       userRole: json['userRole'] as String?,
     );
 

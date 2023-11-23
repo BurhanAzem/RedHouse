@@ -1,9 +1,7 @@
-import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/applications.dart';
 import 'package:client/data/properties.dart';
-import 'package:client/data/user_history.dart';
+import 'package:client/data/history.dart';
 import 'package:client/model/application.dart';
-import 'package:client/model/contract.dart';
 import 'package:client/model/property.dart';
 import 'package:client/model/user_history.dart';
 import 'package:client/routes.dart';
@@ -13,7 +11,6 @@ import 'package:get/get.dart';
 abstract class ContractsController extends GetxController {
   ContractsController();
   goToContract();
-
 }
 
 class ApplicationsControllerImp extends ContractsController {
@@ -21,19 +18,18 @@ class ApplicationsControllerImp extends ContractsController {
 
   List<Application> applications = [];
   List<UserHistory> userHistory = [];
+  List<UserHistory> propertyHistory = [];
 
   String? applicationType = "All";
   String? applicationStatus = "All";
-
-
+  String? applicationTo = "Landlord";
   getApplications(int userId) async {
-    var response = await ApplicationData.getApplications(userId);
+    var response = await ApplicationData.getApplications(userId, applicationStatus, applicationType, applicationTo);
 
     if (response['statusCode'] == 200) {
       applications = (response['listDto'] as List<dynamic>)
           .map((e) => Application.fromJson(e as Map<String, dynamic>))
           .toList();
-      // applications = Application.fromJson(response);
       print(applications);
     } else {
       Get.defaultDialog(
@@ -44,7 +40,6 @@ class ApplicationsControllerImp extends ContractsController {
     }
   }
 
-
   getHistoryUser(int userId) async {
     var response = await UserHistoryData.getUserHistory(userId);
 
@@ -52,8 +47,24 @@ class ApplicationsControllerImp extends ContractsController {
       userHistory = (response['listDto'] as List<dynamic>)
           .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
           .toList();
-      // applications = Application.fromJson(response);
       print(userHistory);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  getHistoryProperty(int propertId) async {
+    var response = await UserHistoryData.getPropertyHistory(propertId);
+
+    if (response['statusCode'] == 200) {
+      propertyHistory = (response['listDto'] as List<dynamic>)
+          .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
+          .toList();
+      print(propertyHistory);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -78,9 +89,18 @@ class ApplicationsControllerImp extends ContractsController {
     }
   }
 
+  approvedApplication(int id) async {
+    var response = await ApplicationData.approvedApplication(id);
+    print(response['message']);
+  }
+
+  deleteApplication(int id) async {
+    var response = await ApplicationData.deleteApplication(id);
+    print(response['message']);
+  }
+
   @override
   void onInit() {
-    
     super.onInit();
   }
 

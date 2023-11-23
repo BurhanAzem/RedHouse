@@ -24,7 +24,14 @@ class _TopNavigationBar extends State<ManageProperties>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage properties'),
+        title: const Text(
+          "Manage Properties",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         bottom: TabBar(
           controller: _tabController,
           tabs: const <Widget>[
@@ -38,15 +45,15 @@ class _TopNavigationBar extends State<ManageProperties>
               child: Text("Other"),
             ),
           ],
-          overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
-          indicatorColor: Colors.black,
-          labelColor: Colors.black,
-          labelStyle: TextStyle(
-            fontWeight: FontWeight.bold,
+          overlayColor: MaterialStatePropertyAll(Colors.grey[700]),
+          indicatorColor: Colors.white,
+          labelColor: Colors.white,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.w600,
             fontSize: 17,
           ),
-          unselectedLabelColor: Colors.grey[700],
-          unselectedLabelStyle: TextStyle(
+          unselectedLabelColor: Colors.grey[400],
+          unselectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.normal,
             fontSize: 17,
           ),

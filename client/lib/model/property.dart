@@ -1,7 +1,6 @@
 import 'package:client/model/location.dart';
 import 'package:client/model/property_files.dart';
 import 'package:client/model/user.dart';
-import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 part "property.g.dart";
 

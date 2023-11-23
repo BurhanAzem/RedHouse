@@ -1,11 +1,11 @@
-import 'package:client/controller/account_info_contoller.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
-import 'package:client/model/list_property.dart';
 import 'package:client/model/property.dart';
 import 'package:client/routes.dart';
+import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 abstract class ManagePropertyController extends GetxController {
   ManagePropertyController();
@@ -21,12 +21,15 @@ abstract class ManagePropertyController extends GetxController {
 }
 
 class ManagePropertyControllerImp extends ManagePropertyController {
-  AccountInfoContoller controller = Get.put(AccountInfoContoller());
   int propertiesUserId = 0;
   List<Property> userProperties = [];
 
-  GlobalKey<FormState> formstate = GlobalKey<FormState>();
+  GlobalKey<FormState> formKey1 = GlobalKey<FormState>(); // In AddProperty1
+  GlobalKey<FormState> formKey2 = GlobalKey<FormState>(); // In AddNeighbour
+  GoogleMapController? mapController1; // In AddProperty1
+  GoogleMapController? mapController2; // In AddNeighbour
   int activeStep = 0;
+
   late TextEditingController price;
   late TextEditingController numberOfBedrooms;
   late TextEditingController numberOfBathrooms;
@@ -45,7 +48,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
   String listingBy = "Landlord";
   int userId = 0;
   List<String> downloadUrls = [];
-  // PropertyData propertyData = PropertyData(Crud());
   StatusRequest statusRequest = StatusRequest.loading;
 
   String? City;
@@ -59,7 +61,7 @@ class ManagePropertyControllerImp extends ManagePropertyController {
 
   @override
   AddProperty() async {
-    if (formstate.currentState!.validate()) {
+    if (formKey1.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
       var response = await PropertyData.addProperty(
           propertyType,
@@ -90,8 +92,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
       if (response['statusCode'] == 200) {
         print("================================================== LsitDto");
         print(response['listDto']);
-
-        // Get.offNamed(AppRoute.verfiyCodeSignUp);
       } else {
         Get.defaultDialog(
           title: "Error",
@@ -122,9 +122,7 @@ class ManagePropertyControllerImp extends ManagePropertyController {
     super.onInit();
   }
 
-
-
-getPropertiesUser() async {
+  getPropertiesUser() async {
     var response = await PropertyData.getPropertiesForUser(propertiesUserId);
 
     if (response['statusCode'] == 200) {
@@ -140,6 +138,7 @@ getPropertiesUser() async {
       );
     }
   }
+
   @override
   goToAddProperty1() {
     Get.toNamed(AppRoute.addProperty1);
@@ -183,5 +182,191 @@ getPropertiesUser() async {
   @override
   goToAddProperty9() {
     Get.toNamed(AppRoute.addProperty9);
+  }
+
+  void increaseActiveStep() {
+    activeStep++;
+    update();
+  }
+
+  void decreaseActiveStep() {
+    activeStep--;
+    update();
+  }
+
+  Widget easyStepper() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: EasyStepper(
+        finishedStepBackgroundColor: const Color(0xffd92328),
+        activeStepBorderColor: Colors.black,
+        stepShape: StepShape.circle,
+        lineStyle: const LineStyle(),
+
+        activeStep: activeStep,
+        activeStepTextColor: Colors.black87,
+        finishedStepTextColor: Colors.black87,
+        internalPadding: 0,
+        fitWidth: true,
+        showLoadingAnimation: false,
+        stepRadius: 5,
+        showStepBorder: false,
+        steps: [
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 1 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Order Received',
+            topTitle: true,
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 2 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Preparing',
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 3 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'On Way',
+            topTitle: true,
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 4 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Delivered',
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 5 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Delivered',
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 6 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Delivered',
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 7 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Delivered',
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 8 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Delivered',
+          ),
+          EasyStep(
+            customStep: CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.grey,
+              child: CircleAvatar(
+                radius: 7,
+                backgroundColor:
+                    activeStep >= 9 ? const Color(0xffd92328) : Colors.grey,
+              ),
+            ),
+            // title: 'Delivered',
+          ),
+        ],
+
+        // ON Step Reached
+        onStepReached: (index) {
+          activeStep = index;
+          update();
+        },
+      ),
+    );
+  }
+}
+
+class CustomMarkerWidget extends StatelessWidget {
+  final String markerText;
+
+  const CustomMarkerWidget({Key? key, required this.markerText})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 75,
+      width: 75,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          const Align(
+            alignment: Alignment.bottomCenter,
+            child: Icon(
+              Icons.arrow_drop_down,
+              color: Colors.black,
+              size: 50,
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 14),
+            padding: const EdgeInsets.all(5),
+            color: Colors.black,
+            child: Text(
+              markerText,
+              style: const TextStyle(color: Colors.white),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -310,13 +310,14 @@ namespace RedHouse_Server.Services
             };
         }
 
-        public async Task<ResponsDto<UserHistory>> GetPropertyHistory(int propertyId)
-        {
+        
 
+        public async Task<ResponsDto<Offer>> GetPricePropertyHistory(int propertyId)
+        {
             var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
             if (property == null)
             {
-                return new ResponsDto<UserHistory>
+                return new ResponsDto<Offer>
                 {
                     Message = $"Property with {propertyId} Id Dose Not Exist",
                     StatusCode = HttpStatusCode.BadRequest,
@@ -324,40 +325,18 @@ namespace RedHouse_Server.Services
             }
 
 
-
-
-            var contracts = _redHouseDbContext.Contracts
-                .Where(c => c.Offer.PropertyId == propertyId)
-                .Include(c => c.Offer.Property) // Include the Property navigation property
-                .Include(c => c.Offer.Landlord) // Include the Landlord navigation property
-                .Include(c => c.Offer.Customer) // Include the Customer navigation property
+            var acceptedOffers = _redHouseDbContext.Offers
+                .Where(o => o.PropertyId == propertyId && o.OfferStatus == "Accepted")
+                .Include(o => o.Property) // Include the Property navigation property
+                .Include(o => o.Landlord) // Include the Landlord navigation property
+                .Include(o => o.Customer) // Include the Customer navigation property
                 .ToList();
 
-            var userHistories = _redHouseDbContext.UserHistoryRecords
-                .ToList()
-                .Join(
-                    contracts,
-                    uh => uh.ContractId,
-                    c => c.Id,
-                    (uh, c) => new UserHistory
-                    {
-                        Id = uh.Id,
-                        ContractId = uh.ContractId,
-                        FeedbackToLandlord = uh.FeedbackToLandlord,
-                        FeedbackToCustomer = uh.FeedbackToCustomer,
-                        CustomerRating = uh.CustomerRating,
-                        LandlordRating = uh.LandlordRating,
-                        Contract = c
-                    }
-                )
-                .ToList();
-
-            return new ResponsDto<UserHistory>
+            return new ResponsDto<Offer>
             {
-                ListDto = userHistories,
+                ListDto = acceptedOffers,
                 StatusCode = HttpStatusCode.OK,
             };
         }
-
     }
 }

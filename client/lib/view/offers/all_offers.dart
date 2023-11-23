@@ -34,11 +34,10 @@ class _AllOffersState extends State<AllOffers>
   void loadData() async {
     OfferControllerImp controller =
         Get.put(OfferControllerImp(), permanent: true);
-    String? userDtoJson = sharepref!.getString("user");
+    String? userDtoJson = sharepref.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
-    // controller.userId = user.id;
-    await controller.getAllOffersForUser(user.id);
+    await controller.getAllOffersForUser(user.id!);
 
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded
@@ -61,12 +60,12 @@ class _AllOffersState extends State<AllOffers>
     ];
 
     if (isLoading) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(), // Show a loading indicator
       );
     }
     return VisibilityDetector(
-      key: Key('widget1'),
+      key: const Key('widget1'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction == 1) {
           loadData();
@@ -74,38 +73,26 @@ class _AllOffersState extends State<AllOffers>
       },
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.to(CreateOffer());
-        },
-        shape: const CircleBorder(),
-        backgroundColor: const Color.fromARGB(255, 32, 32, 32),
-        child: const Icon(
-          Icons.add,
-          size: 25,
-          color: Colors.white,
+          onPressed: () {
+            Get.to(CreateOffer());
+          },
+          shape: const CircleBorder(),
+          backgroundColor: const Color.fromARGB(255, 32, 32, 32),
+          child: const Icon(
+            Icons.add,
+            size: 25,
+            color: Colors.white,
+          ),
         ),
-      ),
         appBar: AppBar(
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "All ",
-                style: TextStyle(
-                  color: Color(0xffd92328),
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "Offers",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+          iconTheme: const IconThemeData(color: Colors.white),
+          title: const Text(
+            "All Offers",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         body: Column(
@@ -128,7 +115,7 @@ class _AllOffersState extends State<AllOffers>
             ),
             const SizedBox(width: 10),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 11),
+              margin: const EdgeInsets.symmetric(horizontal: 11),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 1.0),
@@ -225,11 +212,12 @@ class _AllOffersState extends State<AllOffers>
                                     title: Column(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                          decoration: BoxDecoration(
-                                          color: Colors.black,
-                                            borderRadius: BorderRadius.all(Radius.circular(8))
-                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 4),
+                                          decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8))),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -240,9 +228,11 @@ class _AllOffersState extends State<AllOffers>
                                                 color: Colors.white,
                                               ),
                                               Container(
-                                                margin: EdgeInsets.only(left: 30),
-                                                child: Text("Offer"
-                                                  ,style: const TextStyle(
+                                                margin: const EdgeInsets.only(
+                                                    left: 30),
+                                                child: const Text(
+                                                  "Offer",
+                                                  style: TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 16,
                                                     color: Colors.white,
@@ -367,7 +357,8 @@ class _AllOffersState extends State<AllOffers>
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  Get.to(OfferDetails(offer: controller.userOffers![index]));
+                                  Get.to(OfferDetails(
+                                      offer: controller.userOffers![index]));
                                   setState(() {});
                                 },
                                 child: Container(
@@ -389,11 +380,12 @@ class _AllOffersState extends State<AllOffers>
                                     title: Column(
                                       children: [
                                         Container(
-                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                          decoration: BoxDecoration(
-                                          color: Colors.black,
-                                            borderRadius: BorderRadius.all(Radius.circular(8))
-                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 4),
+                                          decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8))),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -404,9 +396,11 @@ class _AllOffersState extends State<AllOffers>
                                                 color: Colors.white,
                                               ),
                                               Container(
-                                                margin: EdgeInsets.only(left: 30),
-                                                child: Text("Offer"
-                                                  ,style: const TextStyle(
+                                                margin: const EdgeInsets.only(
+                                                    left: 30),
+                                                child: const Text(
+                                                  "Offer",
+                                                  style: TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 16,
                                                     color: Colors.white,

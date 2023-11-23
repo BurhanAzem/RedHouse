@@ -1,7 +1,5 @@
 import 'dart:io';
-
 import 'package:client/controller/manage_propertise/manage_property_controller.dart';
-import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,9 +14,9 @@ class AddProperty7 extends StatefulWidget {
 }
 
 class _AddProperty7State extends State<AddProperty7> {
-  // final PageController pageController;
   ManagePropertyControllerImp controller =
       Get.put(ManagePropertyControllerImp(), permanent: true);
+
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
 
@@ -30,7 +28,7 @@ class _AddProperty7State extends State<AddProperty7> {
   Future<List<XFile>?> imgFromGallery() async {
     final pickedFiles = await _picker.pickMultiImage();
 
-    if (pickedFiles != null && pickedFiles.isNotEmpty) {
+    if (pickedFiles.isNotEmpty) {
       setState(() {
         _photos =
             pickedFiles.map((pickedFile) => File(pickedFile.path)).toList();
@@ -89,274 +87,145 @@ class _AddProperty7State extends State<AddProperty7> {
       "Townhouse",
       "Entire Department Community"
     ];
-    ManagePropertyControllerImp controller =
-        Get.put(ManagePropertyControllerImp(), permanent: true);
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text(
-              "Red",
-              style: TextStyle(
-                color: Color(0xffd92328),
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              "House Manage Properties",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Form(
-          child: ListView(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  EasyStepper(
-                    finishedStepBackgroundColor: Color(0xffd92328),
-                    activeStepBorderColor: Colors.black,
-                    stepShape: StepShape.circle,
-                    lineStyle: LineStyle(),
 
-                    activeStep: controller.activeStep,
-                    activeStepTextColor: Colors.black87,
-                    finishedStepTextColor: Colors.black87,
-                    internalPadding: 0,
-                    // showScrollbar: false,
-                    fitWidth: true,
-                    showLoadingAnimation: false,
-                    stepRadius: 5,
-                    showStepBorder: false,
-                    steps: [
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 0
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Waiting',
+    return GetBuilder<ManagePropertyControllerImp>(
+      init: ManagePropertyControllerImp(),
+      builder: (ManagePropertyControllerImp controller) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  controller.decreaseActiveStep();
+                  print(controller.activeStep);
+                  Navigator.pop(context);
+                });
+              },
+            ),
+            title: const Text(
+              "Property Images",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          body: Container(
+            padding: const EdgeInsets.all(10),
+            child: Form(
+              child: ListView(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      controller.easyStepper(),
+                      Image.asset("assets/images/logo.png", scale: 10),
+                      Container(height: 5),
+                      const Text(
+                        "When is your property available to rent?",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 23),
                       ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 1
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Order Received',
-                        topTitle: true,
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Add photos",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500, fontSize: 23),
                       ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 2
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Photos help renters imagine living in your place.",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
                         ),
-                        // title: 'Preparing',
                       ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
+                      const SizedBox(height: 5),
+                      Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            _showPicker(context);
+                          },
                           child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 3
-                                ? Color(0xffd92328)
-                                : Colors.grey,
+                            radius: 55,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[400],
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              width: 100,
+                              height: 100,
+                              child: const Icon(
+                                Icons.add,
+                                size: 60,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
                         ),
-                        // title: 'On Way',
-                        topTitle: true,
                       ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 4
-                                ? Color(0xffd92328)
-                                : Colors.grey,
+                      Container(
+                        margin: const EdgeInsets.all(15),
+                        foregroundDecoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5))),
+                        child: Container(
+                          margin: const EdgeInsets.all(5),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1,
+                            ),
+                            itemCount: controller.downloadUrls.length,
+                            itemBuilder: (context, index) {
+                              final imageUrl = controller.downloadUrls[index];
+                              return Image.network(imageUrl);
+                            },
                           ),
                         ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 5
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 6
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 7
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
-                      ),
-                      EasyStep(
-                        customStep: CircleAvatar(
-                          radius: 8,
-                          backgroundColor: Colors.grey,
-                          child: CircleAvatar(
-                            radius: 7,
-                            backgroundColor: controller.activeStep >= 8
-                                ? Color(0xffd92328)
-                                : Colors.grey,
-                          ),
-                        ),
-                        // title: 'Delivered',
                       ),
                     ],
-                    onStepReached: (index) =>
-                        setState(() => controller.activeStep = index),
                   ),
-                  Image.asset("assets/images/logo.png", scale: 10),
-                  Container(height: 5),
-                  Text(
-                    "When is your property available to rent?",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Add photos",
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 23),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Photos help renters imagine living in your place.",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        _showPicker(context);
-                      },
-                      child: CircleAvatar(
-                        radius: 55,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[400],
-                            borderRadius: BorderRadius.circular(50),
+                  Container(height: 25),
+                  isUploading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : MaterialButton(
+                          onPressed: () {
+                            setState(() {
+                              controller.increaseActiveStep();
+                            });
+                            controller.goToAddProperty8();
+                          },
+                          color: const Color(0xffd92328),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          width: 100,
-                          height: 100,
-                          child: Icon(
-                            Icons.add,
-                            size: 60,
-                            color: Colors.black,
+                          child: const Text(
+                            "Continue",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(15),
-                    foregroundDecoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.all(Radius.circular(5))),
-                    child: Container(
-                      margin: EdgeInsets.all(5),
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1,
-                        ),
-                        itemCount: controller.downloadUrls.length,
-                        itemBuilder: (context, index) {
-                          final imageUrl = controller.downloadUrls[index];
-                          return Image.network(imageUrl);
-                        },
-                      ),
-                    ),
-                  ),
+                  Container(height: 15),
                 ],
               ),
-              Container(height: 25),
-              isUploading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : MaterialButton(
-                      onPressed: () {
-                        setState(() {
-                          controller.activeStep++;
-                        });
-                        controller.goToAddProperty8();
-                      },
-                      color: Color(0xffd92328),
-                      child: Text(
-                        "Continue",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-              Container(height: 15),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -369,16 +238,16 @@ class _AddProperty7State extends State<AddProperty7> {
             child: Wrap(
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.photo_library),
-                  title: Text('Gallery'),
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Gallery'),
                   onTap: () {
                     imgFromGallery();
                     Navigator.of(context).pop();
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.photo_camera),
-                  title: Text('Camera'),
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
                   onTap: () {
                     imgFromCamera();
                     Navigator.of(context).pop();

@@ -61,8 +61,8 @@ class _StepperDemoState extends State<OverView> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.all(25), // Adjust the margin as needed
-                padding: EdgeInsets.all(15),
+                margin: const EdgeInsets.all(25), // Adjust the margin as needed
+                padding: const EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(15),
@@ -71,14 +71,14 @@ class _StepperDemoState extends State<OverView> {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 1,
                       blurRadius: 3,
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                     ),
                   ],
                 ),
                 child: Column(children: [
                   Container(
                       alignment: Alignment.topLeft,
-                      child: Text(
+                      child: const Text(
                         "Earnings",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.w500),
@@ -86,7 +86,7 @@ class _StepperDemoState extends State<OverView> {
                   Container(
                     height: 10,
                   ),
-                  StepProgressIndicator(
+                  const StepProgressIndicator(
                     totalSteps: 100,
                     currentStep: 65,
                     size: 8,
@@ -108,7 +108,7 @@ class _StepperDemoState extends State<OverView> {
                   Container(
                     height: 15,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -124,7 +124,7 @@ class _StepperDemoState extends State<OverView> {
                   Container(
                     height: 5,
                   ),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -143,18 +143,18 @@ class _StepperDemoState extends State<OverView> {
                 ]),
               ),
               Container(
-                margin: EdgeInsets.only(top: 15),
+                margin: const EdgeInsets.only(top: 15),
                 alignment: Alignment.center,
                 // alignment: Alignment.topLeft,
-                child: Text(
+                child: const Text(
                   'Milestone timeline',
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(left: 25, bottom: 40),
+                margin: const EdgeInsets.only(left: 25, bottom: 40),
                 child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: milestonesController.milestones!.length + 1,
                   itemBuilder: (context, index) {
@@ -166,7 +166,7 @@ class _StepperDemoState extends State<OverView> {
                         child: milestonesController.milestones!.length != index
                             ? Container(
                                 // height: 180, // Adjust the height as needed
-                                margin: EdgeInsets.only(right: 25, left: 5),
+                                margin: const EdgeInsets.only(right: 25, left: 5),
                                 child: TimelineTile(
                                   isFirst: index == 0,
                                   isLast: index ==
@@ -177,8 +177,8 @@ class _StepperDemoState extends State<OverView> {
                                                 .milestones![index]
                                                 .milestoneStatus! ==
                                             'Paid'
-                                        ? Color(0xffd92328)
-                                        : Color.fromARGB(255, 211, 211, 211),
+                                        ? const Color(0xffd92328)
+                                        : Color.fromARGB(118, 60, 58, 58),
                                     thickness: 0.8,
                                   ),
                                   indicatorStyle: IndicatorStyle(
@@ -190,8 +190,8 @@ class _StepperDemoState extends State<OverView> {
                                                 .milestones![index]
                                                 .milestoneStatus! ==
                                             'Paid'
-                                        ? Color(0xffd92328)
-                                        : Color.fromARGB(255, 211, 211, 211),
+                                        ? const Color(0xffd92328)
+                                        : const Color.fromARGB(255, 211, 211, 211),
                                     width: 28,
                                     iconStyle: IconStyle(
                                       iconData: milestonesController
@@ -209,8 +209,8 @@ class _StepperDemoState extends State<OverView> {
                                     ),
                                   ),
                                   endChild: Container(
-                                    padding: EdgeInsets.only(top: 20),
-                                    alignment: Alignment(0.0, 0),
+                                    padding: const EdgeInsets.only(top: 20),
+                                    alignment: const Alignment(0.0, 0),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
@@ -220,11 +220,11 @@ class _StepperDemoState extends State<OverView> {
                                             milestonesController
                                                 .milestones![index]
                                                 .milestoneName,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontWeight: FontWeight.w500),
                                           ),
                                         ),
-                                        SizedBox(height: 10),
+                                        const SizedBox(height: 10),
                                         Text(milestonesController
                                             .milestones![index].description),
                                         Container(
@@ -234,39 +234,39 @@ class _StepperDemoState extends State<OverView> {
                                           children: [
                                             Container(
                                               margin:
-                                                  EdgeInsets.only(right: 10),
+                                                  const EdgeInsets.only(right: 10),
                                               child: Text(
                                                 "\$" +
                                                     milestonesController
                                                         .milestones![index]
                                                         .amount
                                                         .toString(),
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 16),
                                               ),
                                             ),
                                             Chip(
-                                              padding: EdgeInsets.symmetric(
+                                              padding: const EdgeInsets.symmetric(
                                                   horizontal: 10),
-                                              shadowColor: Color(0xffd92328),
+                                              shadowColor: const Color(0xffd92328),
                                               label: Text(
                                                 milestonesController
                                                     .milestones![index]
                                                     .milestoneStatus,
-                                                style: TextStyle(fontSize: 12),
+                                                style: const TextStyle(fontSize: 12),
                                               ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(12.0),
                                                 // Adjust the border radius as needed
                                               ),
-                                              backgroundColor: Color.fromARGB(
+                                              backgroundColor: const Color.fromARGB(
                                                   255,
                                                   255,
                                                   255,
                                                   255), // Set your desired background color
-                                              labelStyle: TextStyle(
+                                              labelStyle: const TextStyle(
                                                 color: Color(
                                                     0xffd92328), // Set your desired text color
                                               ),
@@ -280,16 +280,16 @@ class _StepperDemoState extends State<OverView> {
                               )
                             : Container(
                                 // height: 100, // Adjust the height as needed
-                                margin: EdgeInsets.only(top: 15),
+                                margin: const EdgeInsets.only(top: 15),
                                 child: TimelineTile(
                                   isFirst: index == 0,
                                   isLast: true,
-                                  beforeLineStyle: LineStyle(
+                                  beforeLineStyle: const LineStyle(
                                     color: Color.fromARGB(255, 42, 42, 42),
                                     thickness: 0.6,
                                   ),
                                   indicatorStyle: IndicatorStyle(
-                                    color: Color(0xffd92328),
+                                    color: const Color(0xffd92328),
                                     width: 28,
                                     iconStyle: IconStyle(
                                       iconData: Icons.add,
@@ -297,13 +297,13 @@ class _StepperDemoState extends State<OverView> {
                                     ),
                                   ),
                                   endChild: Container(
-                                    alignment: Alignment(-1.0, 0),
+                                    alignment: const Alignment(-1.0, 0),
                                     child: MaterialButton(
                                       onPressed: () {
                                         Get.to(AddMilestone(
                                             contract: widget.contract));
                                       },
-                                      child: Text(
+                                      child: const Text(
                                         "Propose new milestone",
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,

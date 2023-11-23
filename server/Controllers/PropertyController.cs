@@ -130,14 +130,14 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpGet("/properties/{id}/property-history")]
-        public async Task<IActionResult> GetPropertyHistory(int id)
+        [HttpGet("/properties/{id}/property-history-price")]
+        public async Task<IActionResult> GetPricePropertyHistory(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _propertyServices.GetPropertyHistory(id);
+            var result = await _propertyServices.GetPricePropertyHistory(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

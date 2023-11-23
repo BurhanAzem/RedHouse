@@ -1,6 +1,4 @@
 import 'package:client/model/contract.dart';
-import 'package:client/model/user.dart';
-import 'package:get/get.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part "user_history.g.dart";
@@ -18,6 +16,8 @@ class UserHistory {
   int customerRating;
   int landlordRating;
 
+  String helpful = "";
+
   UserHistory({
     required this.id,
     required this.contractId,
@@ -27,7 +27,6 @@ class UserHistory {
     required this.landlordRating,
     required this.contract,
     // required this.user,
-  
   });
 
   factory UserHistory.fromJson(Map<String, dynamic> json) =>

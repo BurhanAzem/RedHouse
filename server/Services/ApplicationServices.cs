@@ -80,7 +80,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Application>> GetApplications(int userId)
+        public async Task<ResponsDto<Application>> GetApplications(int userId, ApplicationFilter applicationFilter)
         {
             var user = await _redHouseDbContext.Users.FindAsync(userId);
             if (user == null)
@@ -92,30 +92,36 @@ namespace server.Services
                 };
             }
 
-            //         var applications = _redHouseDbContext.Applications
-            // .Where(a => a.UserId == userId)
-            // .ToList();
+            var query = _redHouseDbContext.Applications.Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .AsQueryable();
 
-            //         foreach (var application in applications)
-            //         {
-            //             var appUser = await _redHouseDbContext.Users.FirstOrDefaultAsync(u => u.Id == application.UserId);
-            //             var appProperty = await _redHouseDbContext.Properties
-            //                 .Include(p => p.propertyFiles)
-            //                 .FirstOrDefaultAsync(p => p.Id == application.PropertyId);
-            //             var location = await _redHouseDbContext.Locations.FirstOrDefaultAsync(l => l.Id == appProperty.LocationId);
-
-            //             application.User = appUser;
-            //             application.Property = appProperty;
-            //             application.Property.Location = location;
-            //         }
-
-            var query = from p in _redHouseDbContext.Properties
-                        join a in _redHouseDbContext.Applications on p.Id equals a.PropertyId
+            if (applicationFilter.ApplicationTo.Trim() == "Landlord")
+            {
+                query = from p in _redHouseDbContext.Properties
+                        join a in query on p.Id equals a.PropertyId
                         where p.UserId == userId
                         select a;
 
-            var applications = query.Include(a => a.User).Include(a => a.Property).ThenInclude(p => p.Location).ToList();
+            }
 
+            // Now you can use the 'query' variable for further processing
+
+            if (applicationFilter.ApplicationTo.Trim() == "Customer")
+            {
+                query = query.Where(a => a.UserId == userId);
+            }
+            if (applicationFilter.ApplicationType.Trim() != "All")
+            {
+                query = query.Where(a => a.Property.ListingType == applicationFilter.ApplicationType.Trim());
+            }
+            if (applicationFilter.ApplicationStatus.Trim() != "All")
+            {
+                query = query.Where(c => c.ApplicationStatus == applicationFilter.ApplicationStatus.Trim());
+            }
+
+            var applications = query.ToList();
 
             return new ResponsDto<Application>
             {

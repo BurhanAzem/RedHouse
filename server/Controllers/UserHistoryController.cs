@@ -98,6 +98,25 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+
+
+        [HttpGet("/properties/{id}/property-history")]
+        public async Task<IActionResult> GetPropertyHistory(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userHistoryServices.GetPropertyHistory(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
         // [HttpDelete("/applications/{id}")]
         // public async Task<IActionResult> DeleteApplication(int id)
         // {
