@@ -147,6 +147,14 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+
+        [HttpGet("/applications/number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _applicationServices.NumberOfApplications();
+            // Set the token value in the cookie
+            return Ok(result);
+        }
     }
 }
 

@@ -8,11 +8,12 @@ namespace server.Services
     {
         // public Task<ResponsDto<User>> CreateApplication(ApplicationDto applicationDto);
         public Task<ResponsDto<User>> GetUsersOfApprovedApplications(int userId);
-        // public Task<ResponsDto<User>> GetApplication(int applicationId);
+        public Task<int> NumberOfUsers();
         public Task<ResponsDto<User>> GetAgents(string userName, int pageNumber = 1, int pageSize = 10);
         public Task<ResponsDto<User>> GetUser(int userId);
         public Task<ResponsDto<User>> GetAllUsers(int pageNumber = 1, int pageSize = 10);
 
+        public Task<List<int>> GetNumberOfUsersInLastTenYears();
 
     }
 }

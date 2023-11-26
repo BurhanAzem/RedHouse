@@ -222,6 +222,12 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+        public async Task<int> NumberOfApplications()
+        {
+            return await _redHouseDbContext.Applications.CountAsync();
+
+        }
     }
 }
 

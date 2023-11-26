@@ -23,6 +23,8 @@ class ApplicationsControllerImp extends ContractsController {
   String? applicationType = "All";
   String? applicationStatus = "All";
   String? applicationTo = "Landlord";
+
+
   getApplications(int userId) async {
     var response = await ApplicationData.getApplications(userId, applicationStatus, applicationType, applicationTo);
 

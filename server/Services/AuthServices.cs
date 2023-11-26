@@ -49,7 +49,8 @@ namespace RedHouse_Server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            var user = _mapper.Map<User>(registerDto);
+            // var user = _mapper.Map<User>(registerDto);
+
 
             var identityUser = new IdentityUser
             {
@@ -71,8 +72,16 @@ namespace RedHouse_Server.Services
                 var resLocation = await _redHouseDbContext.Locations.AddAsync(location);
                 await _redHouseDbContext.SaveChangesAsync(); // Persist changes to the database
 
-                user.LocationId = resLocation.Entity.Id; // Access the ID of the added location
-
+                User user = new User
+                {
+                    Email = registerDto.Email,
+                    IsVerified = true,
+                    Created = DateTime.Now,
+                    LocationId = resLocation.Entity.Id,
+                    Name = registerDto.Name,
+                    PhoneNumber = registerDto.PhoneNumber,
+                    UserRole = registerDto.UserRole,
+                };
                 await _redHouseDbContext.Users.AddAsync(user);
                 await _redHouseDbContext.SaveChangesAsync();
                 return new ResponsDto<User>
@@ -182,6 +191,11 @@ namespace RedHouse_Server.Services
                 Message = "You are logOut sucssefully",
                 StatusCode = HttpStatusCode.OK,
             };
+        }
+
+        public async Task<int> NumberOfVisits()
+        {
+            return (await _redHouseDbContext.Visitors.FirstAsync()).NumberOfVisitors;
         }
     }
 

@@ -63,6 +63,11 @@ namespace server.Services
             throw new NotImplementedException();
         }
 
+        public async Task<int> NumberOfContracts()
+        {
+            return await _redHouseDbContext.Contracts.CountAsync();
+        }
+
         public Task<ResponsDto<Contract>> UpdateContract(ContractDto contractDto, int contractId)
         {
             throw new NotImplementedException();

@@ -15,7 +15,11 @@ namespace RedHouse_Server.Services
         public Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId);
         public Task<ResponsDto<Property>> DeleteProperty(int propertyId);
         public Task<ResponsDto<Property>> UpdateProperty(PropertyDto propertyDto, int propertyId);
-        public Task<ResponsDto<Offer>> GetPricePropertyHistory(int propertyId);
+        public Task<List<int>> GetPricePropertyHistoryAsRent(int propertyId);
+        public Task<List<int>> GetPricePropertyHistoryAsSell(int propertyId);
+        public Task<List<int>> GetNumberOfPropertiesInLastTenYears();
+        public Task<int> NumberOfProperties();
+
 
     }
 }

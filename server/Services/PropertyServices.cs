@@ -55,6 +55,7 @@ namespace RedHouse_Server.Services
                 ListingType = propertyDto.ListingType,
                 LocationId = locationRes.Entity.Id,
                 PropertyCode = random_number_str,
+                ListingDate = DateTime.Now,
                 // NeighborhoodId = 0,
                 NumberOfBathRooms = propertyDto.NumberOfBathRooms,
                 NumberOfBedRooms = propertyDto.NumberOfBedRooms,
@@ -310,33 +311,106 @@ namespace RedHouse_Server.Services
             };
         }
 
-        
 
-        public async Task<ResponsDto<Offer>> GetPricePropertyHistory(int propertyId)
+
+        public async Task<List<int>> GetPricePropertyHistoryAsRent(int propertyId)
         {
             var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
             if (property == null)
             {
-                return new ResponsDto<Offer>
-                {
-                    Message = $"Property with {propertyId} Id Dose Not Exist",
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
+                throw new Exception($"Property with {propertyId} Id Does Not Exist");
             }
 
 
             var acceptedOffers = _redHouseDbContext.Offers
-                .Where(o => o.PropertyId == propertyId && o.OfferStatus == "Accepted")
+                .Where(o => o.PropertyId == propertyId && o.OfferStatus == "Accepted" && o.Property.ListingType == "For rent")
                 .Include(o => o.Property) // Include the Property navigation property
                 .Include(o => o.Landlord) // Include the Landlord navigation property
                 .Include(o => o.Customer) // Include the Customer navigation property
                 .ToList();
+            var offersOfTheLastTenYears = acceptedOffers.Where(a => (DateTime.Now.Year - a.OfferDate.Year) < 10).ToArray();
+            List<int> avgPropertiesPricePerYearInLastTenYears = Enumerable.Repeat(0, 10).ToList();
 
-            return new ResponsDto<Offer>
+            for (int i = 0; i < avgPropertiesPricePerYearInLastTenYears.Count; i++)
             {
-                ListDto = acceptedOffers,
-                StatusCode = HttpStatusCode.OK,
-            };
+                int pricePerYear = avgPropertiesPricePerYearInLastTenYears[i];
+
+                List<Offer> offersInThisYear = offersOfTheLastTenYears.Where(o => o.OfferDate.Year == (DateTime.Now.Year - i)).ToList();
+                if (offersInThisYear.Count() > 0)
+                {
+                    int sum = 0, j = 0;
+                    for (j = 0; j < offersInThisYear.Count(); j++)
+                    {
+                        sum = sum + (int)offersInThisYear[j].Price;
+                    }
+                    pricePerYear = sum / offersInThisYear.Count();
+                    avgPropertiesPricePerYearInLastTenYears[i] = pricePerYear;
+                }
+
+            }
+            return avgPropertiesPricePerYearInLastTenYears;
+
+        }
+
+        public async Task<int> NumberOfProperties()
+        {
+            return await _redHouseDbContext.Users.CountAsync();
+
+        }
+
+        public async Task<List<int>> GetPricePropertyHistoryAsSell(int propertyId)
+        {
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                throw new Exception($"Property with {propertyId} Id Does Not Exist");
+            }
+
+
+            var acceptedOffers = _redHouseDbContext.Offers
+                .Where(o => o.PropertyId == propertyId && o.OfferStatus == "Accepted" && o.Property.ListingType == "For sell")
+                .Include(o => o.Property) // Include the Property navigation property
+                .Include(o => o.Landlord) // Include the Landlord navigation property
+                .Include(o => o.Customer) // Include the Customer navigation property
+                .ToList();
+            var offersOfTheLastTenYears = acceptedOffers.Where(a => (DateTime.Now.Year - a.OfferDate.Year) < 10).ToArray();
+            List<int> avgPropertiesPricePerYearInLastTenYears = Enumerable.Repeat(0, 10).ToList();
+
+            for (int i = 0; i < avgPropertiesPricePerYearInLastTenYears.Count; i++)
+            {
+                int pricePerYear = avgPropertiesPricePerYearInLastTenYears[i];
+
+                List<Offer> offersInThisYear = offersOfTheLastTenYears.Where(o => o.OfferDate.Year == (DateTime.Now.Year - i)).ToList();
+                if (offersInThisYear.Count() > 0)
+                {
+                    int sum = 0, j = 0;
+                    for (j = 0; j < offersInThisYear.Count(); j++)
+                    {
+                        sum = sum + (int)offersInThisYear[j].Price;
+                    }
+                    pricePerYear = sum / offersInThisYear.Count();
+                    avgPropertiesPricePerYearInLastTenYears[i] = pricePerYear;
+                }
+
+            }
+            return avgPropertiesPricePerYearInLastTenYears;
+        }
+
+        public async Task<List<int>> GetNumberOfPropertiesInLastTenYears()
+        {
+            var propertiesOfTheLastTenYears = _redHouseDbContext.Properties.Where(a => (DateTime.Now.Year - a.ListingDate.Year) < 10).ToArray();
+            List<int> avgPropertiesNumberPerYearInLastTenYears = Enumerable.Repeat(0, 10).ToList();
+
+            for (int i = 0; i < avgPropertiesNumberPerYearInLastTenYears.Count; i++)
+            {
+                int numberPerYear = avgPropertiesNumberPerYearInLastTenYears[i];
+
+                List<Property> propertiesInThisYear = propertiesOfTheLastTenYears.Where(o => o.ListingDate.Year == (DateTime.Now.Year - i)).ToList();
+
+                avgPropertiesNumberPerYearInLastTenYears[i] = propertiesInThisYear.Count();
+
+            }
+            return avgPropertiesNumberPerYearInLastTenYears;
         }
     }
 }

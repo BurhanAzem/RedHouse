@@ -194,6 +194,12 @@ namespace server.Services
             };
         }
 
+        public async Task<int> NumberOfOffers()
+        {
+            return await _redHouseDbContext.Offers.CountAsync();
+            
+        }
+
         public async Task<ResponsDto<Offer>> UpdateOffer(OfferDto offerDto, int offerId)
         {
             var offer = await _redHouseDbContext.Offers
