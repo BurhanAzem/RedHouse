@@ -35,7 +35,17 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-
+            var applications = await _redHouseDbContext.Applications.Where(o => o.UserId == applicationDto.UserId
+                                                                                && o.PropertyId == applicationDto.PropertyId).ToArrayAsync();
+            var searchedApplication = applications.First();
+            if (searchedApplication != null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception("You can't create more than application to the same landlord and property"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
             Application application = new Application
             {
                 UserId = applicationDto.UserId,
@@ -56,7 +66,6 @@ namespace server.Services
 
         public async Task<ResponsDto<Application>> GetApplication(int applicationId)
         {
-
             var property = await _redHouseDbContext.Properties.FindAsync(applicationId);
             if (property == null)
             {

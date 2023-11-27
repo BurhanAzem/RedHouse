@@ -88,6 +88,21 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
+
+            var offers = await _redHouseDbContext.Offers.Where(o => o.CustomerId == offerDto.CustomerId 
+                                                                    && o.LandlordId == offerDto.LandlordId 
+                                                                    && o.PropertyId == offerDto.PropertyId).ToArrayAsync();
+            var searchedOffer = offers.First();
+            if (searchedOffer != null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception("You can't create more than offer to the same landlord and client and property"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+
             Offer offer = new Offer
             {
                 CustomerId = offerDto.CustomerId,
@@ -197,7 +212,7 @@ namespace server.Services
         public async Task<int> NumberOfOffers()
         {
             return await _redHouseDbContext.Offers.CountAsync();
-            
+
         }
 
         public async Task<ResponsDto<Offer>> UpdateOffer(OfferDto offerDto, int offerId)

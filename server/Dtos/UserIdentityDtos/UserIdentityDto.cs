@@ -7,7 +7,7 @@ namespace RedHouse_Server.Dtos.ApplicationDtos
     {
        public int UserId { get; set; }
         public DateTime RequestDate { get; set; }
-        public bool RequestStatus { get; set; }
+        public string RequestStatus { get; set; }
         public List<string> IdentityFiles { get; set; }
     }
 }

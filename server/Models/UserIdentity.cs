@@ -12,7 +12,7 @@ namespace server.Models
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
         public DateTime RequestDate { get; set; }
-        public bool RequestStatus { get; set; }
+        public string RequestStatus { get; set; }
         public ICollection<IdentityFile>? IdentityFiles { get; set; }
         
     }
