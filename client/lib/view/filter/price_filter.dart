@@ -1,5 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
-import 'package:client/controller/map_list_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/view/filter/buy_filter.dart';
 import 'package:client/view/filter/rent_filter.dart';
 import 'package:flutter/material.dart';

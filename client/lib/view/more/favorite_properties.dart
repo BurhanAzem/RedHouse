@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:client/controller/map_list_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/home_information/home_information.dart';
@@ -63,7 +63,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 13),
+            padding: const EdgeInsets.only(right: 15),
             child: Stack(
               children: [
                 const Icon(

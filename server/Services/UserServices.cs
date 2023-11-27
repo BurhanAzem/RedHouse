@@ -51,43 +51,43 @@ namespace server.Services
             };
         }
 
-    
+
 
         public async Task<ResponsDto<User>> GetAllUsers(int pageNumber = 1, int pageSize = 10)
-{
-    // Validate and adjust page number and page size if needed
-    pageNumber = pageNumber < 1 ? 1 : pageNumber;
-    pageSize = pageSize < 1 ? 10 : pageSize;
-
-    var query = _redHouseDbContext.Users;
-
-    var totalItems = await query.CountAsync();
-    var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-    var users = await query
-        .Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize)
-        .ToArrayAsync();
-
-    if (users == null || !users.Any())
-    {
-        return new ResponsDto<User>
         {
-            Exception = new Exception("Users Not Found"),
-            StatusCode = HttpStatusCode.NotFound,
-        };
-    }
+            // Validate and adjust page number and page size if needed
+            pageNumber = pageNumber < 1 ? 1 : pageNumber;
+            pageSize = pageSize < 1 ? 10 : pageSize;
 
-    return new ResponsDto<User>
-    {
-        ListDto = users,
-        // PageNumber = pageNumber,
-        // PageSize = pageSize,
-        // TotalItems = totalItems,
-        // TotalPages = totalPages,
-        StatusCode = HttpStatusCode.OK,
-    };
-}
+            var query = _redHouseDbContext.Users;
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            var users = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToArrayAsync();
+
+            if (users == null || !users.Any())
+            {
+                return new ResponsDto<User>
+                {
+                    Exception = new Exception("Users Not Found"),
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
+
+            return new ResponsDto<User>
+            {
+                ListDto = users,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
 
 
         // public async Task<ResponsDto<User>> GetApplication(int applicationId)
@@ -120,31 +120,5 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<User>> GetUsersOfApprovedApplications(int userId)
-        {
-            var user = await _redHouseDbContext.Users.FindAsync(userId);
-            if (user == null)
-            {
-                return new ResponsDto<User>
-                {
-                    Exception = new Exception("User Not Exist"),
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
-            }
-
-            var applications = await _redHouseDbContext.Applications.Include(a => a.Property).AsQueryable()
-                                    .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved").ToArrayAsync();
-            List<User> users = new List<User>();
-
-            foreach (var application in applications)
-            {
-                users.Add(await _redHouseDbContext.Users.FindAsync(application.UserId));
-            }
-            return new ResponsDto<User>
-            {
-                ListDto = users,
-                StatusCode = HttpStatusCode.OK,
-            };
-        }
     }
 }

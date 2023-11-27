@@ -1,4 +1,4 @@
-import 'package:client/controller/map_list_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/view/filter/filters_listview.dart';
 import 'package:client/view/search/list_widget.dart';
 import 'package:client/view/search/map_widget.dart';

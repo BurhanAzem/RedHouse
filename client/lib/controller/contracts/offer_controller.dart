@@ -1,20 +1,9 @@
-import 'package:client/core/class/statusrequest.dart';
-import 'package:client/data/contracts.dart';
 import 'package:client/data/offers.dart';
-import 'package:client/data/properties.dart';
-import 'package:client/model/contract.dart';
-import 'package:client/model/milestone.dart';
 import 'package:client/model/offer.dart';
-import 'package:client/routes.dart';
-import 'package:client/view/contracts/add_milestone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class OfferController extends GetxController {
-  OfferController();
-}
-
-class OfferControllerImp extends OfferController {
+class OfferController extends GetxController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
   String offerStatusSelect = "All";
@@ -46,8 +35,6 @@ class OfferControllerImp extends OfferController {
     if (response['statusCode'] == 200) {
       print("================================================== LsitDto");
       print(response['listDto']);
-
-      // Get.offNamed(AppRoute.verfiyCodeSignUp);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -58,13 +45,13 @@ class OfferControllerImp extends OfferController {
   }
 
   getAllOffersForUser(int userId) async {
-    var response = await OfferData.getAllOffersForUser(userId, offerStatusSelect, offerToSelect);
+    var response = await OfferData.getAllOffersForUser(
+        userId, offerStatusSelect, offerToSelect);
 
     if (response['statusCode'] == 200) {
       userOffers = (response['listDto'] as List<dynamic>)
           .map((e) => Offer.fromJson(e as Map<String, dynamic>))
           .toList();
-      // applications = Application.fromJson(response);
       print(userOffers);
     } else {
       Get.defaultDialog(

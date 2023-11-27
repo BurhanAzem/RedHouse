@@ -1,6 +1,6 @@
-import 'package:client/controller/applications/applications_controller.dart';
-import 'package:client/controller/auth/login_controller.dart';
-import 'package:client/controller/history_controller/check_history_contoller.dart';
+import 'package:client/controller/history/history_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/controller/history/check_history_contoller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/model/user_history.dart';
 import 'package:client/view/home_information/home_information.dart';
@@ -21,9 +21,10 @@ class CheckProperty extends StatefulWidget {
 class _CheckPropertyState extends State<CheckProperty> {
   bool isLoading = true; // Add a boolean variable for loading state
   bool isFollowed = false;
-  LoginControllerImp LoginController = Get.put(LoginControllerImp());
-  CheckHistoryController historyController = Get.put(CheckHistoryController());
-  late ApplicationsControllerImp applicationsController;
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+  CheckHistoryController checkHistoryController =
+      Get.put(CheckHistoryController());
+  late HistoryController historyController;
 
   @override
   void initState() {
@@ -33,9 +34,8 @@ class _CheckPropertyState extends State<CheckProperty> {
   }
 
   void loadData() async {
-    applicationsController =
-        Get.put(ApplicationsControllerImp(), permanent: true);
-    await applicationsController.getHistoryProperty(widget.property.id);
+    historyController = Get.put(HistoryController(), permanent: true);
+    await historyController.getHistoryProperty(widget.property.id);
 
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded
@@ -50,8 +50,8 @@ class _CheckPropertyState extends State<CheckProperty> {
       );
     }
 
-    historyController.calAverageRating(applicationsController.propertyHistory);
-    historyController.calHistoryBars(applicationsController.propertyHistory);
+    checkHistoryController.calAverageRating(historyController.propertyHistory);
+    checkHistoryController.calHistoryBars(historyController.propertyHistory);
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -85,7 +85,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                       ),
                       child: Center(
                         child: Text(
-                          LoginController.getShortenedName("Property"),
+                          loginController.getShortenedName("Property"),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 30,
@@ -144,7 +144,7 @@ class _CheckPropertyState extends State<CheckProperty> {
             const SizedBox(height: 15),
             const Divider(thickness: 1.5),
             // If this property not has history
-            if (applicationsController.propertyHistory.isEmpty)
+            if (historyController.propertyHistory.isEmpty)
               Container(
                 margin: const EdgeInsetsDirectional.symmetric(
                     horizontal: 40, vertical: 90),
@@ -194,7 +194,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                       children: [
                         LineWithIconText(
                           Icons.numbers,
-                          'This account has ${applicationsController.propertyHistory.length} contracts that have been agreed upon',
+                          'This account has ${historyController.propertyHistory.length} contracts that have been agreed upon',
                         ),
                         const SizedBox(height: 13),
                         LineWithIconText(Icons.switch_account,
@@ -214,12 +214,12 @@ class _CheckPropertyState extends State<CheckProperty> {
                       Column(
                         children: [
                           Text(
-                            "${historyController.averageRating}",
+                            "${checkHistoryController.averageRating}",
                             style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w500),
                           ),
                           RatingBarIndicator(
-                            rating: historyController.averageRating,
+                            rating: checkHistoryController.averageRating,
                             itemCount: 5,
                             itemSize: 20,
                             itemBuilder: (context, index) {
@@ -233,36 +233,16 @@ class _CheckPropertyState extends State<CheckProperty> {
                       ),
                       Column(
                         children: [
-                          buildRatingRow(
-                              5,
-                              historyController.fiveCount,
-                              2 *
-                                  applicationsController
-                                      .propertyHistory.length),
-                          buildRatingRow(
-                              4,
-                              historyController.fourCount,
-                              2 *
-                                  applicationsController
-                                      .propertyHistory.length),
-                          buildRatingRow(
-                              3,
-                              historyController.threeCount,
-                              2 *
-                                  applicationsController
-                                      .propertyHistory.length),
-                          buildRatingRow(
-                              2,
-                              historyController.twoCount,
-                              2 *
-                                  applicationsController
-                                      .propertyHistory.length),
-                          buildRatingRow(
-                              1,
-                              historyController.oneCount,
-                              2 *
-                                  applicationsController
-                                      .propertyHistory.length),
+                          buildRatingRow(5, checkHistoryController.fiveCount,
+                              2 * historyController.propertyHistory.length),
+                          buildRatingRow(4, checkHistoryController.fourCount,
+                              2 * historyController.propertyHistory.length),
+                          buildRatingRow(3, checkHistoryController.threeCount,
+                              2 * historyController.propertyHistory.length),
+                          buildRatingRow(2, checkHistoryController.twoCount,
+                              2 * historyController.propertyHistory.length),
+                          buildRatingRow(1, checkHistoryController.oneCount,
+                              2 * historyController.propertyHistory.length),
                         ],
                       )
                     ],
@@ -270,11 +250,10 @@ class _CheckPropertyState extends State<CheckProperty> {
                   ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: applicationsController.propertyHistory.length,
+                    itemCount: historyController.propertyHistory.length,
                     itemBuilder: (context, index) {
-                      UserHistory propertyHistory = applicationsController
-                          .propertyHistory
-                          .elementAt(index);
+                      UserHistory propertyHistory =
+                          historyController.propertyHistory.elementAt(index);
                       return Card(
                           elevation: 0.7,
                           color: Colors.white,
@@ -338,9 +317,9 @@ class _CheckPropertyState extends State<CheckProperty> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          LoginController.getShortenedName(
-                                              propertyHistory
-                                                  .contract.offer!.landlord!.name!),
+                                          loginController.getShortenedName(
+                                              propertyHistory.contract.offer!
+                                                  .landlord!.name!),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 17,
@@ -418,9 +397,9 @@ class _CheckPropertyState extends State<CheckProperty> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          LoginController.getShortenedName(
-                                              propertyHistory
-                                                  .contract.offer!.customer!.name!),
+                                          loginController.getShortenedName(
+                                              propertyHistory.contract.offer!
+                                                  .customer!.name!),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 17,
@@ -497,9 +476,10 @@ class _CheckPropertyState extends State<CheckProperty> {
                                         Container(
                                           width: 55,
                                           child: MaterialButton(
-                                            color: propertyHistory.helpful == "Yes"
-                                                ? Colors.black
-                                                : Colors.white,
+                                            color:
+                                                propertyHistory.helpful == "Yes"
+                                                    ? Colors.black
+                                                    : Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -517,10 +497,11 @@ class _CheckPropertyState extends State<CheckProperty> {
                                               child: Text(
                                                 "Yes",
                                                 style: TextStyle(
-                                                  color: propertyHistory.helpful ==
-                                                          "Yes"
-                                                      ? Colors.white
-                                                      : Colors.black,
+                                                  color:
+                                                      propertyHistory.helpful ==
+                                                              "Yes"
+                                                          ? Colors.white
+                                                          : Colors.black,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
                                                 ),
@@ -532,9 +513,10 @@ class _CheckPropertyState extends State<CheckProperty> {
                                         SizedBox(
                                           width: 55,
                                           child: MaterialButton(
-                                            color: propertyHistory.helpful == "No"
-                                                ? Colors.black
-                                                : Colors.white,
+                                            color:
+                                                propertyHistory.helpful == "No"
+                                                    ? Colors.black
+                                                    : Colors.white,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -552,10 +534,11 @@ class _CheckPropertyState extends State<CheckProperty> {
                                               child: Text(
                                                 "No",
                                                 style: TextStyle(
-                                                  color: propertyHistory.helpful ==
-                                                          "No"
-                                                      ? Colors.white
-                                                      : Colors.black,
+                                                  color:
+                                                      propertyHistory.helpful ==
+                                                              "No"
+                                                          ? Colors.white
+                                                          : Colors.black,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
                                                 ),

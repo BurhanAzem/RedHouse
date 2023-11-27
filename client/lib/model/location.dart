@@ -25,17 +25,7 @@ class Location {
     required this.longitude,
   });
 
-  factory Location.fromJson(Map<String, dynamic> json) => _$LocationFromJson(json);
+  factory Location.fromJson(Map<String, dynamic> json) =>
+      _$LocationFromJson(json);
   Map<String, dynamic> toJson() => _$LocationToJson(this);
-  // factory Location.fromJson(Map<String, dynamic> json) {
-  //   return Location(
-  //     StreetAddress: json['StreetAddress'],
-  //     City: json['City'],
-  //     Region: json['Region'],
-  //     PostalCode: json['PostalCode'],
-  //     Country: json['Country'],
-  //     Latitude: json['Latitude']?.toDouble(),
-  //     Longitude: json['Longitude']?.toDouble(),
-  //   );
-  // }
 }

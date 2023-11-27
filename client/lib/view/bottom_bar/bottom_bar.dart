@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/bottom_bar.dart';
-import 'package:client/controller/map_list_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/more/more.dart';
 import 'package:client/view/notification/notifications.dart';
@@ -76,8 +76,8 @@ class _BottomBarState extends State<BottomBar> {
     loginController.userDto = json.decode(sharepref.getString("user") ?? "{}");
     print(loginController.userDto);
     print(loginController.userDto);
-
-    mapListController.isListIcon = true;
+    
+    // mapListController.isListIcon = true;
     // mapListController.favoriteProperties.clear();
   }
 

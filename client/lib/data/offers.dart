@@ -2,39 +2,35 @@ import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/link_api.dart';
-import 'package:client/model/location.dart';
 import 'package:client/shared_preferences.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class OfferData {
   static createOffer(
-      int landlordId,
-      int customerId,
-      int propertyId,
-      String price,
-      String description,
-      String offerStatus,
-      DateTime offerExpireDate,
-      DateTime offerDate,
-) async {
+    int landlordId,
+    int customerId,
+    int propertyId,
+    String price,
+    String description,
+    String offerStatus,
+    DateTime offerExpireDate,
+    DateTime offerDate,
+  ) async {
     String formattedOfferExpireDate =
         DateFormat('yyyy-MM-ddTHH:mm:ss').format(offerExpireDate);
     String formattedOfferDate =
         DateFormat('yyyy-MM-ddTHH:mm:ss').format(offerDate);
 
     var data = {
-        "landlordId": landlordId, 
-          "customerId": customerId,
-          "propertyId": propertyId,
-          "offerDate": formattedOfferDate,
-          "offerExpires": formattedOfferExpireDate,
-          "description": description,
-          "price": int.tryParse(price) ?? 0,
-          "offerStatus": "Pending"
-     
+      "landlordId": landlordId,
+      "customerId": customerId,
+      "propertyId": propertyId,
+      "offerDate": formattedOfferDate,
+      "offerExpires": formattedOfferExpireDate,
+      "description": description,
+      "price": int.tryParse(price) ?? 0,
+      "offerStatus": "Pending"
     };
     if (await checkInternet()) {
       var response = await http.post(Uri.parse(AppLink.offers),
@@ -56,17 +52,18 @@ class OfferData {
     } else {
       return (StatusRequest.offlinefailure);
     }
-    // return response.fold((l) => l, (r) => r);
   }
 
-  static getAllOffersForUser(int userId, String offerStatus, String offerTo) async {
+  static getAllOffersForUser(
+      int userId, String offerStatus, String offerTo) async {
     final Map<String, dynamic> filters = {
       "offerStatus": offerStatus,
       "offerTo": offerTo,
     };
 
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/users/$userId/offers", filters);
+      final Uri uri =
+          Uri.https("10.0.2.2:7042", "/users/$userId/offers", filters);
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',
@@ -88,5 +85,4 @@ class OfferData {
       return StatusRequest.offlinefailure;
     }
   }
-  
 }

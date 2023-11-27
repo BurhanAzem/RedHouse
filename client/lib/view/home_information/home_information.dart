@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/check_account.dart';

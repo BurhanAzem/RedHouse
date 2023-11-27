@@ -1,6 +1,6 @@
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
-import 'package:client/view/messages/messages.dart';
+import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/account_information.dart';
 import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';

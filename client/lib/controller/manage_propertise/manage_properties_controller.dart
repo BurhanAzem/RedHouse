@@ -1,26 +1,13 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
+import 'package:client/model/neighborhood.dart';
 import 'package:client/model/property.dart';
-import 'package:client/routes.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-abstract class ManagePropertyController extends GetxController {
-  ManagePropertyController();
-  goToAddProperty1();
-  goToAddProperty2();
-  goToAddProperty3();
-  goToAddProperty4();
-  goToAddProperty5();
-  goToAddProperty6();
-  goToAddProperty7();
-  goToAddProperty8();
-  goToAddProperty9();
-}
-
-class ManagePropertyControllerImp extends ManagePropertyController {
+class ManagePropertiesController extends GetxController {
   int propertiesUserId = 0;
   List<Property> userProperties = [];
 
@@ -57,52 +44,9 @@ class ManagePropertyControllerImp extends ManagePropertyController {
   double? Latitude;
   double? Longitude;
 
-  List data = [];
-
-  @override
-  AddProperty() async {
-    if (formKey1.currentState!.validate()) {
-      statusRequest = StatusRequest.loading;
-      var response = await PropertyData.addProperty(
-          propertyType,
-          price.text,
-          numberOfBedrooms.text,
-          numberOfBathrooms.text,
-          squareMeter.text,
-          propertyDescription.text,
-          builtYear,
-          view,
-          availableDate,
-          propertyStatus,
-          numberOfUnits?.text ?? "",
-          parkingSpots.text,
-          listingType,
-          isAvaliableBasement,
-          listingBy,
-          userId,
-          downloadUrls,
-          streetAddress.text,
-          City!,
-          Region!,
-          PostalCode,
-          Country!,
-          Latitude,
-          Longitude);
-
-      if (response['statusCode'] == 200) {
-        print("================================================== LsitDto");
-        print(response['listDto']);
-      } else {
-        Get.defaultDialog(
-          title: "Error",
-          middleText:
-              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-        );
-        statusRequest = StatusRequest.failure;
-      }
-    }
-    update();
-  }
+  CameraPosition? currentPosition;
+  Set<Marker> markers = {}; // Empty marker
+  List<Neighborhood> propertyNeighborhoods = [];
 
   @override
   void onInit() {
@@ -122,6 +66,52 @@ class ManagePropertyControllerImp extends ManagePropertyController {
     super.onInit();
   }
 
+  @override
+  AddProperty() async {
+    if (formKey1.currentState!.validate()) {
+      statusRequest = StatusRequest.loading;
+      var response = await PropertyData.addProperty(
+        propertyType,
+        price.text,
+        numberOfBedrooms.text,
+        numberOfBathrooms.text,
+        squareMeter.text,
+        propertyDescription.text,
+        builtYear,
+        view,
+        availableDate,
+        propertyStatus,
+        numberOfUnits?.text ?? "",
+        parkingSpots.text,
+        listingType,
+        isAvaliableBasement,
+        listingBy,
+        userId,
+        downloadUrls,
+        streetAddress.text,
+        City!,
+        Region!,
+        PostalCode,
+        Country!,
+        Latitude,
+        Longitude,
+      );
+
+      if (response['statusCode'] == 200) {
+        print("================================================== LsitDto");
+        print(response['listDto']);
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+        statusRequest = StatusRequest.failure;
+      }
+    }
+    update();
+  }
+
   getPropertiesUser() async {
     var response = await PropertyData.getPropertiesForUser(propertiesUserId);
 
@@ -139,51 +129,7 @@ class ManagePropertyControllerImp extends ManagePropertyController {
     }
   }
 
-  @override
-  goToAddProperty1() {
-    Get.toNamed(AppRoute.addProperty1);
-  }
-
-  @override
-  goToAddProperty2() {
-    Get.toNamed(AppRoute.addProperty2);
-  }
-
-  @override
-  goToAddProperty3() {
-    Get.toNamed(AppRoute.addProperty3);
-  }
-
-  @override
-  goToAddProperty4() {
-    Get.toNamed(AppRoute.addProperty4);
-  }
-
-  @override
-  goToAddProperty5() {
-    Get.toNamed(AppRoute.addProperty5);
-  }
-
-  @override
-  goToAddProperty6() {
-    Get.toNamed(AppRoute.addProperty6);
-  }
-
-  @override
-  goToAddProperty7() {
-    Get.toNamed(AppRoute.addProperty7);
-  }
-
-  @override
-  goToAddProperty8() {
-    Get.toNamed(AppRoute.addProperty8);
-  }
-
-  @override
-  goToAddProperty9() {
-    Get.toNamed(AppRoute.addProperty9);
-  }
-
+  // ALL this for front end
   void increaseActiveStep() {
     activeStep++;
     update();
@@ -222,7 +168,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 1 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Order Received',
             topTitle: true,
           ),
           EasyStep(
@@ -235,7 +180,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 2 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Preparing',
           ),
           EasyStep(
             customStep: CircleAvatar(
@@ -247,7 +191,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 3 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'On Way',
             topTitle: true,
           ),
           EasyStep(
@@ -260,7 +203,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 4 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Delivered',
           ),
           EasyStep(
             customStep: CircleAvatar(
@@ -272,7 +214,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 5 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Delivered',
           ),
           EasyStep(
             customStep: CircleAvatar(
@@ -284,7 +225,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 6 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Delivered',
           ),
           EasyStep(
             customStep: CircleAvatar(
@@ -296,7 +236,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 7 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Delivered',
           ),
           EasyStep(
             customStep: CircleAvatar(
@@ -308,7 +247,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 8 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Delivered',
           ),
           EasyStep(
             customStep: CircleAvatar(
@@ -320,7 +258,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
                     activeStep >= 9 ? const Color(0xffd92328) : Colors.grey,
               ),
             ),
-            // title: 'Delivered',
           ),
         ],
 
@@ -329,43 +266,6 @@ class ManagePropertyControllerImp extends ManagePropertyController {
           activeStep = index;
           update();
         },
-      ),
-    );
-  }
-}
-
-class CustomMarkerWidget extends StatelessWidget {
-  final String markerText;
-
-  const CustomMarkerWidget({Key? key, required this.markerText})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 75,
-      width: 75,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Icon(
-              Icons.arrow_drop_down,
-              color: Colors.black,
-              size: 50,
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 14),
-            padding: const EdgeInsets.all(5),
-            color: Colors.black,
-            child: Text(
-              markerText,
-              style: const TextStyle(color: Colors.white),
-            ),
-          )
-        ],
       ),
     );
   }

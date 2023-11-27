@@ -1,17 +1,24 @@
-import 'package:client/controller/contracts/milestone_controller.dart';
+import 'package:client/controller/contracts/offer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateOffer extends StatefulWidget {
-  CreateOffer({Key? key}) : super(key: key);
+  int landlordId;
+  int customerId;
+  int propertyId;
+  CreateOffer({
+    Key? key,
+    required this.landlordId,
+    required this.customerId,
+    required this.propertyId,
+  }) : super(key: key);
 
   @override
   _CreateOfferState createState() => _CreateOfferState();
 }
 
 class _CreateOfferState extends State<CreateOffer> {
-  MilestoneControllerImp controller =
-      Get.put(MilestoneControllerImp(), permanent: true);
+  OfferController offerController = Get.put(OfferController());
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(
@@ -24,29 +31,19 @@ class _CreateOfferState extends State<CreateOffer> {
           data: ThemeData.dark().copyWith(
             primaryColor:
                 const Color(0xffd92328), // Change the color of the header
-            // accentColor: Color(0xffd92328), // Change the color of the selected date
           ),
           child: child ?? Container(),
         );
       },
-      // Define the theme for the date picker buttons here
-      // To change the button color, you can define your custom DatePickerTheme
-      // and set the button color within it.
-      // Example:
-      // theme: DatePickerTheme(
-      //   doneStyle: TextStyle(color: Color(0xffd92328)),
-      //   cancelStyle: TextStyle(color: Color(0xffd92328)),
-      // ),
     );
 
     if (pickedDate != null) {
       setState(() {
-        controller.milestoneDate = pickedDate;
+        // controller.milestoneDate = pickedDate;
       });
     }
   }
 
-  // final PageController pageController;
   @override
   Widget build(BuildContext context) {
     const options = [
@@ -77,32 +74,32 @@ class _CreateOfferState extends State<CreateOffer> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(height: 5),
-                  const Text(
-                    "Choose property",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(height: 5),
-                  Container(
-                    child: TextFormField(
-                      controller: controller.milestoneName,
-                      style: const TextStyle(),
-                      decoration: InputDecoration(
-                        // suffixIcon: Icon(Icons.description),
-                        hintText: "Milestone name",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(height: 5),
-                  Container(height: 15),
+                  // Container(height: 5),
+                  // const Text(
+                  //   "Choose property",
+                  //   style: TextStyle(
+                  //       fontSize: 18,
+                  //       color: Colors.black,
+                  //       fontWeight: FontWeight.w500),
+                  // ),
+                  // Container(height: 5),
+                  // Container(
+                  //   child: TextFormField(
+                  //     controller: controller.milestoneName,
+                  //     style: const TextStyle(),
+                  //     decoration: InputDecoration(
+                  //       // suffixIcon: Icon(Icons.description),
+                  //       hintText: "Milestone name",
+                  //       floatingLabelBehavior: FloatingLabelBehavior.always,
+                  //       contentPadding: const EdgeInsets.all(5),
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(10),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  // Container(height: 5),
+                  // Container(height: 15),
                   const Text(
                     "Price",
                     style: TextStyle(
@@ -113,7 +110,7 @@ class _CreateOfferState extends State<CreateOffer> {
                   Container(height: 5),
                   Container(
                     child: TextFormField(
-                      controller: controller.milestoneName,
+                      // controller: controller.milestoneName,
                       style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
@@ -148,7 +145,7 @@ class _CreateOfferState extends State<CreateOffer> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(controller.milestoneDate.toString()),
+                          // Text(controller.milestoneDate.toString()),
                           IconButton(
                               onPressed: _selectDateAvialableOn,
                               icon: const Icon(Icons.date_range_outlined))
@@ -168,10 +165,9 @@ class _CreateOfferState extends State<CreateOffer> {
                     child: TextFormField(
                       minLines: 7,
                       maxLines: 10,
-                      controller: controller.description,
+                      // controller: controller.description,
                       style: const TextStyle(),
                       decoration: InputDecoration(
-                        // suffixIcon: Icon(Icons.description),
                         hintText:
                             "Example: New house in the center of the city, there is close school and very beautiful view",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -182,31 +178,41 @@ class _CreateOfferState extends State<CreateOffer> {
                       ),
                     ),
                   ),
-                  Container(height: 5),
-                  // Container(
-                  //     alignment: Alignment.center,
-                  //     child:
-                  //         Image.asset("assets/images/red-tree.png", scale: 3)),
                 ],
               ),
               Container(height: 25),
               MaterialButton(
                 onPressed: () {
+                  setState(() {});
+                  ScaffoldMessenger.of(context).clearSnackBars();
                   // setState(() {
                   //   controller.activeStep++;
                   // });
                   // controller.addMilestone();
+
+                  // applicationsController.propertyId = widget.property.id;
+                  // applicationsController.userId =
+                  //     loginController.userDto?["id"];
+                  // applicationsController.addApplication();
+
+                  SnackBar snackBar = const SnackBar(
+                    content: Text("Created successfully"),
+                    backgroundColor: Colors.blue,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  Navigator.of(context).pop();
                 },
                 color: const Color.fromARGB(255, 0, 0, 0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: const Text(
-                  "Save",
+                  "Create",
                   style: TextStyle(
+                    fontSize: 16,
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               Container(height: 15),

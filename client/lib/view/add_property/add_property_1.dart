@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/view/add_property/add_property_neighbour.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -18,53 +18,52 @@ class AddProperty1 extends StatefulWidget {
 class _AddProperty1State extends State<AddProperty1> {
   bool arePlacemarksAvailable = false;
   final geocoding = GeocodingPlatform.instance;
-
   late double lat;
   late double long;
   Position? cl;
-  CameraPosition? currentCameraPosition;
+
   StreamSubscription<Position>? positionStream;
 
-  // Empty marker
-  Set<Marker> marker = {};
+  ManagePropertiesController controller =
+      Get.put(ManagePropertiesController(), permanent: true);
+
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
 
   Future<void> getLatAndLong() async {
     cl = await Geolocator.getCurrentPosition().then((value) => value);
     lat = cl!.latitude;
     long = cl!.longitude;
-    currentCameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 14);
+    controller.currentPosition =
+        CameraPosition(target: LatLng(lat, long), zoom: 13);
     setState(() {});
   }
 
-  CameraPosition jerusalem = const CameraPosition(
-    target: LatLng(32.438909, 35.295625),
-    zoom: 8,
-  );
-
-  ManagePropertyControllerImp controller =
-      Get.put(ManagePropertyControllerImp(), permanent: true);
-  LoginControllerImp loginController = Get.put(LoginControllerImp());
-
   @override
   void initState() {
+    controller.markers = {};
+
     setState(() {
       controller.activeStep = 1;
     });
-    positionStream =
-        Geolocator.getPositionStream().listen((Position? position) {
-      print(position == null
-          ? 'Unknown'
-          : '${position.latitude.toString()}, ${position.longitude.toString()}');
-    });
-    getLatAndLong(); // Initialize currentCameraPosition when the widget is created.
+
+    positionStream = Geolocator.getPositionStream().listen(
+      (Position? position) {
+        print(position == null
+            ? 'Unknown'
+            : '${position.latitude.toString()}, ${position.longitude.toString()}');
+      },
+    );
+
+    getLatAndLong(); // Initialize currentPosition when the widget is created.
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -159,24 +158,38 @@ class _AddProperty1State extends State<AddProperty1> {
                     height: 300,
                     child: Visibility(
                       visible: true,
-                      child: currentCameraPosition == null
+                      child: controller.currentPosition == null
                           ? Container(
                               alignment: Alignment.center,
                               child: const CircularProgressIndicator())
                           : Expanded(
                               child: GoogleMap(
                                 mapType: MapType.normal,
-                                initialCameraPosition: jerusalem,
+                                initialCameraPosition:
+                                    controller.currentPosition!,
+                                onCameraMove: (position) {
+                                  controller.currentPosition = CameraPosition(
+                                      target: LatLng(position.target.latitude,
+                                          position.target.longitude),
+                                      zoom: position.zoom);
+                                },
                                 onMapCreated: (mapcontroller) {
                                   getLatAndLong();
                                   controller.mapController1 = mapcontroller;
                                 },
-                                markers: marker,
+                                markers: controller.markers,
                                 onTap: (latlng) async {
-                                  marker.add(Marker(
-                                    markerId: const MarkerId("9"),
-                                    position: latlng,
-                                  ));
+                                  // Remove existing markers
+                                  controller.markers.clear();
+
+                                  // Add a new marker with ID "1"
+                                  controller.markers.add(
+                                    Marker(
+                                      markerId: const MarkerId("1"),
+                                      position: latlng,
+                                    ),
+                                  );
+                                  print(controller.markers);
                                   try {
                                     List<Placemark> placemarks =
                                         await placemarkFromCoordinates(

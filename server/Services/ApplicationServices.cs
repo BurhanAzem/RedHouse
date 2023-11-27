@@ -39,9 +39,11 @@ namespace server.Services
             Application application = new Application
             {
                 UserId = applicationDto.UserId,
+                Message = applicationDto.Message,
                 PropertyId = applicationDto.PropertyId,
                 ApplicationDate = DateTime.Now,
                 ApplicationStatus = "Pending",
+                SuggestedPrice = applicationDto.SuggestedPrice,
             };
             var applicationRes = await _redHouseDbContext.Applications.AddAsync(application);
             await _redHouseDbContext.SaveChangesAsync();
@@ -213,6 +215,45 @@ namespace server.Services
             {
                 Dto = application,
                 Exception = new Exception($"Application with {applicationId} Rejected succussfuly"),
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+
+        public async Task<ResponsDto<Application>> GetApprovedApplicationsForUser(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception("User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var customerApplications = await _redHouseDbContext.Applications
+            .Include(a => a.Property)
+            .Include(a => a.User)
+            .AsQueryable()
+            .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved")
+            .ToArrayAsync();
+
+            var landlordApplications = await _redHouseDbContext.Applications
+                .Include(a => a.Property)
+                .Include(a => a.User)
+                .AsQueryable()
+                .Where(a => a.ApplicationStatus == "Approved" && a.UserId == userId)
+                .ToArrayAsync();
+
+            List<Application> applications = new List<Application>();
+            applications.AddRange(customerApplications);
+            applications.AddRange(landlordApplications);
+
+
+            return new ResponsDto<Application>
+            {
+                ListDto = applications.Distinct().ToList(),
                 StatusCode = HttpStatusCode.OK,
             };
         }

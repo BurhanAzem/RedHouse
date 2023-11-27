@@ -25,8 +25,8 @@ class _AllApplicationsState extends State<AllApplications> {
   }
 
   void loadData() async {
-    ApplicationsControllerImp controller =
-        Get.put(ApplicationsControllerImp(), permanent: true);
+    ApplicationsController controller =
+        Get.put(ApplicationsController(), permanent: true);
     String? userDtoJson = sharepref!.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
@@ -39,8 +39,8 @@ class _AllApplicationsState extends State<AllApplications> {
 
   @override
   Widget build(BuildContext context) {
-    ApplicationsControllerImp controller =
-        Get.find<ApplicationsControllerImp>();
+    ApplicationsController controller =
+        Get.find<ApplicationsController>();
 
     // Check if data is still loading
     if (isLoading) {

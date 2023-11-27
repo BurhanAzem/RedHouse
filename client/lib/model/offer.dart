@@ -18,19 +18,20 @@ class Offer {
   User? customer;
   Property? property;
 
-  Offer(
-      {required this.id,
-      required this.landlordId,
-      required this.customerId,
-      required this.propertryId,
-      required this.offerDate,
-      required this.offerExpires,
-      required this.description,
-      required this.offerStatus,
-      required this.price,
-      this.landlord,
-      this.customer,
-      this.property});
+  Offer({
+    required this.id,
+    required this.landlordId,
+    required this.customerId,
+    required this.propertryId,
+    required this.offerDate,
+    required this.offerExpires,
+    required this.description,
+    required this.offerStatus,
+    required this.price,
+    this.landlord,
+    this.customer,
+    this.property,
+  });
 
   factory Offer.fromJson(Map<String, dynamic> json) => _$OfferFromJson(json);
   Map<String, dynamic> toJson() => _$OfferToJson(this);

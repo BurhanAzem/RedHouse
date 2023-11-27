@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
 import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/offers/create_offer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -21,7 +23,8 @@ class _StepperDemoState extends State<ApplicationDetails> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
   late Application application;
-  ApplicationsControllerImp controller = Get.put(ApplicationsControllerImp());
+  ApplicationsController controller = Get.put(ApplicationsController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
   bool isLoading = true; // Add a boolean variable for loading state
 
   @override
@@ -32,8 +35,8 @@ class _StepperDemoState extends State<ApplicationDetails> {
   }
 
   void loadDataAllapliactions() async {
-    ApplicationsControllerImp controller =
-        Get.put(ApplicationsControllerImp(), permanent: true);
+    ApplicationsController controller =
+        Get.put(ApplicationsController(), permanent: true);
     String? userDtoJson = sharepref.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
@@ -61,6 +64,35 @@ class _StepperDemoState extends State<ApplicationDetails> {
     }
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Container(
+        height: 40,
+        child: FloatingActionButton.extended(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+          onPressed: () {
+            Get.to(
+              () => CreateOffer(
+                // This user ID is the ID of who received the application
+                landlordId: application.property.userId,
+                // The user ID is the ID of the person who sent the application
+                customerId: application.userId,
+                propertyId: application.propertyId,
+              ),
+            );
+          },
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          icon: const Icon(
+            Icons.add,
+            size: 22,
+          ),
+          label: const Text("Create offer"),
+        ),
+      ),
+
+      // App bar
       appBar: AppBar(
         automaticallyImplyLeading: true,
         centerTitle: true,
@@ -74,6 +106,8 @@ class _StepperDemoState extends State<ApplicationDetails> {
           ),
         ),
       ),
+
+      // Body
       body: Container(
         margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
         child: Column(
@@ -112,7 +146,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: Colors.black,
-                  width: 1, // Adjust the width as needed
+                  width: 1,
                 ),
               ),
               child: const Icon(
@@ -283,7 +317,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                   ),
                 ],
               ),
-            Container(height: 25),
+            Container(height: 15),
             InkWell(
               onTap: () {
                 Get.to(() => HomeInformation(property: application.property));

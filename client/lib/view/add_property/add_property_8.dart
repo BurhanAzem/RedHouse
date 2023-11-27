@@ -1,5 +1,5 @@
 import 'package:client/controller/bottom_bar/bottom_bar.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/more/my_properties.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +22,9 @@ class _AddProperty8State extends State<AddProperty8> {
     ];
     final List<String> options = ["Landlord", "Agent"];
 
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -181,10 +181,10 @@ class _AddProperty8State extends State<AddProperty8> {
 
                         print(bottomBarController.currentIndex);
                         if (bottomBarController.currentIndex == 3) {
-                          Get.offAll(() => BottomBar());
+                          Get.offAll(() => const BottomBar());
                         } else if (bottomBarController.currentIndex == 4) {
-                          Get.offAll(() => BottomBar());
-                          Get.to(() => MyProperties());
+                          Get.offAll(() => const BottomBar());
+                          Get.to(() => const MyProperties());
                         }
 
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);

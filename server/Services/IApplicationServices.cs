@@ -7,6 +7,7 @@ namespace server.Services
 {
     public interface IApplicationServices
     {
+        public Task<ResponsDto<Application>> GetApprovedApplicationsForUser(int userId);
         public Task<ResponsDto<Application>> CreateApplication(ApplicationDto applicationDto);
         public Task<ResponsDto<Application>> GetApplications(int userId);
         public Task<ResponsDto<Application>> GetApplication(int applicationId);

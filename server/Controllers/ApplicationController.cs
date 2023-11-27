@@ -21,7 +21,7 @@ namespace RedHouse_Server.Controllers
         {
             _applicationServices = applicationServices;
         }
-        
+
         // [Authorize]
         [HttpPost("/applications")]
         public async Task<IActionResult> CreateAppication([FromBody] ApplicationDto applicationDto)
@@ -138,6 +138,24 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _applicationServices.RejectApplication(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+        [HttpGet("/users/{id}/approved-applications")]
+        public async Task<IActionResult> GetApprovedApplicationsForUser(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _applicationServices.GetApprovedApplicationsForUser(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

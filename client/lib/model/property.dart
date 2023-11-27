@@ -11,8 +11,8 @@ class Property {
   int userId;
   User? user;
   String propertyCode;
-  int locationId;
   List<PropertyFile>? propertyFiles;
+  int locationId;
   Location? location;
   int price;
   int numberOfBedRooms;

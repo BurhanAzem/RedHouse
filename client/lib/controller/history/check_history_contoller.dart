@@ -1,4 +1,3 @@
-import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/model/user_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -108,7 +107,6 @@ Widget buildRatingRow(int rating, int count, int totalCount) {
   double percentage = (count / totalCount);
 
   return SizedBox(
-    // width: 270,
     child: Row(
       children: [
         SizedBox(

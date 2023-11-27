@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:client/controller/map_list_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/model/property_files.dart';
 import 'package:flutter/material.dart';

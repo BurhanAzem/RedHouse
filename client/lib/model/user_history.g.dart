@@ -14,7 +14,7 @@ UserHistory _$UserHistoryFromJson(Map<String, dynamic> json) => UserHistory(
       customerRating: json['customerRating'] as int,
       landlordRating: json['landlordRating'] as int,
       contract: Contract.fromJson(json['contract'] as Map<String, dynamic>),
-    );
+    )..helpful = json['helpful'] as String;
 
 Map<String, dynamic> _$UserHistoryToJson(UserHistory instance) =>
     <String, dynamic>{
@@ -25,4 +25,5 @@ Map<String, dynamic> _$UserHistoryToJson(UserHistory instance) =>
       'feedbackToCustomer': instance.feedbackToCustomer,
       'customerRating': instance.customerRating,
       'landlordRating': instance.landlordRating,
+      'helpful': instance.helpful,
     };

@@ -1,14 +1,28 @@
+import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ActionButtonsWidget extends StatelessWidget {
+class ActionButtonsWidget extends StatefulWidget {
   final Property property;
 
   const ActionButtonsWidget({
     Key? key,
     required this.property,
   }) : super(key: key);
+
+  @override
+  State<ActionButtonsWidget> createState() => _ActionButtonsWidgetState();
+}
+
+class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
+  ApplicationsController applicationsController =
+      Get.put(ApplicationsController(), permanent: true);
+
+  LoginControllerImp loginController =
+      Get.put(LoginControllerImp(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +38,9 @@ class ActionButtonsWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
               onPressed: () {
+                applicationsController.message.text = "";
+                applicationsController.suggestedPrice.text = "";
+
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -63,7 +80,7 @@ class ActionButtonsWidget extends StatelessWidget {
                                       TextFieldWithLabel(
                                           label:
                                               "The price you pay for this property",
-                                          property: property),
+                                          property: widget.property),
                                       const Padding(
                                         padding: EdgeInsets.only(
                                             left: 16,
@@ -91,7 +108,26 @@ class ActionButtonsWidget extends StatelessWidget {
                                       height: 40,
                                       color: Colors.blue,
                                       child: MaterialButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          setState(() {});
+                                          ScaffoldMessenger.of(context)
+                                              .clearSnackBars();
+
+                                          applicationsController.propertyId =
+                                              widget.property.id;
+                                          applicationsController.userId =
+                                              loginController.userDto?["id"];
+                                          applicationsController
+                                              .addApplication();
+
+                                          SnackBar snackBar = const SnackBar(
+                                            content: Text("Sent successfully"),
+                                            backgroundColor: Colors.blue,
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
+                                          Navigator.of(context).pop();
+                                        },
                                         child: const Text(
                                           "Send request",
                                           style: TextStyle(
@@ -180,6 +216,9 @@ class TextFieldWithLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ApplicationsController controller =
+        Get.put(ApplicationsController(), permanent: true);
+
     String hintText() {
       if (label == "Message") {
         return "Add your message";
@@ -218,7 +257,12 @@ class TextFieldWithLabel extends StatelessWidget {
           ),
           const SizedBox(height: 5),
           TextField(
-            maxLines: label == "Message" ? 3 : 1,
+            controller: label == "The price you pay for this property"
+                ? controller.suggestedPrice
+                : label == "Message"
+                    ? controller.message
+                    : null,
+            maxLines: label == "Message" ? 4 : 1,
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(12),
               hintText: hintText(),
@@ -227,9 +271,6 @@ class TextFieldWithLabel extends StatelessWidget {
               suffixStyle:
                   const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
-            onChanged: (text) {
-              print("$label: $text");
-            },
           ),
         ],
       ),

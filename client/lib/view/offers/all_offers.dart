@@ -32,8 +32,8 @@ class _AllOffersState extends State<AllOffers>
   }
 
   void loadData() async {
-    OfferControllerImp controller =
-        Get.put(OfferControllerImp(), permanent: true);
+    OfferController controller =
+        Get.put(OfferController(), permanent: true);
     String? userDtoJson = sharepref.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
@@ -50,7 +50,7 @@ class _AllOffersState extends State<AllOffers>
   @override
   Widget build(BuildContext context) {
     // loadData();
-    OfferControllerImp controller = Get.put(OfferControllerImp());
+    OfferController controller = Get.put(OfferController());
     super.build(context);
     const offerStatus = [
       "All",
@@ -72,18 +72,18 @@ class _AllOffersState extends State<AllOffers>
         }
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Get.to(CreateOffer());
-          },
-          shape: const CircleBorder(),
-          backgroundColor: const Color.fromARGB(255, 32, 32, 32),
-          child: const Icon(
-            Icons.add,
-            size: 25,
-            color: Colors.white,
-          ),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     // Get.to(CreateOffer());
+        //   },
+        //   shape: const CircleBorder(),
+        //   backgroundColor: const Color.fromARGB(255, 32, 32, 32),
+        //   child: const Icon(
+        //     Icons.add,
+        //     size: 25,
+        //     color: Colors.white,
+        //   ),
+        // ),
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
           title: const Text(

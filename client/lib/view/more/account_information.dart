@@ -1,4 +1,4 @@
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/more/my_feedback.dart';
 import 'package:flutter/material.dart';

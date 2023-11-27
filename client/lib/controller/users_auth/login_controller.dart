@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:client/controller/bottom_bar/bottom_bar.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/handlingdata.dart';
-import 'package:client/data/users.dart';
+import 'package:client/data/users_auth.dart';
 import 'package:client/main.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,6 +15,12 @@ abstract class LoginController extends GetxController {
 }
 
 class LoginControllerImp extends LoginController {
+  BottomBarController bottomBarController =
+      Get.put(BottomBarController(), permanent: true);
+
+  MapListController mapListController =
+      Get.put(MapListController(), permanent: true);
+
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
   late TextEditingController email;
@@ -63,6 +71,8 @@ class LoginControllerImp extends LoginController {
           'name': userDto?["name"],
         }, SetOptions(merge: true));
 
+        bottomBarController.currentIndex = 0;
+        mapListController.isListIcon = true;
         Get.offAllNamed("/bottom-bar");
       } else {
         Get.defaultDialog(

@@ -1,9 +1,9 @@
-import 'dart:async';
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/model/neighborhood.dart';
+import 'package:client/view/add_property/add_property_2.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -15,60 +15,116 @@ class AddPropertyNeighbour extends StatefulWidget {
 }
 
 class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
-  String neighbourType = "Select neighbours type";
-  // bool arePlacemarksAvailable = false;
-
-  final geocoding = GeocodingPlatform.instance;
-
-  late double lat;
-  late double long;
-  Position? cl;
-  CameraPosition? currentCameraPosition;
-  StreamSubscription<Position>? positionStream;
-
-  // Empty markers
-  Set<Marker> markers = {};
-
-  Future<void> getLatAndLong() async {
-    cl = await Geolocator.getCurrentPosition().then((value) => value);
-    lat = cl!.latitude;
-    long = cl!.longitude;
-    currentCameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 14);
-    setState(() {});
-  }
-
-  CameraPosition jerusalem = const CameraPosition(
-    target: LatLng(32.438909, 35.295625),
-    zoom: 8,
-  );
+  String neighbourType = "Select Neighbours Type";
 
   LoginControllerImp loginController = Get.put(LoginControllerImp());
 
+  Neighborhood neighborhood = Neighborhood(
+    id: 0,
+    propertyId: 0,
+    // property: null,
+    neighborhoodType: '',
+    locationId: 0,
+    // location: null,
+  );
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+
+  // Give icon for each neighborhood
+  void addCustomerIcon() {
+    if (neighbourType == "Parking") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/parking.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighbourType == "School") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/school.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighbourType == "Hospital") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/hospital.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighbourType == "Mosque") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/mosque.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighbourType == "Gymnasium") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/gym.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighbourType == "Gas Station") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/gas-station.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighbourType == "ATM") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/atm.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    }
+  }
+
   @override
   void initState() {
-    positionStream =
-        Geolocator.getPositionStream().listen((Position? position) {
-      print(position == null
-          ? 'Unknown'
-          : '${position.latitude.toString()}, ${position.longitude.toString()}');
-    });
-    getLatAndLong(); // Initialize currentCameraPosition when the widget is created.
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     const options = [
-      "Select neighbours type",
+      "Select Neighbours Type",
       "Parking",
+      "School",
+      "Hospital",
       "Mosque",
-      "University",
-      "School"
+      "Gymnasium",
+      "Gas Station",
+      "ATM",
     ];
 
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -85,7 +141,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
               },
             ),
             title: const Text(
-              "Neighbor Locations",
+              "Neighbours Locations",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -110,7 +166,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                   Container(
                     margin: const EdgeInsets.only(left: 12),
                     child: const Text(
-                      "Add neighbors to this property",
+                      "Add neighbours to this property",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
                     ),
@@ -140,6 +196,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                         if (newValue != null) {
                           setState(() {
                             neighbourType = newValue;
+                            addCustomerIcon();
                           });
                         }
                       },
@@ -188,105 +245,71 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                     height: 300,
                     child: Visibility(
                       visible: true,
-                      child: currentCameraPosition == null
+                      child: controller.currentPosition == null
                           ? Container(
                               alignment: Alignment.center,
                               child: const CircularProgressIndicator())
                           : Expanded(
                               child: GoogleMap(
-                                markers: markers,
+                                markers: controller.markers,
                                 onTap: (latlng) async {
                                   print(neighbourType);
-                                  if (neighbourType == "Parking") {
-                                    markers.add(
+                                  if (neighbourType !=
+                                      "Select Neighbours Type") {
+                                    controller.markers.add(
                                       Marker(
-                                        markerId: const MarkerId("1"),
+                                        markerId: MarkerId(neighbourType),
                                         position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueViolet),
                                         infoWindow:
-                                            const InfoWindow(title: 'Parking'),
+                                            InfoWindow(title: neighbourType),
+                                        icon: markerIcon,
                                       ),
                                     );
-                                  } else if (neighbourType == "Mosque") {
-                                    markers.add(
-                                      Marker(
-                                        markerId: const MarkerId("2"),
-                                        position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueYellow),
-                                        infoWindow:
-                                            const InfoWindow(title: 'Mosque'),
-                                      ),
-                                    );
-                                  } else if (neighbourType == "University") {
-                                    markers.add(
-                                      Marker(
-                                        markerId: const MarkerId("3"),
-                                        position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueBlue),
-                                        infoWindow: const InfoWindow(
-                                            title: 'University'),
-                                      ),
-                                    );
-                                  } else if (neighbourType == "School") {
-                                    markers.add(
-                                      Marker(
-                                        markerId: const MarkerId("4"),
-                                        position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueGreen),
-                                        infoWindow:
-                                            const InfoWindow(title: 'School'),
-                                      ),
-                                    );
-                                  }
 
-                                  try {
-                                    List<Placemark> placemarks =
-                                        await placemarkFromCoordinates(
-                                            latlng.latitude, latlng.longitude);
+                                    neighborhood!.id = 0;
 
-                                    if (placemarks.isNotEmpty) {
-                                      final placemark = placemarks[0];
-                                      controller.City = placemark.locality;
-                                      controller.PostalCode =
-                                          placemark.postalCode!;
-                                      controller.streetAddress.text =
-                                          placemark.street!;
-                                      controller.Country = placemark.country;
-                                      controller.Region = placemark.locality;
-                                      controller.Latitude = latlng.latitude;
-                                      controller.Longitude = latlng.longitude;
+                                    // controller.propertyNeighborhoods.insert(neighbourType, element);
 
-                                      print('City: ${controller.City}');
-                                      print(
-                                          'PostalCode: ${controller.PostalCode}');
-                                      print('Country: ${controller.Country}');
-                                      print(
-                                          'streetAddress: ${controller.streetAddress.text}');
-                                      print('Region: ${controller.Region}');
-                                      print('Latitude: ${controller.Latitude}');
-                                      print(
-                                          'Longitude: ${controller.Longitude}');
-                                      setState(() {});
-                                    }
-                                  } catch (e) {
-                                    Get.defaultDialog(
-                                        title: "ُEntered invalid location",
-                                        middleText: 'Error: $e');
+                                    try {
+                                      List<Placemark> placemarks =
+                                          await placemarkFromCoordinates(
+                                              latlng.latitude,
+                                              latlng.longitude);
+
+                                      if (placemarks.isNotEmpty) {
+                                        final placemark = placemarks[0];
+                                        controller.City = placemark.locality;
+                                        controller.PostalCode =
+                                            placemark.postalCode!;
+                                        controller.streetAddress.text =
+                                            placemark.street!;
+                                        controller.Country = placemark.country;
+                                        controller.Region = placemark.locality;
+                                        controller.Latitude = latlng.latitude;
+                                        controller.Longitude = latlng.longitude;
+
+                                        print('City: ${controller.City}');
+                                        print(
+                                            'PostalCode: ${controller.PostalCode}');
+                                        print('Country: ${controller.Country}');
+                                        print(
+                                            'streetAddress: ${controller.streetAddress.text}');
+                                        print('Region: ${controller.Region}');
+                                        print(
+                                            'Latitude: ${controller.Latitude}');
+                                        print(
+                                            'Longitude: ${controller.Longitude}');
+                                        setState(() {});
+                                      }
+                                    } catch (e) {}
                                   }
                                   setState(() {});
                                 },
                                 mapType: MapType.normal,
-                                initialCameraPosition: jerusalem,
+                                initialCameraPosition:
+                                    controller.currentPosition!,
                                 onMapCreated: (mapcontroller) {
-                                  getLatAndLong();
+                                  // getLatAndLong();
                                   controller.mapController2 = mapcontroller;
                                 },
                               ),
@@ -305,7 +328,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                           print(controller.activeStep);
                         });
                         controller.userId = loginController.userDto?["id"];
-                        controller.goToAddProperty2();
+                        Get.to(() => AddProperty2());
                       },
                       color: const Color(0xffd92328),
                       shape: RoundedRectangleBorder(

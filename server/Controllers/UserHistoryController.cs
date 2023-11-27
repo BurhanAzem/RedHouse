@@ -63,23 +63,7 @@ namespace RedHouse_Server.Controllers
 
         // }
 
-        [HttpGet("/users/id/usres-approved-applications")]
-        public async Task<IActionResult> GetUsersOfApprovedApplications(int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var result = await _userServices.GetUsersOfApprovedApplications(id);
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code.Value, result.Exception);
-            }
-            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-            return Ok(result);
 
-        }
 
         [HttpGet("/user-history")]
         public async Task<IActionResult> GetAllProperties([FromQuery] string userId)

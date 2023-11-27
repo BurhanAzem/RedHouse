@@ -88,7 +88,6 @@ class PropertyData {
     } else {
       return (StatusRequest.offlinefailure);
     }
-    // return response.fold((l) => l, (r) => r);
   }
 
   static getProperties(
@@ -132,11 +131,32 @@ class PropertyData {
         'Authorization': 'Bearer ${getToken()}',
       });
       print(response.statusCode);
-      // print(response.body.listDto);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody["listDto"]);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static getProperty(int id) async {
+    if (await checkInternet()) {
+      var response = await http.get(Uri.parse('${AppLink.properties}/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["dto"]);
 
         return (responsebody);
       } else {
@@ -155,9 +175,8 @@ class PropertyData {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
-      
+
       print(response.statusCode);
-      // print(response.body.listDto);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
@@ -172,28 +191,5 @@ class PropertyData {
     }
   }
 
-  static getProperty(int id) async {
-    if (await checkInternet()) {
-      // final Uri uri = Uri.https("10.0.2.2:7042", "/properties",);
 
-      var response = await http.get(Uri.parse(AppLink.properties + '/$id'),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${getToken()}',
-          });
-      print(response.statusCode);
-      // print(response.body.listDto);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["dto"]);
-
-        return (responsebody);
-      } else {
-        return StatusRequest.serverfailure;
-      }
-    } else {
-      return StatusRequest.offlinefailure;
-    }
-  }
 }

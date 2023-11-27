@@ -1,6 +1,6 @@
 import 'package:client/controller/contracts/contracts_controller.dart';
 import 'package:client/controller/contracts/milestone_controller.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/view/contracts/contract.dart';
 import 'package:client/view/contracts/overview.dart';

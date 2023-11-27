@@ -1,4 +1,5 @@
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_7.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,8 +11,8 @@ class AddProperty6 extends StatefulWidget {
 }
 
 class _AddProperty6State extends State<AddProperty6> {
-  ManagePropertyControllerImp controller =
-      Get.put(ManagePropertyControllerImp(), permanent: true);
+  ManagePropertiesController controller =
+      Get.put(ManagePropertiesController(), permanent: true);
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(
@@ -63,9 +64,9 @@ class _AddProperty6State extends State<AddProperty6> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -176,7 +177,7 @@ class _AddProperty6State extends State<AddProperty6> {
                         controller.increaseActiveStep();
                         print(controller.activeStep);
                       });
-                      controller.goToAddProperty7();
+                      Get.to(() => AddProperty7());
                     },
                     color: const Color(0xffd92328),
                     shape: RoundedRectangleBorder(

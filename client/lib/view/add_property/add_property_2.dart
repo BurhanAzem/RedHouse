@@ -1,4 +1,5 @@
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_3.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,9 +21,9 @@ class _AddProperty2State extends State<AddProperty2> {
       "Entire Department Community"
     ];
 
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -174,7 +175,7 @@ class _AddProperty2State extends State<AddProperty2> {
                         controller.increaseActiveStep();
                         print(controller.activeStep);
                       });
-                      controller.goToAddProperty3();
+                      Get.to(() => AddProperty3());
                     },
                     color: const Color(0xffd92328),
                     shape: RoundedRectangleBorder(
