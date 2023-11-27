@@ -59,9 +59,7 @@ namespace RedHouse_Server.Models
         public DbSet<ContractActivity> ContractActivities { get; set; }
         public DbSet<UserHistory> UserHistoryRecords { get; set; }
         public DbSet<SavedProperties> SavedProperties { get; set; }
-
-
-
-
+        public IEnumerable<object> UserIdentities { get; internal set; }
+        public object IdentityFiles { get; internal set; }
     }
 }
