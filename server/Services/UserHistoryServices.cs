@@ -80,5 +80,54 @@ namespace server.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ResponsDto<UserHistory>> GetPropertyHistory(int propertyId)
+        {
+
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<UserHistory>
+                {
+                    Message = $"Property with {propertyId} Id Dose Not Exist",
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+
+
+
+            var contracts = _redHouseDbContext.Contracts
+                .Where(c => c.Offer.PropertyId == propertyId)
+                .Include(c => c.Offer.Property) // Include the Property navigation property
+                .Include(c => c.Offer.Landlord) // Include the Landlord navigation property
+                .Include(c => c.Offer.Customer) // Include the Customer navigation property
+                .ToList();
+
+            var userHistories = _redHouseDbContext.UserHistoryRecords
+                .ToList()
+                .Join(
+                    contracts,
+                    uh => uh.ContractId,
+                    c => c.Id,
+                    (uh, c) => new UserHistory
+                    {
+                        Id = uh.Id,
+                        ContractId = uh.ContractId,
+                        FeedbackToLandlord = uh.FeedbackToLandlord,
+                        FeedbackToCustomer = uh.FeedbackToCustomer,
+                        CustomerRating = uh.CustomerRating,
+                        LandlordRating = uh.LandlordRating,
+                        Contract = c
+                    }
+                )
+                .ToList();
+
+            return new ResponsDto<UserHistory>
+            {
+                ListDto = userHistories,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
     }
 }

@@ -130,22 +130,51 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpGet("/properties/{id}/property-history")]
-        public async Task<IActionResult> GetPropertyHistory(int id)
+        [HttpGet("/properties/{id}/property-history-price-as-rent")]
+        public async Task<IActionResult> GetPricePropertyHistoryAsRent(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _propertyServices.GetPropertyHistory(id);
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code.Value, result.Exception);
-            }
+            var result = await _propertyServices.GetPricePropertyHistoryAsRent(id);
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 
+        }
+
+        [HttpGet("/properties/{id}/property-history-price-as-sell")]
+        public async Task<IActionResult> GetPricePropertyHistoryAsSell(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _propertyServices.GetPricePropertyHistoryAsSell(id);
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+        [HttpGet("/properties/property-numbers-in-last-ten-year")]
+        public async Task<IActionResult> GetNumberOfPropertiesInLastTenYears()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _propertyServices.GetNumberOfPropertiesInLastTenYears();
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+        [HttpGet("/properties/number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _propertyServices.NumberOfProperties();
+            // Set the token value in the cookie
+            return Ok(result);
         }
     }
 }

@@ -10,6 +10,8 @@ class ApplicationsController extends GetxController {
 
   String? applicationType = "All";
   String? applicationStatus = "All";
+  String? applicationTo = "Landlord";
+
 
   int propertyId = 1;
   int userId = 1; // customer id
@@ -41,7 +43,7 @@ class ApplicationsController extends GetxController {
   }
 
   getApplications(int userId) async {
-    var response = await ApplicationData.getApplications(userId);
+    var response = await ApplicationData.getApplications(userId, applicationStatus, applicationType, applicationTo);
 
     if (response['statusCode'] == 200) {
       applications = (response['listDto'] as List<dynamic>)

@@ -27,7 +27,8 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            Location location = new Location{
+            Location location = new Location
+            {
                 City = neighborhoodDto.Location.City,
                 Country = neighborhoodDto.Location.Country,
                 Region = neighborhoodDto.Location.Region,
@@ -62,41 +63,42 @@ namespace server.Services
         {
             foreach (var neighborhoodDto in listNeighborhoodDto.NeighborhoodDtos)
             {
-                var porperty = await _redHouseDbContext.Neighborhoods.FindAsync(neighborhoodDto.PropertyId);
-            if (porperty == null)
-            {
-                return new ResponsDto<Neighborhood>
+                var porperty = await _redHouseDbContext.Properties.FindAsync(neighborhoodDto.PropertyId);
+                if (porperty == null)
                 {
-                    Exception = new Exception("Property Not Exist"),
-                    StatusCode = HttpStatusCode.BadRequest,
+                    return new ResponsDto<Neighborhood>
+                    {
+                        Exception = new Exception("Property Not Exist"),
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+                }
+                Location location = new Location
+                {
+                    City = neighborhoodDto.Location.City,
+                    Country = neighborhoodDto.Location.Country,
+                    Region = neighborhoodDto.Location.Region,
+                    PostalCode = neighborhoodDto.Location.PostalCode,
+                    StreetAddress = neighborhoodDto.Location.StreetAddress,
+                    Latitude = neighborhoodDto.Location.Latitude,
+                    Longitude = neighborhoodDto.Location.Longitude,
                 };
+
+                var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
+                await _redHouseDbContext.SaveChangesAsync();
+
+                Neighborhood neighborhood = new Neighborhood
+                {
+                    LocationId = locationRes.Entity.Id,
+                    NeighborhoodName = neighborhoodDto.NeighborhoodName,
+                    NeighborhoodType = neighborhoodDto.NeighborhoodType,
+                    PropertyId = neighborhoodDto.PropertyId,
+                };
+                var neighborhoodRes = await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
+                await _redHouseDbContext.SaveChangesAsync();
+
+
             }
-            Location location = new Location{
-                City = neighborhoodDto.Location.City,
-                Country = neighborhoodDto.Location.Country,
-                Region = neighborhoodDto.Location.Region,
-                PostalCode = neighborhoodDto.Location.PostalCode,
-                StreetAddress = neighborhoodDto.Location.StreetAddress,
-                Latitude = neighborhoodDto.Location.Latitude,
-                Longitude = neighborhoodDto.Location.Longitude,
-            };
 
-            var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
-            _redHouseDbContext.SaveChangesAsync();
-
-            Neighborhood neighborhood = new Neighborhood
-            {
-                LocationId = locationRes.Entity.Id,
-                NeighborhoodName = neighborhoodDto.NeighborhoodName,
-                NeighborhoodType = neighborhoodDto.NeighborhoodType,
-                PropertyId = neighborhoodDto.PropertyId,
-            };
-            var neighborhoodRes = await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
-            await _redHouseDbContext.SaveChangesAsync();
-
-            
-            }
-            
 
             return new ResponsDto<Neighborhood>
             {
@@ -107,11 +109,11 @@ namespace server.Services
 
         public async Task<ResponsDto<Neighborhood>> GetNeighborhoods(int propertyId)
         {
-            var porperty = await _redHouseDbContext.Neighborhoods.FindAsync(propertyId);
+            var porperty = await _redHouseDbContext.Properties.FindAsync(propertyId);
             if (porperty == null)
             {
                 return new ResponsDto<Neighborhood>
-                {                         
+                {
                     Exception = new Exception("Property Not Exist"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };

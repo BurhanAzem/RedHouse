@@ -49,16 +49,16 @@ class _AllApplicationsState extends State<AllApplications> {
       );
     }
 
-    const contractStatus = [
+    const applicationStatus = [
       "All",
-      "Approved App",
-      "Pending App",
+      "Approved",
+      "Pending",
     ];
 
-    const contractType = [
+    const applicationType = [
       "All",
-      "Rent Appications",
-      "Buy Appications",
+      "For rent",
+      "For sell",
     ];
 
     return Scaffold(
@@ -99,9 +99,10 @@ class _AllApplicationsState extends State<AllApplications> {
                   onChanged: (String? newValue) {
                     setState(() {
                       controller.applicationStatus = newValue!;
+                      loadData();
                     });
                   },
-                  items: contractStatus.map((String option) {
+                  items: applicationStatus.map((String option) {
                     return DropdownMenuItem<String>(
                       value: option,
                       child: Text(option),
@@ -122,9 +123,10 @@ class _AllApplicationsState extends State<AllApplications> {
                   onChanged: (String? newValue) {
                     setState(() {
                       controller.applicationType = newValue!;
+                      loadData();
                     });
                   },
-                  items: contractType.map((String option) {
+                  items: applicationType.map((String option) {
                     return DropdownMenuItem<String>(
                       value: option,
                       child: Text(option),
@@ -138,144 +140,344 @@ class _AllApplicationsState extends State<AllApplications> {
             height: 12,
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: controller.applications.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      Get.toNamed(AppRoute.applicationDetails,
-                          arguments: controller.applications[index]);
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 4,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
+            child: Container(
+              child: DefaultTabController(
+                length: 2,
+                initialIndex: 0,
+                child: Scaffold(
+                  appBar: TabBar(
+                    onTap: (value) {
+                      if (value == 0) {
+                        setState(() {
+                          controller.applicationTo = "Landlord";
+                        });
+                        loadData();
+                      } else {
+                        setState(() {
+                          controller.applicationTo = "Customer";
+                        });
+                        loadData();
+                      }
+                    },
+                    tabs: const [
+                      Tab(text: 'Landlord Applications'),
+                      Tab(text: 'Customer Applications'),
+                    ],
+                    overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
+                    indicatorColor: Colors.black,
+                    labelColor: Colors.black,
+                    labelStyle: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17,
                     ),
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: ListTile(
-                      title: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Icon(
-                                FontAwesomeIcons.circleDot,
-                                size: 25,
-                                color: const Color(0xffd92328),
-                              ),
-                              Text(
-                                (controller.applications![index]
-                                            .applicationDate!
-                                            .toString()
-                                            .length <=
-                                        10)
-                                    ? "       ${controller.applications![index].applicationDate!.toString()!}"
-                                    : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            (controller.applications![index].user!.name!
-                                        .length <=
-                                    38)
-                                ? controller.applications![index].user!.name!
-                                : '${controller.applications![index].user!.name!.substring(0, 38)}...',
-                            style: const TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                      isThreeLine:
-                          true, // This allows the title to take up more horizontal space
-                      subtitle: Column(
-                        children: [
-                          Container(
-                            height: 1,
-                          ),
-                          Container(
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 1, // Adjust the width as needed
-                              ),
-                            ),
-                            child: const Icon(
-                              FontAwesomeIcons.solidFileZipper,
-                              size: 25,
-                              color: const Color(0xffd92328),
-                            ),
-                          ),
-                          Container(
-                            height: 1,
-                          ),
-                          Container(
-                            height: 5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    "status: ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12),
-                                  ),
-                                  Text(
-                                    controller
-                                        .applications![index].applicationStatus!
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        color: Color(0xffd92328)),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Property Code: ",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12),
-                                  ),
-                                  Text(
-                                    controller.applications![index].property
-                                        .propertyCode!,
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12,
-                                        color: Color(0xffd92328)),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    unselectedLabelColor: Colors.grey[700],
+                    unselectedLabelStyle: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 17,
                     ),
                   ),
-                );
-              },
+                  body: TabBarView(
+                    children: [
+                      // Content for 'Buy' tab
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.applications.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  Get.toNamed(AppRoute.applicationDetails,
+                                      arguments:
+                                          controller.applications[index]);
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 4,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: ListTile(
+                                  title: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Icon(
+                                            FontAwesomeIcons.circleDot,
+                                            size: 25,
+                                            color: const Color(0xffd92328),
+                                          ),
+                                          Text(
+                                            (controller.applications![index]
+                                                        .applicationDate!
+                                                        .toString()
+                                                        .length <=
+                                                    10)
+                                                ? "       ${controller.applications![index].applicationDate!.toString()!}"
+                                                : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        (controller.applications![index].user!
+                                                    .name!.length <=
+                                                38)
+                                            ? controller.applications![index]
+                                                .user!.name!
+                                            : '${controller.applications![index].user!.name!.substring(0, 38)}...',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  isThreeLine:
+                                      true, // This allows the title to take up more horizontal space
+                                  subtitle: Column(
+                                    children: [
+                                      Container(
+                                        height: 1,
+                                      ),
+                                      Container(
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width:
+                                                1, // Adjust the width as needed
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          FontAwesomeIcons.solidFileZipper,
+                                          size: 25,
+                                          color: const Color(0xffd92328),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 1,
+                                      ),
+                                      Container(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "status: ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                controller.applications![index]
+                                                    .applicationStatus!
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12,
+                                                    color: Color(0xffd92328)),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "Property Code: ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                controller.applications![index]
+                                                    .property.propertyCode!,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12,
+                                                    color: Color(0xffd92328)),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      // Content for 'Rent' tab
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: controller.applications.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  Get.toNamed(AppRoute.applicationDetails,
+                                      arguments:
+                                          controller.applications[index]);
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 4,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                child: ListTile(
+                                  title: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          const Icon(
+                                            FontAwesomeIcons.circleDot,
+                                            size: 25,
+                                            color: const Color(0xffd92328),
+                                          ),
+                                          Text(
+                                            (controller.applications![index]
+                                                        .applicationDate!
+                                                        .toString()
+                                                        .length <=
+                                                    10)
+                                                ? "       ${controller.applications![index].applicationDate!.toString()!}"
+                                                : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        (controller.applications![index].user!
+                                                    .name!.length <=
+                                                38)
+                                            ? controller.applications![index]
+                                                .user!.name!
+                                            : '${controller.applications![index].user!.name!.substring(0, 38)}...',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
+                                  isThreeLine:
+                                      true, // This allows the title to take up more horizontal space
+                                  subtitle: Column(
+                                    children: [
+                                      Container(
+                                        height: 1,
+                                      ),
+                                      Container(
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width:
+                                                1, // Adjust the width as needed
+                                          ),
+                                        ),
+                                        child: const Icon(
+                                          FontAwesomeIcons.solidFileZipper,
+                                          size: 25,
+                                          color: const Color(0xffd92328),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 1,
+                                      ),
+                                      Container(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "status: ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                controller.applications![index]
+                                                    .applicationStatus!
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12,
+                                                    color: Color(0xffd92328)),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text(
+                                                "Property Code: ",
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                controller.applications![index]
+                                                    .property.propertyCode!,
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 12,
+                                                    color: Color(0xffd92328)),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
-          )
+          ),
         ],
       ),
     );

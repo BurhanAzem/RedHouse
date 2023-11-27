@@ -49,11 +49,17 @@ class ApplicationData {
     }
   }
 
-  static getApplications(int userId) async {
-    final Map<String, dynamic> filters = {"userId": userId.toString()};
+  static getApplications(int userId, String? applicationStatus,
+      String? applicationType, String? applicationTo) async {
+    final Map<String, dynamic> filters = {
+      "applicationStatus": applicationStatus,
+      "applicationType": applicationType,
+      "applicationTo": applicationTo,
+    };
+
 
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/applications", filters);
+      final Uri uri = Uri.https("10.0.2.2:7042", "users/$userId/applications", filters);
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',

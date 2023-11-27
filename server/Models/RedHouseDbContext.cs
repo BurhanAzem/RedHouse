@@ -61,5 +61,16 @@ namespace RedHouse_Server.Models
         public DbSet<SavedProperties> SavedProperties { get; set; }
         public IEnumerable<object> UserIdentities { get; internal set; }
         public object IdentityFiles { get; internal set; }
+        public DbSet<Visitors> Visitors { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<BookingDay> BookingDays { get; set; }
+        public DbSet<UserIdentity> UserIdentities { get; set; }
+        public DbSet<Complain> Complains { get; set; }
+
+        public DbSet<IdentityFile> IdentityFiles { get; set; }
+
+
+
+
     }
 }

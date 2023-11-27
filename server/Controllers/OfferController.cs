@@ -153,6 +153,14 @@ namespace RedHouse_Server.Controllers
 
         }
 
+        [HttpGet("/offers/number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _offerServices.NumberOfOffers();
+            // Set the token value in the cookie
+            return Ok(result);
+        }
+
         // [HttpPost("/applications/{id}/reject")]
         // public async Task<IActionResult> RejectApplication(int id)
         // {

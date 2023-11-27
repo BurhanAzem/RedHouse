@@ -73,6 +73,26 @@ namespace RedHouse_Server.Controllers
 
 
 
+        [HttpGet("/users/number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _userServices.NumberOfUsers();
+            // Set the token value in the cookie
+            return Ok(result);
+        }
+
+        [HttpGet("/users/users-numbers-in-last-ten-year")]
+        public async Task<IActionResult> GetNumberOfPropertiesInLastTenYears()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.GetNumberOfUsersInLastTenYears();
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
 
     }
 }

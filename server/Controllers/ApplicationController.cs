@@ -58,14 +58,14 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/applications")]
-        public async Task<IActionResult> GetAllProperties([FromQuery] string userId)
+        [HttpGet("/users/{id}/applications")]
+        public async Task<IActionResult> GetAllProperties( int id, [FromQuery] ApplicationFilter applicationFilter)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _applicationServices.GetApplications(int.Parse(userId));
+            var result = await _applicationServices.GetApplications(id, applicationFilter);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -164,6 +164,12 @@ namespace RedHouse_Server.Controllers
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 
+        [HttpGet("/applications/number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _applicationServices.NumberOfApplications();
+            // Set the token value in the cookie
+            return Ok(result);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace RedHouse_Server.Models
         public int NumberOfBathRooms { get; set; }
         public float SquareMetersArea { get; set; }
         public string PropertyDescription { get; set; }
+        public DateTime ListingDate { get; set; } = DateTime.Now;
         public DateTime BuiltYear { get; set; } = DateTime.Now;
         public string View { get; set; }
         public DateTime AvailableOn { get; set; } = DateTime.Now;

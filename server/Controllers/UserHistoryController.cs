@@ -8,7 +8,6 @@ using server.Dtos.PropertyDtos;
 using Microsoft.AspNetCore.Authorization;
 using server.Services;
 using RedHouse_Server.Dtos.ApplicationDtos;
-using AutoMapper.Internal.Mappers;
 
 namespace RedHouse_Server.Controllers
 {
@@ -73,6 +72,25 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userHistoryServices.GetUserHistory(int.Parse(userId));
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+
+        [HttpGet("/properties/{id}/property-history")]
+        public async Task<IActionResult> GetPropertyHistory(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userHistoryServices.GetPropertyHistory(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

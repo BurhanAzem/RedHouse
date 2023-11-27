@@ -38,7 +38,7 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpPost("/auth/login")]
-        public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
             if (!ModelState.IsValid)
             {
@@ -81,6 +81,17 @@ namespace RedHouse_Server.Controllers
             // Set the token value in the cookie
             return Ok(result);
         }
+
+
+        [HttpGet("/visits-number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _authServices.NumberOfVisits();
+            // Set the token value in the cookie
+            return Ok(result);
+        }
+
+
     }
 }
 

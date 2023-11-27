@@ -1,0 +1,8 @@
+{
+  "short_name": "Tuulio",
+  "name": "Tuulio",
+  "start_url": "https://www.tuulio.co",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

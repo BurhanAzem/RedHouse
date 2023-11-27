@@ -89,6 +89,23 @@ namespace server.Services
             };
         }
 
+        public async Task<List<int>> GetNumberOfUsersInLastTenYears()
+        {
+           var uersOfTheLastTenYears = _redHouseDbContext.Users.Where(a => (DateTime.Now.Year - a.Created.Year) < 10).ToArray();
+            List<int> avgUsersNumberPerYearInLastTenYears = Enumerable.Repeat(0, 10).ToList();
+
+            for (int i = 0; i < avgUsersNumberPerYearInLastTenYears.Count; i++)
+            {
+                int numberPerYear = avgUsersNumberPerYearInLastTenYears[i];
+
+                List<User> usersInThisYear = uersOfTheLastTenYears.Where(o => o.Created.Year == (DateTime.Now.Year - i)).ToList();
+
+                avgUsersNumberPerYearInLastTenYears[i] = usersInThisYear.Count();
+
+            }
+            return avgUsersNumberPerYearInLastTenYears;
+        }
+
 
         // public async Task<ResponsDto<User>> GetApplication(int applicationId)
         // {
@@ -120,5 +137,36 @@ namespace server.Services
             };
         }
 
+        public async Task<ResponsDto<User>> GetUsersOfApprovedApplications(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<User>
+                {
+                    Exception = new Exception("User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var applications = await _redHouseDbContext.Applications.Include(a => a.Property).AsQueryable()
+                                    .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved").ToArrayAsync();
+            List<User> users = new List<User>();
+
+            foreach (var application in applications)
+            {
+                users.Add(await _redHouseDbContext.Users.FindAsync(application.UserId));
+            }
+            return new ResponsDto<User>
+            {
+                ListDto = users,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<int> NumberOfUsers()
+        {
+            return await _redHouseDbContext.Users.CountAsync();
+        }
     }
 }

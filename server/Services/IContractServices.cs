@@ -13,5 +13,7 @@ namespace server.Services
         public Task<ResponsDto<Contract>> GetContract(int contractId);
         public Task<ResponsDto<Contract>> DeleteContract(int contractId);
         public Task<ResponsDto<Contract>> UpdateContract(ContractDto contractDto, int contractId);
+        public Task<int> NumberOfContracts();
+
     }
 }

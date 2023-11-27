@@ -295,6 +295,31 @@ namespace RedHouse_Server.Migrations
                     b.ToTable("Contracts");
                 });
 
+            modelBuilder.Entity("RedHouse_Server.Models.IdentityFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DownloadUrls")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdentityUserId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("UserIdentityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserIdentityId");
+
+                    b.ToTable("IdentityFiles");
+                });
+
             modelBuilder.Entity("RedHouse_Server.Models.Location", b =>
                 {
                     b.Property<int>("Id")
@@ -380,6 +405,9 @@ namespace RedHouse_Server.Migrations
                     b.Property<string>("ListingBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ListingDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ListingType")
                         .IsRequired()
@@ -468,6 +496,9 @@ namespace RedHouse_Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -489,6 +520,89 @@ namespace RedHouse_Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RedHouse_Server.Models.Visitors", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("NumberOfVisitors")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Visitors");
+                });
+
+            modelBuilder.Entity("server.Models.Booking", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("server.Models.BookingDay", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DayDate")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.ToTable("BookingDays");
+                });
+
+            modelBuilder.Entity("server.Models.Complain", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ComplainDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Complains");
                 });
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
@@ -652,6 +766,29 @@ namespace RedHouse_Server.Migrations
                     b.ToTable("UserHistoryRecords");
                 });
 
+            modelBuilder.Entity("server.Models.UserIdentity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RequestStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserIdentities");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -733,6 +870,13 @@ namespace RedHouse_Server.Migrations
                     b.Navigation("Offer");
                 });
 
+            modelBuilder.Entity("RedHouse_Server.Models.IdentityFile", b =>
+                {
+                    b.HasOne("server.Models.UserIdentity", null)
+                        .WithMany("IdentityFiles")
+                        .HasForeignKey("UserIdentityId");
+                });
+
             modelBuilder.Entity("RedHouse_Server.Models.Neighborhood", b =>
                 {
                     b.HasOne("RedHouse_Server.Models.Location", "Location")
@@ -778,6 +922,36 @@ namespace RedHouse_Server.Migrations
                         .HasForeignKey("PropertyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("server.Models.Booking", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.Property", "Property")
+                        .WithMany()
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RedHouse_Server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("server.Models.BookingDay", b =>
+                {
+                    b.HasOne("server.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
@@ -846,6 +1020,11 @@ namespace RedHouse_Server.Migrations
             modelBuilder.Entity("RedHouse_Server.Models.Property", b =>
                 {
                     b.Navigation("propertyFiles");
+                });
+
+            modelBuilder.Entity("server.Models.UserIdentity", b =>
+                {
+                    b.Navigation("IdentityFiles");
                 });
 #pragma warning restore 612, 618
         }
