@@ -11,6 +11,6 @@ namespace server.Models
         [ForeignKey(nameof(Booking))]
         public int BookingId { get; set; }
         public Booking Booking { get; set; }
-        public int DayDate { get; set; }    // max value for this field is 30
+        public DateTime DayDate { get; set; }    // max value for this field is 30
     }
 }

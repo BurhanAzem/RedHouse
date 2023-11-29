@@ -28,7 +28,7 @@ const Footer = () => {
               <MDBCol md='3' lg='4' xl='3' className='mx-auto mb-4'>
                 <h6 className='text-uppercase fw-bold mb-4'>
                   <MDBIcon color='white' icon='gem' className='me-3' />
-                  Tuulio
+                  RedHouse
                 </h6>
                 <p>
                 Got any questions or support issues? Reach out to us at our email tuulio.contact@gmail.com

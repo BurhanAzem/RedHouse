@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedHouse_Server.Models;
 
@@ -11,9 +12,11 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    partial class RedHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231129153519_lastEditModel_14")]
+    partial class lastEditModel_14
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -561,26 +564,7 @@ namespace RedHouse_Server.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("server.Models.BookingDay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DayDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
-
-                    b.ToTable("BookingDays");
-                });
+           
 
             modelBuilder.Entity("server.Models.Complain", b =>
                 {
@@ -943,16 +927,7 @@ namespace RedHouse_Server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("server.Models.BookingDay", b =>
-                {
-                    b.HasOne("server.Models.Booking", "Booking")
-                        .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-                });
+            
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
                 {
