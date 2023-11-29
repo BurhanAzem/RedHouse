@@ -65,10 +65,9 @@ builder.Services.AddScoped<IApplicationServices, ApplicationServices>();
 builder.Services.AddScoped<IUserHistoryServices, UserHistoryServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
-
 builder.Services.AddScoped<IComplainServices, ComplainServices>();
 builder.Services.AddScoped<IUserIdentityServices, UserIdentityServices>();
-
+builder.Services.AddScoped<IBookingServices, BookingServices>();
 builder.Services.AddScoped<INeighborhoodServices, NeighborhoodServices>();
 builder.Services.AddScoped<IMilestoneServices, MilestoneServices>();
 builder.Services.AddScoped<IOfferServices, OfferServices>();
