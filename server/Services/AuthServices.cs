@@ -195,8 +195,19 @@ namespace RedHouse_Server.Services
 
         public async Task<int> NumberOfVisits()
         {
-            return (await _redHouseDbContext.Visitors.FirstAsync()).NumberOfVisitors;
+            var firstVisitor = await _redHouseDbContext.Visitors.FirstOrDefaultAsync();
+
+            if (firstVisitor != null)
+            {
+                return firstVisitor.NumberOfVisitors;
+            }
+
+            // Handle the case where the Visitors table is empty
+            // You can return a default value or throw an exception, depending on your requirements.
+            // For example, you might return 0 if there are no visitors yet.
+            return 0;
         }
+
     }
 
 }

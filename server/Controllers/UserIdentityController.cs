@@ -26,7 +26,7 @@ namespace RedHouse_Server.Controllers
         }
         
         // [Authorize]
-        [HttpPost("/complains")]
+        [HttpPost("/userIdentities")]
         public async Task<IActionResult> CreateUserIdentity([FromBody] UserIdentityDto userIdentityDto)
         {
             if (!ModelState.IsValid)

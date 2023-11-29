@@ -65,6 +65,10 @@ builder.Services.AddScoped<IApplicationServices, ApplicationServices>();
 builder.Services.AddScoped<IUserHistoryServices, UserHistoryServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IContractServices, ContractServices>();
+
+builder.Services.AddScoped<IComplainServices, ComplainServices>();
+builder.Services.AddScoped<IUserIdentityServices, UserIdentityServices>();
+
 builder.Services.AddScoped<INeighborhoodServices, NeighborhoodServices>();
 builder.Services.AddScoped<IMilestoneServices, MilestoneServices>();
 builder.Services.AddScoped<IOfferServices, OfferServices>();
@@ -86,11 +90,28 @@ builder.Services.AddSwaggerGen(options =>
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
     // other SwaggerGen configuration...
 });
-
+builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
 
 
 var app = builder.Build();
 app.UseMiddleware<ErrorHandlingMiddlewareExtensions>();
+
+
+// app.Use(async (context, next) =>
+//     {
+//         // Set Content Security Policy header
+//         context.Response.Headers.Add("Content-Security-Policy", "connect-src 'self' http://localhost:7042");
+
+//         await next();
+//     });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -98,6 +119,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(c => c.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
+
+
 app.UseHangfireServer();
 
 app.UseHangfireDashboard();
