@@ -202,22 +202,22 @@ class _StepperDemoState extends State<ApplicationDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
-                  children: [
-                    Text(
-                      "Type: ",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-                    ),
-                    Text(
-                      "Type",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                          color: Color(0xffd92328)),
-                    ),
-                  ],
-                ),
+                //  Row(
+                //   children: [
+                //     Text(
+                //       "Type: ",
+                //       style:
+                //           TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                //     ),
+                //     Text(
+                //     application.,
+                //       style: TextStyle(
+                //           fontWeight: FontWeight.w600,
+                //           fontSize: 12,
+                //           color: Color(0xffd92328)),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   children: [
                     const Text(
@@ -226,7 +226,7 @@ class _StepperDemoState extends State<ApplicationDetails> {
                           TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                     ),
                     Text(
-                      "${application.property.listingType}   ",
+                      "${application.suggestedPrice != null ? application.suggestedPrice!.toInt() : "NO suggested Price"}",
                       style: const TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 14,

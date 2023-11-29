@@ -207,7 +207,7 @@ class _CreateOfferState extends State<CreateOffer> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text(
-                  "Create",
+                  "Save",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

@@ -37,15 +37,19 @@ namespace server.Services
             }
             var applications = await _redHouseDbContext.Applications.Where(o => o.UserId == applicationDto.UserId
                                                                                 && o.PropertyId == applicationDto.PropertyId).ToArrayAsync();
-            var searchedApplication = applications.First();
+
+            var searchedApplication = applications.FirstOrDefault();
+
             if (searchedApplication != null)
             {
                 return new ResponsDto<Application>
                 {
-                    Exception = new Exception("You can't create more than application to the same landlord and property"),
+                    Exception = new Exception("You can't send more than one application for the same property"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
+
+
             Application application = new Application
             {
                 UserId = applicationDto.UserId,
@@ -61,7 +65,7 @@ namespace server.Services
             return new ResponsDto<Application>
             {
                 Dto = applicationRes.Entity,
-                Message = "Application Added Successfully",
+                Message = "Sent successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -103,10 +107,16 @@ namespace server.Services
                 };
             }
 
-            var query = _redHouseDbContext.Applications.Include(a => a.User)
-                .Include(a => a.Property)
-                .ThenInclude(p => p.Location)
-                .AsQueryable();
+            var query = _redHouseDbContext.Applications
+    .Include(a => a.User)
+    .Include(a => a.Property)
+        .ThenInclude(p => p.Location)
+    .Include(a => a.Property)
+        .ThenInclude(p => p.User)
+            .Include(a => a.Property)
+        .ThenInclude(p => p.propertyFiles)
+    .AsQueryable();
+
 
             if (applicationFilter.ApplicationTo.Trim() == "Landlord")
             {

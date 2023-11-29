@@ -91,7 +91,7 @@ namespace server.Services
 
         public async Task<List<int>> GetNumberOfUsersInLastTenYears()
         {
-           var uersOfTheLastTenYears = _redHouseDbContext.Users.Where(a => (DateTime.Now.Year - a.Created.Year) < 10).ToArray();
+            var uersOfTheLastTenYears = _redHouseDbContext.Users.Where(a => (DateTime.Now.Year - a.Created.Year) < 10).ToArray();
             List<int> avgUsersNumberPerYearInLastTenYears = Enumerable.Repeat(0, 10).ToList();
 
             for (int i = 0; i < avgUsersNumberPerYearInLastTenYears.Count; i++)
@@ -107,16 +107,7 @@ namespace server.Services
         }
 
 
-        // public async Task<ResponsDto<User>> GetApplication(int applicationId)
-        // {
-        //     var users = await _redHouseDbContext.Users.ToArrayAsync();
 
-        //     return new ResponsDto<User>
-        //     {
-        //         ListDto = users,
-        //         StatusCode = HttpStatusCode.OK,
-        //     };
-        // }
 
         public async Task<ResponsDto<User>> GetUser(int userId)
         {

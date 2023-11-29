@@ -35,15 +35,18 @@ class ApplicationData {
           },
           body: json.encode(data),
           encoding: Encoding.getByName("utf-8"));
-      print(response.statusCode);
+      print(response);
+      return(response);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody);
-        return (responsebody);
-      } else {
-        return (StatusRequest.serverfailure);
-      }
+      // if (response.statusCode == 200 || response.statusCode == 201) {
+      //   Map responsebody = json.decode(response.body);
+      //   print(responsebody);
+      //   return (responsebody);
+      // } else {
+      //   Map responsebody = json.decode(response.body);
+      //   print(responsebody);
+      //   return (StatusRequest.serverfailure);
+      // }
     } else {
       return (StatusRequest.offlinefailure);
     }
@@ -57,9 +60,9 @@ class ApplicationData {
       "applicationTo": applicationTo,
     };
 
-
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "users/$userId/applications", filters);
+      final Uri uri =
+          Uri.https("10.0.2.2:7042", "users/$userId/applications", filters);
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',
@@ -70,7 +73,6 @@ class ApplicationData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody["listDto"]);
-
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;
@@ -92,7 +94,6 @@ class ApplicationData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody["dto"]);
-
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;
@@ -114,7 +115,6 @@ class ApplicationData {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;
@@ -135,7 +135,30 @@ class ApplicationData {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
 
+  // Get all approved applications for user, to open messages between customer and landlord
+  static getApprovedApplicationsForUser(int userId) async {
+    if (await checkInternet()) {
+      final Uri uri =
+          Uri.https("10.0.2.2:7042", "/users/$userId/approved-applications");
+
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["listDto"]);
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;

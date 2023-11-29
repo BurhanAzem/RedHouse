@@ -552,7 +552,7 @@ class _HomeInformationState extends State<HomeInformation> {
                       Expanded(
                           child: ListTile(
                         title: Text(
-                          widget.property.user!.name!,
+                          widget.property.user?.name ?? 'DefaultName',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         subtitle: const Text("Click here to see history"),
@@ -594,8 +594,12 @@ class _HomeInformationState extends State<HomeInformation> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.only(
-                      left: 25, top: 15, right: 17, bottom: 5),
+                  padding:
+                      widget.property.userId != loginController.userDto?["id"]
+                          ? const EdgeInsets.only(
+                              left: 25, right: 20, top: 15, bottom: 17)
+                          : const EdgeInsets.only(
+                              left: 25, right: 20, top: 15, bottom: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

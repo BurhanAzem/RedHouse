@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/model/property_files.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +19,11 @@ class ImageSliderWidget extends StatefulWidget {
 
 class _ImageSliderWidgetState extends State<ImageSliderWidget> {
   MapListController mapListController = Get.find<MapListController>();
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
   PageController controller = PageController();
   int slider = 1;
+
   late bool _isLoading;
   late Timer _timer;
   late bool isFavorite;
@@ -143,55 +147,76 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
           right: 16,
           child: Row(
             children: [
-              InkWell(
-                onTap: () async {
-                  setState(() {});
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  SnackBar snackBar;
+              if (widget.property.userId != loginController.userDto?["id"])
+                InkWell(
+                  onTap: () async {
+                    setState(() {});
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    SnackBar snackBar;
 
-                  // If it is in favourites
-                  if (isFavorite) {
-                    setState(() {
-                      isFavorite = false;
-                    });
-                    // Remove property with the same ID from favoriteProperties
-                    mapListController.favoriteProperties.removeWhere(
-                        (favProperty) => favProperty.id == widget.property.id);
-                    snackBar = const SnackBar(
-                      content: Text("Removed Successfully"),
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                  // If it is not in favourites
-                  else {
-                    setState(() {
-                      isFavorite = true;
-                    });
-                    mapListController.favoriteProperties.add(widget.property);
-                    snackBar = const SnackBar(
-                      content: Text("Added Successfully"),
-                      backgroundColor: Colors.blue,
-                    );
-                  }
+                    // If it is in favourites
+                    if (isFavorite) {
+                      setState(() {
+                        isFavorite = false;
+                      });
+                      // Remove property with the same ID from favoriteProperties
+                      mapListController.favoriteProperties.removeWhere(
+                          (favProperty) =>
+                              favProperty.id == widget.property.id);
+                      snackBar = const SnackBar(
+                        content: Text("Removed Successfully"),
+                        backgroundColor: Colors.red,
+                      );
+                    }
+                    // If it is not in favourites
+                    else {
+                      setState(() {
+                        isFavorite = true;
+                      });
+                      mapListController.favoriteProperties.add(widget.property);
+                      snackBar = const SnackBar(
+                        content: Text("Added Successfully"),
+                        backgroundColor: Colors.blue,
+                      );
+                    }
 
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                },
-                child: Container(
-                  width: 29,
-                  height: 29,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(149, 224, 224, 224),
-                    borderRadius: BorderRadius.circular(100),
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 29,
+                    height: 29,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(149, 224, 224, 224),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: Center(
+                      child: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: const Color.fromARGB(255, 196, 39, 27),
+                        size: 22,
+                      ),
+                    ),
                   ),
-                  child: Center(
-                    child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: const Color.fromARGB(255, 196, 39, 27),
-                      size: 22,
+                )
+              else
+                InkWell(
+                  onTap: () async {},
+                  child: Container(
+                    width: 29,
+                    height: 29,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(149, 224, 224, 224),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.favorite_border,
+                        color: Color.fromARGB(255, 196, 39, 27),
+                        size: 22,
+                      ),
                     ),
                   ),
                 ),
-              ),
               const SizedBox(width: 10),
               InkWell(
                 onTap: () {},

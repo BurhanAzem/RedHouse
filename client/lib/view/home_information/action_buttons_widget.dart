@@ -21,13 +21,12 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
   ApplicationsController applicationsController =
       Get.put(ApplicationsController(), permanent: true);
 
-  LoginControllerImp loginController =
-      Get.put(LoginControllerImp(), permanent: true);
+  String message = "";
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -38,6 +37,7 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
                 borderRadius: BorderRadius.circular(100),
               ),
               onPressed: () {
+                // message = "";
                 applicationsController.message.text = "";
                 applicationsController.suggestedPrice.text = "";
 
@@ -54,109 +54,9 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
                         ),
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(maxHeight: 550),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Text(
-                                  "Request to apply",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    children: <Widget>[
-                                      const TextFieldWithLabel(
-                                          label: 'First & last name'),
-                                      const TextFieldWithLabel(label: 'Phone'),
-                                      const TextFieldWithLabel(label: 'Email'),
-                                      const TextFieldWithLabel(
-                                          label: 'Message'),
-                                      TextFieldWithLabel(
-                                          label:
-                                              "The price you pay for this property",
-                                          property: widget.property),
-                                      const Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 16,
-                                            right: 37,
-                                            top: 20,
-                                            bottom: 12),
-                                        child: Text(
-                                          "You agree to RedHouse's Terms of Use & Privacy Policy. By choosing to contact a property, you also agree that RedHouse Group, landlords, and property managers may call or text you about any inquiries you submit through our services, which may involve use of automated means and prerecorded/artificial voices.",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: ButtonBar(
-                                  children: [
-                                    Container(
-                                      width: 220,
-                                      height: 40,
-                                      color: Colors.blue,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          setState(() {});
-                                          ScaffoldMessenger.of(context)
-                                              .clearSnackBars();
-
-                                          applicationsController.propertyId =
-                                              widget.property.id;
-                                          applicationsController.userId =
-                                              loginController.userDto?["id"];
-                                          applicationsController
-                                              .addApplication();
-
-                                          SnackBar snackBar = const SnackBar(
-                                            content: Text("Sent successfully"),
-                                            backgroundColor: Colors.blue,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text(
-                                          "Send request",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 40,
-                                      child: MaterialButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Text(
-                                          "Close",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 17.5,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                          child: CustomDialog(
+                            message: message,
+                            property: widget.property,
                           ),
                         ),
                       ),
@@ -186,9 +86,8 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
                 side: const BorderSide(color: Colors.black, width: 1.4),
               ),
               onPressed: () {
-                // Replace '0598937436' with the desired phone number
-                // ignore: deprecated_member_use
-                launch('tel:0598937436');
+                String phone = "0${widget.property.user!.phoneNumber}";
+                launch('tel:$phone');
               },
               height: 45,
               child: const Center(
@@ -205,6 +104,145 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CustomDialog extends StatefulWidget {
+  String message;
+  final Property property;
+
+  CustomDialog({Key? key, required this.message, required this.property})
+      : super(key: key);
+
+  @override
+  _CustomDialogState createState() => _CustomDialogState();
+}
+
+class _CustomDialogState extends State<CustomDialog> {
+  ApplicationsController applicationsController =
+      Get.put(ApplicationsController(), permanent: true);
+
+  LoginControllerImp loginController =
+      Get.put(LoginControllerImp(), permanent: true);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            "Request to apply",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                const TextFieldWithLabel(label: 'First & last name'),
+                const TextFieldWithLabel(label: 'Phone'),
+                const TextFieldWithLabel(label: 'Email'),
+                const TextFieldWithLabel(label: 'Message'),
+                TextFieldWithLabel(
+                    label: "The price you pay for this property",
+                    property: widget.property),
+                const Padding(
+                  padding:
+                      EdgeInsets.only(left: 16, right: 37, top: 20, bottom: 12),
+                  child: Text(
+                    "You agree to RedHouse's Terms of Use & Privacy Policy. By choosing to contact a property, you also agree that RedHouse Group, landlords, and property managers may call or text you about any inquiries you submit through our services, which may involve use of automated means and prerecorded/artificial voices.",
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: ButtonBar(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 210,
+                    height: 40,
+                    color: Colors.blue,
+                    child: MaterialButton(
+                      onPressed: () {
+                        setState(() {});
+                        ScaffoldMessenger.of(context).clearSnackBars();
+
+                        applicationsController.propertyId = widget.property.id;
+                        applicationsController.userId =
+                            loginController.userDto?["id"];
+                        applicationsController.addApplication();
+                        setState(() {
+                          widget.message =
+                              applicationsController.responseMessage;
+                        });
+                        print(widget.message);
+                        if (widget.message == "Sent successfully") {
+                          SnackBar snackBar = SnackBar(
+                            content: Text(widget.message),
+                            backgroundColor: Colors.blue,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text(
+                        "Send request",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  SizedBox(
+                    height: 40,
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text(
+                        "Close",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 17.5,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                padding: widget.message == ""
+                    ? null
+                    : const EdgeInsets.only(top: 15, right: 12, left: 10),
+                child: Text(
+                  widget.message,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.red,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

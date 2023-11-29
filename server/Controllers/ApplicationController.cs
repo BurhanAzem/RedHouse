@@ -59,7 +59,7 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpGet("/users/{id}/applications")]
-        public async Task<IActionResult> GetAllProperties( int id, [FromQuery] ApplicationFilter applicationFilter)
+        public async Task<IActionResult> GetAllProperties(int id, [FromQuery] ApplicationFilter applicationFilter)
         {
             if (!ModelState.IsValid)
             {
@@ -148,6 +148,14 @@ namespace RedHouse_Server.Controllers
 
         }
 
+        [HttpGet("/applications/number")]
+        public async Task<IActionResult> NumberOfVisits()
+        {
+            var result = await _applicationServices.NumberOfApplications();
+            // Set the token value in the cookie
+            return Ok(result);
+        }
+
         [HttpGet("/users/{id}/approved-applications")]
         public async Task<IActionResult> GetApprovedApplicationsForUser(int id)
         {
@@ -164,15 +172,7 @@ namespace RedHouse_Server.Controllers
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 
-        [HttpGet("/applications/number")]
-        public async Task<IActionResult> NumberOfVisits()
-        {
-            var result = await _applicationServices.NumberOfApplications();
-            // Set the token value in the cookie
-            return Ok(result);
+
         }
     }
 }
-
-
-

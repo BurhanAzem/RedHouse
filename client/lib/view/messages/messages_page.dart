@@ -1,5 +1,7 @@
+import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/controller/history/history_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/model/application.dart';
 import 'package:client/model/firebase/chats_model.dart';
 import 'package:client/view/messages/chat_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,9 +20,12 @@ class Messages extends StatefulWidget {
 
 class _MessagesState extends State<Messages> {
   bool isLoading = true; // Add a boolean variable for loading state
+
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   HistoryController historyController =
       Get.put(HistoryController(), permanent: true);
+  ApplicationsController applicationController =
+      Get.put(ApplicationsController(), permanent: true);
 
   // instance of fireStore
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -28,6 +33,7 @@ class _MessagesState extends State<Messages> {
   Map<String, String> lastMessageTextMap = {};
   Map<String, Timestamp> lastMessageTimeMap = {};
   Map<String, bool> isUnreadMap = {};
+  Map<String, Application> approvedApplications = {};
 
   String currentUserId = "";
   String currentUserEmail = "";
@@ -47,9 +53,11 @@ class _MessagesState extends State<Messages> {
       return;
     }
 
-    await historyController
-        .getUsersApprovedApplications(loginController.userDto?["id"]);
-    print(historyController.usersApprovedApplications);
+    await applicationController
+        .getApprovedApplicationsForUser(loginController.userDto?["id"]);
+    // .getUsersApprovedApplications(loginController.userDto?["id"]);
+    // print(historyController.usersApprovedApplications);
+    print(applicationController.approvedApplicationsForUser);
 
     // Set isLoading to false only after data is loaded
     setState(() {
@@ -97,7 +105,7 @@ class _MessagesState extends State<Messages> {
         ),
         centerTitle: true,
       ),
-      body: historyController.usersApprovedApplications.isEmpty
+      body: applicationController.approvedApplicationsForUser.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -127,6 +135,42 @@ class _MessagesState extends State<Messages> {
     );
   }
 
+  // Widget _buildUserList({required Function onMessageSent}) {
+  //   return StreamBuilder<QuerySnapshot>(
+  //     stream: FirebaseFirestore.instance.collection('users').snapshots(),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasError) {
+  //         return const Text("error");
+  //       }
+
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return const Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       }
+
+  //       // Filter users based on the condition
+  //       List<DocumentSnapshot> filteredUsers = snapshot.data!.docs.where((doc) {
+  //         Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+  //         return data['email'] != currentUserEmail &&
+  //             applicationController.approvedApplicationsForUser.any(
+  //               (application) =>
+  //                   application.user.email == data['email'] ||
+  //                   application.property.user?.email == data['email'],
+  //             );
+  //       }).toList();
+
+  //       print(filteredUsers);
+
+  //       return ListView(
+  //         children: filteredUsers
+  //             .map<Widget>((doc) => _buildUserItem(doc, onMessageSent))
+  //             .toList(),
+  //       );
+  //     },
+  //   );
+  // }
+
   Widget _buildUserList({required Function onMessageSent}) {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('users').snapshots(),
@@ -144,24 +188,52 @@ class _MessagesState extends State<Messages> {
         // Filter users based on the condition
         List<DocumentSnapshot> filteredUsers = snapshot.data!.docs.where((doc) {
           Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
-          return data['email'] != null &&
-              historyController.usersApprovedApplications.any(
-                (user) => user.email == data['email'],
+          return data['email'] != currentUserEmail &&
+              applicationController.approvedApplicationsForUser.any(
+                (application) =>
+                    application.user.email == data['email'] ||
+                    application.property.user?.email == data['email'],
               );
         }).toList();
 
+        // // Map users to applications
+        // List<Application> userApplications = filteredUsers.map((doc) {
+        //   // Find the corresponding application
+        //   return applicationController.approvedApplicationsForUser.firstWhere(
+        //     (application) =>
+        //         application.user.email == doc.data()!['email'] ||
+        //         application.property.user?.email == doc.data()!['email'],
+        //   );
+        // }).toList();
+
+        List<Application> userApplications = filteredUsers.map((doc) {
+          // Cast the result of doc.data() to Map<String, dynamic>
+          Map<String, dynamic> userData = doc.data()! as Map<String, dynamic>;
+
+          // Find the corresponding application
+          return applicationController.approvedApplicationsForUser.firstWhere(
+            (application) =>
+                application.user.email == userData['email'] ||
+                application.property.user?.email == userData['email'],
+          );
+        }).toList();
+
+        print(userApplications);
         print(filteredUsers);
 
-        return ListView(
-          children: filteredUsers
-              .map<Widget>((doc) => _buildUserItem(doc, onMessageSent))
-              .toList(),
+        return ListView.builder(
+          itemCount: filteredUsers.length,
+          itemBuilder: (context, index) {
+            return _buildUserItem(
+                filteredUsers[index], userApplications[index], onMessageSent);
+          },
         );
       },
     );
   }
 
-  Widget _buildUserItem(DocumentSnapshot document, Function onMessageSent) {
+  Widget _buildUserItem(DocumentSnapshot document, Application application,
+      Function onMessageSent) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
     // Construct chat room id from sender id and receiver id (sorted to ensure uniqueness)
@@ -169,6 +241,7 @@ class _MessagesState extends State<Messages> {
     List<String> ids = [currentUserId, receiverUserId];
     ids.sort();
     String chatRoomId = ids.join("_");
+    print(application);
 
     // Use FutureBuilder to wait for the completion of asynchronous operations
     return FutureBuilder(
@@ -294,11 +367,11 @@ class _MessagesState extends State<Messages> {
                   children: [
                     Text(
                       isUnread
-                          ? lastMessageText.length > 18
-                              ? '${lastMessageText.substring(0, 18)}...'
+                          ? lastMessageText.length > 16
+                              ? '${lastMessageText.substring(0, 16)}...'
                               : lastMessageText
-                          : lastMessageText.length > 20
-                              ? '${lastMessageText.substring(0, 20)}...'
+                          : lastMessageText.length > 16
+                              ? '${lastMessageText.substring(0, 16)}...'
                               : lastMessageText,
                       style: TextStyle(
                         fontSize: isUnread ? 13 : 14.5,
@@ -377,7 +450,9 @@ class _MessagesState extends State<Messages> {
             .collection("chat_rooms")
             .doc(chatRoomId)
             .get()
-            .then((doc) => doc.data()?["$currentUserId SeeMessage"]);
+            .then(
+              (doc) => doc.data()?["$currentUserId SeeMessage"],
+            );
 
         // Update the maps for each user separately
         DocumentSnapshot lastMessage = messagesSnapshot.docs.first;

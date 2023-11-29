@@ -4442,26 +4442,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lenovo\\.nuget\\packages\\": {}
+    "C:\\Users\\Engineer\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Desktop\\RedHouse\\server\\RedHouse_Server.csproj",
+      "projectUniqueName": "C:\\Users\\Engineer\\Desktop\\RedHouse\\server\\RedHouse_Server.csproj",
       "projectName": "RedHouse_Server",
-      "projectPath": "C:\\Desktop\\RedHouse\\server\\RedHouse_Server.csproj",
-      "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
-      "outputPath": "C:\\Desktop\\RedHouse\\server\\obj\\",
+      "projectPath": "C:\\Users\\Engineer\\Desktop\\RedHouse\\server\\RedHouse_Server.csproj",
+      "packagesPath": "C:\\Users\\Engineer\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Engineer\\Desktop\\RedHouse\\server\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Engineer\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4548,7 +4546,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

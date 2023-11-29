@@ -9,7 +9,6 @@ class HistoryController extends GetxController {
 
   List<UserHistory> userHistory = [];
   List<UserHistory> propertyHistory = [];
-  List<User> usersApprovedApplications = [];
 
   getHistoryUser(int userId) async {
     var response = await UserHistoryData.getUserHistory(userId);
@@ -46,20 +45,21 @@ class HistoryController extends GetxController {
   }
 
   // Get all users who have an approved application between them and this user, to open messages between them
-  getUsersApprovedApplications(int userId) async {
-    var response = await UserHistoryData.getUsersApprovedApplications(userId);
+  // List<User> usersApprovedApplications = [];
+  // getUsersApprovedApplications(int userId) async {
+  //   var response = await UserHistoryData.getUsersApprovedApplications(userId);
 
-    if (response['statusCode'] == 200) {
-      usersApprovedApplications = (response['listDto'] as List<dynamic>)
-          .map((e) => User.fromJson(e as Map<String, dynamic>))
-          .toList();
-      print(usersApprovedApplications);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
-    }
-  }
+  //   if (response['statusCode'] == 200) {
+  //     usersApprovedApplications = (response['listDto'] as List<dynamic>)
+  //         .map((e) => User.fromJson(e as Map<String, dynamic>))
+  //         .toList();
+  //     print(usersApprovedApplications);
+  //   } else {
+  //     Get.defaultDialog(
+  //       title: "Error",
+  //       middleText:
+  //           "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+  //     );
+  //   }
+  // }
 }

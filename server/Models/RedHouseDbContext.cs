@@ -59,8 +59,6 @@ namespace RedHouse_Server.Models
         public DbSet<ContractActivity> ContractActivities { get; set; }
         public DbSet<UserHistory> UserHistoryRecords { get; set; }
         public DbSet<SavedProperties> SavedProperties { get; set; }
-        public IEnumerable<object> UserIdentities { get; internal set; }
-        public object IdentityFiles { get; internal set; }
         public DbSet<Visitors> Visitors { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingDay> BookingDays { get; set; }
@@ -68,9 +66,5 @@ namespace RedHouse_Server.Models
         public DbSet<Complain> Complains { get; set; }
 
         public DbSet<IdentityFile> IdentityFiles { get; set; }
-
-
-
-
     }
 }

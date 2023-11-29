@@ -112,35 +112,10 @@ class UserHistoryData {
     }
   }
 
-    static getPropertyHistory(int propertId) async {
+  static getPropertyHistory(int propertId) async {
     if (await checkInternet()) {
       final Uri uri =
           Uri.https("10.0.2.2:7042", "/properties/$propertId/property-history");
-
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}',
-      });
-      print(response.statusCode);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
-
-        return (responsebody);
-      } else {
-        return StatusRequest.serverfailure;
-      }
-    } else {
-      return StatusRequest.offlinefailure;
-    }
-  }
-
-  // Get all users who have an approved application between them and this user, to open messages between them
-  static getUsersApprovedApplications(int userId) async {
-    if (await checkInternet()) {
-      final Uri uri = Uri.https(
-          "10.0.2.2:7042", "/users/$userId/usres-approved-applications");
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',

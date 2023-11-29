@@ -71,8 +71,6 @@ class OfferData {
       });
 
       print(response.statusCode);
-      // print(response.body.listDto);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody["listDto"]);

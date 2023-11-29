@@ -27,7 +27,7 @@ class _AllApplicationsState extends State<AllApplications> {
   void loadData() async {
     ApplicationsController controller =
         Get.put(ApplicationsController(), permanent: true);
-    String? userDtoJson = sharepref!.getString("user");
+    String? userDtoJson = sharepref.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
     await controller.getApplications(user.id!);
@@ -39,8 +39,7 @@ class _AllApplicationsState extends State<AllApplications> {
 
   @override
   Widget build(BuildContext context) {
-    ApplicationsController controller =
-        Get.find<ApplicationsController>();
+    ApplicationsController controller = Get.find<ApplicationsController>();
 
     // Check if data is still loading
     if (isLoading) {
@@ -160,8 +159,8 @@ class _AllApplicationsState extends State<AllApplications> {
                       }
                     },
                     tabs: const [
-                      Tab(text: 'Landlord Applications'),
-                      Tab(text: 'Customer Applications'),
+                      Tab(text: 'Incoming Applications'),
+                      Tab(text: 'Sent Applications'),
                     ],
                     overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
                     indicatorColor: Colors.black,
@@ -178,7 +177,7 @@ class _AllApplicationsState extends State<AllApplications> {
                   ),
                   body: TabBarView(
                     children: [
-                      // Content for 'Buy' tab
+                      // Content for 'Incoming Applications' tab
                       Expanded(
                         child: ListView.builder(
                           itemCount: controller.applications.length,
@@ -219,13 +218,13 @@ class _AllApplicationsState extends State<AllApplications> {
                                             color: const Color(0xffd92328),
                                           ),
                                           Text(
-                                            (controller.applications![index]
-                                                        .applicationDate!
+                                            (controller.applications[index]
+                                                        .applicationDate
                                                         .toString()
                                                         .length <=
                                                     10)
-                                                ? "       ${controller.applications![index].applicationDate!.toString()!}"
-                                                : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
+                                                ? "       ${controller.applications[index].applicationDate.toString()}"
+                                                : "       ${controller.applications[index].applicationDate.toString().substring(0, 9)}",
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 12),
@@ -233,12 +232,12 @@ class _AllApplicationsState extends State<AllApplications> {
                                         ],
                                       ),
                                       Text(
-                                        (controller.applications![index].user!
+                                        (controller.applications[index].user
                                                     .name!.length <=
                                                 38)
-                                            ? controller.applications![index]
-                                                .user!.name!
-                                            : '${controller.applications![index].user!.name!.substring(0, 38)}...',
+                                            ? controller
+                                                .applications[index].user.name!
+                                            : '${controller.applications[index].user.name!.substring(0, 38)}...',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600),
                                       ),
@@ -287,8 +286,8 @@ class _AllApplicationsState extends State<AllApplications> {
                                                     fontSize: 12),
                                               ),
                                               Text(
-                                                controller.applications![index]
-                                                    .applicationStatus!
+                                                controller.applications[index]
+                                                    .applicationStatus
                                                     .toString(),
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w600,
@@ -306,8 +305,8 @@ class _AllApplicationsState extends State<AllApplications> {
                                                     fontSize: 12),
                                               ),
                                               Text(
-                                                controller.applications![index]
-                                                    .property.propertyCode!,
+                                                controller.applications[index]
+                                                    .property.propertyCode,
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 12,
@@ -325,7 +324,8 @@ class _AllApplicationsState extends State<AllApplications> {
                           },
                         ),
                       ),
-                      // Content for 'Rent' tab
+
+                      // Content for 'Incoming Applications' tab
                       Expanded(
                         child: ListView.builder(
                           itemCount: controller.applications.length,
@@ -366,13 +366,13 @@ class _AllApplicationsState extends State<AllApplications> {
                                             color: const Color(0xffd92328),
                                           ),
                                           Text(
-                                            (controller.applications![index]
-                                                        .applicationDate!
+                                            (controller.applications[index]
+                                                        .applicationDate
                                                         .toString()
                                                         .length <=
                                                     10)
-                                                ? "       ${controller.applications![index].applicationDate!.toString()!}"
-                                                : "       ${controller.applications![index].applicationDate!.toString().substring(0, 9)}",
+                                                ? "       ${controller.applications[index].applicationDate.toString()}"
+                                                : "       ${controller.applications[index].applicationDate.toString().substring(0, 9)}",
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 12),
@@ -380,12 +380,12 @@ class _AllApplicationsState extends State<AllApplications> {
                                         ],
                                       ),
                                       Text(
-                                        (controller.applications![index].user!
-                                                    .name!.length <=
-                                                38)
-                                            ? controller.applications![index]
-                                                .user!.name!
-                                            : '${controller.applications![index].user!.name!.substring(0, 38)}...',
+                                        (controller.applications[index].property
+                                                    .user!.name!.length) <=
+                                                38
+                                            ? controller.applications[index]
+                                                .property.user!.name!
+                                            : '${controller.applications[index].property.user!.name!.substring(0, 38)}...',
                                         style: const TextStyle(
                                             fontWeight: FontWeight.w600),
                                       ),
@@ -434,8 +434,8 @@ class _AllApplicationsState extends State<AllApplications> {
                                                     fontSize: 12),
                                               ),
                                               Text(
-                                                controller.applications![index]
-                                                    .applicationStatus!
+                                                controller.applications[index]
+                                                    .applicationStatus
                                                     .toString(),
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w600,
@@ -453,8 +453,8 @@ class _AllApplicationsState extends State<AllApplications> {
                                                     fontSize: 12),
                                               ),
                                               Text(
-                                                controller.applications![index]
-                                                    .property.propertyCode!,
+                                                controller.applications[index]
+                                                    .property.propertyCode,
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 12,

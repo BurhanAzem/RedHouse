@@ -111,21 +111,26 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         actions: [
-          PopupMenuButton(
-            onSelected: (value) {
-              print(value);
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: "Create offer",
-                child: Text("Create offer"),
-              ),
-              const PopupMenuItem(
-                value: "all offers",
-                child: Text("Show all offers"),
-              ),
-            ],
-          ),
+          if (true)
+            PopupMenuButton(
+              onSelected: (value) {
+                print(value);
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: "Create offer",
+                  child: Text("Create offer"),
+                ),
+                const PopupMenuItem(
+                  value: "all offers",
+                  child: Text("Show all offers"),
+                ),
+                 const PopupMenuItem(
+                  value: "Make a complaint",
+                  child: Text("Make a complaint"),
+                ),
+              ],
+            ),
         ],
       ),
       body: Column(
@@ -253,7 +258,7 @@ class _ChatPageState extends State<ChatPage> {
                           formatMessageTimestamp(data['timestamp']),
                           style: TextStyle(
                             fontSize: 13,
-                            color: Colors.yellow[900],
+                            color: Colors.purple,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -263,7 +268,7 @@ class _ChatPageState extends State<ChatPage> {
                       formatMessageTimestamp(data['timestamp']),
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.yellow[900],
+                        color: Colors.purple,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -283,7 +288,7 @@ class _ChatPageState extends State<ChatPage> {
           decoration: const BoxDecoration(
             border: Border(
                 top: BorderSide(
-              color: Colors.orange,
+              color: Colors.purple,
               width: 2,
             )),
           ),
@@ -315,7 +320,7 @@ class _ChatPageState extends State<ChatPage> {
                 icon: Icon(
                   Icons.send,
                   size: 25,
-                  color: Colors.yellow[900],
+                  color: Colors.purple,
                 ))
           ],
         ),
