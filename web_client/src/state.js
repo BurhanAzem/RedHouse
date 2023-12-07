@@ -8,6 +8,17 @@ export const posts = atom({
     default: []
 })
 
+
+export const searchedProperties = atom({
+    key: 'searchedProperties',
+    default: []
+})
+
+export const requestsState = atom({
+    key: 'requests',
+    default: []
+})
+
 export const isCreatingPost = atom({
     key: 'creating',
     default: false

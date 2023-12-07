@@ -35,6 +35,9 @@ import Offers from './menuItems/Offers.jsx';
 import Users from './menuItems/Users.jsx';
 import Agents from './menuItems/Agents.jsx';
 import Applications from './menuItems/Applications.jsx';
+import UserComplaints from './menuItems/UserComplaints.jsx';
+import ComplaintsList from './menuItems/ComplaintsList.jsx';
+import PersonalVerificationRequests from './menuItems/PersonalVerificationRequests.jsx';
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;600;700;800;900&family=Work+Sans:ital,wght@0,200;0,800;1,100;1,600&display=swap');
 </style>
@@ -76,7 +79,12 @@ const router = createBrowserRouter(
           <Route path="/offers" element={<Offers />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/agents" element={<Agents />} />
-        </Route>
+          <Route path="/user-complains" element={<UserComplaints />} />
+          <Route path="/complaints-list/:id" element={<ComplaintsList />} />
+          <Route path="/verification-requests" element={<PersonalVerificationRequests />} />
+
+
+          </Route>
 
         {/* <Route path="posts/:id" element={<PostDetails />} />
         <Route path="/students/:id" element={<Student />} >

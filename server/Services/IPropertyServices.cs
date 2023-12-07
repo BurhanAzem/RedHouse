@@ -18,6 +18,7 @@ namespace RedHouse_Server.Services
         public Task<List<int>> GetPricePropertyHistoryAsRent(int propertyId);
         public Task<List<int>> GetPricePropertyHistoryAsSell(int propertyId);
         public Task<List<int>> GetNumberOfPropertiesInLastTenYears();
+        public Task<ResponsDto<Property>> FilterProperties(SearchDto searchDto);
         public Task<int> NumberOfProperties();
 
 

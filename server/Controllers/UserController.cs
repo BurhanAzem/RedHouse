@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Services;
+using Cooking_School.Dtos;
 namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
@@ -36,14 +37,32 @@ namespace RedHouse_Server.Controllers
 
         }
 
+        // [HttpGet("/users")]
+        // public async Task<IActionResult> GetAllUsers()
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
+        //     var result = await _userServices.GetAllUsers();
+        //     if (result.Exception != null)
+        //     {
+        //         var code = result.StatusCode;
+        //         throw new StatusCodeException(code.Value, result.Exception);
+        //     }
+        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+        //     return Ok(result);
+
+        // }
+
         [HttpGet("/users")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> FilterUsers([FromQuery] SearchDto searchDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAllUsers();
+            var result = await _userServices.FilterUsers(searchDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -51,17 +70,16 @@ namespace RedHouse_Server.Controllers
             }
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
-
         }
 
-        [HttpGet("/agents/{userName}")]
-        public async Task<IActionResult> GetAllAgents(string userName)
+        [HttpGet("/agents")]
+        public async Task<IActionResult> FilterAgents([FromQuery] SearchDto searchDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAgents(userName);
+            var result = await _userServices.FilterAgents(searchDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

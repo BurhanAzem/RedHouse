@@ -28,6 +28,9 @@ import Offers from '../menuItems/Offers.jsx'
 import Users from '../menuItems/Users.jsx'
 import Applications from '../menuItems/Applications.jsx'
 import Agents from '../menuItems/Agents.jsx'
+import UserComplaints from '../menuItems/UserComplaints.jsx'
+import ComplaintsList from '../menuItems/ComplaintsList.jsx'
+import PersonalVerificationRequests from '../menuItems/PersonalVerificationRequests.jsx'
 
 
 
@@ -223,15 +226,18 @@ const Admin = () => {
           <Sidebar
             rootStyles={{
               [`.${sidebarClasses.container}`]: {
-                height: '100vh',
+                height: '165vh',
+
                 backgroundColor: 'black',
                 color: 'white',
+                paddingTop: "12px"
               },
               [`.${sidebarClasses.menuItem}`]: {
                 '&:hover': {
                   color: 'black',
                 },
               },
+
             }}
           >
             <Menu
@@ -244,6 +250,7 @@ const Admin = () => {
                   [`&:hover`]: {
                     color: 'black',
                   },
+                  
                 },
               }}
             >
@@ -282,6 +289,12 @@ const Admin = () => {
             <Route path="/offers" element={<Offers />} />
             <Route path="/applications" element={<Applications />} />
             <Route path="/agents" element={<Agents />} />
+            <Route path="/user-complains" element={<UserComplaints />} />
+            <Route path="/complaints-list/:id" element={<ComplaintsList />} />
+            <Route path="/verification-requests" element={<PersonalVerificationRequests />} />
+
+            {/* <Route path="/complains" element={<Complains />} /> */}
+
           </Routes>
         </div>
       </div>

@@ -8,7 +8,7 @@
     width: 100%;
     max-height: 100vh;
     display: flex;
-    overflow: auto;
+    overflow: hidden;
     flex-direction: column;
     justify-content: flex-start;
 }
@@ -87,7 +87,14 @@
 }
 
 #right-side{
-    /* margin: 20px; */
+    /* margin: 10px; */
+    position: relative;
+    /* width: 100%; */
+    max-height: 95vh;
+    /* display: flex; */
+    overflow: scroll;
+    /* flex-direction: column;
+    justify-content: flex-start; */
     justify-content: start;
 }
 

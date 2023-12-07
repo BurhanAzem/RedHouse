@@ -28,6 +28,7 @@ const FilterBar = ({ placeholder, options, filterType }) => {
         options={options}
         placeholder={placeholder}
         styles={{
+          color: 'white',
           control: (baseStyles, state) => ({
             ...baseStyles,
             borderColor: 'transparent',
@@ -37,12 +38,12 @@ const FilterBar = ({ placeholder, options, filterType }) => {
             borderRadius: '0px 13px 13px 0px',
             '&:hover': {
               backgroundColor: '#ffffff',
-              color: "black",
+              color: 'black',
               borderColor: 'white',
             },
             '&:focus': {
               backgroundColor: '#ffffff',
-              color: "white",
+              color: 'white',
               borderColor: 'white',
             },
           }),
@@ -56,7 +57,7 @@ const FilterBar = ({ placeholder, options, filterType }) => {
             color: 'white',
             '&:hover': {
               backgroundColor: '#ffffff',
-              color: "black",
+              color: 'black',
               borderColor: 'white',
             },
           }),
@@ -66,6 +67,8 @@ const FilterBar = ({ placeholder, options, filterType }) => {
           }),
         }}
       />
+
+
     </div>
   );
 };

@@ -412,5 +412,46 @@ namespace RedHouse_Server.Services
             }
             return avgPropertiesNumberPerYearInLastTenYears;
         }
+
+        public async Task<ResponsDto<Property>> FilterProperties(SearchDto searchDto)
+        {
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
+            var query = _redHouseDbContext.Properties.Include(u => u.Location).AsQueryable();
+            if (searchDto.SearchQuery != null)
+                query = query.Where(p => p.PropertyCode == searchDto.SearchQuery);
+            if (query == null)
+                query = query.Where(p => p.Location.City == searchDto.SearchQuery 
+                || p.Location.City == searchDto.SearchQuery
+                || p.Location.Country == searchDto.SearchQuery
+                || p.Location.Region == searchDto.SearchQuery
+                || p.Location.PostalCode == searchDto.SearchQuery);
+                
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
+
+            var properties = await query
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)searchDto.Limit)
+                .ToArrayAsync();
+
+            if (properties == null || !properties.Any())
+            {
+                return new ResponsDto<Property>
+                {
+                    Exception = new Exception("Users Not Found"),
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
+
+            return new ResponsDto<Property>
+            {
+                ListDto = properties,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };        }
     }
 }

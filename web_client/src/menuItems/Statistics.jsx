@@ -11,6 +11,7 @@ import 'chart.js/auto';
 import Chart from "chart.js/auto";
 import { CategoryScale } from 'chart.js/auto';
 import Cookies from 'js-cookie'
+import Footer from '../components/Footer.jsx'
 
 Chart.register(CategoryScale);
 
@@ -349,10 +350,10 @@ const Statistics = () => {
 
   return (
     <>
+      <div style={{ height: "50px" }}></div>
+      {/* <div style={{ height: "10px" }}></div>
       <div style={{ height: "10px" }}></div>
-      <div style={{ height: "10px" }}></div>
-      <div style={{ height: "10px" }}></div>
-      <div style={{ height: "10px" }}></div>
+      <div style={{ height: "10px" }}></div> */}
 
       <div className="row" id='statistics'>
         <div className="col-md-3">
@@ -406,7 +407,7 @@ const Statistics = () => {
         <div className="items" style={{ height: "400px" }}>
           <Line aria-setsize={{}} data={data} />
         </div>
-
+        <Footer/>
       </div>
     </>
 

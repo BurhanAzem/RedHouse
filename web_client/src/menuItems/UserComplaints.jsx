@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import '../styles/Student.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { Link, Outlet, useNavigate, useParams } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { isCreatingPost, viewingPostDetails } from '../state'
@@ -12,21 +11,38 @@ import Cookie from 'js-cookie'
 import FilterBar from '../components/SearchBar/FilterBar'
 import SearchBar from '../components/SearchBar/SearchBar'
 
+import { faFire } from '@fortawesome/free-solid-svg-icons'
+
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from "react-paginate";
 import '../styles/UserList.css'
 import { categoryFilterQuery, keywordQuery, languageFilterQuery, usersRows } from "../state";
 import UsersTable from "../components/Users/UsersTable";
 import ClipLoader from "react-spinners/ClipLoader";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import '../styles/UserList.css';
+import '../styles/UserTable.css';
+import profile_pic from '../assets/user-pic.png';
+import Swal from 'sweetalert2';
 
-const Users = () => {
+
+
+
+const UserComplaints = () => {
   const [page, setPage] = useState(1); // Start page from 1
   const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState(0);
   const [rows, setRows] = useState(0);
-  const [keyword, setKeyword] = useRecoilState(keywordQuery);
-  const [languageFilter, setLanguageFilter] = useRecoilState(languageFilterQuery);
-  const [users, setUsers] = useRecoilState(usersRows);
+  // const [keyword, setKeyword] = useRecoilState(keywordQuery);
+  // const [languageFilter, setLanguageFilter] = useRecoilState(languageFilterQuery);
+  const [complaintsPerDay, setComplaintsPerDay] = useState(null);
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -40,24 +56,19 @@ const Users = () => {
   const [studentData, setStudentData] = useState({})
   const params = useParams();
 
-  useEffect(() => {
-    getUsers();
-  }, [page, keyword, languageFilter]);
-  useEffect(() => {
-    setLanguageFilter("")
-    setKeyword("")
-  }, []);
-  const getUsers = async () => {
+
+
+  const getComplaints = async () => {
     try {
-      setUsers([]);
+      setComplaintsPerDay([]);
       setLoading(true);
 
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users?searchQuery=${keyword}&page=${page}&limit=${limit}`);
-      setUsers(response.data.listDto);
-      console.log(response.data.listDto);
-      // setPage(response.data.pagination.page);
-      // setPages(response.data.pagination.totalPage);
-      // setRows(response.data.pagination.totalRows);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/complaints/number-of-complaints-per-day?page=${page}&limit=${limit}`);
+      setComplaintsPerDay(response.data.value.listDto);
+      console.log(response.data.value.listDto);
+      setPage(response.data.pagination.page);
+      setPages(response.data.pagination.totalPage);
+      setRows(response.data.pagination.totalRows);
     } catch (err) {
       if (err.message === 'Network Error' && !err.response) {
         toast.error('Network error - make sure the server is running!', {
@@ -82,7 +93,7 @@ const Users = () => {
   const changePage = ({ selected }) => {
     console.log(selected);
     setPage(selected + 1);
-    console.log(users);
+    console.log(complaintsPerDay);
     // Add 1 to start from page 1
     if (selected === 9) {
       setMsg(".........");
@@ -98,13 +109,6 @@ const Users = () => {
     return cookieValue;
   }
 
-  // useEffect(() => {
-  //   // Scroll to the top of the page when the component mounts
-
-  //   setTimeout(function () {
-  //     window.scrollTo(0, 0);
-  // },2);
-  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -183,19 +187,11 @@ const Users = () => {
     };
 
     // fetchData();
-    fetchStudent()
-    setIsCreatingLocal(false)
-    setIsViewingPostDetailsLocal(false)
-  }, [params]);
+    // fetchStudent()
+    getComplaints()
+  }, []);
 
 
-  useEffect(() => {
-    setIsViewingPostDetails(isViewingPostDetailsLocal)
-  }, [isViewingPostDetailsLocal])
-
-  useEffect(() => {
-    setIsCreating(isCreatingLocal)
-  }, [isCreatingLocal])
 
   const languageOptions = [
     { value: '', label: '' },
@@ -203,27 +199,105 @@ const Users = () => {
     { value: 'Oldest', label: 'Oldest' },
   ];
 
+
+  // const [rows, setUsers] = React.useState(rows);
+  const [clickedRows, setClickedRows] = React.useState([]);
+
+
+
+
+
+
+
+  const passUser = async (isPass, userId) => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/users/${userId}/update-isPass`, { isPass: isPass });
+    } catch (err) {
+      if (err.message === 'Network Error' && !err.response) {
+        toast.error('Network error - make sure the server is running!', {
+          position: 'top-center',
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        });
+      } else if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+      console.error(err);
+    }
+  }
+
+
+  const deleteUser = async (userId) => {
+    Swal.fire({
+      title: 'Are you sure you want to delete this user?',
+      showCancelButton: true,
+      confirmButtonColor: '#00BF63',
+      confirmButtonText: 'Delete',
+      customClass: "Custom_btn"
+
+    }).then(async (result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire('Done!', '', 'success')
+        try {
+          const res = await axios.delete(`${process.env.REACT_APP_BASE_URL}/users/${userId}`);
+          console.log(res.data)
+          // console.log(res.data[0].id);
+          const updatedUsers = complaintsPerDay.filter(post => post.id !== userId)
+          setComplaintsPerDay(updatedUsers)
+        } catch (err) {
+
+          if (err.message === 'Network Error' && !err.response) {
+            toast.error('Network error - make sure the server is running!', {
+              position: 'top-center',
+              autoClose: 10000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'colored',
+            });
+          } else if (err.response && err.response.status === 401) {
+            navigate('/login');
+          }
+          console.error(err);
+        }
+      } else if (result.isDenied) {
+        Swal.fire('Changes are not saved', '', 'info')
+      }
+    })
+
+  }
+
+
+  function handleButtonClick(row) {
+    const newIsPass = row.isPass === '1' ? '0' : '1';
+
+    // Create a new array of users with the updated isPass value
+    const updatedUsers = complaintsPerDay.map((user) =>
+      user.id === row.id ? { ...user, isPass: newIsPass } : user
+    );
+
+    // Update the state with the modified users array
+    setComplaintsPerDay(updatedUsers);
+
+    // Call passUser function to update the backend if needed
+    passUser(newIsPass, row.id);
+  }
+
   return (
     <div className='container' id='student-container' style={{ marginTop: "50px" }}>
       <div style={{ paddingRight: "120px" }}>
         <div className="row">
-          <div className="l-search">Search about users</div>
+          <div className="l-search">Users Complaints</div>
         </div>
-        <div className="items">
-
-          <div className="container" id='row-items'>
-            <div className="row" id='search-bar-up'>
-              <SearchBar searchHint="Search about users" />
-            </div>
-            {/* <div className="row" id='search-bar-below'>
-
-              <div className="col-md-6" id='filter-bar-container'>
-                <FilterBar placeholder='Filter result sort' options={languageOptions} filterType="language" />
-              </div>
-            </div> */}
-          </div>
-
-        </div>
+        <div style={{ height: "40px" }}></div>
       </div>
       <div className="container mt-4">
         <div className="row">
@@ -241,7 +315,59 @@ const Users = () => {
 
 
             ) :
-              (<UsersTable />)}
+              (<>
+                {complaintsPerDay == null ? (
+                  <div style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}>
+                    <ClipLoader
+                      color={"#00BF63"}
+                      loading={true}
+                      // cssOverride={override}
+                      size={40}
+                      aria-label="Loading Spinner"
+                      data-testid="loader"
+                    />
+                  </div>
+
+
+                ) : (
+                  <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 550 }} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Picture</TableCell>
+                          <TableCell align="left">Date</TableCell>
+                          <TableCell align="left">Number of complaints</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {complaintsPerDay ?
+                          complaintsPerDay.map((inDay) => (
+                            <TableRow
+                            style={{justifyContent: "center", width: "450px"}}
+                              key={inDay && inDay.id}
+                              sx={{
+                                '&:last-child td, &:last-child th': { border: 0 },
+                              }}
+                            >
+
+                              <TableCell component="th" scope="row">
+                                
+                                <FontAwesomeIcon icon={faFire} style={{fontSize: "28px"}}/>
+                                  
+                              </TableCell>
+
+                              <Link to={`/complaints-list/${inDay && btoa(inDay.complainDate)}`} >
+                                <TableCell id='username-link' align="left">{inDay && inDay.complainDate}</TableCell>
+                              </Link>
+                              <TableCell style={{justifyContent: "center", paddingLeft: "80px"}} >{inDay && inDay.complaints.length}</TableCell>
+                            </TableRow>
+                          ))
+                          :
+                          <h3 style={{ textAlign: "center" }}>No data found!</h3>
+                        }
+                      </TableBody>
+                    </Table>
+                  </TableContainer>)}</>)}
             <p className="text-muted">
               Total Users: {rows} Page: {page} of {pages}
             </p>
@@ -272,7 +398,7 @@ const Users = () => {
   )
 }
 
-export default Users
+export default UserComplaints
 
 
 

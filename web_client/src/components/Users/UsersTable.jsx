@@ -140,26 +140,24 @@ function UsersTable() {
                 <TableCell>Picture</TableCell>
                 <TableCell align="left">Name</TableCell>
                 <TableCell align="left">Email</TableCell>
-                <TableCell align="left">Language</TableCell>
-                <TableCell align="left">Status</TableCell>
-                <TableCell align="left">Pass student</TableCell>
+                <TableCell align="left">UserRole</TableCell>
+                <TableCell align="left">Postal code</TableCell>
                 <TableCell align="left">Delete</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {users ?
                 users.map((user) => (
-                  <TableRow className={user.userRole == "admin" ? "colored-row" : ""}
+                  <TableRow 
                     key={user && user.id}
                     sx={{
                       '&:last-child td, &:last-child th': { border: 0 },
-                      color: user.userRole === "admin" ? "white" : "inherit",
                     }}
                   >
 
                     <TableCell component="th" scope="row">
                       <img
-                        src={user.imagePath !== "" ? user.imagePath : profile_pic}
+                        src={profile_pic}
                         alt="Profile pic"
                         className="profile-pic"
                       ></img>
@@ -171,33 +169,17 @@ function UsersTable() {
                     <TableCell align="left">{user && user.email}</TableCell>
                     <TableCell align="left">
                       {
-                        user.userRole !== "admin" ?
-                          user && user.nativeLanguage
-                          :
-                          null
+                          user && user.userRole
+                          
                       }
                     </TableCell>
                     <TableCell align="left">
                       {
-                        user.userRole !== "admin" ?
-                          user && user.isPass === '1' ? 'Pass' : 'In Progress'
-                          :
-                          null
+                          user && user.location.postalCode
+                          
                       }
                     </TableCell>
-                    <TableCell align="left">
-                      {
-                        user.userRole !== "admin" ?
-                          <button
-                            className={user.isPass === '1' ? 'unpass-btn' : 'pass-btn'}
-                            onClick={() => handleButtonClick(user)}
-                          >
-                            {user.isPass === '1' ? 'UnPass' : 'Pass'}
-                          </button>
-                          :
-                          null
-                      }
-                    </TableCell>
+
                     <TableCell onClick={() => deleteUser(user.id)} align="left">
                       <button className="delete-btn">Delete</button>
                     </TableCell>

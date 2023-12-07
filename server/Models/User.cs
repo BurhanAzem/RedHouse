@@ -14,6 +14,7 @@ namespace RedHouse_Server.Models
         public int PhoneNumber { get; set; }
         [ForeignKey(nameof(Location))]
         public int LocationId { get; set; }
+        public Location Location { get; set; }
         public string? UserRole { get; set; }
         public DateTime Created { get; set; } = DateTime.Now;
 
