@@ -10,30 +10,31 @@ import 'package:http/http.dart' as http;
 
 class PropertyData {
   static addProperty(
-      String propertyType,
-      String price,
-      String numberOfBedrooms,
-      String numberOfBathrooms,
-      String squareMeter,
-      String propertyDescription,
-      DateTime builtYear,
-      String view,
-      DateTime availableOn,
-      String propertyStatus,
-      String numberOfUnits,
-      String parkingSpots,
-      String listingType,
-      String isAvailableBasement,
-      String listingBy,
-      int userId,
-      List<String> downloadUrls,
-      String streetAddress,
-      String city,
-      String region,
-      String postalCode,
-      String country,
-      dynamic latitude,
-      dynamic longitude) async {
+    String propertyType,
+    String price,
+    String numberOfBedrooms,
+    String numberOfBathrooms,
+    String squareMeter,
+    String propertyDescription,
+    DateTime builtYear,
+    String view,
+    DateTime availableOn,
+    String propertyStatus,
+    String numberOfUnits,
+    String parkingSpots,
+    String listingType,
+    String isAvailableBasement,
+    String listingBy,
+    int userId,
+    List<String> downloadUrls,
+    String streetAddress,
+    String city,
+    String region,
+    String postalCode,
+    String country,
+    dynamic latitude,
+    dynamic longitude,
+  ) async {
     String formattedBuiltYear =
         DateFormat('yyyy-MM-ddTHH:mm:ss').format(builtYear);
     String formattedAvailableOn =
@@ -65,7 +66,6 @@ class PropertyData {
         "latitude": latitude,
         "longitude": longitude
       },
-      // "neighborhoodDto":{},
       "propertyFiles": downloadUrls
     };
     if (await checkInternet()) {
@@ -190,6 +190,4 @@ class PropertyData {
       return StatusRequest.offlinefailure;
     }
   }
-
-
 }

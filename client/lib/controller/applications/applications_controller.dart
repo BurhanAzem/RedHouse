@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:client/data/applications.dart';
 import 'package:client/model/application.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ApplicationsController extends GetxController {
-  GlobalKey<FormState> formstate = GlobalKey<FormState>();
-
   List<Application> applications = [];
   List<Application> approvedApplicationsForUser = [];
 
@@ -74,6 +71,11 @@ class ApplicationsController extends GetxController {
 
   approvedApplication(int id) async {
     var response = await ApplicationData.approvedApplication(id);
+    print(response['message']);
+  }
+
+  ignoreApplication(int id) async {
+    var response = await ApplicationData.ignoreApplication(id);
     print(response['message']);
   }
 

@@ -21,10 +21,8 @@ class Properties extends StatefulWidget {
 class _AllPropertiesState extends State<Properties>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true; // Add a boolean variable for loading data from api
-
+  ManagePropertiesController controller = Get.put(ManagePropertiesController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-
-  late ManagePropertiesController controller;
 
   late bool _isLoading; // Add a boolean variable for loading images
   Timer? _timer;
@@ -40,7 +38,6 @@ class _AllPropertiesState extends State<Properties>
   }
 
   void loadData() async {
-    controller = Get.put(ManagePropertiesController());
     controller.propertiesUserId = loginController.userDto?["id"];
     await controller.getPropertiesUser();
 

@@ -1,16 +1,21 @@
 import 'package:client/controller/contracts/offer_controller.dart';
+import 'package:client/model/property.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CreateOffer extends StatefulWidget {
   int landlordId;
   int customerId;
   int propertyId;
+  Property property;
+
   CreateOffer({
     Key? key,
     required this.landlordId,
     required this.customerId,
     required this.propertyId,
+    required this.property,
   }) : super(key: key);
 
   @override
@@ -19,6 +24,16 @@ class CreateOffer extends StatefulWidget {
 
 class _CreateOfferState extends State<CreateOffer> {
   OfferController offerController = Get.put(OfferController());
+  String message = "";
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.landlordId + widget.customerId + widget.propertyId);
+    offerController.price.text = "";
+    offerController.offerExpireDate = DateTime.now();
+    offerController.description.text = "";
+  }
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(
@@ -29,8 +44,7 @@ class _CreateOfferState extends State<CreateOffer> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor:
-                const Color(0xffd92328), // Change the color of the header
+            primaryColor: const Color(0xffd92328),
           ),
           child: child ?? Container(),
         );
@@ -39,8 +53,24 @@ class _CreateOfferState extends State<CreateOffer> {
 
     if (pickedDate != null) {
       setState(() {
-        // controller.milestoneDate = pickedDate;
+        offerController.offerExpireDate = pickedDate;
       });
+    }
+  }
+
+  String hintText() {
+    if (widget.property.listingType == "For rent") {
+      return "Enter the monthly rental price";
+    } else {
+      return "Enter the buy price";
+    }
+  }
+
+  String suffixText() {
+    if (widget.property.listingType == "For rent") {
+      return '\$/mo';
+    } else {
+      return "\$";
     }
   }
 
@@ -100,6 +130,8 @@ class _CreateOfferState extends State<CreateOffer> {
                   // ),
                   // Container(height: 5),
                   // Container(height: 15),
+
+                  // Price
                   const Text(
                     "Price",
                     style: TextStyle(
@@ -110,21 +142,28 @@ class _CreateOfferState extends State<CreateOffer> {
                   Container(height: 5),
                   Container(
                     child: TextFormField(
-                      // controller: controller.milestoneName,
+                      controller: offerController.price,
                       style: const TextStyle(),
                       decoration: InputDecoration(
-                        // suffixIcon: Icon(Icons.description),
-                        hintText: "  \$0.00",
+                        hintText: widget.property.listingType == "For rent"
+                            ? "Enter the monthly rental price"
+                            : "Enter the buy price",
+                        suffixText: widget.property.listingType == "For rent"
+                            ? '\$/mo '
+                            : "\$ ",
+                        suffixStyle: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
                   ),
-                  Container(height: 5),
-                  Container(height: 15),
+                  Container(height: 20),
+
+                  // Offer Expire Date
                   const Text(
                     "Offer Expire Date",
                     style: TextStyle(
@@ -133,26 +172,33 @@ class _CreateOfferState extends State<CreateOffer> {
                         fontWeight: FontWeight.w500),
                   ),
                   Container(height: 5),
-                  Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 0.5,
-                          ),
+                  InkWell(
+                    onTap: _selectDateAvialableOn,
+                    child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.5),
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(8))),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Text(controller.milestoneDate.toString()),
-                          IconButton(
-                              onPressed: _selectDateAvialableOn,
-                              icon: const Icon(Icons.date_range_outlined))
-                        ],
-                      )),
-                  Container(height: 5),
-                  Container(height: 15),
+                              const BorderRadius.all(Radius.circular(8)),
+                        ),
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(DateFormat('yyyy-MM-dd')
+                                  .format(offerController.offerExpireDate)),
+                              IconButton(
+                                onPressed: _selectDateAvialableOn,
+                                icon: const Icon(Icons.date_range_outlined),
+                              )
+                            ],
+                          ),
+                        )),
+                  ),
+                  Container(height: 20),
+
+                  // Description (Optional)
                   const Text(
                     "Description (Optional)",
                     style: TextStyle(
@@ -165,13 +211,13 @@ class _CreateOfferState extends State<CreateOffer> {
                     child: TextFormField(
                       minLines: 7,
                       maxLines: 10,
-                      // controller: controller.description,
+                      controller: offerController.description,
                       style: const TextStyle(),
                       decoration: InputDecoration(
                         hintText:
                             "Example: New house in the center of the city, there is close school and very beautiful view",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -183,8 +229,8 @@ class _CreateOfferState extends State<CreateOffer> {
               Container(height: 25),
               MaterialButton(
                 onPressed: () {
-                  setState(() {});
-                  ScaffoldMessenger.of(context).clearSnackBars();
+                  // setState(() {});
+                  // ScaffoldMessenger.of(context).clearSnackBars();
                   // setState(() {
                   //   controller.activeStep++;
                   // });
@@ -194,13 +240,40 @@ class _CreateOfferState extends State<CreateOffer> {
                   // applicationsController.userId =
                   //     loginController.userDto?["id"];
                   // applicationsController.addApplication();
+                  // offerController.createOffer();
 
-                  SnackBar snackBar = const SnackBar(
-                    content: Text("Created successfully"),
-                    backgroundColor: Colors.blue,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  Navigator.of(context).pop();
+                  // SnackBar snackBar = const SnackBar(
+                  //   content: Text("Created successfully"),
+                  //   backgroundColor: Colors.blue,
+                  // );
+                  // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  // Navigator.of(context).pop();
+
+                  setState(() {});
+                  ScaffoldMessenger.of(context).clearSnackBars();
+
+                  Future<void> addOfferFuture() async {
+                    offerController.landlordId = widget.landlordId;
+                    offerController.propertyId = widget.propertyId;
+                    offerController.customerId = widget.customerId;
+                    await offerController.createOffer();
+
+                    setState(() {
+                      message = offerController.responseMessage;
+                    });
+                    print(message);
+
+                    if (message == "Created Successfully") {
+                      SnackBar snackBar = SnackBar(
+                        content: Text(message),
+                        backgroundColor: Colors.blue,
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      Navigator.of(context).pop();
+                    }
+                  }
+
+                  addOfferFuture();
                 },
                 color: const Color.fromARGB(255, 0, 0, 0),
                 shape: RoundedRectangleBorder(
@@ -215,7 +288,20 @@ class _CreateOfferState extends State<CreateOffer> {
                   ),
                 ),
               ),
-              Container(height: 15),
+              Container(height: 10),
+              Container(
+                padding: message == ""
+                    ? null
+                    : const EdgeInsets.only(top: 15, right: 12, left: 10),
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.red,
+                    fontSize: 15,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

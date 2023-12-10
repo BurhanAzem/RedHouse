@@ -8,7 +8,7 @@ part "neighborhood.g.dart";
 class Neighborhood {
   int id;
   int propertyId;
-  // Property property;
+  Property property;
   String neighborhoodType;
   String? neighborhoodName;
   int locationId;
@@ -17,7 +17,7 @@ class Neighborhood {
   Neighborhood({
     required this.id,
     required this.propertyId,
-    // required this.property,
+    required this.property,
     required this.neighborhoodType,
     this.neighborhoodName,
     required this.locationId,

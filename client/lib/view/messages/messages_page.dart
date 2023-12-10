@@ -196,21 +196,9 @@ class _MessagesState extends State<Messages> {
               );
         }).toList();
 
-        // // Map users to applications
-        // List<Application> userApplications = filteredUsers.map((doc) {
-        //   // Find the corresponding application
-        //   return applicationController.approvedApplicationsForUser.firstWhere(
-        //     (application) =>
-        //         application.user.email == doc.data()!['email'] ||
-        //         application.property.user?.email == doc.data()!['email'],
-        //   );
-        // }).toList();
-
+        // Find the corresponding application
         List<Application> userApplications = filteredUsers.map((doc) {
-          // Cast the result of doc.data() to Map<String, dynamic>
           Map<String, dynamic> userData = doc.data()! as Map<String, dynamic>;
-
-          // Find the corresponding application
           return applicationController.approvedApplicationsForUser.firstWhere(
             (application) =>
                 application.user.email == userData['email'] ||
@@ -249,7 +237,8 @@ class _MessagesState extends State<Messages> {
           chatRoomId, currentUserId, currentUserEmail, receiverUserId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return _buildUserListItem(chatRoomId, data, onMessageSent);
+          return _buildUserListItem(
+              chatRoomId, data, application, onMessageSent);
         } else {
           return Center(
             child: Shimmer.fromColors(
@@ -292,7 +281,7 @@ class _MessagesState extends State<Messages> {
                           subtitle: const Row(
                             children: [
                               Text(
-                                "communicate with other.",
+                                "Now you can communicate",
                                 style: TextStyle(
                                   fontSize: 13,
                                 ),
@@ -320,8 +309,8 @@ class _MessagesState extends State<Messages> {
     );
   }
 
-  Widget _buildUserListItem(
-      String chatRoomId, Map<String, dynamic> data, Function onMessageSent) {
+  Widget _buildUserListItem(String chatRoomId, Map<String, dynamic> data,
+      Application application, Function onMessageSent) {
     String lastMessageText = lastMessageTextMap[chatRoomId] ?? "";
     Timestamp lastMessageTime =
         lastMessageTimeMap[chatRoomId] ?? Timestamp.now();
@@ -397,9 +386,11 @@ class _MessagesState extends State<Messages> {
         ),
         onTap: () {
           Get.to(() => ChatPage(
-              receiverUserEmail: data['email'],
-              receiverUserID: data['uid'],
-              onMessageSent: onMessageSent));
+                receiverUserEmail: data['email'],
+                receiverUserID: data['uid'],
+                onMessageSent: onMessageSent,
+                application: application,
+              ));
         },
       ),
     );

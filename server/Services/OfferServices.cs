@@ -89,15 +89,15 @@ namespace server.Services
                 };
             }
 
-            var offers = await _redHouseDbContext.Offers.Where(o => o.CustomerId == offerDto.CustomerId 
-                                                                    && o.LandlordId == offerDto.LandlordId 
+            var offers = await _redHouseDbContext.Offers.Where(o => o.CustomerId == offerDto.CustomerId
+                                                                    && o.LandlordId == offerDto.LandlordId
                                                                     && o.PropertyId == offerDto.PropertyId).ToArrayAsync();
-            var searchedOffer = offers.First();
+            var searchedOffer = offers.FirstOrDefault();
             if (searchedOffer != null)
             {
                 return new ResponsDto<Offer>
                 {
-                    Exception = new Exception("You can't create more than offer to the same landlord and client and property"),
+                    Exception = new Exception("You can't create more than one offer for the same application"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
@@ -108,7 +108,7 @@ namespace server.Services
                 CustomerId = offerDto.CustomerId,
                 LandlordId = offerDto.LandlordId,
                 PropertyId = offerDto.PropertyId,
-                Description = offerDto.Description,
+                Description = offerDto.Description!,
                 OfferDate = DateTime.Now,
                 OfferExpires = offerDto.OfferExpires,
                 OfferStatus = offerDto.OfferStatus,
@@ -120,7 +120,7 @@ namespace server.Services
             return new ResponsDto<Offer>
             {
                 Dto = offerRes.Entity,
-                Message = "Offer Created Successfully",
+                Message = "Created Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -161,7 +161,15 @@ namespace server.Services
             }
 
             var query = _redHouseDbContext.Offers.Where(o => o.CustomerId == userId || o.LandlordId == userId)
-            .Include(o => o.Customer).Include(o => o.Landlord).Include(o => o.Property).AsQueryable();
+            .Include(o => o.Customer)
+            .Include(o => o.Landlord)
+            .Include(a => a.Property)
+            .ThenInclude(p => p.Location)
+            .Include(a => a.Property)
+            .ThenInclude(p => p.User)
+            .Include(a => a.Property)
+            .ThenInclude(p => p.propertyFiles)
+            .AsQueryable();
 
             if (offerFilter.OfferTo.Trim() == "Landlord")
             {

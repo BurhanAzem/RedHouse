@@ -309,14 +309,15 @@ class FilterController extends GetxController {
       listingPropertyType = "For rent";
     }
     var response = await PropertyData.getProperties(
-        propertyTypes,
-        minPrice,
-        maxPrice,
-        numberOfBathrooms,
-        numberOfBedrooms,
-        view,
-        listingPropertyType.toString(),
-        location);
+      propertyTypes,
+      minPrice,
+      maxPrice,
+      numberOfBathrooms,
+      numberOfBedrooms,
+      view,
+      listingPropertyType.toString(),
+      location,
+    );
 
     if (response['statusCode'] == 200) {
       listProperty = ListProperty.fromJson(response);

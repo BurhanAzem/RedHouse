@@ -1,5 +1,8 @@
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/model/application.dart';
 import 'package:client/view/messages/chat_service.dart';
+import 'package:client/view/more/compline.dart';
+import 'package:client/view/offers/create_offer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,12 +12,14 @@ class ChatPage extends StatefulWidget {
   final Function onMessageSent;
   final String receiverUserEmail;
   final String receiverUserID;
+  final Application application;
 
   const ChatPage(
       {super.key,
       required this.receiverUserEmail,
       required this.receiverUserID,
-      required this.onMessageSent});
+      required this.onMessageSent,
+      required this.application});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -42,6 +47,7 @@ class _ChatPageState extends State<ChatPage> {
     ids = [currentUserId, receiverUserId];
     ids.sort();
     chatRoomId = ids.join("_");
+    print(widget.application);
 
     // Add the following line to update the 'SeeMessage' value to true
     _trueSeeMessageValue();
@@ -115,19 +121,46 @@ class _ChatPageState extends State<ChatPage> {
             PopupMenuButton(
               onSelected: (value) {
                 print(value);
+                switch (value) {
+                  case "Send complaint":
+                    Get.to(const Compline());
+                    break;
+                  case "Create offer":
+                    Get.to(
+                      () => CreateOffer(
+                        // This user ID is the ID of who received the application
+                        landlordId: widget.application.property.userId,
+                        // This user ID is the ID of who sent the application
+                        customerId: widget.application.userId,
+                        propertyId: widget.application.propertyId,
+                        property: widget.application.property,
+                      ),
+                    );
+                    break;
+                  case "Send complaint":
+                    Get.to(const Compline());
+                    break;
+                }
               },
               itemBuilder: (context) => [
+                // If the landlord and this application does not have a offer, show "Create offer"
+                if (currentUserId ==
+                    widget.application.property.userId.toString())
+                  const PopupMenuItem(
+                    value: "Create offer",
+                    child: Text("Create offer"),
+                  ),
+
+                // If this appliaction has offer, show "See offer"
+                if (true)
+                  const PopupMenuItem(
+                    value: "See offer",
+                    child: Text("See offer"),
+                  ),
+
                 const PopupMenuItem(
-                  value: "Create offer",
-                  child: Text("Create offer"),
-                ),
-                const PopupMenuItem(
-                  value: "all offers",
-                  child: Text("Show all offers"),
-                ),
-                 const PopupMenuItem(
-                  value: "Make a complaint",
-                  child: Text("Make a complaint"),
+                  value: "Send complaint",
+                  child: Text("Send complaint"),
                 ),
               ],
             ),
@@ -256,7 +289,7 @@ class _ChatPageState extends State<ChatPage> {
                         const SizedBox(width: 5),
                         Text(
                           formatMessageTimestamp(data['timestamp']),
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 13,
                             color: Colors.purple,
                             fontWeight: FontWeight.w500,
@@ -266,7 +299,7 @@ class _ChatPageState extends State<ChatPage> {
                     )
                   : Text(
                       formatMessageTimestamp(data['timestamp']),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13,
                         color: Colors.purple,
                         fontWeight: FontWeight.w500,
@@ -317,7 +350,7 @@ class _ChatPageState extends State<ChatPage> {
             // send button
             IconButton(
                 onPressed: sendMessage,
-                icon: Icon(
+                icon: const Icon(
                   Icons.send,
                   size: 25,
                   color: Colors.purple,

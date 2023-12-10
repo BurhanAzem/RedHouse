@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluster/fluster.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/main.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -310,19 +311,31 @@ class MapMarker extends Clusterable {
   get context => null;
 
   Marker toMarker() => Marker(
-      markerId: MarkerId(property.id.toString()),
-      position: LatLng(
-        position.latitude,
-        position.longitude,
-      ),
-      icon: filterController.listingType
-          ? BitmapDescriptor.defaultMarker
-          : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
-      onTap: () {
-        _showMarkerInfo(property);
-      });
+        markerId: MarkerId(property.id.toString()),
+        position: LatLng(
+          position.latitude,
+          position.longitude,
+        ),
+        icon: filterController.listingType
+            ? BitmapDescriptor.defaultMarker
+            : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+        onTap: () {
+          _showMarkerInfo(property);
+        },
+      );
 
   void _showMarkerInfo(Property property) {
+    String homePrice() {
+      String price =
+          "\$${NumberFormat.decimalPattern().format(property.price)}";
+      if (property.listingType == "For monthly rent") {
+        price += "/monthly";
+      } else if (property.listingType == "For daily rent") {
+        price += "/daily";
+      }
+      return price;
+    }
+
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
@@ -374,7 +387,7 @@ class MapMarker extends Clusterable {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              "\$${NumberFormat.decimalPattern().format(property.price)}${property.listingType == "For rent" ? "/mo" : ""}",
+                              homePrice(),
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
@@ -480,8 +493,6 @@ class _MarkerInfoWidgetState extends State<homeImageWidget> {
     print(widget.property);
     print(isFavorite);
     print(mapListController.favoriteProperties.length);
-    print(
-        "====================================================================================================");
 
     _isLoading = true;
     _timer = Timer(const Duration(seconds: 1), () {

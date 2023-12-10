@@ -39,7 +39,6 @@ namespace server.Services
                                                                                 && o.PropertyId == applicationDto.PropertyId).ToArrayAsync();
 
             var searchedApplication = applications.FirstOrDefault();
-
             if (searchedApplication != null)
             {
                 return new ResponsDto<Application>
@@ -65,7 +64,7 @@ namespace server.Services
             return new ResponsDto<Application>
             {
                 Dto = applicationRes.Entity,
-                Message = "Sent successfully",
+                Message = "Sent Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -108,14 +107,14 @@ namespace server.Services
             }
 
             var query = _redHouseDbContext.Applications
-    .Include(a => a.User)
-    .Include(a => a.Property)
-        .ThenInclude(p => p.Location)
-    .Include(a => a.Property)
-        .ThenInclude(p => p.User)
-            .Include(a => a.Property)
-        .ThenInclude(p => p.propertyFiles)
-    .AsQueryable();
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable();
 
 
             if (applicationFilter.ApplicationTo.Trim() == "Landlord")
@@ -222,7 +221,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Application>> RejectApplication(int applicationId)
+        public async Task<ResponsDto<Application>> IgnoreApplication(int applicationId)
         {
             var application = await _redHouseDbContext.Applications.FindAsync(applicationId);
             if (application == null)
@@ -233,13 +232,13 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            application.ApplicationStatus = "Rejected";
+            application.ApplicationStatus = "Ignored";
             _redHouseDbContext.Applications.Update(application);
             _redHouseDbContext.SaveChanges();
             return new ResponsDto<Application>
             {
                 Dto = application,
-                Exception = new Exception($"Application with {applicationId} Rejected succussfuly"),
+                Exception = new Exception($"Application with {applicationId} Ignored succussfuly"),
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -258,15 +257,25 @@ namespace server.Services
             }
 
             var customerApplications = await _redHouseDbContext.Applications
-            .Include(a => a.Property)
-            .Include(a => a.User)
-            .AsQueryable()
-            .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved")
-            .ToArrayAsync();
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable()
+                .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved")
+                .ToArrayAsync();
 
             var landlordApplications = await _redHouseDbContext.Applications
-                .Include(a => a.Property)
                 .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
                 .AsQueryable()
                 .Where(a => a.ApplicationStatus == "Approved" && a.UserId == userId)
                 .ToArrayAsync();
@@ -289,6 +298,12 @@ namespace server.Services
             return await _redHouseDbContext.Applications.CountAsync();
 
         }
+
+        public Task<ResponsDto<Application>> RejectApplication(int applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 
 }

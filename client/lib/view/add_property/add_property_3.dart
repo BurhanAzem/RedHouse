@@ -97,11 +97,12 @@ class _AddProperty3State extends State<AddProperty3> {
                           ),
                         ),
                       ),
-                      Container(height: 5),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Image.asset("assets/images/red-tree.png",
-                              scale: 3)),
+                      // Container(height: 5),
+                      // Container(
+                      //   alignment: Alignment.center,
+                      //   child:
+                      //       Image.asset("assets/images/red-tree.png", scale: 3),
+                      // ),
                     ],
                   ),
                   Container(height: 25),

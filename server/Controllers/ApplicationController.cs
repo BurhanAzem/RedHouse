@@ -130,14 +130,14 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpPost("/applications/{id}/reject")]
-        public async Task<IActionResult> RejectApplication(int id)
+        [HttpPost("/applications/{id}/ignore")]
+        public async Task<IActionResult> IgnoreApplication(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _applicationServices.RejectApplication(id);
+            var result = await _applicationServices.IgnoreApplication(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

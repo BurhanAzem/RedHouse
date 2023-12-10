@@ -1,7 +1,6 @@
+import 'package:client/controller/manage_propertise/neighborhood_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/model/neighborhood.dart';
 import 'package:client/view/add_property/add_property_2.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,23 +14,20 @@ class AddPropertyNeighbour extends StatefulWidget {
 }
 
 class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
-  String neighbourType = "Select Neighbours Type";
+  String neighborhoodType = "Select Neighborhood Type";
 
   LoginControllerImp loginController = Get.put(LoginControllerImp());
+  NeighborhoodController neighborhoodController =
+      Get.put(NeighborhoodController());
 
-  Neighborhood neighborhood = Neighborhood(
-    id: 0,
-    propertyId: 0,
-    // property: null,
-    neighborhoodType: '',
-    locationId: 0,
-    // location: null,
-  );
+  ManagePropertiesController propertyController =
+      Get.put(ManagePropertiesController());
+
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
 
   // Give icon for each neighborhood
   void addCustomerIcon() {
-    if (neighbourType == "Parking") {
+    if (neighborhoodType == "Parking") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/parking.png")
           .then(
@@ -41,7 +37,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
           });
         },
       );
-    } else if (neighbourType == "School") {
+    } else if (neighborhoodType == "School") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/school.png")
           .then(
@@ -51,7 +47,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
           });
         },
       );
-    } else if (neighbourType == "Hospital") {
+    } else if (neighborhoodType == "Hospital") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/hospital.png")
           .then(
@@ -61,7 +57,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
           });
         },
       );
-    } else if (neighbourType == "Mosque") {
+    } else if (neighborhoodType == "Mosque") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/mosque.png")
           .then(
@@ -71,7 +67,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
           });
         },
       );
-    } else if (neighbourType == "Gymnasium") {
+    } else if (neighborhoodType == "Gymnasium") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/gym.png")
           .then(
@@ -81,7 +77,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
           });
         },
       );
-    } else if (neighbourType == "Gas Station") {
+    } else if (neighborhoodType == "Gas Station") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/gas-station.png")
           .then(
@@ -91,7 +87,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
           });
         },
       );
-    } else if (neighbourType == "ATM") {
+    } else if (neighborhoodType == "ATM") {
       BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(), "assets/images/atm.png")
           .then(
@@ -106,13 +102,14 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
 
   @override
   void initState() {
+    print(propertyController.markers);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     const options = [
-      "Select Neighbours Type",
+      "Select Neighborhood Type",
       "Parking",
       "School",
       "Hospital",
@@ -141,7 +138,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
               },
             ),
             title: const Text(
-              "Neighbours Locations",
+              "Neighborhoods Locations",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -185,7 +182,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: DropdownButton<String>(
-                      value: neighbourType,
+                      value: neighborhoodType,
                       items: options.map((String option) {
                         return DropdownMenuItem<String>(
                           value: option,
@@ -195,7 +192,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                       onChanged: (String? newValue) {
                         if (newValue != null) {
                           setState(() {
-                            neighbourType = newValue;
+                            neighborhoodType = newValue;
                             addCustomerIcon();
                           });
                         }
@@ -248,68 +245,42 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                       child: controller.currentPosition == null
                           ? Container(
                               alignment: Alignment.center,
-                              child: const CircularProgressIndicator())
+                              child: const CircularProgressIndicator(),
+                            )
                           : Expanded(
                               child: GoogleMap(
                                 markers: controller.markers,
                                 onTap: (latlng) async {
-                                  print(neighbourType);
-                                  if (neighbourType !=
-                                      "Select Neighbours Type") {
+                                  print(controller.markers);
+                                  print(neighborhoodType);
+
+                                  if (neighborhoodType !=
+                                      "Select Neighborhood Type") {
+                                    // Remove the marker with the specified ID
+                                    controller.markers.removeWhere(
+                                      (marker) =>
+                                          marker.markerId.value ==
+                                          neighborhoodType,
+                                    );
+
+                                    // Add a new marker
                                     controller.markers.add(
                                       Marker(
-                                        markerId: MarkerId(neighbourType),
+                                        markerId: MarkerId(neighborhoodType),
                                         position: latlng,
                                         infoWindow:
-                                            InfoWindow(title: neighbourType),
+                                            InfoWindow(title: neighborhoodType),
                                         icon: markerIcon,
                                       ),
                                     );
 
-                                    neighborhood!.id = 0;
-
-                                    // controller.propertyNeighborhoods.insert(neighbourType, element);
-
-                                    try {
-                                      List<Placemark> placemarks =
-                                          await placemarkFromCoordinates(
-                                              latlng.latitude,
-                                              latlng.longitude);
-
-                                      if (placemarks.isNotEmpty) {
-                                        final placemark = placemarks[0];
-                                        controller.City = placemark.locality;
-                                        controller.PostalCode =
-                                            placemark.postalCode!;
-                                        controller.streetAddress.text =
-                                            placemark.street!;
-                                        controller.Country = placemark.country;
-                                        controller.Region = placemark.locality;
-                                        controller.Latitude = latlng.latitude;
-                                        controller.Longitude = latlng.longitude;
-
-                                        print('City: ${controller.City}');
-                                        print(
-                                            'PostalCode: ${controller.PostalCode}');
-                                        print('Country: ${controller.Country}');
-                                        print(
-                                            'streetAddress: ${controller.streetAddress.text}');
-                                        print('Region: ${controller.Region}');
-                                        print(
-                                            'Latitude: ${controller.Latitude}');
-                                        print(
-                                            'Longitude: ${controller.Longitude}');
-                                        setState(() {});
-                                      }
-                                    } catch (e) {}
+                                    setState(() {});
                                   }
-                                  setState(() {});
                                 },
                                 mapType: MapType.normal,
                                 initialCameraPosition:
                                     controller.currentPosition!,
                                 onMapCreated: (mapcontroller) {
-                                  // getLatAndLong();
                                   controller.mapController2 = mapcontroller;
                                 },
                               ),

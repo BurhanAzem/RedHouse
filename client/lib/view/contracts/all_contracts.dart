@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:client/controller/contracts/contracts_controller.dart';
 import 'package:client/main.dart';
+import 'package:client/model/contract.dart';
 import 'package:client/model/user.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/contracts/contract.dart';
@@ -31,7 +32,7 @@ class _AllContractsState extends State<AllContracts>
   void loadData() async {
     ContractsControllerImp controller =
         Get.put(ContractsControllerImp(), permanent: true);
-    String? userDtoJson = sharepref!.getString("user");
+    String? userDtoJson = sharepref.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
     controller.userId = user.id!;
@@ -200,12 +201,12 @@ class _AllContractsState extends State<AllContracts>
                         // Content for 'Buy' tab
                         Expanded(
                           child: ListView.builder(
-                            itemCount: controller.contracts!.length,
+                            itemCount: controller.contracts.length,
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
                                   Get.to(() => ContractReview(
-                                        contract: controller.contracts![index],
+                                        contract: controller.contracts[index],
                                       ));
                                   setState(() {});
                                 },
@@ -237,12 +238,12 @@ class _AllContractsState extends State<AllContracts>
                                             ),
                                             Text(
                                               (controller.contracts != null &&
-                                                      controller.contracts!
+                                                      controller.contracts
                                                           .isNotEmpty &&
                                                       index <
-                                                          controller.contracts!
-                                                              .length)
-                                                  ? "       ${controller.contracts![index].startDate!.toString().length <= 10 ? controller.contracts![index].startDate!.toString() : controller.contracts![index].startDate!.toString().substring(0, 9)}"
+                                                          controller
+                                                              .contracts.length)
+                                                  ? "       ${controller.contracts[index].startDate.toString().length <= 10 ? controller.contracts[index].startDate.toString() : controller.contracts[index].startDate.toString().substring(0, 9)}"
                                                   : "N/A", // Replace "N/A" with a default value or message
                                               style: const TextStyle(
                                                 fontWeight: FontWeight.w600,
@@ -252,12 +253,12 @@ class _AllContractsState extends State<AllContracts>
                                           ],
                                         ),
                                         Text(
-                                          (controller.contracts![index].offer!
-                                                      .description!.length <=
+                                          (controller.contracts[index].offer!
+                                                      .description.length <=
                                                   38)
-                                              ? controller.contracts![index]
-                                                  .offer!.description!
-                                              : '${controller.contracts![index].offer!.description!.substring(0, 38)}...',
+                                              ? controller.contracts[index]
+                                                  .offer!.description
+                                              : '${controller.contracts[index].offer!.description.substring(0, 38)}...',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w600),
                                         ),
@@ -277,12 +278,12 @@ class _AllContractsState extends State<AllContracts>
                                           height: 1,
                                         ),
                                         Text(
-                                          (controller.contracts![index].offer!
-                                                      .description!.length <=
+                                          (controller.contracts[index].offer!
+                                                      .description.length <=
                                                   100)
-                                              ? controller.contracts![index]
-                                                  .offer!.description!
-                                              : '${controller.contracts![index].offer!.description!.substring(0, 100)}...',
+                                              ? controller.contracts[index]
+                                                  .offer!.description
+                                              : '${controller.contracts[index].offer!.description.substring(0, 100)}...',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                         ),
@@ -303,8 +304,8 @@ class _AllContractsState extends State<AllContracts>
                                                       fontSize: 12),
                                                 ),
                                                 Text(
-                                                  controller.contracts![index]
-                                                      .offer!.price!
+                                                  controller.contracts[index]
+                                                      .offer!.price
                                                       .toString(),
                                                   style: const TextStyle(
                                                       fontWeight:
@@ -324,8 +325,8 @@ class _AllContractsState extends State<AllContracts>
                                                       fontSize: 12),
                                                 ),
                                                 Text(
-                                                  controller.contracts![index]
-                                                      .contractStatus!,
+                                                  controller.contracts[index]
+                                                      .contractStatus,
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,
@@ -348,11 +349,15 @@ class _AllContractsState extends State<AllContracts>
                         // Content for 'Rent' tab
                         Expanded(
                           child: ListView.builder(
-                            itemCount: controller.contracts!.length,
+                            itemCount: controller.contracts.length,
                             itemBuilder: (context, index) {
+                              Contract contract = controller.contracts[index];
+
                               return GestureDetector(
                                 onTap: () {
-                                  Get.toNamed(AppRoute.contract);
+                                  // Get.toNamed(AppRoute.contract);
+                                  Get.to(
+                                      () => ContractReview(contract: contract));
                                   setState(() {});
                                 },
                                 child: Container(
@@ -382,13 +387,13 @@ class _AllContractsState extends State<AllContracts>
                                               size: 25,
                                             ),
                                             Text(
-                                              (controller.contracts![index]
-                                                          .startDate!
+                                              (controller.contracts[index]
+                                                          .startDate
                                                           .toString()
                                                           .length <=
                                                       10)
-                                                  ? "       ${controller.contracts![index].startDate!.toString()!}"
-                                                  : "       ${controller.contracts![index].startDate!.toString().substring(0, 9)}",
+                                                  ? "       ${controller.contracts[index].startDate.toString()}"
+                                                  : "       ${controller.contracts[index].startDate.toString().substring(0, 9)}",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: 12),
@@ -396,12 +401,12 @@ class _AllContractsState extends State<AllContracts>
                                           ],
                                         ),
                                         Text(
-                                          (controller.contracts![index].offer!
-                                                      .description!.length <=
+                                          (controller.contracts[index].offer!
+                                                      .description.length <=
                                                   38)
-                                              ? controller.contracts![index]
-                                                  .offer!.description!
-                                              : '${controller.contracts![index].offer!.description!.substring(0, 38)}...',
+                                              ? controller.contracts[index]
+                                                  .offer!.description
+                                              : '${controller.contracts[index].offer!.description.substring(0, 38)}...',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w600),
                                         ),
@@ -421,12 +426,12 @@ class _AllContractsState extends State<AllContracts>
                                           height: 1,
                                         ),
                                         Text(
-                                          (controller.contracts![index].offer!
-                                                      .description!.length <=
+                                          (controller.contracts[index].offer!
+                                                      .description.length <=
                                                   100)
-                                              ? controller.contracts![index]
-                                                  .offer!.description!
-                                              : '${controller.contracts![index].offer!.description!.substring(0, 100)}...',
+                                              ? controller.contracts[index]
+                                                  .offer!.description
+                                              : '${controller.contracts[index].offer!.description.substring(0, 100)}...',
                                           style: const TextStyle(
                                               fontWeight: FontWeight.w400),
                                         ),
@@ -447,8 +452,8 @@ class _AllContractsState extends State<AllContracts>
                                                       fontSize: 12),
                                                 ),
                                                 Text(
-                                                  controller.contracts![index]
-                                                      .offer!.price!
+                                                  controller.contracts[index]
+                                                      .offer!.price
                                                       .toString(),
                                                   style: const TextStyle(
                                                       fontWeight:
@@ -468,8 +473,8 @@ class _AllContractsState extends State<AllContracts>
                                                       fontSize: 12),
                                                 ),
                                                 Text(
-                                                  controller.contracts![index]
-                                                      .contractStatus!,
+                                                  controller.contracts[index]
+                                                      .contractStatus,
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w600,

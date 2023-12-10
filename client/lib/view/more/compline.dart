@@ -1,4 +1,3 @@
-import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 
 class Compline extends StatelessWidget {
@@ -10,7 +9,7 @@ class Compline extends StatelessWidget {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "Create compline",
+          "Send complaint",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -76,7 +75,7 @@ class Compline extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(height: 20),
+                  Container(height: 15),
                   Row(
                     children: [
                       const Text(
@@ -102,7 +101,7 @@ class Compline extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(height: 20),
+                  Container(height: 15),
                   const Row(
                     children: [
                       Text(

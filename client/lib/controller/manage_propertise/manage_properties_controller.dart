@@ -1,6 +1,5 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
-import 'package:client/model/neighborhood.dart';
 import 'package:client/model/property.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
@@ -22,14 +21,14 @@ class ManagePropertiesController extends GetxController {
   late TextEditingController numberOfBathrooms;
   late TextEditingController squareMeter;
   late TextEditingController propertyDescription;
-  DateTime builtYear = DateTime(1900);
+  DateTime builtYear = DateTime(2000);
   String propertyType = "House";
   String view = "City";
   DateTime availableDate = DateTime(2023);
   String propertyStatus = "Accepting offers";
   TextEditingController? numberOfUnits;
   late TextEditingController parkingSpots;
-  String listingType = "For rent";
+  String listingType = "For sell";
   String isAvaliableBasement = "Yes";
   late TextEditingController streetAddress;
   String listingBy = "Landlord";
@@ -46,7 +45,6 @@ class ManagePropertiesController extends GetxController {
 
   CameraPosition? currentPosition;
   Set<Marker> markers = {}; // Empty marker
-  List<Neighborhood> propertyNeighborhoods = [];
 
   @override
   void onInit() {
@@ -88,6 +86,8 @@ class ManagePropertiesController extends GetxController {
         listingBy,
         userId,
         downloadUrls,
+
+        // For location
         streetAddress.text,
         City!,
         Region!,

@@ -14,7 +14,8 @@ class Application {
   String message;
   User user;
   Property property;
-  double? suggestedPrice;
+  // double? suggestedPrice;
+  int? suggestedPrice;
   Application({
     required this.id,
     required this.propertyId,

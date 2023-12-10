@@ -60,44 +60,48 @@ class _AddProperty8State extends State<AddProperty8> {
                       controller.easyStepper(),
                       Image.asset("assets/images/logo.png", scale: 10),
                       Container(height: 20),
-                      const Text(
-                        "Property status",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Container(height: 5),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: DropdownButton<String>(
-                          value: controller.propertyStatus,
-                          items: optionsStatus.map((String option) {
-                            return DropdownMenuItem<String>(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              controller.propertyStatus = newValue ?? "";
-                              // Update the controller's property here.
-                              controller.propertyStatus =
-                                  controller.propertyStatus;
-                            });
-                          },
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                        ),
-                      ),
+
+                      // // Property status
+                      // const Text(
+                      //   "Property status",
+                      //   style: TextStyle(
+                      //       fontSize: 18,
+                      //       color: Colors.black,
+                      //       fontWeight: FontWeight.w500),
+                      // ),
+                      // Container(height: 5),
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 10),
+                      //   width: double.infinity,
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(
+                      //       color: Colors.black,
+                      //       width: 1.0,
+                      //     ),
+                      //     borderRadius: BorderRadius.circular(10.0),
+                      //   ),
+                      //   child: DropdownButton<String>(
+                      //     value: controller.propertyStatus,
+                      //     items: optionsStatus.map((String option) {
+                      //       return DropdownMenuItem<String>(
+                      //         value: option,
+                      //         child: Text(option),
+                      //       );
+                      //     }).toList(),
+                      //     onChanged: (String? newValue) {
+                      //       setState(() {
+                      //         controller.propertyStatus = newValue ?? "";
+                      //         // Update the controller's property here.
+                      //         controller.propertyStatus =
+                      //             controller.propertyStatus;
+                      //       });
+                      //     },
+                      //     isExpanded: true,
+                      //     underline: const SizedBox(),
+                      //   ),
+                      // ),
+
+                      // listing By
                       Container(height: 20),
                       const Text(
                         "Listing by",
@@ -128,7 +132,6 @@ class _AddProperty8State extends State<AddProperty8> {
                           onChanged: (String? newValue) {
                             setState(() {
                               controller.listingBy = newValue ?? "";
-                              // Update the controller's property here.
                               controller.listingBy = controller.listingBy;
                             });
                           },

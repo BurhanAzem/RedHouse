@@ -21,8 +21,6 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
   ApplicationsController applicationsController =
       Get.put(ApplicationsController(), permanent: true);
 
-  String message = "";
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +35,6 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
                 borderRadius: BorderRadius.circular(100),
               ),
               onPressed: () {
-                // message = "";
                 applicationsController.message.text = "";
                 applicationsController.suggestedPrice.text = "";
 
@@ -55,7 +52,6 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
                         child: ConstrainedBox(
                           constraints: const BoxConstraints(maxHeight: 550),
                           child: CustomDialog(
-                            message: message,
                             property: widget.property,
                           ),
                         ),
@@ -109,11 +105,9 @@ class _ActionButtonsWidgetState extends State<ActionButtonsWidget> {
 }
 
 class CustomDialog extends StatefulWidget {
-  String message;
   final Property property;
 
-  CustomDialog({Key? key, required this.message, required this.property})
-      : super(key: key);
+  CustomDialog({Key? key, required this.property}) : super(key: key);
 
   @override
   _CustomDialogState createState() => _CustomDialogState();
@@ -125,6 +119,7 @@ class _CustomDialogState extends State<CustomDialog> {
 
   LoginControllerImp loginController =
       Get.put(LoginControllerImp(), permanent: true);
+  String message = "";
 
   @override
   Widget build(BuildContext context) {
@@ -180,23 +175,30 @@ class _CustomDialogState extends State<CustomDialog> {
                         setState(() {});
                         ScaffoldMessenger.of(context).clearSnackBars();
 
-                        applicationsController.propertyId = widget.property.id;
-                        applicationsController.userId =
-                            loginController.userDto?["id"];
-                        applicationsController.addApplication();
-                        setState(() {
-                          widget.message =
-                              applicationsController.responseMessage;
-                        });
-                        print(widget.message);
-                        if (widget.message == "Sent successfully") {
-                          SnackBar snackBar = SnackBar(
-                            content: Text(widget.message),
-                            backgroundColor: Colors.blue,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                          Navigator.of(context).pop();
+                        Future<void> addApplicationFuture() async {
+                          applicationsController.propertyId =
+                              widget.property.id;
+                          applicationsController.userId =
+                              loginController.userDto?["id"];
+                          await applicationsController.addApplication();
+
+                          setState(() {
+                            message = applicationsController.responseMessage;
+                          });
+                          print(message);
+
+                          if (message == "Sent Successfully") {
+                            SnackBar snackBar = SnackBar(
+                              content: Text(message),
+                              backgroundColor: Colors.blue,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                            Navigator.of(context).pop();
+                          }
                         }
+
+                        addApplicationFuture();
                       },
                       child: const Text(
                         "Send request",
@@ -227,11 +229,11 @@ class _CustomDialogState extends State<CustomDialog> {
                 ],
               ),
               Container(
-                padding: widget.message == ""
+                padding: message == ""
                     ? null
                     : const EdgeInsets.only(top: 15, right: 12, left: 10),
                 child: Text(
-                  widget.message,
+                  message,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.red,

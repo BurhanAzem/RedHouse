@@ -198,6 +198,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const Messages());
@@ -229,6 +230,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const MyFeedback());
@@ -244,6 +246,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const AllOffers());
@@ -259,6 +262,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => FavoriteProperties());
@@ -282,7 +286,39 @@ class _MoreState extends State<More> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "Contact Us",
+                "Send complaint",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: () {
+              // Get.to(() => Compline());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Account verification",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: () {
+              // Get.to(() => Compline());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Select agent",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -305,6 +341,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {},
             child: Container(
@@ -318,6 +355,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const NotificationsSettings());

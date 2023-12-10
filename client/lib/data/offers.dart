@@ -40,15 +40,16 @@ class OfferData {
           },
           body: json.encode(data),
           encoding: Encoding.getByName("utf-8"));
-      print(response.statusCode);
+      print(response);
+      return (response);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody);
-        return (responsebody);
-      } else {
-        return (StatusRequest.serverfailure);
-      }
+      // if (response.statusCode == 200 || response.statusCode == 201) {
+      //   Map responsebody = json.decode(response.body);
+      //   print(responsebody);
+      //   return (responsebody);
+      // } else {
+      //   return (StatusRequest.serverfailure);
+      // }
     } else {
       return (StatusRequest.offlinefailure);
     }
@@ -75,6 +76,26 @@ class OfferData {
         Map responsebody = json.decode(response.body);
         print(responsebody["listDto"]);
 
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static acceptOffer(int offerId) async {
+    if (await checkInternet()) {
+      var response = await http.post(Uri.parse('${AppLink.offers}/$offerId/accept'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;

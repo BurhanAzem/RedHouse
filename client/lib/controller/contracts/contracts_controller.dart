@@ -19,7 +19,7 @@ class ContractsControllerImp extends AllContractsController {
   String contractType = "All";
   String contractTo = "Landlord";
   int userId = 1;
-  List<Contract>? contracts = [];
+  List<Contract> contracts = [];
   List<Milestone>? milestones = [
     Milestone(
         id: 1,

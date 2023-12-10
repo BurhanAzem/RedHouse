@@ -145,9 +145,10 @@ class _AddProperty2State extends State<AddProperty2> {
                       Column(
                         children: [
                           RadioListTile(
-                            title: const Text("For rent"),
-                            value: "For rent",
+                            title: const Text("For sell"),
+                            value: "For sell",
                             groupValue: controller.listingType,
+                            activeColor: Colors.green,
                             onChanged: (value) {
                               setState(() {
                                 controller.listingType = value.toString();
@@ -155,9 +156,21 @@ class _AddProperty2State extends State<AddProperty2> {
                             },
                           ),
                           RadioListTile(
-                            title: const Text("For sell"),
-                            value: "For sell",
+                            title: const Text("For monthly rent"),
+                            value: "For monthly rent",
                             groupValue: controller.listingType,
+                            activeColor: Colors.green,
+                            onChanged: (value) {
+                              setState(() {
+                                controller.listingType = value.toString();
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            title: const Text("For daily rent"),
+                            value: "For daily rent",
+                            groupValue: controller.listingType,
+                            activeColor: Colors.green,
                             onChanged: (value) {
                               setState(() {
                                 controller.listingType = value.toString();
@@ -168,7 +181,7 @@ class _AddProperty2State extends State<AddProperty2> {
                       )
                     ],
                   ),
-                  Container(height: 70),
+                  Container(height: 20),
                   MaterialButton(
                     onPressed: () {
                       setState(() {

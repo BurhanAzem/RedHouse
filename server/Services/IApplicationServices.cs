@@ -14,7 +14,7 @@ namespace server.Services
         public Task<ResponsDto<Application>> DeleteApplication(int applicationId);
         public Task<ResponsDto<Application>> UpdateApplication(ApplicationDto applicationDto, int applicationId);
         public Task<ResponsDto<Application>> ApproveApplication(int applicationId);
-        public Task<ResponsDto<Application>> RejectApplication(int applicationId);
+        public Task<ResponsDto<Application>> IgnoreApplication(int applicationId);
         public Task<int> NumberOfApplications();
     }
 }

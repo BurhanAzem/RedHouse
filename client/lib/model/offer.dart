@@ -10,9 +10,9 @@ class Offer {
   int customerId;
   int? propertryId;
   DateTime offerDate;
-  DateTime offerExpires;
+  DateTime offerExpireDate;
   String description;
-  double price;
+  int price;
   String offerStatus;
   User? landlord;
   User? customer;
@@ -24,7 +24,7 @@ class Offer {
     required this.customerId,
     required this.propertryId,
     required this.offerDate,
-    required this.offerExpires,
+    required this.offerExpireDate,
     required this.description,
     required this.offerStatus,
     required this.price,

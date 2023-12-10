@@ -39,13 +39,13 @@ class AppRoute {
   static const String addProperty8 = "/add-property8";
   static const String addProperty9 = "/add-property9";
   static const String allContracts = "/all-contracts";
-  static const String applicationDetails = "/application-details";
-  static const String contract = "/contract";
+  // static const String applicationDetails = "/application-details";
+  // static const String contract = "/contract";
   static const String login = "/login";
   static const String properties = "/properties";
   static const String manageProperties = "/manage-properties";
-  static const String userHistory = "/user-history";
-  static const String addMilestone = "/add-milestone";
+  // static const String userHistory = "/user-history";
+  // static const String addMilestone = "/add-milestone";
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
@@ -63,7 +63,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
   AppRoute.allContracts: (context) => AllContracts(),
-  AppRoute.applicationDetails: (context) => ApplicationDetails(),
+  // AppRoute.applicationDetails: (context) => ApplicationDetails(),
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),
