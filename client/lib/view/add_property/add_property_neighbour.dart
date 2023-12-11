@@ -1,9 +1,8 @@
-import 'dart:async';
-import 'package:client/controller/auth/login_controller.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/neighborhood_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/view/add_property/add_property_2.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -15,60 +14,114 @@ class AddPropertyNeighbour extends StatefulWidget {
 }
 
 class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
-  String neighbourType = "Select neighbours type";
-  // bool arePlacemarksAvailable = false;
-
-  final geocoding = GeocodingPlatform.instance;
-
-  late double lat;
-  late double long;
-  Position? cl;
-  CameraPosition? currentCameraPosition;
-  StreamSubscription<Position>? positionStream;
-
-  // Empty markers
-  Set<Marker> markers = {};
-
-  Future<void> getLatAndLong() async {
-    cl = await Geolocator.getCurrentPosition().then((value) => value);
-    lat = cl!.latitude;
-    long = cl!.longitude;
-    currentCameraPosition = CameraPosition(target: LatLng(lat, long), zoom: 14);
-    setState(() {});
-  }
-
-  CameraPosition jerusalem = const CameraPosition(
-    target: LatLng(32.438909, 35.295625),
-    zoom: 8,
-  );
+  String neighborhoodType = "Select Neighborhood Type";
 
   LoginControllerImp loginController = Get.put(LoginControllerImp());
+  NeighborhoodController neighborhoodController =
+      Get.put(NeighborhoodController());
+
+  ManagePropertiesController propertyController =
+      Get.put(ManagePropertiesController());
+
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+
+  // Give icon for each neighborhood
+  void addCustomerIcon() {
+    if (neighborhoodType == "Parking") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/parking.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "School") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/school.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Hospital") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/hospital.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Mosque") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/mosque.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Gymnasium") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/gym.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Gas Station") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/gas-station.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "ATM") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/atm.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    }
+  }
 
   @override
   void initState() {
-    positionStream =
-        Geolocator.getPositionStream().listen((Position? position) {
-      print(position == null
-          ? 'Unknown'
-          : '${position.latitude.toString()}, ${position.longitude.toString()}');
-    });
-    getLatAndLong(); // Initialize currentCameraPosition when the widget is created.
+    print(propertyController.markers);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     const options = [
-      "Select neighbours type",
+      "Select Neighborhood Type",
       "Parking",
+      "School",
+      "Hospital",
       "Mosque",
-      "University",
-      "School"
+      "Gymnasium",
+      "Gas Station",
+      "ATM",
     ];
 
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -85,7 +138,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
               },
             ),
             title: const Text(
-              "Neighbor Locations",
+              "Neighborhoods Locations",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -110,7 +163,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                   Container(
                     margin: const EdgeInsets.only(left: 12),
                     child: const Text(
-                      "Add neighbors to this property",
+                      "Add neighbours to this property",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
                     ),
@@ -129,7 +182,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: DropdownButton<String>(
-                      value: neighbourType,
+                      value: neighborhoodType,
                       items: options.map((String option) {
                         return DropdownMenuItem<String>(
                           value: option,
@@ -139,7 +192,8 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                       onChanged: (String? newValue) {
                         if (newValue != null) {
                           setState(() {
-                            neighbourType = newValue;
+                            neighborhoodType = newValue;
+                            addCustomerIcon();
                           });
                         }
                       },
@@ -188,105 +242,45 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                     height: 300,
                     child: Visibility(
                       visible: true,
-                      child: currentCameraPosition == null
+                      child: controller.currentPosition == null
                           ? Container(
                               alignment: Alignment.center,
-                              child: const CircularProgressIndicator())
+                              child: const CircularProgressIndicator(),
+                            )
                           : Expanded(
                               child: GoogleMap(
-                                markers: markers,
+                                markers: controller.markers,
                                 onTap: (latlng) async {
-                                  print(neighbourType);
-                                  if (neighbourType == "Parking") {
-                                    markers.add(
+                                  print(controller.markers);
+                                  print(neighborhoodType);
+
+                                  if (neighborhoodType !=
+                                      "Select Neighborhood Type") {
+                                    // Remove the marker with the specified ID
+                                    controller.markers.removeWhere(
+                                      (marker) =>
+                                          marker.markerId.value ==
+                                          neighborhoodType,
+                                    );
+
+                                    // Add a new marker
+                                    controller.markers.add(
                                       Marker(
-                                        markerId: const MarkerId("1"),
+                                        markerId: MarkerId(neighborhoodType),
                                         position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueViolet),
                                         infoWindow:
-                                            const InfoWindow(title: 'Parking'),
+                                            InfoWindow(title: neighborhoodType),
+                                        icon: markerIcon,
                                       ),
                                     );
-                                  } else if (neighbourType == "Mosque") {
-                                    markers.add(
-                                      Marker(
-                                        markerId: const MarkerId("2"),
-                                        position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueYellow),
-                                        infoWindow:
-                                            const InfoWindow(title: 'Mosque'),
-                                      ),
-                                    );
-                                  } else if (neighbourType == "University") {
-                                    markers.add(
-                                      Marker(
-                                        markerId: const MarkerId("3"),
-                                        position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueBlue),
-                                        infoWindow: const InfoWindow(
-                                            title: 'University'),
-                                      ),
-                                    );
-                                  } else if (neighbourType == "School") {
-                                    markers.add(
-                                      Marker(
-                                        markerId: const MarkerId("4"),
-                                        position: latlng,
-                                        icon: BitmapDescriptor
-                                            .defaultMarkerWithHue(
-                                                BitmapDescriptor.hueGreen),
-                                        infoWindow:
-                                            const InfoWindow(title: 'School'),
-                                      ),
-                                    );
+
+                                    setState(() {});
                                   }
-
-                                  try {
-                                    List<Placemark> placemarks =
-                                        await placemarkFromCoordinates(
-                                            latlng.latitude, latlng.longitude);
-
-                                    if (placemarks.isNotEmpty) {
-                                      final placemark = placemarks[0];
-                                      controller.City = placemark.locality;
-                                      controller.PostalCode =
-                                          placemark.postalCode!;
-                                      controller.streetAddress.text =
-                                          placemark.street!;
-                                      controller.Country = placemark.country;
-                                      controller.Region = placemark.locality;
-                                      controller.Latitude = latlng.latitude;
-                                      controller.Longitude = latlng.longitude;
-
-                                      print('City: ${controller.City}');
-                                      print(
-                                          'PostalCode: ${controller.PostalCode}');
-                                      print('Country: ${controller.Country}');
-                                      print(
-                                          'streetAddress: ${controller.streetAddress.text}');
-                                      print('Region: ${controller.Region}');
-                                      print('Latitude: ${controller.Latitude}');
-                                      print(
-                                          'Longitude: ${controller.Longitude}');
-                                      setState(() {});
-                                    }
-                                  } catch (e) {
-                                    Get.defaultDialog(
-                                        title: "ُEntered invalid location",
-                                        middleText: 'Error: $e');
-                                  }
-                                  setState(() {});
                                 },
                                 mapType: MapType.normal,
-                                initialCameraPosition: jerusalem,
+                                initialCameraPosition:
+                                    controller.currentPosition!,
                                 onMapCreated: (mapcontroller) {
-                                  getLatAndLong();
                                   controller.mapController2 = mapcontroller;
                                 },
                               ),
@@ -305,7 +299,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                           print(controller.activeStep);
                         });
                         controller.userId = loginController.userDto?["id"];
-                        controller.goToAddProperty2();
+                        Get.to(() => AddProperty2());
                       },
                       color: const Color(0xffd92328),
                       shape: RoundedRectangleBorder(
@@ -330,5 +324,3 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
     );
   }
 }
-
-

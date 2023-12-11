@@ -1,4 +1,5 @@
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_6.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,9 +13,9 @@ class AddProperty5 extends StatefulWidget {
 class _AddProperty5State extends State<AddProperty5> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -132,7 +133,7 @@ class _AddProperty5State extends State<AddProperty5> {
                         controller.increaseActiveStep();
                         print(controller.activeStep);
                       });
-                      controller.goToAddProperty6();
+                      Get.to(() => AddProperty6());
                     },
                     color: const Color(0xffd92328),
                     shape: RoundedRectangleBorder(

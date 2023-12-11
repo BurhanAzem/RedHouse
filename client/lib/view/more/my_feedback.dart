@@ -1,4 +1,5 @@
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/history/history_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:client/controller/applications/applications_controller.dart';
@@ -14,7 +15,7 @@ class MyFeedback extends StatefulWidget {
 class _MyFeedbackState extends State<MyFeedback> {
   bool isLoading = true; // Add a boolean variable for loading state
   bool isFollowed = false;
-  late ApplicationsControllerImp applicationsController;
+  late HistoryController historyController;
   LoginControllerImp loginController = Get.put(LoginControllerImp());
 
   @override
@@ -25,9 +26,9 @@ class _MyFeedbackState extends State<MyFeedback> {
   }
 
   void loadData() async {
-    applicationsController =
-        Get.put(ApplicationsControllerImp(), permanent: true);
-    await applicationsController.getHistoryUser(loginController.userDto?["id"]);
+    historyController =
+        Get.put(HistoryController(), permanent: true);
+    await historyController.getHistoryUser(loginController.userDto?["id"]);
 
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded
@@ -53,7 +54,7 @@ class _MyFeedbackState extends State<MyFeedback> {
   }
 
   Widget bodyMyFeedback() {
-    if (applicationsController.userHistory.isEmpty) {
+    if (historyController.userHistory.isEmpty) {
       return Container(
         margin: const EdgeInsetsDirectional.symmetric(vertical: 60),
         child: SingleChildScrollView(

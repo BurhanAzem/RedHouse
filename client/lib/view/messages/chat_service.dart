@@ -1,4 +1,4 @@
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/firebase/chats_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -10,6 +10,9 @@ class ChatService extends GetxController {
   // instance of fireStore
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+  // Callback to notify when a new message is sent
+  Function()? onMessageSent;
+
   // SEND MESSAGE
   Future<void> sendMessage(String receiverId, String message) async {
     // get current user info
@@ -19,11 +22,12 @@ class ChatService extends GetxController {
 
     // create a new message
     Message newMessage = Message(
-        senderId: currentUserId,
-        senderEmail: currentUserEmail,
-        receiverId: receiverId,
-        message: message,
-        timestamp: timestamp);
+      senderId: currentUserId,
+      senderEmail: currentUserEmail,
+      receiverId: receiverId,
+      message: message,
+      timestamp: timestamp,
+    );
 
     // construct chat room id from current user id and receiver id (sorted to ensure uniqueness)
     List<String> ids = [currentUserId, receiverId];
@@ -37,9 +41,10 @@ class ChatService extends GetxController {
         .collection("messages")
         .add(newMessage.toMap());
 
-    await _fireStore.collection("chat_rooms").doc(chatRoomId).set({
-      'timestamp': timestamp,
-    });
+    // Notify the callback that a new message is sent
+    if (onMessageSent != null) {
+      onMessageSent!();
+    }
   }
 
   // GET MESSAGES

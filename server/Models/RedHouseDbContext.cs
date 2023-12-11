@@ -66,9 +66,5 @@ namespace RedHouse_Server.Models
         public DbSet<UserIdentity> UserIdentities { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<IdentityFile> IdentityFiles { get; set; }
-
-
-
-
     }
 }

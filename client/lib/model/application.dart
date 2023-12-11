@@ -14,18 +14,19 @@ class Application {
   String message;
   User user;
   Property property;
-  double ?suggestedPrice;
-  Application(
-      {required this.id,
-      required this.propertyId,
-      required this.userId,
-      required this.applicationDate,
-      required this.applicationStatus,
-      required this.message,
-      required this.property,
-      required this.user,
-      this.suggestedPrice,
-      });
+  // double? suggestedPrice;
+  int? suggestedPrice;
+  Application({
+    required this.id,
+    required this.propertyId,
+    required this.userId,
+    required this.applicationDate,
+    required this.applicationStatus,
+    required this.message,
+    required this.property,
+    required this.user,
+    this.suggestedPrice,
+  });
 
   factory Application.fromJson(Map<String, dynamic> json) =>
       _$ApplicationFromJson(json);

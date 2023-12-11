@@ -89,6 +89,8 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+
+
         [HttpGet("/users/number")]
         public async Task<IActionResult> NumberOfVisits()
         {

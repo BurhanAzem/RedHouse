@@ -21,7 +21,7 @@ namespace RedHouse_Server.Controllers
         {
             _applicationServices = applicationServices;
         }
-        
+
         // [Authorize]
         [HttpPost("/applications")]
         public async Task<IActionResult> CreateAppication([FromBody] ApplicationDto applicationDto)
@@ -59,7 +59,7 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpGet("/users/{id}/applications")]
-        public async Task<IActionResult> GetAllProperties( int id, [FromQuery] ApplicationFilter applicationFilter)
+        public async Task<IActionResult> GetAllProperties(int id, [FromQuery] ApplicationFilter applicationFilter)
         {
             if (!ModelState.IsValid)
             {
@@ -130,14 +130,14 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpPost("/applications/{id}/reject")]
-        public async Task<IActionResult> RejectApplication(int id)
+        [HttpPost("/applications/{id}/ignore")]
+        public async Task<IActionResult> IgnoreApplication(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _applicationServices.RejectApplication(id);
+            var result = await _applicationServices.IgnoreApplication(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -155,8 +155,24 @@ namespace RedHouse_Server.Controllers
             // Set the token value in the cookie
             return Ok(result);
         }
+
+        [HttpGet("/users/{id}/approved-applications")]
+        public async Task<IActionResult> GetApprovedApplicationsForUser(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _applicationServices.GetApprovedApplicationsForUser(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+
+        }
     }
 }
-
-
-

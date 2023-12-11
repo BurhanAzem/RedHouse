@@ -19,9 +19,9 @@ class ContractsControllerImp extends AllContractsController {
   String contractType = "All";
   String contractTo = "Landlord";
   int userId = 1;
-  List<Contract>? contracts = [];
+  List<Contract> contracts = [];
   List<Milestone>? milestones = [
-    new Milestone(
+    Milestone(
         id: 1,
         milestoneName: 'Payment of dues for the month of October 10',
         description:
@@ -30,7 +30,7 @@ class ContractsControllerImp extends AllContractsController {
         amount: 100,
         milestoneStatus: 'Paid',
         contractId: 2),
-        new Milestone(
+        Milestone(
         id: 1,
         milestoneName: 'Payment of dues for the month of October 10',
         description:
@@ -39,7 +39,7 @@ class ContractsControllerImp extends AllContractsController {
         amount: 100,
         milestoneStatus: 'Paid',
         contractId: 2),
-        new Milestone(
+        Milestone(
         id: 1,
         milestoneName: 'Payment of dues for the month of October 10',
         description:
@@ -48,7 +48,7 @@ class ContractsControllerImp extends AllContractsController {
         amount: 100,
         milestoneStatus: 'Paid',
         contractId: 2),
-        new Milestone(
+        Milestone(
         id: 1,
         milestoneName: 'Payment of dues for the month of October 10',
         description:
@@ -57,7 +57,7 @@ class ContractsControllerImp extends AllContractsController {
         amount: 100,
         milestoneStatus: 'Paid',
         contractId: 2),
-        new Milestone(
+        Milestone(
         id: 1,
         milestoneName: 'Payment of dues for the month of October 10',
         description:
@@ -66,7 +66,7 @@ class ContractsControllerImp extends AllContractsController {
         amount: 100,
         milestoneStatus: 'Pending',
         contractId: 2),
-        new Milestone(
+        Milestone(
         id: 1,
         milestoneName: 'Payment of dues for the month of October 10',
         description:

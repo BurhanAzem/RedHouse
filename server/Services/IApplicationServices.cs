@@ -7,15 +7,14 @@ namespace server.Services
 {
     public interface IApplicationServices
     {
+        public Task<ResponsDto<Application>> GetApprovedApplicationsForUser(int userId);
         public Task<ResponsDto<Application>> CreateApplication(ApplicationDto applicationDto);
         public Task<ResponsDto<Application>> GetApplications(int userId, ApplicationFilter applicationFilter);
         public Task<ResponsDto<Application>> GetApplication(int applicationId);
         public Task<ResponsDto<Application>> DeleteApplication(int applicationId);
         public Task<ResponsDto<Application>> UpdateApplication(ApplicationDto applicationDto, int applicationId);
         public Task<ResponsDto<Application>> ApproveApplication(int applicationId);
-        public Task<ResponsDto<Application>> RejectApplication(int applicationId);
+        public Task<ResponsDto<Application>> IgnoreApplication(int applicationId);
         public Task<int> NumberOfApplications();
-
-
     }
 }

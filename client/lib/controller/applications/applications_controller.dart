@@ -1,32 +1,59 @@
+import 'dart:convert';
 import 'package:client/data/applications.dart';
-import 'package:client/data/properties.dart';
-import 'package:client/data/history.dart';
 import 'package:client/model/application.dart';
-import 'package:client/model/property.dart';
-import 'package:client/model/user_history.dart';
-import 'package:client/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class ContractsController extends GetxController {
-  ContractsController();
-  goToContract();
-}
-
-class ApplicationsControllerImp extends ContractsController {
-  GlobalKey<FormState> formstate = GlobalKey<FormState>();
-
+class ApplicationsController extends GetxController {
   List<Application> applications = [];
-  List<UserHistory> userHistory = [];
-  List<UserHistory> propertyHistory = [];
+  List<Application> approvedApplicationsForUser = [];
 
   String? applicationType = "All";
   String? applicationStatus = "All";
   String? applicationTo = "Landlord";
 
+  int propertyId = 1;
+  int userId = 1; // customer id
+  DateTime applicationDate = DateTime.now();
+  TextEditingController message = TextEditingController();
+  String aapplicationStatus = "Pendding";
+  TextEditingController suggestedPrice = TextEditingController();
+
+  String responseMessage = "";
+
+  addApplication() async {
+    var response = await ApplicationData.addApplication(
+      propertyId,
+      userId,
+      applicationDate,
+      message.text,
+      aapplicationStatus,
+      int.tryParse(suggestedPrice.text) ?? 0,
+    );
+
+    print(response);
+    Map responsebody = json.decode(response.body);
+    print(responsebody);
+    responseMessage = responsebody["message"];
+    print(responseMessage);
+
+    if (responsebody.length != 1) {
+      if (responsebody['statusCode'] == 200) {
+        print(responsebody['listDto']);
+        print(responseMessage);
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${responsebody['statusCode']}, exceptions: ${responsebody['exceptions']}",
+        );
+      }
+    }
+  }
 
   getApplications(int userId) async {
-    var response = await ApplicationData.getApplications(userId, applicationStatus, applicationType, applicationTo);
+    var response = await ApplicationData.getApplications(
+        userId, applicationStatus, applicationType, applicationTo);
 
     if (response['statusCode'] == 200) {
       applications = (response['listDto'] as List<dynamic>)
@@ -42,57 +69,13 @@ class ApplicationsControllerImp extends ContractsController {
     }
   }
 
-  getHistoryUser(int userId) async {
-    var response = await UserHistoryData.getUserHistory(userId);
-
-    if (response['statusCode'] == 200) {
-      userHistory = (response['listDto'] as List<dynamic>)
-          .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
-          .toList();
-      print(userHistory);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
-    }
-  }
-
-  getHistoryProperty(int propertId) async {
-    var response = await UserHistoryData.getPropertyHistory(propertId);
-
-    if (response['statusCode'] == 200) {
-      propertyHistory = (response['listDto'] as List<dynamic>)
-          .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
-          .toList();
-      print(propertyHistory);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
-    }
-  }
-
-  getApplication() async {
-    var response = await PropertyData.getProperty(4);
-
-    if (response['statusCode'] == 200) {
-      var property = Property.fromJson(response['dto']);
-      print(property);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
-    }
-  }
-
   approvedApplication(int id) async {
     var response = await ApplicationData.approvedApplication(id);
+    print(response['message']);
+  }
+
+  ignoreApplication(int id) async {
+    var response = await ApplicationData.ignoreApplication(id);
     print(response['message']);
   }
 
@@ -101,58 +84,21 @@ class ApplicationsControllerImp extends ContractsController {
     print(response['message']);
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  // Get all approved applications for user, to open messages between customer and landlord
+  getApprovedApplicationsForUser(int userId) async {
+    var response = await ApplicationData.getApprovedApplicationsForUser(userId);
 
-  @override
-  goToAddProperty1() {
-    Get.toNamed(AppRoute.addProperty1);
-  }
-
-  @override
-  goToAddProperty2() {
-    Get.toNamed(AppRoute.addProperty2);
-  }
-
-  @override
-  goToAddProperty3() {
-    Get.toNamed(AppRoute.addProperty3);
-  }
-
-  @override
-  goToAddProperty4() {
-    Get.toNamed(AppRoute.addProperty4);
-  }
-
-  @override
-  goToAddProperty5() {
-    Get.toNamed(AppRoute.addProperty5);
-  }
-
-  @override
-  goToAddProperty6() {
-    Get.toNamed(AppRoute.addProperty6);
-  }
-
-  @override
-  goToAddProperty7() {
-    Get.toNamed(AppRoute.addProperty7);
-  }
-
-  @override
-  goToAddProperty8() {
-    Get.toNamed(AppRoute.addProperty8);
-  }
-
-  @override
-  goToAddProperty9() {
-    Get.toNamed(AppRoute.addProperty9);
-  }
-
-  @override
-  goToContract() {
-    // Get.toNamed(AppRoute.contract);
+    if (response['statusCode'] == 200) {
+      approvedApplicationsForUser = (response['listDto'] as List<dynamic>)
+          .map((e) => Application.fromJson(e as Map<String, dynamic>))
+          .toList();
+      print(approvedApplicationsForUser);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
   }
 }

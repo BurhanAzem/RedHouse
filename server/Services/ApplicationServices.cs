@@ -37,21 +37,26 @@ namespace server.Services
             }
             var applications = await _redHouseDbContext.Applications.Where(o => o.UserId == applicationDto.UserId
                                                                                 && o.PropertyId == applicationDto.PropertyId).ToArrayAsync();
-            var searchedApplication = applications.First();
+
+            var searchedApplication = applications.FirstOrDefault();
             if (searchedApplication != null)
             {
                 return new ResponsDto<Application>
                 {
-                    Exception = new Exception("You can't create more than application to the same landlord and property"),
+                    Exception = new Exception("You can't send more than one application for the same property"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
+
+
             Application application = new Application
             {
                 UserId = applicationDto.UserId,
+                Message = applicationDto.Message,
                 PropertyId = applicationDto.PropertyId,
                 ApplicationDate = DateTime.Now,
                 ApplicationStatus = "Pending",
+                SuggestedPrice = applicationDto.SuggestedPrice,
             };
             var applicationRes = await _redHouseDbContext.Applications.AddAsync(application);
             await _redHouseDbContext.SaveChangesAsync();
@@ -59,7 +64,7 @@ namespace server.Services
             return new ResponsDto<Application>
             {
                 Dto = applicationRes.Entity,
-                Message = "Application Added Successfully",
+                Message = "Sent Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -101,10 +106,16 @@ namespace server.Services
                 };
             }
 
-            var query = _redHouseDbContext.Applications.Include(a => a.User)
+            var query = _redHouseDbContext.Applications
+                .Include(a => a.User)
                 .Include(a => a.Property)
                 .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
                 .AsQueryable();
+
 
             if (applicationFilter.ApplicationTo.Trim() == "Landlord")
             {
@@ -210,7 +221,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Application>> RejectApplication(int applicationId)
+        public async Task<ResponsDto<Application>> IgnoreApplication(int applicationId)
         {
             var application = await _redHouseDbContext.Applications.FindAsync(applicationId);
             if (application == null)
@@ -221,15 +232,65 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            application.ApplicationStatus = "Rejected";
+            application.ApplicationStatus = "Ignored";
             _redHouseDbContext.Applications.Update(application);
             _redHouseDbContext.SaveChanges();
             return new ResponsDto<Application>
             {
                 Dto = application,
-                Exception = new Exception($"Application with {applicationId} Rejected succussfuly"),
+                Exception = new Exception($"Application with {applicationId} Ignored succussfuly"),
                 StatusCode = HttpStatusCode.OK,
             };
+        }
+
+
+        public async Task<ResponsDto<Application>> GetApprovedApplicationsForUser(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception("User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var customerApplications = await _redHouseDbContext.Applications
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable()
+                .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved")
+                .ToArrayAsync();
+
+            var landlordApplications = await _redHouseDbContext.Applications
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable()
+                .Where(a => a.ApplicationStatus == "Approved" && a.UserId == userId)
+                .ToArrayAsync();
+
+            List<Application> applications = new List<Application>();
+            applications.AddRange(customerApplications);
+            applications.AddRange(landlordApplications);
+
+
+            return new ResponsDto<Application>
+            {
+                ListDto = applications.Distinct().ToList(),
+                StatusCode = HttpStatusCode.OK,
+            };
+
         }
 
         public async Task<int> NumberOfApplications()
@@ -237,7 +298,12 @@ namespace server.Services
             return await _redHouseDbContext.Applications.CountAsync();
 
         }
+
+        public Task<ResponsDto<Application>> RejectApplication(int applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
     }
+
 }
-
-

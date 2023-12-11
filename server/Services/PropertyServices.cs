@@ -82,6 +82,31 @@ namespace RedHouse_Server.Services
                 await _redHouseDbContext.PropertyFiles.AddAsync(propertyFile);
                 await _redHouseDbContext.SaveChangesAsync();
             }
+            foreach (var neighborhoodDto in propertyDto.NeighborhoodDtos)
+            {
+                Location locationN = new Location
+                {
+                    City = neighborhoodDto.Location.City,
+                    Country = neighborhoodDto.Location.Country,
+                    Region = neighborhoodDto.Location.Region,
+                    PostalCode = neighborhoodDto.Location.PostalCode,
+                    StreetAddress = neighborhoodDto.Location.StreetAddress,
+                    Latitude = neighborhoodDto.Location.Latitude,
+                    Longitude = neighborhoodDto.Location.Longitude,
+                };
+                var locationResN = await _redHouseDbContext.Locations.AddAsync(locationN);
+                await _redHouseDbContext.SaveChangesAsync();
+
+                Neighborhood neighborhood = new Neighborhood
+                {
+                    PropertyId = propertyId,
+                    NeighborhoodType = neighborhoodDto.NeighborhoodType,
+                    NeighborhoodName = neighborhoodDto.NeighborhoodName,
+                    LocationId = locationResN.Entity.Id
+                };
+                await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
+                await _redHouseDbContext.SaveChangesAsync();
+            }
             return new ResponsDto<Property>
             {
                 Dto = propertyRes.Entity,

@@ -24,23 +24,23 @@ namespace RedHouse_Server.Controllers
         }
         
         // [Authorize]
-        [HttpPost("/neighborhoods")]
-        public async Task<IActionResult> CreateAppication([FromBody] NeighborhoodDto neighborhoodDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var result = await _neighborhoodServices.AddNeighborhood(neighborhoodDto);
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code.Value, result.Exception);
-            }
-            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-            return Ok(result);
+        // [HttpPost("/neighborhoods")]
+        // public async Task<IActionResult> CreateAppication([FromBody] NeighborhoodDto neighborhoodDto)
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
+        //     var result = await _neighborhoodServices.GetNeighborhoods(neighborhoodDto);
+        //     if (result.Exception != null)
+        //     {
+        //         var code = result.StatusCode;
+        //         throw new StatusCodeException(code.Value, result.Exception);
+        //     }
+        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+        //     return Ok(result);
 
-        }
+        // }
 
         
 
@@ -64,23 +64,23 @@ namespace RedHouse_Server.Controllers
     
 
 
-        [HttpPost("/applications/range")]
-        public async Task<IActionResult> RejectApplication([FromBody] ListNeighborhoodDto listNeighborhoodDto)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var result = await _neighborhoodServices.AddRangeNeighborhood(listNeighborhoodDto);
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code.Value, result.Exception);
-            }
-            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-            return Ok(result);
+        // [HttpPost("/applications/range")]
+        // public async Task<IActionResult> RejectApplication([FromBody] ListNeighborhoodDto listNeighborhoodDto)
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
+        //     var result = await _neighborhoodServices.AddRangeNeighborhood(listNeighborhoodDto);
+        //     if (result.Exception != null)
+        //     {
+        //         var code = result.StatusCode;
+        //         throw new StatusCodeException(code.Value, result.Exception);
+        //     }
+        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+        //     return Ok(result);
 
-        }
+        // }
     }
 }
 

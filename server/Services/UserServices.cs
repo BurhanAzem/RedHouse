@@ -146,12 +146,6 @@ namespace server.Services
         // {
         //     var users = await _redHouseDbContext.Users.ToArrayAsync();
 
-        //     return new ResponsDto<User>
-        //     {
-        //         ListDto = users,
-        //         StatusCode = HttpStatusCode.OK,
-        //     };
-        // }
 
         public async Task<ResponsDto<User>> GetUser(int userId)
         {

@@ -63,7 +63,6 @@ class UserHistoryData {
         "latitude": latitude,
         "longitude": longitude
       },
-      // "neighborhoodDto":{},
       "propertyFiles": downloadUrls
     };
     if (await checkInternet()) {
@@ -86,7 +85,6 @@ class UserHistoryData {
     } else {
       return (StatusRequest.offlinefailure);
     }
-    // return response.fold((l) => l, (r) => r);
   }
 
   static getUserHistory(int userId) async {
@@ -99,9 +97,7 @@ class UserHistoryData {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
-
       print(response.statusCode);
-      // print(response.body.listDto);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
@@ -125,9 +121,7 @@ class UserHistoryData {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
-      
       print(response.statusCode);
-      // print(response.body.listDto);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);

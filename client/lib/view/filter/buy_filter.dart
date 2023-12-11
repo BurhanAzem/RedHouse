@@ -1,5 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
-import 'package:client/controller/map_list_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/view/filter/bedbath_filter.dart';
 import 'package:client/view/filter/propertytype_filter.dart';
 import 'package:flutter/material.dart';

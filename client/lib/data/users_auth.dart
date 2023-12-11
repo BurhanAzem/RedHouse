@@ -3,12 +3,9 @@ import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/shared_preferences.dart';
-import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 
 class UserData {
-
-
   static Login(String password, String email) async {
     var data = {
       "email": email,
@@ -27,7 +24,7 @@ class UserData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody);
-        
+
         return (responsebody);
       } else {
         return (StatusRequest.serverfailure);
@@ -76,34 +73,25 @@ class UserData {
     }
   }
 
-  static getUser(
-  int id
-) async {
+  static getUser(int id) async {
+    if (await checkInternet()) {
+      var response = await http
+          .get(Uri.parse(AppLink.users + '/$id'), headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+      print(response.statusCode);
 
-  if (await checkInternet()) {
-    // final Uri uri = Uri.https("10.0.2.2:7042", "/properties",);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["dto"]);
 
-    var response = await http.get(Uri.parse(AppLink.users+'/$id'), headers: <String, String>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${getToken()}',
-    });
-    print(response.statusCode);
-    // print(response.body.listDto);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Map responsebody = json.decode(response.body);
-      print(responsebody["dto"]);
-
-      return (responsebody);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
     } else {
-      return StatusRequest.serverfailure;
+      return StatusRequest.offlinefailure;
     }
-  } else {
-    return StatusRequest.offlinefailure;
   }
-}
-
-
-
-
 }

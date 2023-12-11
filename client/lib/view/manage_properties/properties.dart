@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:client/controller/auth/login_controller.dart';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
-import 'package:client/view/add_property/add_property_neighbour.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_1.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -21,10 +21,8 @@ class Properties extends StatefulWidget {
 class _AllPropertiesState extends State<Properties>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true; // Add a boolean variable for loading data from api
-
+  ManagePropertiesController controller = Get.put(ManagePropertiesController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-
-  late ManagePropertyControllerImp controller;
 
   late bool _isLoading; // Add a boolean variable for loading images
   Timer? _timer;
@@ -40,7 +38,6 @@ class _AllPropertiesState extends State<Properties>
   }
 
   void loadData() async {
-    controller = Get.put(ManagePropertyControllerImp());
     controller.propertiesUserId = loginController.userDto?["id"];
     await controller.getPropertiesUser();
 
@@ -110,7 +107,7 @@ class _AllPropertiesState extends State<Properties>
                       borderRadius: BorderRadius.circular(100),
                     ),
                     onPressed: () {
-                      controller.goToAddProperty1();
+                      Get.to(() => AddProperty1());
                     },
                     height: 45,
                     color: Colors.black87,
@@ -148,8 +145,7 @@ class _AllPropertiesState extends State<Properties>
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
             onPressed: () {
-              controller.goToAddProperty1();
-              // Get.to(() => AddPropertyNeighbour());
+              Get.to(() => AddProperty1());
             },
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),

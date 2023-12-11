@@ -1,4 +1,4 @@
-import 'package:client/controller/map_list_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/view/search/search_api/search_location_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

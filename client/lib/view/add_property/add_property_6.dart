@@ -1,4 +1,5 @@
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_7.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,8 +11,8 @@ class AddProperty6 extends StatefulWidget {
 }
 
 class _AddProperty6State extends State<AddProperty6> {
-  ManagePropertyControllerImp controller =
-      Get.put(ManagePropertyControllerImp(), permanent: true);
+  ManagePropertiesController controller =
+      Get.put(ManagePropertiesController(), permanent: true);
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(
@@ -63,9 +64,15 @@ class _AddProperty6State extends State<AddProperty6> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    final List<String> optionsStatus = [
+      "Coming soon",
+      "Accepting offers",
+      // "Under contract"
+    ];
+
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -101,42 +108,95 @@ class _AddProperty6State extends State<AddProperty6> {
                       controller.easyStepper(),
                       Image.asset("assets/images/logo.png", scale: 10),
                       Container(height: 5),
+
+                      // Property status
                       const Text(
-                        "When is your property available to rent?",
+                        "Property status",
                         style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Container(height: 5),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: DropdownButton<String>(
+                          value: controller.propertyStatus,
+                          items: optionsStatus.map((String option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              controller.propertyStatus = newValue ?? "";
+                              controller.propertyStatus =
+                                  controller.propertyStatus;
+                            });
+                          },
+                          isExpanded: true,
+                          underline: const SizedBox(),
                         ),
                       ),
-                      Container(height: 30),
-                      Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 0.5,
+
+                      // Available date
+                      if (controller.propertyStatus == "Coming soon")
+                        Column(
+                          children: [
+                            Container(height: 20),
+                            const Text(
+                              "When is your property available?",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
                               ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8))),
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(controller.availableDate
-                                  .toString()
-                                  .substring(0, 10)),
-                              IconButton(
-                                  onPressed: _selectDateAvialableOn,
-                                  icon: const Icon(Icons.date_range_outlined))
-                            ],
-                          )),
+                            ),
+                            Container(height: 20),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: 0.5,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8))),
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(controller.availableDate
+                                      .toString()
+                                      .substring(0, 10)),
+                                  IconButton(
+                                      onPressed: _selectDateAvialableOn,
+                                      icon:
+                                          const Icon(Icons.date_range_outlined))
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+
+                      // Built year
                       const SizedBox(height: 15),
                       const Text(
                         "Built year",
                         style: TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 23),
                       ),
-                      Container(height: 30),
+                      Container(height: 20),
                       Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8),
                           decoration: BoxDecoration(
@@ -159,24 +219,24 @@ class _AddProperty6State extends State<AddProperty6> {
                           )),
                     ],
                   ),
-                  Container(height: 25),
-                  Container(
-                    height: 0.2,
-                    color: Colors.black,
-                  ),
-                  Container(height: 25),
-                  Container(
-                      alignment: Alignment.center,
-                      child:
-                          Image.asset("assets/images/red-tree.png", scale: 3)),
-                  const SizedBox(height: 25),
+                  // Container(height: 25),
+                  // Container(
+                  //   height: 0.2,
+                  //   color: Colors.black,
+                  // ),
+                  // Container(height: 25),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   child: Image.asset("assets/images/red-tree.png", scale: 3),
+                  // ),
+                  // const SizedBox(height: 25),
                   MaterialButton(
                     onPressed: () {
                       setState(() {
                         controller.increaseActiveStep();
                         print(controller.activeStep);
                       });
-                      controller.goToAddProperty7();
+                      Get.to(() => AddProperty7());
                     },
                     color: const Color(0xffd92328),
                     shape: RoundedRectangleBorder(

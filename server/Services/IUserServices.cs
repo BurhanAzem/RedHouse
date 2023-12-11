@@ -6,7 +6,6 @@ namespace server.Services
 {
     public interface IUserServices
     {
-        // public Task<ResponsDto<User>> CreateApplication(ApplicationDto applicationDto);
         public Task<ResponsDto<User>> GetUsersOfApprovedApplications(int userId);
         public Task<int> NumberOfUsers();
         public Task<ResponsDto<User>> FilterAgents(SearchDto searchDto);

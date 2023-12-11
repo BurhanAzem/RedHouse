@@ -1,7 +1,8 @@
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
-import 'package:client/view/messages/messages.dart';
+import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/account_information.dart';
+import 'package:client/view/more/compline.dart';
 import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';
 import 'package:client/view/more/my_properties.dart';
@@ -197,6 +198,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const Messages());
@@ -212,7 +214,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-          
+
           InkWell(
             onTap: () {
               Get.to(() => const MyProperties());
@@ -228,6 +230,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const MyFeedback());
@@ -242,7 +245,9 @@ class _MoreState extends State<More> {
                 ),
               ),
             ),
-          ),InkWell(
+          ),
+
+          InkWell(
             onTap: () {
               Get.to(() => const AllOffers());
             },
@@ -257,6 +262,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => FavoriteProperties());
@@ -265,6 +271,54 @@ class _MoreState extends State<More> {
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
                 "Favorite properties",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: () {
+              Get.to(() => Compline());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Send complaint",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: () {
+              // Get.to(() => Compline());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Account verification",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: () {
+              // Get.to(() => Compline());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Select agent",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -287,6 +341,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {},
             child: Container(
@@ -300,6 +355,7 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
+
           InkWell(
             onTap: () {
               Get.to(() => const NotificationsSettings());

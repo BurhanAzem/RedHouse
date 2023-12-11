@@ -1,4 +1,5 @@
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_4.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,9 +21,9 @@ class _AddProperty3State extends State<AddProperty3> {
       "Entire Department Community",
     ];
 
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -96,11 +97,12 @@ class _AddProperty3State extends State<AddProperty3> {
                           ),
                         ),
                       ),
-                      Container(height: 5),
-                      Container(
-                          alignment: Alignment.center,
-                          child: Image.asset("assets/images/red-tree.png",
-                              scale: 3)),
+                      // Container(height: 5),
+                      // Container(
+                      //   alignment: Alignment.center,
+                      //   child:
+                      //       Image.asset("assets/images/red-tree.png", scale: 3),
+                      // ),
                     ],
                   ),
                   Container(height: 25),
@@ -110,7 +112,7 @@ class _AddProperty3State extends State<AddProperty3> {
                         controller.increaseActiveStep();
                         print(controller.activeStep);
                       });
-                      controller.goToAddProperty4();
+                      Get.to(() => AddProperty4());
                     },
                     color: const Color(0xffd92328),
                     shape: RoundedRectangleBorder(

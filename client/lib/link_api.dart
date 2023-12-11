@@ -9,4 +9,5 @@ class AppLink {
   static const String contracts = "$server/contracts";
   static const String milestones = "$server/milestones";
   static const String applications= "$server/applications";
+  static const String neighborhoods= "$server/neighborhoods";
 }

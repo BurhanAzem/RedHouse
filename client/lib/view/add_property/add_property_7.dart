@@ -1,5 +1,6 @@
 import 'dart:io';
-import 'package:client/controller/manage_propertise/manage_property_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/view/add_property/add_property_8.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,8 +15,8 @@ class AddProperty7 extends StatefulWidget {
 }
 
 class _AddProperty7State extends State<AddProperty7> {
-  ManagePropertyControllerImp controller =
-      Get.put(ManagePropertyControllerImp(), permanent: true);
+  ManagePropertiesController controller =
+      Get.put(ManagePropertiesController(), permanent: true);
 
   firebase_storage.FirebaseStorage storage =
       firebase_storage.FirebaseStorage.instance;
@@ -88,9 +89,9 @@ class _AddProperty7State extends State<AddProperty7> {
       "Entire Department Community"
     ];
 
-    return GetBuilder<ManagePropertyControllerImp>(
-      init: ManagePropertyControllerImp(),
-      builder: (ManagePropertyControllerImp controller) {
+    return GetBuilder<ManagePropertiesController>(
+      init: ManagePropertiesController(),
+      builder: (ManagePropertiesController controller) {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -205,7 +206,7 @@ class _AddProperty7State extends State<AddProperty7> {
                             setState(() {
                               controller.increaseActiveStep();
                             });
-                            controller.goToAddProperty8();
+                            Get.to(() => AddProperty8());
                           },
                           color: const Color(0xffd92328),
                           shape: RoundedRectangleBorder(

@@ -1,5 +1,5 @@
-import 'package:client/controller/applications/applications_controller.dart';
-import 'package:client/controller/auth/login_controller.dart';
+import 'package:client/controller/history/history_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/user.dart';
 import 'package:client/view/home_information/user_history_wdget.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class _CheckAccountState extends State<CheckAccount> {
   bool isLoading = true; // Add a boolean variable for loading state
   bool isFollowed = false;
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  late ApplicationsControllerImp applicationsController;
+  late HistoryController historyController;
 
   @override
   void initState() {
@@ -27,9 +27,8 @@ class _CheckAccountState extends State<CheckAccount> {
   }
 
   void loadData() async {
-    applicationsController =
-        Get.put(ApplicationsControllerImp(), permanent: true);
-    await applicationsController.getHistoryUser(widget.user.id!);
+    historyController = Get.put(HistoryController(), permanent: true);
+    await historyController.getHistoryUser(widget.user.id!);
 
     setState(() {
       isLoading = false; // Set isLoading to false when data is loaded

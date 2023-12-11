@@ -1,6 +1,6 @@
-import 'package:client/controller/applications/applications_controller.dart';
-import 'package:client/controller/auth/login_controller.dart';
-import 'package:client/controller/history_controller/check_history_contoller.dart';
+import 'package:client/controller/history/history_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/controller/history/check_history_contoller.dart';
 import 'package:client/model/user_history.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +15,15 @@ class UserHistoryWidget extends StatefulWidget {
 }
 
 class _UserHistoryWidgetState extends State<UserHistoryWidget> {
-  ApplicationsControllerImp applicationsController =
-      Get.put(ApplicationsControllerImp());
-  CheckHistoryController historyController = Get.put(CheckHistoryController());
-  LoginControllerImp LoginController = Get.put(LoginControllerImp());
+  HistoryController historyController = Get.put(HistoryController());
+  CheckHistoryController checkHistoryController =
+      Get.put(CheckHistoryController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
 
   @override
   Widget build(BuildContext context) {
     // If this user not has history
-    if (applicationsController.userHistory.isEmpty) {
+    if (historyController.userHistory.isEmpty) {
       return Container(
         margin:
             const EdgeInsetsDirectional.symmetric(horizontal: 40, vertical: 85),
@@ -58,8 +58,8 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
 
     // If this user has history
     else {
-      historyController.calAverageRating(applicationsController.userHistory);
-      historyController.calHistoryBars(applicationsController.userHistory);
+      checkHistoryController.calAverageRating(historyController.userHistory);
+      checkHistoryController.calHistoryBars(historyController.userHistory);
 
       return Column(
         children: [
@@ -77,7 +77,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
               children: [
                 LineWithIconText(
                   Icons.numbers,
-                  'This account has ${applicationsController.userHistory.length} contracts that have been agreed upon',
+                  'This account has ${historyController.userHistory.length} contracts that have been agreed upon',
                 ),
                 const SizedBox(height: 13),
                 LineWithIconText(Icons.switch_account,
@@ -97,12 +97,12 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
               Column(
                 children: [
                   Text(
-                    "${historyController.averageRating}",
+                    "${checkHistoryController.averageRating}",
                     style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.w500),
                   ),
                   RatingBarIndicator(
-                    rating: historyController.averageRating,
+                    rating: checkHistoryController.averageRating,
                     itemCount: 5,
                     itemSize: 20,
                     itemBuilder: (context, index) {
@@ -116,16 +116,16 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
               ),
               Column(
                 children: [
-                  buildRatingRow(5, historyController.fiveCount,
-                      2 * applicationsController.userHistory.length),
-                  buildRatingRow(4, historyController.fourCount,
-                      2 * applicationsController.userHistory.length),
-                  buildRatingRow(3, historyController.threeCount,
-                      2 * applicationsController.userHistory.length),
-                  buildRatingRow(2, historyController.twoCount,
-                      2 * applicationsController.userHistory.length),
-                  buildRatingRow(1, historyController.oneCount,
-                      2 * applicationsController.userHistory.length),
+                  buildRatingRow(5, checkHistoryController.fiveCount,
+                      2 * historyController.userHistory.length),
+                  buildRatingRow(4, checkHistoryController.fourCount,
+                      2 * historyController.userHistory.length),
+                  buildRatingRow(3, checkHistoryController.threeCount,
+                      2 * historyController.userHistory.length),
+                  buildRatingRow(2, checkHistoryController.twoCount,
+                      2 * historyController.userHistory.length),
+                  buildRatingRow(1, checkHistoryController.oneCount,
+                      2 * historyController.userHistory.length),
                 ],
               )
             ],
@@ -133,10 +133,10 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: applicationsController.userHistory.length,
+            itemCount: historyController.userHistory.length,
             itemBuilder: (context, index) {
               UserHistory userHistory =
-                  applicationsController.userHistory.elementAt(index);
+                  historyController.userHistory.elementAt(index);
 
               return Card(
                   elevation: 1,
@@ -165,7 +165,8 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                             InkWell(
                               onTap: () {
                                 Get.to(() => HomeInformation(
-                                    property: userHistory.contract.offer!.property!));
+                                    property:
+                                        userHistory.contract.offer!.property!));
                               },
                               child: Container(
                                 decoration: const BoxDecoration(
@@ -200,8 +201,8 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                               ),
                               child: Center(
                                 child: Text(
-                                  LoginController.getShortenedName(
-                                      userHistory.contract.offer!.landlord!.name!),
+                                  loginController.getShortenedName(userHistory
+                                      .contract.offer!.landlord!.name!),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
@@ -278,8 +279,8 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                               ),
                               child: Center(
                                 child: Text(
-                                  LoginController.getShortenedName(
-                                      userHistory.contract.offer!.customer!.name!),
+                                  loginController.getShortenedName(userHistory
+                                      .contract.offer!.customer!.name!),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 17,
