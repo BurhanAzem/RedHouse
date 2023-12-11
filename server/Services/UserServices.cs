@@ -134,10 +134,12 @@ namespace server.Services
                 List<User> usersInThisYear = uersOfTheLastTenYears.Where(o => o.Created.Year == (DateTime.Now.Year - i)).ToList();
 
                 avgUsersNumberPerYearInLastTenYears[i] = usersInThisYear.Count();
-
             }
-            return avgUsersNumberPerYearInLastTenYears;
+
+            avgUsersNumberPerYearInLastTenYears.Reverse();
+            return avgUsersNumberPerYearInLastTenYears.ToList(); // Convert it back to a list
         }
+
 
 
         // public async Task<ResponsDto<User>> GetApplication(int applicationId)

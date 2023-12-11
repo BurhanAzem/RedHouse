@@ -38,6 +38,11 @@ import Applications from './menuItems/Applications.jsx';
 import UserComplaints from './menuItems/UserComplaints.jsx';
 import ComplaintsList from './menuItems/ComplaintsList.jsx';
 import PersonalVerificationRequests from './menuItems/PersonalVerificationRequests.jsx';
+import Contract from './menuItems/Contract.jsx';
+import ContractDetails from './menuItems/ContractDetails.jsx';
+import ContractsList from './menuItems/ContractsList.jsx';
+import PropertiesList from './menuItems/PropertiesList.jsx';
+import PropertyDetails from './menuItems/PropertyDetails.jsx';
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;600;700;800;900&family=Work+Sans:ital,wght@0,200;0,800;1,100;1,600&display=swap');
 </style>
@@ -71,20 +76,24 @@ const router = createBrowserRouter(
       </Route> */}
 
       <Route path="/" element={<Layout />}>
-        <Route  element={<Admin />} >
+        <Route element={<Admin />} >
           <Route path="/" element={<Statistics />} />
           <Route path="/users" element={<Users />} />s
-          <Route path="/properties" element={<Properties />} />
-          <Route path="/contracts" element={<Contracts />} />
+          <Route path="/properties" element={<Properties />} >
+            <Route path="" element={<PropertiesList />} />
+            <Route path=":propertyCode" element={<PropertyDetails />} />
+          </Route>
+          <Route path="/contracts" element={<Contracts />} >
+            <Route path="" element={<ContractsList />} />
+            <Route path=":id" element={<ContractDetails />} />
+          </Route>
           <Route path="/offers" element={<Offers />} />
           <Route path="/applications" element={<Applications />} />
           <Route path="/agents" element={<Agents />} />
           <Route path="/user-complains" element={<UserComplaints />} />
           <Route path="/complaints-list/:id" element={<ComplaintsList />} />
           <Route path="/verification-requests" element={<PersonalVerificationRequests />} />
-
-
-          </Route>
+        </Route>
 
         {/* <Route path="posts/:id" element={<PostDetails />} />
         <Route path="/students/:id" element={<Student />} >

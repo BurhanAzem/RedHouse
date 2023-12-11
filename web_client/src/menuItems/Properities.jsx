@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay } from '@fortawesome/free-solid-svg-icons'
 import { faHandshakeAngle } from '@fortawesome/free-solid-svg-icons'
 // import Post from '../Post/Post.jsx'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 // import SearchBar from '../SearchBar/SearchBar.jsx'
 // import FilterBar from '../SearchBar/FilterBar.jsx'
 // import SearchResultsListPost from './SearchBar/SearchResultsListPost'
@@ -51,13 +51,17 @@ const Properties = () => {
     return cookieValue;
   }
 
+  useEffect(() => {
+    getProperties();
+  }, [keyword])
 
 
-  const getUsers = async () => {
+
+  const getProperties = async () => {
     try {
       setProperties([]);
 
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/properties?searchQuery=${keyword}&page=${page}&limit=${limit}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/properties/filter?searchQuery=${keyword}&page=${page}&limit=${limit}`);
       setProperties(response.data.listDto);
       console.log(response.data.listDto);
       // setPage(response.data.pagination.page);
@@ -173,42 +177,9 @@ const Properties = () => {
         <div className="container" id='left-right-setup'>
           <div className="row">
 
-          <div className="col-12">
+            <div className="col-12">
 
-              <div style={{ paddingRight: "0px" }}>
-                <div className="row">
-                  <div className="l-search">Search about properties</div>
-                </div>
-                <div className="items">
-
-                  <div className="container" id='row-items'>
-                    <div className="row" id='search-bar-up'>
-                      <SearchBar searchHint="Search about properties by location" />
-                    </div>
-
-                  </div>
-
-                </div>
-              </div>
-
-              <div className="container" id='row-items'>
-
-                <MapContainer />
-              </div>
-
-              <div style={{ paddingRight: "0px" }}>
-
-                <div className="items">
-
-                  <div className="container" id='row-items'>
-                    <div className="row" id='search-bar-up'>
-                      <SearchBar searchHint="Search about properties by Id" />
-                    </div>
-
-                  </div>
-
-                </div>
-              </div>
+              
 
 
 
@@ -226,9 +197,9 @@ const Properties = () => {
 
 
                 ) :
-                  <PropertiesList />
-              } 
-            </div>
+                  <Outlet />
+                }
+              </div>
 
             </div>
             <div className="row" id='left-setup'>
@@ -245,7 +216,5 @@ const Properties = () => {
   )
 }
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
-})(Properties)
+export default (Properties)
 

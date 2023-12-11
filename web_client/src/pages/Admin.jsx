@@ -12,7 +12,7 @@ import { categoryFilterQuery, languageFilterQuery } from '../state.js'
 import SearchBar from '../components/SearchBar/SearchBar.jsx'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify'
-import { Link, Route, Routes, useNavigate } from 'react-router-dom'
+import { Link, Outlet, Route, Routes, useNavigate } from 'react-router-dom'
 import Counter from '../components/Counter.jsx'
 import Cookies from 'js-cookie'
 import { AuthContext } from '../context/authContext.js'
@@ -31,6 +31,7 @@ import Agents from '../menuItems/Agents.jsx'
 import UserComplaints from '../menuItems/UserComplaints.jsx'
 import ComplaintsList from '../menuItems/ComplaintsList.jsx'
 import PersonalVerificationRequests from '../menuItems/PersonalVerificationRequests.jsx'
+import ContractDetails from '../menuItems/ContractDetails.jsx'
 
 
 
@@ -250,7 +251,7 @@ const Admin = () => {
                   [`&:hover`]: {
                     color: 'black',
                   },
-                  
+
                 },
               }}
             >
@@ -281,21 +282,7 @@ const Admin = () => {
           </Sidebar>
         </div>
         <div className="col-md-11" id="right-side">
-          <Routes>
-            <Route path="/" element={<Statistics />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/properties" element={<Properties />} />
-            <Route path="/contracts" element={<Contracts />} />
-            <Route path="/offers" element={<Offers />} />
-            <Route path="/applications" element={<Applications />} />
-            <Route path="/agents" element={<Agents />} />
-            <Route path="/user-complains" element={<UserComplaints />} />
-            <Route path="/complaints-list/:id" element={<ComplaintsList />} />
-            <Route path="/verification-requests" element={<PersonalVerificationRequests />} />
-
-            {/* <Route path="/complains" element={<Complains />} /> */}
-
-          </Routes>
+          <Outlet />
         </div>
       </div>
     </div>

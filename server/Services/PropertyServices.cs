@@ -410,23 +410,24 @@ namespace RedHouse_Server.Services
                 avgPropertiesNumberPerYearInLastTenYears[i] = propertiesInThisYear.Count();
 
             }
-            return avgPropertiesNumberPerYearInLastTenYears;
+            avgPropertiesNumberPerYearInLastTenYears.Reverse();
+            return avgPropertiesNumberPerYearInLastTenYears.ToList();
         }
 
         public async Task<ResponsDto<Property>> FilterProperties(SearchDto searchDto)
         {
             searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
             searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
-            var query = _redHouseDbContext.Properties.Include(u => u.Location).AsQueryable();
+            var query = _redHouseDbContext.Properties.Include(u => u.Location).Include(u => u.User).Include(u => u.propertyFiles).AsQueryable();
             if (searchDto.SearchQuery != null)
                 query = query.Where(p => p.PropertyCode == searchDto.SearchQuery);
             if (query == null)
-                query = query.Where(p => p.Location.City == searchDto.SearchQuery 
+                query = query.Where(p => p.Location.City == searchDto.SearchQuery
                 || p.Location.City == searchDto.SearchQuery
                 || p.Location.Country == searchDto.SearchQuery
                 || p.Location.Region == searchDto.SearchQuery
                 || p.Location.PostalCode == searchDto.SearchQuery);
-                
+
             var totalItems = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
 
@@ -452,6 +453,7 @@ namespace RedHouse_Server.Services
                 // TotalItems = totalItems,
                 // TotalPages = totalPages,
                 StatusCode = HttpStatusCode.OK,
-            };        }
+            };
+        }
     }
 }

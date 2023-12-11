@@ -4,20 +4,18 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import ReactPaginate from "react-paginate";
 // import Post from "./Post";
 import '../styles/PostList.css'
-import { categoryFilterQuery, isLoading, keywordQuery, languageFilterQuery, searchedProperties, studentPosts } from "../state";
+import { categoryFilterQuery, isLoading, keywordQuery, languageFilterQuery, searchedDContracts, searchedProperties, studentPosts } from "../state";
 import { useRecoilState } from "recoil";
 import { ToastContainer, toast } from 'react-toastify'
 import { useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-import { Map, GoogleApiWrapper } from 'google-maps-react'
-import MapContainer from './MapContainer'
 import { makeStyles } from '@material-ui/core/styles';
 import Complaint from "./Complaint";
 import Property from "./Property";
+import Contract from "./Contract";
 import SearchBar from "../components/SearchBar/SearchBar";
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -26,11 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PropertiesList = () => {
-  const { isLoaded } = useState(true) 
-
-  const center = (() => ({ lat: 18.52043, lng: 73.856743 }), []);
-
+const ContractsList = () => {
   const classes = useStyles();
   const [complaints, setComplaints] = useState([]);
   const [page, setPage] = useState(1);
@@ -45,10 +39,10 @@ const PropertiesList = () => {
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
 
-  const [properties, setProperties] = useRecoilState(searchedProperties);
+  const [contracts, setContracts] = useRecoilState(searchedDContracts);
 
 
-  const params = useParams();
+  const  params  = useParams();
   useEffect(() => {
     setIsLoadingHome(false)
   }, [page]);
@@ -57,7 +51,7 @@ const PropertiesList = () => {
     setCategoryFilter("");
     setLanguageFilter("");
     setKeyword("");
-  }, [params])
+}, [params])
 
 
 
@@ -90,36 +84,22 @@ const PropertiesList = () => {
 
   return (
     <>
-      <div style={{ paddingRight: "0px" }}>
+    <div style={{ paddingRight: "0px" }}>
         <div className="row">
-          <div className="l-search">Search about properties</div>
+          <div className="l-search">Search about contracts</div>
         </div>
         <div className="items">
 
           <div className="container" id='row-items'>
             <div className="row" id='search-bar-up'>
-              <SearchBar searchHint="Search about properties by location" />
+              <SearchBar searchHint="Search about contracts" />
             </div>
+            {/* <div className="row" id='search-bar-below'>
 
-          </div>
-
-        </div>
-      </div>
-
-      <div className="container" id='row-items'>
-
-        <MapContainer />
-      </div>
-
-      <div style={{ paddingRight: "0px" }}>
-
-        <div className="items">
-
-          <div className="container" id='row-items'>
-            <div className="row" id='search-bar-up'>
-              <SearchBar searchHint="Search about properties by Id" />
-            </div>
-
+              <div className="col-md-6" id='filter-bar-container'>
+                <FilterBar placeholder='Select' options={languageOptions} filterType="language" />
+              </div>
+            </div> */}
           </div>
 
         </div>
@@ -138,11 +118,11 @@ const PropertiesList = () => {
 
 
       ) : (
-        <div className="post-list" style={{ marginTop: "50px", marginLeft: "20px" }}>
-          {properties.length !== 0 ? (
-            properties.map((property) => <Property key={property.id} propertyData={property} />)
+        <div className="post-list" style={{marginTop: "50px", marginLeft: "20px"}}>
+          {contracts.length !== 0 ? (
+            contracts.map((contract) => <Contract key={contract.id} contractData={contract} />)
           ) : (
-            <h1 className="posts-found">      No Properties Found</h1>
+            <h1 className="posts-found">      No Contracts Found</h1>
           )}
           Total Posts: {rows} Page: {page} of {pages}
         </div>
@@ -168,6 +148,4 @@ const PropertiesList = () => {
   );
 };
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
-})(PropertiesList);
+export default ContractsList;
