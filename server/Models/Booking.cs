@@ -16,5 +16,7 @@ namespace server.Models
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
         public Property Property { get; set; }
+        public DateTime BookingDate { get; set; } = DateTime.Now;
+        public  ICollection<BookingDay> BookingDays { get; set; }
     }
 }

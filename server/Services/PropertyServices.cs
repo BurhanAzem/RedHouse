@@ -259,13 +259,53 @@ namespace RedHouse_Server.Services
             };
         }
 
-        public async Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId)
+        public async Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId, MyPropertiesFilterDto myPropertiesFilterDto)
         {
             // Create a queryable variable based on the DbSet
             var query = _redHouseDbContext.Properties.AsQueryable();
 
             query = query.Where(p => p.UserId == userId);
             query = query.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location);
+            // var properties = query.ToArray();
+
+            if (myPropertiesFilterDto.PropertiesFilter != "Posted properties")
+            {
+                if (myPropertiesFilterDto.PropertiesFilter == "All")
+                {
+                    query.Union(from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                join offer in _redHouseDbContext.Offers
+                                    on property.Id equals offer.PropertyId
+                                join contract in _redHouseDbContext.Contracts
+                                    on offer.Id equals contract.OfferId
+                                where contract.IsShouldPay == 0 && offer.CustomerId == userId
+                                select property);
+                }
+                else
+                {
+                    query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                join offer in _redHouseDbContext.Offers
+                                    on property.Id equals offer.PropertyId
+                                join contract in _redHouseDbContext.Contracts
+                                    on offer.Id equals contract.OfferId
+                                where contract.IsShouldPay == 0 && offer.CustomerId == userId
+                                select property);
+                    if (myPropertiesFilterDto.PropertiesFilter == "Rented properties")
+                    {
+                        query = (from property in query
+                                 where property.ListingType == "For monthly rent" || property.ListingType == "For daily rent"
+                                 select property);
+
+                    }
+                    else if (myPropertiesFilterDto.PropertiesFilter == "Purchased properties")
+                    {
+                        query = (from property in query
+                                 where property.ListingType == "For sell"
+                                 select property);
+                    }
+                }
+
+            }
+
             var properties = query.ToArray();
 
             return new ResponsDto<Property>

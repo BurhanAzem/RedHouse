@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ManagePropertiesController extends GetxController {
+
+  String propertiesFilter = "All";
   int propertiesUserId = 0;
   List<Property> userProperties = [];
 
@@ -113,7 +115,7 @@ class ManagePropertiesController extends GetxController {
   }
 
   getPropertiesUser() async {
-    var response = await PropertyData.getPropertiesForUser(propertiesUserId);
+    var response = await PropertyData.getPropertiesForUser(propertiesUserId, propertiesFilter);
 
     if (response['statusCode'] == 200) {
       userProperties = (response['listDto'] as List<dynamic>)

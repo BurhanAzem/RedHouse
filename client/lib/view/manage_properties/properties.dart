@@ -18,6 +18,13 @@ class Properties extends StatefulWidget {
   _AllPropertiesState createState() => _AllPropertiesState();
 }
 
+const propertiesFilterList = [
+  "Rented properties",
+  "Purchased properties",
+  "Posted properties",
+  "All"
+];
+
 class _AllPropertiesState extends State<Properties>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true; // Add a boolean variable for loading data from api
@@ -161,6 +168,31 @@ class _AllPropertiesState extends State<Properties>
         //
         body: Column(
           children: [
+            Container(height: 10,),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              width: 360,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1.0),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: DropdownButton<String>(
+                alignment: Alignment.topRight,
+                value: controller.propertiesFilter,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    controller.propertiesFilter = newValue!;
+                    loadData();
+                  });
+                },
+                items: propertiesFilterList.map((String option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(option),
+                  );
+                }).toList(),
+              ),
+            ),
             Expanded(
               child: ListView.builder(
                 itemCount: controller.userProperties.length,
@@ -176,7 +208,7 @@ class _AllPropertiesState extends State<Properties>
                           ? const EdgeInsets.only(
                               top: 25, bottom: 65, left: 15, right: 15)
                           : const EdgeInsets.only(
-                              top: 25, bottom: 20, left: 15, right: 15),
+                              top: 10, bottom: 20, left: 15, right: 15),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

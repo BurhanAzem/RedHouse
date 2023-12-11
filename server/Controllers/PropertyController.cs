@@ -132,13 +132,13 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpGet("/users/{id}/properties")]
-        public async Task<IActionResult> GetAllPropertiesForUser(int id)
+        public async Task<IActionResult> GetAllPropertiesForUser(int id, [FromQuery] MyPropertiesFilterDto myPropertiesFilterDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _propertyServices.GetAllPropertiesForUser(id);
+            var result = await _propertyServices.GetAllPropertiesForUser(id, myPropertiesFilterDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
