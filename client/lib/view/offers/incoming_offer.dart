@@ -1,4 +1,5 @@
 import 'package:client/controller/contracts/offer_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +14,24 @@ class IncomingOffer extends StatefulWidget {
 }
 
 class _IncomingOffeState extends State<IncomingOffer> {
-  int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
   bool showMoreSummary = false;
   String summaryString = "Show more";
   OfferController controller = Get.put(OfferController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
+  bool isLoading = true; // Add a boolean variable for loading state
 
   @override
   bool get wantKeepAlive => true;
+
+  void loadAllOffers() async {
+    await controller.getAllOffersForUser(loginController.userDto?["id"]);
+
+    setState(() {
+      isLoading = false; // Set isLoading to false when data is loaded
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,7 +269,8 @@ class _IncomingOffeState extends State<IncomingOffer> {
               ),
               InkWell(
                 onTap: () {
-                  Get.to(() => HomeInformation(property: widget.offer.property!));
+                  Get.to(
+                      () => HomeInformation(property: widget.offer.property!));
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -311,10 +323,9 @@ class _IncomingOffeState extends State<IncomingOffer> {
           ),
           child: MaterialButton(
             onPressed: () {
-              setState(() {
-                // widget.offer.offerStatus = "Accepted";
-                controller.acceptOffer(widget.offer.id);
-              });
+              controller.acceptOffer(widget.offer.id);
+              loadAllOffers();
+              setState(() {});
             },
             child: const Text(
               "Accept",
@@ -326,18 +337,17 @@ class _IncomingOffeState extends State<IncomingOffer> {
           height: 40,
           width: 160,
           decoration: BoxDecoration(
-            borderRadius:
-                BorderRadius.circular(50), // Set a large border radius
+            borderRadius: BorderRadius.circular(50),
             border: Border.all(
-              color: Colors.black, // Adjust the border color as needed
-              width: 1, // Adjust the border width as needed
+              color: Colors.black,
+              width: 1,
             ),
           ),
           child: MaterialButton(
             onPressed: () {
-              setState(() {
-                widget.offer.offerStatus = "Rejected";
-              });
+              controller.deleteOffer(widget.offer.id);
+              loadAllOffers();
+              setState(() {});
               Navigator.pop(context);
             },
             child: const Text(

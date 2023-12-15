@@ -12,10 +12,10 @@ Offer _$OfferFromJson(Map<String, dynamic> json) => Offer(
       customerId: json['customerId'] as int,
       propertryId: json['propertryId'] as int?,
       offerDate: DateTime.parse(json['offerDate'] as String),
-      offerExpireDate: DateTime.parse(json['offerExpires'] as String),
+      offerExpireDate: DateTime.parse(json['offerExpireDate'] as String),
       description: json['description'] as String,
       offerStatus: json['offerStatus'] as String,
-      price: (json['price'] as num).toInt(),
+      price: json['price'] as int,
       landlord: json['landlord'] == null
           ? null
           : User.fromJson(json['landlord'] as Map<String, dynamic>),
@@ -33,7 +33,7 @@ Map<String, dynamic> _$OfferToJson(Offer instance) => <String, dynamic>{
       'customerId': instance.customerId,
       'propertryId': instance.propertryId,
       'offerDate': instance.offerDate.toIso8601String(),
-      'offerExpires': instance.offerExpireDate.toIso8601String(),
+      'offerExpireDate': instance.offerExpireDate.toIso8601String(),
       'description': instance.description,
       'price': instance.price,
       'offerStatus': instance.offerStatus,

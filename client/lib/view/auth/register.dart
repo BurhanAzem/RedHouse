@@ -90,7 +90,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.man),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -108,7 +108,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.man),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -126,7 +126,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.email),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -145,7 +145,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.lock),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -163,7 +163,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.phone),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -181,7 +181,7 @@ class _RegisterState extends State<Register> {
                   decoration: InputDecoration(
                     suffixIcon: const Icon(Icons.map),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
-                    contentPadding: const EdgeInsets.all(5),
+                    contentPadding: const EdgeInsets.all(10),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

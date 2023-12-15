@@ -19,13 +19,12 @@ class IncomingApplication extends StatefulWidget {
 }
 
 class _IncomingApplicationState extends State<IncomingApplication> {
-  int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
-  
+
   late Application application;
   ApplicationsController controller = Get.put(ApplicationsController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  
+
   bool isLoading = true; // Add a boolean variable for loading state
 
   @override
@@ -35,7 +34,7 @@ class _IncomingApplicationState extends State<IncomingApplication> {
     setState(() {});
   }
 
-  void loadDataAllapliactions() async {
+  void loadAllApplications() async {
     await controller.getApplications(loginController.userDto?["id"]);
 
     setState(() {
@@ -60,34 +59,6 @@ class _IncomingApplicationState extends State<IncomingApplication> {
     }
 
     return Scaffold(
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      // floatingActionButton: Container(
-      //   height: 40,
-      //   child: FloatingActionButton.extended(
-      //     backgroundColor: Colors.black,
-      //     foregroundColor: Colors.white,
-      //     onPressed: () {
-      //       Get.to(
-      //         () => CreateOffer(
-      //           // This user ID is the ID of who received the application
-      //           landlordId: application.property.userId,
-      //           // The user ID is the ID of the person who sent the application
-      //           customerId: application.userId,
-      //           propertyId: application.propertyId,
-      //         ),
-      //       );
-      //     },
-      //     shape: RoundedRectangleBorder(
-      //       borderRadius: BorderRadius.circular(10),
-      //     ),
-      //     icon: const Icon(
-      //       Icons.add,
-      //       size: 22,
-      //     ),
-      //     label: const Text("Create offer"),
-      //   ),
-      // ),
-
       // App bar
       appBar: AppBar(
         automaticallyImplyLeading: true,
@@ -325,7 +296,7 @@ class _IncomingApplicationState extends State<IncomingApplication> {
           child: MaterialButton(
             onPressed: () {
               controller.approvedApplication(application.id);
-              loadDataAllapliactions();
+              loadAllApplications();
               setState(() {});
             },
             child: const Text(
@@ -346,9 +317,8 @@ class _IncomingApplicationState extends State<IncomingApplication> {
           ),
           child: MaterialButton(
             onPressed: () {
-              // controller.deleteApplication(application.id);
-              controller.ignoreApplication(application.id);
-              loadDataAllapliactions();
+              controller.deleteApplication(application.id);
+              loadAllApplications();
               setState(() {});
               Navigator.pop(context);
             },

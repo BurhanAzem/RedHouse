@@ -51,9 +51,8 @@ class _AllApplicationsState extends State<AllApplications> {
 
     const applicationStatus = [
       "All",
-      "Approved",
       "Pending",
-      // "Ignored",
+      "Approved",
     ];
 
     const applicationType = [

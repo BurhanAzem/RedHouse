@@ -3,7 +3,9 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:client/view/add_property/add_property_1.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -30,10 +32,19 @@ class _AllPropertiesState extends State<Properties>
   @override
   bool get wantKeepAlive => true; // Keep the state alive
 
+  Future<void> getLatAndLong() async {
+    Position cl = await Geolocator.getCurrentPosition().then((value) => value);
+    double lat = cl.latitude;
+    double long = cl.longitude;
+    controller.currentPosition =
+        CameraPosition(target: LatLng(lat, long), zoom: 13);
+  }
+
   @override
   void initState() {
     super.initState();
     loadData();
+    getLatAndLong();
     setState(() {});
   }
 

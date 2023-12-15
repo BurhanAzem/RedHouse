@@ -1,8 +1,9 @@
-import 'package:client/controller/manage_propertise/neighborhood_controller.dart';
-import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/model/neighborhood/locationNeighborhood.dart';
+import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:client/view/add_property/add_property_2.dart';
 import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -13,15 +14,15 @@ class AddPropertyNeighbour extends StatefulWidget {
   _AddPropertyNeighbourState createState() => _AddPropertyNeighbourState();
 }
 
-class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
+class _AddPropertyNeighbourState extends State<AddPropertyNeighbour>
+    with SingleTickerProviderStateMixin {
   String neighborhoodType = "Select Neighborhood Type";
-
-  LoginControllerImp loginController = Get.put(LoginControllerImp());
-  NeighborhoodController neighborhoodController =
-      Get.put(NeighborhoodController());
 
   ManagePropertiesController propertyController =
       Get.put(ManagePropertiesController());
+
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
 
   BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
 
@@ -103,7 +104,27 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
   @override
   void initState() {
     print(propertyController.markers);
+
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
+    );
+
+    // Create a Tween for the animation
+    _textAnimation =
+        IntTween(begin: 0, end: "Locate property neighborhoods".length)
+            .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -138,128 +159,113 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
               },
             ),
             title: const Text(
-              "Neighborhoods Locations",
+              "Add Property",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.w600,
               ),
             ),
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        controller.increaseActiveStep();
+                        print(controller.activeStep);
+                      });
+                      Get.to(() => AddProperty2());
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
 
           // Body
-          body: Container(
-            margin: const EdgeInsets.all(15),
-            child: Form(
-              key: controller.formKey2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  controller.easyStepper(),
-                  // Container(
-                  //   margin: const EdgeInsets.only(left: 12),
-                  //   child: Image.asset("assets/images/logo.png", scale: 10),
-                  // ),
-                  Container(
-                    margin: const EdgeInsets.only(left: 12),
-                    child: const Text(
-                      "Add neighbours to this property",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 21),
-                    ),
-                  ),
-                  Container(height: 20),
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            children: [
+              controller.easyStepper(),
 
-                  // Dropdown Button
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: DropdownButton<String>(
-                      value: neighborhoodType,
-                      items: options.map((String option) {
-                        return DropdownMenuItem<String>(
-                          value: option,
-                          child: Text(option),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        if (newValue != null) {
-                          setState(() {
-                            neighborhoodType = newValue;
-                            addCustomerIcon();
-                          });
-                        }
-                      },
-                      isExpanded: true,
-                      underline: const SizedBox(),
-                    ),
-                  ),
-
-                  Container(height: 10),
-                  Container(
-                    margin: const EdgeInsets.only(left: 12),
-                    child: const Text(
-                      "Street address",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
+              // Introduction
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset("assets/images/logo.png", scale: 11),
+                    Container(
+                      child: AnimatedBuilder(
+                        animation: _textAnimation,
+                        builder: (context, child) {
+                          String animatedText = "Locate property neighborhoods"
+                              .substring(0, _textAnimation.value);
+                          return Text(
+                            animatedText,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
 
-                  Container(height: 5),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 12),
-                    child: TextFormField(
-                      controller: controller.streetAddress,
-                      style: const TextStyle(),
-                      decoration: InputDecoration(
-                        suffixIcon: const Icon(Icons.map),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(height: 5),
+              // Googel Map
+              Container(
+                height: 320,
+                child: Visibility(
+                  visible: true,
+                  child: controller.currentPosition == null
+                      ? Container(
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        )
+                      : Expanded(
+                          child: GoogleMap(
+                            markers: controller.markers,
+                            onTap: (latlng) async {
+                              print(controller.markers);
+                              print(controller.propertyNeighborhoods);
+                              print(neighborhoodType);
 
-                  // Googel Map
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 12),
-                    decoration: BoxDecoration(border: Border.all()),
-                    height: 300,
-                    child: Visibility(
-                      visible: true,
-                      child: controller.currentPosition == null
-                          ? Container(
-                              alignment: Alignment.center,
-                              child: const CircularProgressIndicator(),
-                            )
-                          : Expanded(
-                              child: GoogleMap(
-                                markers: controller.markers,
-                                onTap: (latlng) async {
-                                  print(controller.markers);
-                                  print(neighborhoodType);
+                              if (neighborhoodType !=
+                                  "Select Neighborhood Type") {
+                                try {
+                                  List<Placemark> placemarks =
+                                      await placemarkFromCoordinates(
+                                          latlng.latitude, latlng.longitude);
 
-                                  if (neighborhoodType !=
-                                      "Select Neighborhood Type") {
+                                  if (placemarks.isNotEmpty) {
+                                    final placemark = placemarks[0];
+                                    controller.neighborhoodStreet.text =
+                                        placemark.street!;
+
                                     // Remove the marker with the specified ID
                                     controller.markers.removeWhere(
                                       (marker) =>
                                           marker.markerId.value ==
+                                          neighborhoodType,
+                                    );
+                                    // Remove the neighborhood with the neighborhood type
+                                    controller.propertyNeighborhoods
+                                        .removeWhere(
+                                      (neighborhood) =>
+                                          neighborhood.neighborhoodType ==
                                           neighborhoodType,
                                     );
 
@@ -273,51 +279,119 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour> {
                                         icon: markerIcon,
                                       ),
                                     );
-
-                                    setState(() {});
+                                    // Add a new neighborhood
+                                    controller.propertyNeighborhoods
+                                        .add(NeighborhoodDto(
+                                      neighborhoodType: neighborhoodType,
+                                      location: LocationNeighborhood(
+                                        city: placemark.locality,
+                                        postalCode: placemark.postalCode!,
+                                        country: placemark.country,
+                                        region: placemark.locality,
+                                        streetAddress: placemark.street,
+                                        latitude: latlng.latitude,
+                                        longitude: latlng.longitude,
+                                      ),
+                                    ));
                                   }
-                                },
-                                mapType: MapType.normal,
-                                initialCameraPosition:
-                                    controller.currentPosition!,
-                                onMapCreated: (mapcontroller) {
-                                  controller.mapController2 = mapcontroller;
-                                },
-                              ),
-                            ),
-                    ),
-                  ),
-                  Container(height: 5),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: 12),
-                    child: MaterialButton(
-                      minWidth: 400,
-                      onPressed: () {
-                        setState(() {
-                          controller.increaseActiveStep();
-                          print(controller.activeStep);
-                        });
-                        controller.userId = loginController.userDto?["id"];
-                        Get.to(() => AddProperty2());
-                      },
-                      color: const Color(0xffd92328),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Text(
-                        "Continue",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
+                                } catch (e) {
+                                  Get.defaultDialog(
+                                      title: "ُEntered invalid location",
+                                      middleText: 'Error: $e');
+                                }
+                                print(controller.markers);
+                                print(controller.propertyNeighborhoods);
+                                setState(() {});
+                              }
+                            },
+                            mapType: MapType.normal,
+                            initialCameraPosition: controller.currentPosition!,
+                            onMapCreated: (mapcontroller) {
+                              controller.mapController2 = mapcontroller;
+                            },
+                          ),
+                        ),
+                ),
+              ),
+
+              // Street address and Dropdown Button
+              Container(
+                margin: const EdgeInsets.only(
+                    top: 20, right: 15, left: 15, bottom: 25),
+                child: Form(
+                  key: controller.formKey2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: DropdownButton<String>(
+                          value: neighborhoodType,
+                          items: options.map((String option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                neighborhoodType = newValue;
+                                addCustomerIcon();
+                              });
+                            }
+                          },
+                          isExpanded: true,
+                          underline: const SizedBox(),
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 15),
+                      Container(
+                        child: const Text(
+                          "Street address",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Container(height: 5),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          controller: controller.neighborhoodStreet,
+                          readOnly: true,
+                          enabled: false,
+                          style: const TextStyle(color: Colors.black54),
+                          decoration: const InputDecoration(
+                            hintText: "Here will appear Street address",
+                            hintStyle: TextStyle(color: Colors.black54),
+                            suffixIcon: Icon(
+                              Icons.map,
+                              color: Colors.black54,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  // Container(height: 15),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

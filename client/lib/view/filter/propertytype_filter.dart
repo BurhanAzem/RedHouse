@@ -166,11 +166,12 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
         const PropertyTypeSheetHeading(),
         Container(height: 5),
         CheckboxListTile(
-          title: const Text(
+          title:  Text(
             "House",
             style: TextStyle(
-              fontSize: 17,
+            fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.buyHouseTemp,
@@ -179,14 +180,15 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               controller.buyHouseTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
+          title: Text(
             "Apartment Unit",
             style: TextStyle(
-              fontSize: 17,
+            fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.buyApartmentTemp,
@@ -195,14 +197,15 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               controller.buyApartmentTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
+          title:  Text(
             "Townhouse",
             style: TextStyle(
-              fontSize: 17,
+             fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.buyTownhouseTemp,
@@ -211,14 +214,15 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               controller.buyTownhouseTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
+          title:  Text(
             "Castle",
             style: TextStyle(
-              fontSize: 17,
+             fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.buyCastleTemp,
@@ -227,14 +231,15 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               controller.buyCastleTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
-            "Entire Department community",
+          title:  Text(
+            "Entire Department",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.buyDepartmentTemp,
@@ -243,7 +248,7 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               controller.buyDepartmentTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         Container(height: 15),
       ],
@@ -269,11 +274,12 @@ class _RentPropertyTypeState extends State<RentPropertyType> {
         const PropertyTypeSheetHeading(),
         Container(height: 5),
         CheckboxListTile(
-          title: const Text(
+          title: Text(
             "House",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.rentHouseTemp,
@@ -282,14 +288,15 @@ class _RentPropertyTypeState extends State<RentPropertyType> {
               controller.rentHouseTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
+          title: Text(
             "Apartment Unit",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.rentApartmentTemp,
@@ -298,14 +305,15 @@ class _RentPropertyTypeState extends State<RentPropertyType> {
               controller.rentApartmentTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
+          title: Text(
             "Townhouse",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.rentTownhouseTemp,
@@ -314,14 +322,15 @@ class _RentPropertyTypeState extends State<RentPropertyType> {
               controller.rentTownhouseTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
+          title: Text(
             "Castle",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.rentCastleTemp,
@@ -330,14 +339,15 @@ class _RentPropertyTypeState extends State<RentPropertyType> {
               controller.rentCastleTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title: const Text(
-            "Entire Department community",
+          title: Text(
+            "Entire Department",
             style: TextStyle(
-              fontSize: 17,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
             ),
           ),
           value: controller.rentDepartmentTemp,
@@ -346,7 +356,7 @@ class _RentPropertyTypeState extends State<RentPropertyType> {
               controller.rentDepartmentTemp = value!;
             });
           },
-          activeColor: const Color.fromARGB(255, 12, 173, 18),
+          activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         Container(height: 15),
       ],

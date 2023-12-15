@@ -1,6 +1,6 @@
 import 'package:client/view/add_property/add_property_1.dart';
 import 'package:client/view/add_property/add_property_2.dart';
-import 'package:client/view/add_property/add_property_3.dart';
+// import 'package:client/view/add_property/add_property_3.dart';
 import 'package:client/view/add_property/add_property_4.dart';
 import 'package:client/view/add_property/add_property_5.dart';
 import 'package:client/view/add_property/add_property_6.dart';
@@ -12,7 +12,6 @@ import 'package:client/view/notification/notifications_settings.dart';
 import 'package:client/view/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/auth/login.dart';
-import 'package:client/view/manage_properties/application.dart';
 import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
@@ -39,13 +38,9 @@ class AppRoute {
   static const String addProperty8 = "/add-property8";
   static const String addProperty9 = "/add-property9";
   static const String allContracts = "/all-contracts";
-  // static const String applicationDetails = "/application-details";
-  // static const String contract = "/contract";
   static const String login = "/login";
   static const String properties = "/properties";
   static const String manageProperties = "/manage-properties";
-  // static const String userHistory = "/user-history";
-  // static const String addMilestone = "/add-milestone";
 }
 
 Map<String, Widget Function(BuildContext)> routes = {
@@ -56,7 +51,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.onBoardingFour: (context) => const OnBoardingFour(),
   AppRoute.addProperty1: (context) => AddProperty1(),
   AppRoute.addProperty2: (context) => AddProperty2(),
-  AppRoute.addProperty3: (context) => AddProperty3(),
+  // AppRoute.addProperty3: (context) => AddProperty3(),
   AppRoute.addProperty4: (context) => AddProperty4(),
   AppRoute.addProperty5: (context) => AddProperty5(),
   AppRoute.addProperty6: (context) => AddProperty6(),

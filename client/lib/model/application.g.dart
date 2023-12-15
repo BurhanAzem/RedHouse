@@ -15,7 +15,7 @@ Application _$ApplicationFromJson(Map<String, dynamic> json) => Application(
       message: json['message'] as String,
       property: Property.fromJson(json['property'] as Map<String, dynamic>),
       user: User.fromJson(json['user'] as Map<String, dynamic>),
-      suggestedPrice: (json['suggestedPrice'] as num?)?.toInt(),
+      suggestedPrice: json['suggestedPrice'] as int?,
     );
 
 Map<String, dynamic> _$ApplicationToJson(Application instance) =>

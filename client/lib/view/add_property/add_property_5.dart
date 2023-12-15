@@ -10,7 +10,61 @@ class AddProperty5 extends StatefulWidget {
   _AddProperty5State createState() => _AddProperty5State();
 }
 
-class _AddProperty5State extends State<AddProperty5> {
+class _AddProperty5State extends State<AddProperty5>
+    with SingleTickerProviderStateMixin {
+  ManagePropertiesController controller =
+      Get.put(ManagePropertiesController(), permanent: true);
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
+
+  @override
+  void initState() {
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
+    );
+
+    // Create a Tween for the animation
+    _textAnimation = IntTween(
+            begin: 0, end: "Enter more information about your property".length)
+        .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _selectDateBuitYear() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: controller.builtYear,
+      firstDate: DateTime.utc(1980, 1, 1),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            primaryColor:
+                const Color(0xffd92328), // Change the color of the header
+          ),
+          child: child ?? Container(),
+        );
+      },
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        controller.builtYear = pickedDate;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ManagePropertiesController>(
@@ -32,101 +86,17 @@ class _AddProperty5State extends State<AddProperty5> {
               },
             ),
             title: const Text(
-              "Property Location",
+              "Add Property",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          body: Container(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              child: ListView(
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      controller.easyStepper(),
-                      Image.asset("assets/images/logo.png", scale: 10),
-                      Container(height: 5),
-                      const Text(
-                        "Let's start creating your property",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 23),
-                      ),
-                      Container(height: 20),
-                      const Text(
-                        "Square meter",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Container(height: 5),
-                      TextFormField(
-                        controller: controller.squareMeter,
-                        style: const TextStyle(),
-                        decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.square_foot),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          contentPadding: const EdgeInsets.all(5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Container(height: 25),
-                      const Text(
-                        "Total bedrooms",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      TextFormField(
-                        controller: controller.numberOfBedrooms,
-                        style: const TextStyle(height: 0.8),
-                        decoration: InputDecoration(
-                          hintText: "",
-                          suffixIcon: const Icon(Icons.numbers),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          contentPadding: const EdgeInsets.all(5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      Container(height: 25),
-                      const Text(
-                        "Total bathrooms",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      TextFormField(
-                        controller: controller.numberOfBathrooms,
-                        style: const TextStyle(height: 0.8),
-                        decoration: InputDecoration(
-                          hintText: "",
-                          suffixIcon: const Icon(Icons.numbers),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          contentPadding: const EdgeInsets.all(5),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(height: 25),
-                  Container(
-                      alignment: Alignment.center,
-                      child:
-                          Image.asset("assets/images/red-tree.png", scale: 3)),
-                  const SizedBox(height: 25),
                   MaterialButton(
                     onPressed: () {
                       setState(() {
@@ -135,22 +105,172 @@ class _AddProperty5State extends State<AddProperty5> {
                       });
                       Get.to(() => AddProperty6());
                     },
-                    color: const Color(0xffd92328),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     child: const Text(
-                      "Continue",
+                      'Next',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.5,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 25),
                 ],
               ),
-            ),
+            ],
+          ),
+
+          // Body
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            children: [
+              controller.easyStepper(),
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 25),
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Introduction
+                      Image.asset("assets/images/logo.png", scale: 11),
+                      Container(
+                        child: AnimatedBuilder(
+                          animation: _textAnimation,
+                          builder: (context, child) {
+                            String animatedText =
+                                "Enter more information about your property"
+                                    .substring(0, _textAnimation.value);
+                            return Text(
+                              animatedText,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      // Property space
+                      Container(height: 25),
+                      const Row(
+                        children: [
+                          Text(
+                            "Property space",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            " (in meters)",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      Container(height: 5),
+                      TextFormField(
+                        controller: controller.squareMeter,
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.square_foot),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+
+                      // Number of bedrooms
+                      Container(height: 30),
+                      const Text(
+                        "Number of bedrooms",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Container(height: 5),
+                      TextFormField(
+                        controller: controller.numberOfBedrooms,
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.numbers),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+
+                      // Number of bathrooms
+                      Container(height: 30),
+                      const Text(
+                        "Number of bathrooms",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Container(height: 5),
+                      TextFormField(
+                        controller: controller.numberOfBathrooms,
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.numbers),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+
+                      // Built year
+                      const SizedBox(height: 30),
+                      const Text(
+                        "Built year",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Container(height: 5),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 0.8),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        child: InkWell(
+                          onTap: _selectDateBuitYear,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                controller.builtYear
+                                    .toString()
+                                    .substring(0, 10),
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              IconButton(
+                                onPressed: _selectDateBuitYear,
+                                icon: const Icon(Icons.date_range_outlined),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

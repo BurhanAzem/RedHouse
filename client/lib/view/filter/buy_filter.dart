@@ -46,6 +46,7 @@ class _BuyFilterState extends State<BuyFilter> {
                   Expanded(
                     child: ListView(
                       children: [
+                        // Property Type
                         MaterialButton(
                           onPressed: () {
                             house = controller.buyHouseTemp;
@@ -75,7 +76,7 @@ class _BuyFilterState extends State<BuyFilter> {
                                               1.8,
                                       child: Column(
                                         children: [
-                                          BuyPropertType(),
+                                          const BuyPropertType(),
                                           Container(
                                             width: 340,
                                             child: MaterialButton(
@@ -95,15 +96,6 @@ class _BuyFilterState extends State<BuyFilter> {
                                                       controller.buyCastleTemp;
                                                   department = controller
                                                       .buyDepartmentTemp;
-
-                                                  controller.rentHouse = true;
-                                                  controller.rentApartment =
-                                                      true;
-                                                  controller.rentTownhouse =
-                                                      true;
-                                                  controller.rentCastle = true;
-                                                  controller.rentDepartment =
-                                                      true;
                                                 });
 
                                                 Navigator.pop(context);
@@ -142,40 +134,62 @@ class _BuyFilterState extends State<BuyFilter> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(" Property type",
+                              const Text(" Property Type",
                                   style: TextStyle(
-                                      fontSize: 20, color: Colors.grey[700])),
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.w500,
+                                  )),
                               Container(height: 4),
                               Text(
                                 " Any",
                                 style: TextStyle(
-                                    fontSize: 17, color: Colors.grey[700]),
+                                  fontSize: 18,
+                                  color: Colors.grey[700],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Container(height: 25),
-                        const Text("    Price", style: TextStyle(fontSize: 21)),
+
+                        // Price
+                        Container(height: 30),
+                        const Text("    Price",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
                         Container(height: 10),
                         RowBuyPrice(),
-                        Container(height: 25),
-                        BedBathRow(),
-                        Container(height: 25),
-                        const Text("    Property view",
-                            style: TextStyle(fontSize: 20)),
+
+                        // BedBathRow
+                        Container(height: 30),
+                        const BedBathRow(),
+
+                        // Property View
+                        Container(height: 30),
+                        const Text("    Property View",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
                         Container(height: 10),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20),
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
                           padding: const EdgeInsets.symmetric(horizontal: 13),
                           width: double.infinity,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.black,
+                              color: Colors.grey[700]!,
                               width: 1.0,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: DropdownButton<String>(
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[700],
+                            ),
                             value: controller.buyViewTemp,
                             items: options.map((String option) {
                               return DropdownMenuItem<String>(
@@ -194,9 +208,14 @@ class _BuyFilterState extends State<BuyFilter> {
                             underline: const SizedBox(),
                           ),
                         ),
-                        Container(height: 25),
+
+                        // Listing By
+                        Container(height: 30),
                         const Text("    Listing By",
-                            style: TextStyle(fontSize: 20)),
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
                         Container(height: 10),
                         Container(
                           margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -204,12 +223,17 @@ class _BuyFilterState extends State<BuyFilter> {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.black,
+                              color: Colors.grey[700]!,
                               width: 1.0,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: DropdownButton<String>(
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[700],
+                            ),
                             value: controller.buyListingByTemp,
                             items: listingBy.map((String option) {
                               return DropdownMenuItem<String>(
@@ -228,11 +252,156 @@ class _BuyFilterState extends State<BuyFilter> {
                             underline: const SizedBox(),
                           ),
                         ),
-                        Container(height: 25),
-                        const Text("    Home size",
-                            style: TextStyle(fontSize: 21)),
+
+                        // Property Size
+                        Container(height: 30),
+                        const Text("    Property Size",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
                         Container(height: 10),
                         const BuyHomeSize(),
+
+                        // Property Status
+                        Container(height: 30),
+                        const Text("    Property Status",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Container(height: 10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Column(
+                            children: [
+                              CheckboxListTile(
+                                title: Text(
+                                  "Coming Soon",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                value: controller.buyComingSoonTemp,
+                                onChanged: (value) {
+                                  setState(() {
+                                    controller.buyComingSoonTemp = value!;
+                                  });
+                                },
+                                activeColor:
+                                    const Color.fromARGB(255, 11, 93, 161),
+                              ),
+                              CheckboxListTile(
+                                title: Text(
+                                  "Accepting Offers",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                value: controller.buyAcceptingOffersTemp,
+                                onChanged: (value) {
+                                  setState(() {
+                                    controller.buyAcceptingOffersTemp = value!;
+                                  });
+                                },
+                                activeColor:
+                                    const Color.fromARGB(255, 11, 93, 161),
+                              ),
+                              CheckboxListTile(
+                                title: Text(
+                                  "Pending & Under Contract",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                                value: controller.buyUnderContractTemp,
+                                onChanged: (value) {
+                                  setState(() {
+                                    controller.buyUnderContractTemp = value!;
+                                  });
+                                },
+                                activeColor:
+                                    const Color.fromARGB(255, 11, 93, 161),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Parking Spots
+                        Container(height: 30),
+                        const Text("    Parking Spots",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Container(height: 10),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 20),
+                          child: TextFormField(
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[700],
+                            ),
+                            controller: controller.buyParkingSpotsTemp,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              suffixIcon: const Icon(Icons.numbers),
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.always,
+                              contentPadding: const EdgeInsets.all(10),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Basement
+                        Container(height: 30),
+                        const Text("    Basement",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: CheckboxListTile(
+                            title: Text(
+                              "Has Basement",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            value: controller.buyHouseTemp,
+                            onChanged: (value) {
+                              setState(() {
+                                controller.buyHouseTemp = value!;
+                              });
+                            },
+                            activeColor: const Color.fromARGB(255, 11, 93, 161),
+                          ),
+                        ),
+
+                        // Year Built
+                        Container(height: 30),
+                        const Text("    Year Built",
+                            style: TextStyle(
+                              fontSize: 21,
+                              fontWeight: FontWeight.w500,
+                            )),
+                        Container(height: 10),
+                        const BuyYearBuilt(),
+
+                        // End
                         Container(height: 20),
                       ],
                     ),
@@ -255,11 +424,16 @@ class _BuyFilterState extends State<BuyFilter> {
                                 controller.buySizeMaxTemp.text != "" &&
                                 int.parse(controller.buySizeMinTemp.text) >
                                     int.parse(
-                                        controller.buySizeMaxTemp.text))) {
+                                        controller.buySizeMaxTemp.text)) ||
+                            (controller.buyYearBuiltMinTemp.text != "" &&
+                                controller.buyYearBuiltMaxTemp.text != "" &&
+                                int.parse(controller.buyYearBuiltMinTemp.text) >
+                                    int.parse(
+                                        controller.buyYearBuiltMaxTemp.text))) {
                           Get.rawSnackbar(
                             snackPosition: SnackPosition.TOP,
                             messageText: const Text(
-                              'The Min limit cannot be greater than the Max limit',
+                              'The minimum limit can`t be greater than the maximum',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
@@ -279,6 +453,7 @@ class _BuyFilterState extends State<BuyFilter> {
                         } else {
                           controller.listingType = true;
 
+                          // Property type
                           controller.buyHouse = controller.buyHouseTemp;
                           controller.buyApartment = controller.buyApartmentTemp;
                           controller.buyTownhouse = controller.buyTownhouseTemp;
@@ -286,6 +461,13 @@ class _BuyFilterState extends State<BuyFilter> {
                           controller.buyDepartment =
                               controller.buyDepartmentTemp;
 
+                          controller.rentHouse = true;
+                          controller.rentApartment = true;
+                          controller.rentTownhouse = true;
+                          controller.rentCastle = true;
+                          controller.rentDepartment = true;
+
+                          // Price
                           controller.rentMaxController.text = "";
                           controller.rentMinController.text = "";
                           controller.buyMaxController.text =
@@ -293,15 +475,19 @@ class _BuyFilterState extends State<BuyFilter> {
                           controller.buyMinController.text =
                               controller.buyMinControllerTemp.text;
 
+                          // Bed Bath
                           controller.copyBathButton();
                           controller.copyBedButton();
 
+                          // Property view
                           controller.buyView = controller.buyViewTemp;
                           controller.rentView = "Any";
 
+                          // Listing by
                           controller.rentListingBy = "Any";
                           controller.buyListingBy = controller.buyListingByTemp;
 
+                          // Property size
                           controller.rentSizeMax.text = "";
                           controller.rentSizeMin.text = "";
                           controller.buySizeMax.text =
@@ -309,14 +495,36 @@ class _BuyFilterState extends State<BuyFilter> {
                           controller.buySizeMin.text =
                               controller.buySizeMinTemp.text;
 
+                          // Rent type
+                          controller.rentType = "All";
+
+                          // Property status
+                          controller.rentComingSoon = true;
+                          controller.rentAcceptingOffers = true;
+                          controller.rentUnderContract = true;
+                          controller.buyComingSoon =
+                              controller.buyComingSoonTemp;
+                          controller.buyAcceptingOffers =
+                              controller.buyAcceptingOffersTemp;
+                          controller.buyUnderContract =
+                              controller.buyUnderContractTemp;
+
+                          // Parking spots
+                          controller.buyParkingSpots.text =
+                              controller.buyParkingSpotsTemp.text;
+                          controller.rentParkingSpots.text = "";
+
+                          // Basement
+                          controller.rentBasement = true;
+                          controller.buyBasement = controller.buyBasementTemp;
+
+                          //
                           controller.formatPriceRange(
-                              controller.buyMinController,
-                              controller.buyMaxController);
-
+                            controller.buyMinController,
+                            controller.buyMaxController,
+                          );
                           controller.formatBedBath();
-
                           controller.checkFiltersON();
-
                           controller.getProperties();
                           mapListController.isLoading = true;
                           Navigator.pop(context);
@@ -342,6 +550,8 @@ class _BuyFilterState extends State<BuyFilter> {
             ));
   }
 }
+
+// Others widgets
 
 class RowBuyPrice extends StatefulWidget {
   RowBuyPrice({Key? key}) : super(key: key);
@@ -386,6 +596,11 @@ class _RowBuyPriceState extends State<RowBuyPrice> {
         Container(width: 16),
         Expanded(
           child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
             controller: controller.buyMinControllerTemp,
             focusNode: _focusMinNode,
             keyboardType: TextInputType.number,
@@ -422,6 +637,11 @@ class _RowBuyPriceState extends State<RowBuyPrice> {
         Container(width: 15),
         Expanded(
           child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
             controller: controller.buyMaxControllerTemp,
             focusNode: _focusMAxNode,
             keyboardType: TextInputType.number,
@@ -505,6 +725,11 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
         Container(width: 16),
         Expanded(
           child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
             controller: controller.buySizeMinTemp,
             focusNode: _focusMinNode,
             keyboardType: TextInputType.number,
@@ -541,6 +766,11 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
         Container(width: 15),
         Expanded(
           child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
             controller: controller.buySizeMaxTemp,
             focusNode: _focusMAxNode,
             keyboardType: TextInputType.number,
@@ -556,6 +786,135 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
                       onTap: () {
                         setState(() {
                           controller.buySizeMaxTemp.clear();
+                        });
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 15,
+                            color: Colors.white,
+                          )),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+        Container(width: 16),
+      ],
+    );
+  }
+}
+
+class BuyYearBuilt extends StatefulWidget {
+  const BuyYearBuilt({Key? key}) : super(key: key);
+
+  @override
+  _BuyYearBuiltState createState() => _BuyYearBuiltState();
+}
+
+class _BuyYearBuiltState extends State<BuyYearBuilt> {
+  FilterController controller = Get.put(FilterController());
+
+  final FocusNode _focusMinNode = FocusNode();
+  final FocusNode _focusMAxNode = FocusNode();
+  bool clearMin = false;
+  bool clearMax = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusMinNode.addListener(() {
+      setState(() {
+        clearMin = _focusMinNode.hasFocus;
+      });
+    });
+    _focusMAxNode.addListener(() {
+      setState(() {
+        clearMax = _focusMAxNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusMinNode.dispose();
+    _focusMAxNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(width: 16),
+        Expanded(
+          child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+            controller: controller.buyYearBuiltMinTemp,
+            focusNode: _focusMinNode,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "No min",
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              suffix: clearMin
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          controller.buyYearBuiltMinTemp.clear();
+                        });
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 15,
+                            color: Colors.white,
+                          )),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+        Container(width: 15),
+        Expanded(
+          child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+            controller: controller.buyYearBuiltMaxTemp,
+            focusNode: _focusMAxNode,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "No max",
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              suffix: clearMax
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          controller.buyYearBuiltMaxTemp.clear();
                         });
                       },
                       child: Container(

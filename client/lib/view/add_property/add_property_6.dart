@@ -10,16 +10,19 @@ class AddProperty6 extends StatefulWidget {
   _AddProperty6State createState() => _AddProperty6State();
 }
 
-class _AddProperty6State extends State<AddProperty6> {
+class _AddProperty6State extends State<AddProperty6>
+    with SingleTickerProviderStateMixin {
   ManagePropertiesController controller =
       Get.put(ManagePropertiesController(), permanent: true);
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.utc(1800, 7, 20),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
+      initialDate: controller.availableDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365 * 20)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
@@ -38,28 +41,28 @@ class _AddProperty6State extends State<AddProperty6> {
     }
   }
 
-  Future<void> _selectDateBuitYear() async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.utc(1800, 7, 20),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            primaryColor:
-                const Color(0xffd92328), // Change the color of the header
-          ),
-          child: child ?? Container(),
-        );
-      },
+  @override
+  void initState() {
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
     );
 
-    if (pickedDate != null) {
-      setState(() {
-        controller.builtYear = pickedDate;
-      });
-    }
+    // Create a Tween for the animation
+    _textAnimation = IntTween(
+            begin: 0, end: "Enter more information about your property".length)
+        .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,7 +70,6 @@ class _AddProperty6State extends State<AddProperty6> {
     final List<String> optionsStatus = [
       "Coming soon",
       "Accepting offers",
-      // "Under contract"
     ];
 
     return GetBuilder<ManagePropertiesController>(
@@ -89,33 +91,108 @@ class _AddProperty6State extends State<AddProperty6> {
               },
             ),
             title: const Text(
-              "Property Date",
+              "Add Property",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          body: Container(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              child: ListView(
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        controller.increaseActiveStep();
+                        print(controller.activeStep);
+                      });
+                      Get.to(() => AddProperty7());
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Body
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            children: [
+              controller.easyStepper(),
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 25),
+                child: Form(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      controller.easyStepper(),
-                      Image.asset("assets/images/logo.png", scale: 10),
+                      // Introduction
+                      Image.asset("assets/images/logo.png", scale: 11),
+                      Container(
+                        child: AnimatedBuilder(
+                          animation: _textAnimation,
+                          builder: (context, child) {
+                            String animatedText =
+                                "Enter more information about your property"
+                                    .substring(0, _textAnimation.value);
+                            return Text(
+                              animatedText,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      // Property description
+                      Container(height: 25),
+                      const Text(
+                        "Property description",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       Container(height: 5),
+                      Container(
+                        child: TextFormField(
+                          minLines: 5,
+                          maxLines: 10,
+                          controller: controller.propertyDescription,
+                          style: const TextStyle(),
+                          decoration: InputDecoration(
+                            hintText:
+                                "Example: New house in the center of the city, there is close school and very beautiful view",
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: const EdgeInsets.all(10),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
 
                       // Property status
+                      Container(height: 25),
                       const Text(
                         "Property status",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Container(height: 5),
                       Container(
@@ -148,111 +225,71 @@ class _AddProperty6State extends State<AddProperty6> {
                         ),
                       ),
 
-                      // Available date
+                      // When is it available ?
                       if (controller.propertyStatus == "Coming soon")
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(height: 20),
+                            Container(height: 25),
                             const Text(
-                              "When is your property available?",
+                              "When is it available ?",
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Container(height: 20),
+                            Container(height: 5),
                             Container(
                               padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 0.5,
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(8))),
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(controller.availableDate
-                                      .toString()
-                                      .substring(0, 10)),
-                                  IconButton(
+                                border: Border.all(width: 0.9),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: InkWell(
+                                onTap: _selectDateAvialableOn,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      controller.availableDate
+                                          .toString()
+                                          .substring(0, 10),
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                                    IconButton(
                                       onPressed: _selectDateAvialableOn,
                                       icon:
-                                          const Icon(Icons.date_range_outlined))
-                                ],
+                                          const Icon(Icons.date_range_outlined),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ],
-                        ),
+                        )
 
-                      // Built year
-                      const SizedBox(height: 15),
-                      const Text(
-                        "Built year",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 23),
-                      ),
-                      Container(height: 20),
-                      Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                width: 0.5,
-                              ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(8))),
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(controller.builtYear
-                                  .toString()
-                                  .substring(0, 10)),
-                              IconButton(
-                                  onPressed: _selectDateBuitYear,
-                                  icon: const Icon(Icons.date_range_outlined))
-                            ],
-                          )),
+                      // Image
+                      else
+                        Column(
+                          children: [
+                            Container(height: 10),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Image.asset("assets/images/red-tree.png",
+                                  scale: 2.7),
+                            ),
+                          ],
+                        )
                     ],
                   ),
-                  // Container(height: 25),
-                  // Container(
-                  //   height: 0.2,
-                  //   color: Colors.black,
-                  // ),
-                  // Container(height: 25),
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   child: Image.asset("assets/images/red-tree.png", scale: 3),
-                  // ),
-                  // const SizedBox(height: 25),
-                  MaterialButton(
-                    onPressed: () {
-                      setState(() {
-                        controller.increaseActiveStep();
-                        print(controller.activeStep);
-                      });
-                      Get.to(() => AddProperty7());
-                    },
-                    color: const Color(0xffd92328),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

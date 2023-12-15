@@ -52,7 +52,6 @@ class _AllOffersState extends State<AllOffers>
       "All",
       "Pending",
       "Accepted",
-      // "Rejected offers",
     ];
 
     const offerType = [

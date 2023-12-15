@@ -15,32 +15,27 @@ class AddProperty1 extends StatefulWidget {
   _AddProperty1State createState() => _AddProperty1State();
 }
 
-class _AddProperty1State extends State<AddProperty1> {
+class _AddProperty1State extends State<AddProperty1>
+    with SingleTickerProviderStateMixin {
   bool arePlacemarksAvailable = false;
-  final geocoding = GeocodingPlatform.instance;
-  late double lat;
-  late double long;
-  Position? cl;
-
-  StreamSubscription<Position>? positionStream;
 
   ManagePropertiesController controller =
       Get.put(ManagePropertiesController(), permanent: true);
-
   LoginControllerImp loginController = Get.put(LoginControllerImp());
 
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
+
   Future<void> getLatAndLong() async {
-    cl = await Geolocator.getCurrentPosition().then((value) => value);
-    lat = cl!.latitude;
-    long = cl!.longitude;
+    Position cl = await Geolocator.getCurrentPosition().then((value) => value);
+    double lat = cl.latitude;
+    double long = cl.longitude;
     controller.currentPosition =
         CameraPosition(target: LatLng(lat, long), zoom: 13);
   }
 
   @override
   void initState() {
-    getLatAndLong();
-
     // Clear all previous values
     setState(() {
       controller.markers = {};
@@ -50,24 +45,43 @@ class _AddProperty1State extends State<AddProperty1> {
       controller.numberOfBathrooms.text = '';
       controller.squareMeter.text = '';
       controller.propertyDescription.text = '';
-      controller.builtYear = DateTime(2000);
-      controller.availableDate = DateTime(2023);
-      controller.propertyStatus = "Accepting offers";
-      controller.numberOfUnits!.text = '';
+      controller.builtYear = DateTime.now();
+      controller.availableDate = DateTime.now();
+      controller.propertyStatus = "Coming soon";
+      controller.numberOfUnits.text = '';
       controller.parkingSpots.text = '';
       controller.listingType = "For sell";
       controller.isAvaliableBasement = "Yes";
       controller.streetAddress.text = "";
       controller.downloadUrls = [];
+      controller.neighborhoodStreet.text = "";
+      controller.propertyNeighborhoods = [];
     });
 
-    positionStream = Geolocator.getPositionStream().listen(
-      (Position? position) {
-        print(position == null
-            ? 'Unknown'
-            : '${position.latitude.toString()}, ${position.longitude.toString()}');
-      },
+    // StreamSubscription<Position> positionStream =
+    //     Geolocator.getPositionStream().listen(
+    //   (Position? position) {
+    //     print(position == null
+    //         ? 'Unknown'
+    //         : '${position.latitude.toString()}, ${position.longitude.toString()}');
+    //   },
+    // );
+
+    getLatAndLong();
+
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
     );
+
+    // Create a Tween for the animation
+    _textAnimation =
+        IntTween(begin: 0, end: "Locate your property on the map".length)
+            .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
 
     super.initState();
   }
@@ -75,6 +89,7 @@ class _AddProperty1State extends State<AddProperty1> {
   @override
   void dispose() {
     getLatAndLong();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -99,26 +114,12 @@ class _AddProperty1State extends State<AddProperty1> {
                 });
               },
             ),
-            title: RichText(
-              text: const TextSpan(
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "Add ",
-                    style: TextStyle(
-                      color: Color(0xffd92328),
-                      fontSize: 27,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(
-                    text: "Property",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 23,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+            title: const Text(
+              "Add Property",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 19,
+                fontWeight: FontWeight.w600,
               ),
             ),
             actions: [
@@ -126,7 +127,6 @@ class _AddProperty1State extends State<AddProperty1> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   MaterialButton(
-                    minWidth: 0,
                     onPressed: arePlacemarksAvailable
                         ? () {
                             setState(() {
@@ -155,60 +155,81 @@ class _AddProperty1State extends State<AddProperty1> {
           ),
 
           // Body
-          body: Container(
-            margin: const EdgeInsets.all(15),
-            child: Form(
-              key: controller.formKey1,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  controller.easyStepper(),
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            children: [
+              controller.easyStepper(),
 
-                  // Introduction
-                  Image.asset("assets/images/logo.png", scale: 11),
-                  Container(
-                    child: const Text(
-                      "Locate your property on the map",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
+              // Introduction
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset("assets/images/logo.png", scale: 11),
+                    Container(
+                      child: AnimatedBuilder(
+                        animation: _textAnimation,
+                        builder: (context, child) {
+                          String animatedText =
+                              "Locate your property on the map"
+                                  .substring(0, _textAnimation.value);
+                          return Text(
+                            animatedText,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
 
-                  // Google Map
-                  Container(height: 30),
-                  Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(border: Border.all()),
-                    height: 300,
-                    child: Visibility(
-                      visible: true,
-                      child: controller.currentPosition == null
-                          ? Container(
-                              alignment: Alignment.center,
-                              child: const CircularProgressIndicator())
-                          : Expanded(
-                              child: GoogleMap(
-                                mapType: MapType.normal,
-                                initialCameraPosition:
-                                    controller.currentPosition!,
-                                onCameraMove: (position) {
-                                  controller.currentPosition = CameraPosition(
-                                      target: LatLng(position.target.latitude,
-                                          position.target.longitude),
-                                      zoom: position.zoom);
-                                },
-                                onMapCreated: (mapcontroller) {
-                                  getLatAndLong();
-                                  controller.mapController1 = mapcontroller;
-                                },
-                                markers: controller.markers
-                                    .where((marker) =>
-                                        marker.markerId.value == "1")
-                                    .toSet(),
-                                onTap: (latlng) async {
-                                  print(controller.markers);
+              // Google Map
+              Container(
+                height: 387,
+                child: Visibility(
+                  visible: true,
+                  child: controller.currentPosition == null
+                      ? Container(
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator())
+                      : Expanded(
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: controller.currentPosition!,
+                            onCameraMove: (position) {
+                              controller.currentPosition = CameraPosition(
+                                  target: LatLng(position.target.latitude,
+                                      position.target.longitude),
+                                  zoom: position.zoom);
+                            },
+                            onMapCreated: (mapcontroller) {
+                              getLatAndLong();
+                              controller.mapController1 = mapcontroller;
+                            },
+                            markers: controller.markers
+                                .where((marker) => marker.markerId.value == "1")
+                                .toSet(),
+                            onTap: (latlng) async {
+                              try {
+                                List<Placemark> placemarks =
+                                    await placemarkFromCoordinates(
+                                        latlng.latitude, latlng.longitude);
+
+                                if (placemarks.isNotEmpty) {
+                                  final placemark = placemarks[0];
+                                  controller.City = placemark.locality;
+                                  controller.PostalCode = placemark.postalCode!;
+                                  controller.streetAddress.text =
+                                      placemark.street!;
+                                  controller.Country = placemark.country;
+                                  controller.Region = placemark.locality;
+                                  controller.Latitude = latlng.latitude;
+                                  controller.Longitude = latlng.longitude;
 
                                   // Remove the marker with the specified ID
                                   controller.markers.removeWhere(
@@ -222,127 +243,68 @@ class _AddProperty1State extends State<AddProperty1> {
                                       position: latlng,
                                     ),
                                   );
-                                  print(controller.markers);
-                                  try {
-                                    List<Placemark> placemarks =
-                                        await placemarkFromCoordinates(
-                                            latlng.latitude, latlng.longitude);
 
-                                    if (placemarks.isNotEmpty) {
-                                      final placemark = placemarks[0];
-                                      controller.City = placemark.locality;
-                                      controller.PostalCode =
-                                          placemark.postalCode!;
-                                      controller.streetAddress.text =
-                                          placemark.street!;
-                                      controller.Country = placemark.country;
-                                      controller.Region = placemark.locality;
-                                      controller.Latitude = latlng.latitude;
-                                      controller.Longitude = latlng.longitude;
+                                  arePlacemarksAvailable = true;
+                                }
+                              } catch (e) {
+                                Get.defaultDialog(
+                                    title: "ُEntered invalid location",
+                                    middleText: 'Error: $e');
+                              }
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                ),
+              ),
 
-                                      print('City: ${controller.City}');
-                                      print(
-                                          'PostalCode: ${controller.PostalCode}');
-                                      print('Country: ${controller.Country}');
-                                      print(
-                                          'streetAddress: ${controller.streetAddress.text}');
-                                      print('Region: ${controller.Region}');
-                                      print('Latitude: ${controller.Latitude}');
-                                      print(
-                                          'Longitude: ${controller.Longitude}');
-                                      arePlacemarksAvailable = true;
-                                    }
-                                  } catch (e) {
-                                    Get.defaultDialog(
-                                        title: "ُEntered invalid location",
-                                        middleText: 'Error: $e');
-                                    arePlacemarksAvailable = false;
-                                  }
-                                  setState(() {});
-                                },
-                              ),
-                            ),
-                    ),
-                  ),
-
-                  // Street address
-                  Container(height: 20),
-                  Container(
-                    child: const Text(
-                      "Street address",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  Container(height: 5),
-                  Container(
-                    alignment: Alignment.center,
-                    child: TextFormField(
-                      controller: controller.streetAddress,
-                      style: const TextStyle(),
-                      decoration: InputDecoration(
-                        hintText: "Here will appear Street address",
-                        suffixIcon: const Icon(Icons.map),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
+              // Street address
+              Container(
+                margin: const EdgeInsets.only(
+                    top: 15, right: 15, left: 15, bottom: 25),
+                child: Form(
+                  key: controller.formKey1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        child: const Text(
+                          "Street address",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
+                      Container(height: 5),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          controller: controller.streetAddress,
+                          readOnly: true,
+                          enabled: false,
+                          style: const TextStyle(color: Colors.black54),
+                          decoration: const InputDecoration(
+                            hintText: "Here will appear Street address",
+                            hintStyle: TextStyle(color: Colors.black54),
+                            suffixIcon: Icon(
+                              Icons.map,
+                              color: Colors.black54,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: EdgeInsets.all(10),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   margin: const EdgeInsets.only(left: 12),
-                  //   child: Text(
-                  //     "Enter the USPS-validated address. You won't be able to edit the address once you create the listing.",
-                  //     style: TextStyle(
-                  //       fontSize: 11,
-                  //       color: Colors.grey[700],
-                  //       fontWeight: FontWeight.w500,
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(height: 5),
-                  // Container(height: 5),
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   margin: const EdgeInsets.only(left: 12),
-                  //   child: MaterialButton(
-                  //     minWidth: 400,
-                  //     onPressed: arePlacemarksAvailable
-                  //         ? () {
-                  //             setState(() {
-                  //               controller.increaseActiveStep();
-                  //               print(controller.activeStep);
-                  //             });
-                  //             controller.userId =
-                  //                 loginController.userDto?["id"];
-                  //             Get.to(() => AddPropertyNeighbour());
-                  //           }
-                  //         : () {},
-                  //     color: arePlacemarksAvailable
-                  //         ? const Color(0xffd92328)
-                  //         : const Color.fromARGB(255, 251, 169, 169),
-                  //     shape: RoundedRectangleBorder(
-                  //       borderRadius: BorderRadius.circular(10),
-                  //     ),
-                  //     child: const Text(
-                  //       "Continue",
-                  //       style: TextStyle(
-                  //         color: Colors.black,
-                  //         fontWeight: FontWeight.w700,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(height: 15),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

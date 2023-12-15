@@ -1,27 +1,26 @@
 import 'package:client/model/location.dart';
 import 'package:client/model/property.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 part "neighborhood.g.dart";
 
 @JsonSerializable()
 class Neighborhood {
-  int id;
-  int propertyId;
-  Property property;
   String neighborhoodType;
+  Location location;
+  int? id;
+  int? propertyId;
+  Property? property;
   String? neighborhoodName;
-  int locationId;
-  Location? location;
+  int? locationId;
 
   Neighborhood({
-    required this.id,
-    required this.propertyId,
-    required this.property,
     required this.neighborhoodType,
+    required this.location,
+    this.id,
+    this.propertyId,
+    this.property,
     this.neighborhoodName,
-    required this.locationId,
-    this.location,
+    this.locationId,
   });
 
   factory Neighborhood.fromJson(Map<String, dynamic> json) =>
