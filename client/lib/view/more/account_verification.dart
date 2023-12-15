@@ -113,7 +113,7 @@ class _AccountVerificationState extends State<AccountVerification> {
               ),
               onPressed: () {
                 setState(() {
-                  Get.to(() => More());
+                  Get.to(() => BottomBar());
                 });
               },
             ),

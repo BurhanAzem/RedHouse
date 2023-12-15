@@ -5,6 +5,7 @@ using System.Net;
 using server.Dtos.PropertyDtos;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace RedHouse_Server.Services
 {
@@ -166,6 +167,48 @@ namespace RedHouse_Server.Services
                 }
             }
 
+            if (!string.IsNullOrEmpty(filterDto.MinPropertySize))
+            {
+                int minSize;
+
+                if (int.TryParse(filterDto.MinPropertySize, out minSize))
+                {
+                    query = query.Where(p => p.SquareMetersArea >= minSize);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.MaxPropertySize))
+            {
+                int maxSize;
+
+                if (int.TryParse(filterDto.MaxPropertySize, out maxSize))
+                {
+                    query = query.Where(p => p.SquareMetersArea <= maxSize);
+                }
+            }
+
+
+
+            if (!string.IsNullOrEmpty(filterDto.MinBuiltYear))
+            {
+                int minBuiltYear;
+
+                if (int.TryParse(filterDto.MinBuiltYear, out minBuiltYear))
+                {
+                    query = query.Where(p => p.BuiltYear.Year >= minBuiltYear);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.MaxBuiltYear))
+            {
+                int maxBuiltYear;
+
+                if (int.TryParse(filterDto.MaxBuiltYear, out maxBuiltYear))
+                {
+                    query = query.Where(p => p.BuiltYear.Year <= maxBuiltYear);
+                }
+            }
+
             if (!string.IsNullOrEmpty(filterDto.NumberOfBedRooms))
             {
                 if (int.TryParse(filterDto.NumberOfBedRooms, out int numberOfBedRooms))
@@ -189,11 +232,44 @@ namespace RedHouse_Server.Services
 
             if (!string.IsNullOrEmpty(filterDto.ListingType))
             {
-                query = query.Where(p => p.ListingType.Equals(filterDto.ListingType));
+                if (filterDto.ListingType == "For rent")
+                {
+                    if (filterDto.RentType == "All")
+                    {
+                        query = query.Where(p => p.ListingType.Equals("For daily rent") || p.ListingType.Equals("For monthly rent"));
+                    }
+                    else if (filterDto.RentType == "For monthly")
+                    {
+                        query = query.Where(p => p.ListingType.Equals("For monthly rent"));
+                    }
+                    else
+                    {
+                        query = query.Where(p => p.ListingType.Equals("For daily rent"));
+                    }
+                }
+                else
+                {
+                    query = query.Where(p => p.ListingType.Equals(filterDto.ListingType));
+                }
             }
-            if (filterDto.PropertyTypes[0] == "[]") filterDto.PropertyTypes = null;
 
-            if (filterDto.PropertyTypes != null)
+            if (filterDto.HasBasement != null)
+            {
+                query = query.Where(p => p.IsAvailableBasement.Equals(filterDto.HasBasement));
+            }
+
+            if (!string.IsNullOrEmpty(filterDto.ParkingSpots))
+            {
+                int parkingSpots;
+
+                if (int.TryParse(filterDto.ParkingSpots, out parkingSpots))
+                {
+                    query = query.Where(p => p.ParkingSpots == parkingSpots);
+                }
+            }
+
+
+            if (!filterDto.PropertyTypes.IsNullOrEmpty())
             {
                 foreach (var propertyType in filterDto.PropertyTypes)
                 {
@@ -201,7 +277,32 @@ namespace RedHouse_Server.Services
                 }
 
             }
+            else
+            {
+                return new ResponsDto<Property>
+                {
+                    ListDto = new List<Property>(),
+                    StatusCode = HttpStatusCode.OK,
+                };
 
+            }
+
+
+            if (!filterDto.PropertyStatus.IsNullOrEmpty())
+            {
+                foreach (var propertyStatus in filterDto.PropertyStatus)
+                {
+                    query = query.Where(p => propertyStatus == p.PropertyStatus);
+                }
+            }
+            else
+            {
+                return new ResponsDto<Property>
+                {
+                    ListDto = new List<Property>(),
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
             // Execute the query and return the results
             var properties = await query.ToArrayAsync();
 
@@ -283,12 +384,12 @@ namespace RedHouse_Server.Services
                 else
                 {
                     query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
-                                join offer in _redHouseDbContext.Offers
-                                    on property.Id equals offer.PropertyId
-                                join contract in _redHouseDbContext.Contracts
-                                    on offer.Id equals contract.OfferId
-                                where offer.CustomerId == userId
-                                select property);
+                             join offer in _redHouseDbContext.Offers
+                                 on property.Id equals offer.PropertyId
+                             join contract in _redHouseDbContext.Contracts
+                                 on offer.Id equals contract.OfferId
+                             where offer.CustomerId == userId
+                             select property);
                     if (myPropertiesFilterDto.PropertiesFilter == "Rented properties")
                     {
                         query = (from property in query

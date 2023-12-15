@@ -90,7 +90,7 @@ class PropertyData {
     }
   }
 
-  static getProperties(
+  static Future<dynamic> getProperties(
     List<String> propertyTypes,
     String minPrice,
     String maxPrice,
@@ -99,15 +99,20 @@ class PropertyData {
     String view,
     String listingType,
     Rx<Location> location,
+    List<String> propertyStatus,
+    String minPropertySize,
+    String maxPropertySize,
+    String minBuiltYear,
+    String maxBuiltYear,
+    String parkingSpots,
+    String rentType,
   ) async {
-    String? propertyTypesParam = propertyTypes.toString();
-    if (propertyTypes.length != 0) propertyTypesParam = propertyTypes.join(',');
-    final Map<String, String?> filters = {
-      "PropertyTypes": propertyTypesParam!,
-      "MinPrice": minPrice.toString(),
-      "MaxPrice": maxPrice.toString(),
-      "NumberOfBedRooms": numberOfBedrooms.toString(),
-      "NumberOfBathRooms": numberOfBathrooms.toString(),
+    final Map<String, dynamic> filters = {
+      "PropertyTypes": propertyTypes, // Send as a list
+      "MinPrice": minPrice,
+      "MaxPrice": maxPrice,
+      "NumberOfBedRooms": numberOfBedrooms,
+      "NumberOfBathRooms": numberOfBathrooms,
       "View": view == "Any" ? "" : view,
       "ListingType": listingType,
       "LocationDto.StreetAddress": location.value.streetAddress!,
@@ -121,23 +126,36 @@ class PropertyData {
       "LocationDto.Longitude": location.value.longitude == 0.0
           ? ""
           : location.value.longitude!.toString(),
+      "propertyStatus": propertyStatus,
+      "minPropertySize": minPropertySize,
+      "maxPropertySize": maxPropertySize,
+      "minBuiltYear": minBuiltYear,
+      "maxBuiltYear": maxBuiltYear,
+      "parkingSpots": parkingSpots,
+      "rentType": rentType,
     };
 
     if (await checkInternet()) {
       final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
 
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}',
-      });
-      print(response.statusCode);
+      try {
+        var response = await http.get(uri, headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${getToken()}',
+        });
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
+        print(response.statusCode);
 
-        return (responsebody);
-      } else {
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map<String, dynamic> responseBody = json.decode(response.body);
+          print(responseBody["listDto"]);
+
+          return responseBody;
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        print(e.toString());
         return StatusRequest.serverfailure;
       }
     } else {
