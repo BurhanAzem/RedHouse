@@ -91,7 +91,7 @@ namespace server.Services
 
             var bookings = await _redHouseDbContext.Bookings.Where(o => o.UserId == bookingDto.UserId
                                                                                 && o.PropertyId == bookingDto.PropertyId).ToArrayAsync();
-            var searchedBooking = bookings.First();
+            var searchedBooking = bookings.FirstOrDefault();
             if (searchedBooking != null)
             {
                 return new ResponsDto<Booking>
@@ -119,7 +119,7 @@ namespace server.Services
                     BookingId = bookingRes.Entity.Id,
                     DayDate = day
                 };
-                var identityFileRes = await _redHouseDbContext.BookingDays.AddAsync(bookingDay);
+                await _redHouseDbContext.BookingDays.AddAsync(bookingDay);
                 _redHouseDbContext.SaveChanges();
             }
 
@@ -190,9 +190,27 @@ namespace server.Services
             };
         }
 
-    
+        public async Task<ResponsDto<BookingDay>> GetAvilableBookingDaysForProperty(int propertyId)
+        {
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<BookingDay>
+                {
+                    Exception = new Exception($"Property with {propertyId} Id Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
 
-       
+            var booking =  _redHouseDbContext.Bookings.FirstOrDefault(b => b.PropertyId == propertyId);
+            var bookingDays = await _redHouseDbContext.BookingDays.Where(b => b.BookingId == booking.Id).ToArrayAsync();
+
+            return new ResponsDto<BookingDay>
+            {
+                ListDto = bookingDays,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
 
         public Task<ResponsDto<Booking>> GetBooking(int bookingId)
         {

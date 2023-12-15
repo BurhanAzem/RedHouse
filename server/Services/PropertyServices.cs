@@ -82,6 +82,31 @@ namespace RedHouse_Server.Services
                 await _redHouseDbContext.PropertyFiles.AddAsync(propertyFile);
                 await _redHouseDbContext.SaveChangesAsync();
             }
+            foreach (var neighborhoodDto in propertyDto.NeighborhoodDtos)
+            {
+                Location locationN = new Location
+                {
+                    City = neighborhoodDto.Location.City,
+                    Country = neighborhoodDto.Location.Country,
+                    Region = neighborhoodDto.Location.Region,
+                    PostalCode = neighborhoodDto.Location.PostalCode,
+                    StreetAddress = neighborhoodDto.Location.StreetAddress,
+                    Latitude = neighborhoodDto.Location.Latitude,
+                    Longitude = neighborhoodDto.Location.Longitude,
+                };
+                var locationResN = await _redHouseDbContext.Locations.AddAsync(locationN);
+                await _redHouseDbContext.SaveChangesAsync();
+
+                Neighborhood neighborhood = new Neighborhood
+                {
+                    PropertyId = propertyId,
+                    NeighborhoodType = neighborhoodDto.NeighborhoodType,
+                    NeighborhoodName = neighborhoodDto.NeighborhoodName,
+                    LocationId = locationResN.Entity.Id
+                };
+                await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
+                await _redHouseDbContext.SaveChangesAsync();
+            }
             return new ResponsDto<Property>
             {
                 Dto = propertyRes.Entity,
@@ -234,13 +259,53 @@ namespace RedHouse_Server.Services
             };
         }
 
-        public async Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId)
+        public async Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId, MyPropertiesFilterDto myPropertiesFilterDto)
         {
             // Create a queryable variable based on the DbSet
             var query = _redHouseDbContext.Properties.AsQueryable();
 
             query = query.Where(p => p.UserId == userId);
             query = query.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location);
+            // var properties = query.ToArray();
+
+            if (myPropertiesFilterDto.PropertiesFilter != "Posted properties")
+            {
+                if (myPropertiesFilterDto.PropertiesFilter == "All")
+                {
+                    query.Union(from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                join offer in _redHouseDbContext.Offers
+                                    on property.Id equals offer.PropertyId
+                                join contract in _redHouseDbContext.Contracts
+                                    on offer.Id equals contract.OfferId
+                                where contract.IsShouldPay == 0 && offer.CustomerId == userId
+                                select property);
+                }
+                else
+                {
+                    query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                join offer in _redHouseDbContext.Offers
+                                    on property.Id equals offer.PropertyId
+                                join contract in _redHouseDbContext.Contracts
+                                    on offer.Id equals contract.OfferId
+                                where contract.IsShouldPay == 0 && offer.CustomerId == userId
+                                select property);
+                    if (myPropertiesFilterDto.PropertiesFilter == "Rented properties")
+                    {
+                        query = (from property in query
+                                 where property.ListingType == "For monthly rent" || property.ListingType == "For daily rent"
+                                 select property);
+
+                    }
+                    else if (myPropertiesFilterDto.PropertiesFilter == "Purchased properties")
+                    {
+                        query = (from property in query
+                                 where property.ListingType == "For sell"
+                                 select property);
+                    }
+                }
+
+            }
+
             var properties = query.ToArray();
 
             return new ResponsDto<Property>
@@ -410,7 +475,50 @@ namespace RedHouse_Server.Services
                 avgPropertiesNumberPerYearInLastTenYears[i] = propertiesInThisYear.Count();
 
             }
-            return avgPropertiesNumberPerYearInLastTenYears;
+            avgPropertiesNumberPerYearInLastTenYears.Reverse();
+            return avgPropertiesNumberPerYearInLastTenYears.ToList();
+        }
+
+        public async Task<ResponsDto<Property>> FilterProperties(SearchDto searchDto)
+        {
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
+            var query = _redHouseDbContext.Properties.Include(u => u.Location).Include(u => u.User).Include(u => u.propertyFiles).AsQueryable();
+            if (searchDto.SearchQuery != null)
+                query = query.Where(p => p.PropertyCode == searchDto.SearchQuery);
+            if (query == null)
+                query = query.Where(p => p.Location.City == searchDto.SearchQuery
+                || p.Location.City == searchDto.SearchQuery
+                || p.Location.Country == searchDto.SearchQuery
+                || p.Location.Region == searchDto.SearchQuery
+                || p.Location.PostalCode == searchDto.SearchQuery);
+
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
+
+            var properties = await query
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)searchDto.Limit)
+                .ToArrayAsync();
+
+            if (properties == null || !properties.Any())
+            {
+                return new ResponsDto<Property>
+                {
+                    Exception = new Exception("Users Not Found"),
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
+
+            return new ResponsDto<Property>
+            {
+                ListDto = properties,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };
         }
     }
 }

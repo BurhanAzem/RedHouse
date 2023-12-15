@@ -72,5 +72,52 @@ namespace server.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ResponsDto<Contract>> FilterContracts(SearchDto searchDto)
+        {
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
+            var query = _redHouseDbContext.Contracts.Include(u => u.Milestones)
+                                                    .Include(u => u.Offer)
+                                                    .Include(o => o.Offer.Property)
+                                                    .Include(o => o.Offer.Landlord)
+                                                    .Include(o => o.Offer.Customer).AsQueryable();
+            if (searchDto.SearchQuery != null)
+                query = query.Where(p => p.Offer.PropertyId == int.Parse(searchDto.SearchQuery) 
+                                    || p.Offer.LandlordId == int.Parse(searchDto.SearchQuery) 
+                                    || p.Offer.CustomerId == int.Parse(searchDto.SearchQuery));
+            // if (query == null)
+            //     query = query.Where(p => p.Location.City == searchDto.SearchQuery 
+            //     || p.Location.City == searchDto.SearchQuery
+            //     || p.Location.Country == searchDto.SearchQuery
+            //     || p.Location.Region == searchDto.SearchQuery
+            //     || p.Location.PostalCode == searchDto.SearchQuery);
+                
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
+
+            var contracts = await query
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)searchDto.Limit)
+                .ToArrayAsync();
+
+            if (contracts == null || !contracts.Any())
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception("Contracts Not Found"),
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
+
+            return new ResponsDto<Contract>
+            {
+                ListDto = contracts,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };        }
     }
 }

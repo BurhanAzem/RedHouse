@@ -12,7 +12,7 @@ namespace RedHouse_Server.Dtos.PropertyDtos
         public int UserId { get; set; }
         public List<string> PropertyFiles { get; set; }
         public LocationDto? LocationDto { get; set; }
-        // public NeighborhoodDto? NeighborhoodDto { get; set; }
+        public List<NeighborhoodDto> NeighborhoodDtos { get; set; }
         public int Price { get; set; }
         public int NumberOfBedRooms { get; set; }
         public int NumberOfBathRooms { get; set; }

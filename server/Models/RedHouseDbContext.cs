@@ -43,9 +43,10 @@ namespace RedHouse_Server.Models
 
 
 
-
             base.OnModelCreating(builder);
         }
+
+        
 
         public DbSet<User> Users { get; set; }
         public DbSet<Property> Properties { get; set; }
@@ -63,8 +64,7 @@ namespace RedHouse_Server.Models
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingDay> BookingDays { get; set; }
         public DbSet<UserIdentity> UserIdentities { get; set; }
-        public DbSet<Complain> Complains { get; set; }
-
+        public DbSet<Complaint> Complaints { get; set; }
         public DbSet<IdentityFile> IdentityFiles { get; set; }
     }
 }

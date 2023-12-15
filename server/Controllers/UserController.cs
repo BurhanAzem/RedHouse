@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Services;
+using Cooking_School.Dtos;
 namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
@@ -36,32 +37,32 @@ namespace RedHouse_Server.Controllers
 
         }
 
+        // [HttpGet("/users")]
+        // public async Task<IActionResult> GetAllUsers()
+        // {
+        //     if (!ModelState.IsValid)
+        //     {
+        //         return BadRequest(ModelState);
+        //     }
+        //     var result = await _userServices.GetAllUsers();
+        //     if (result.Exception != null)
+        //     {
+        //         var code = result.StatusCode;
+        //         throw new StatusCodeException(code.Value, result.Exception);
+        //     }
+        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+        //     return Ok(result);
+
+        // }
+
         [HttpGet("/users")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> FilterUsers([FromQuery] SearchDto searchDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAllUsers();
-            if (result.Exception != null)
-            {
-                var code = result.StatusCode;
-                throw new StatusCodeException(code.Value, result.Exception);
-            }
-            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-            return Ok(result);
-
-        }
-
-        [HttpGet("/agents/{userName}")]
-        public async Task<IActionResult> GetAllAgents(string userName)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var result = await _userServices.GetAgents(userName);
+            var result = await _userServices.FilterUsers(searchDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -71,6 +72,26 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+<<<<<<< HEAD
+=======
+        [HttpGet("/agents")]
+        public async Task<IActionResult> FilterAgents([FromQuery] SearchDto searchDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.FilterAgents(searchDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+>>>>>>> 617bbd39e0c39bec3a6756db2c0634de2c1793f3
 
 
         [HttpGet("/users/number")]

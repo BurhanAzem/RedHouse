@@ -65,7 +65,10 @@ namespace server.Services
 
         public async Task<ResponsDto<UserIdentity>> GetUserIdentity(int userIdentityId)
         {
-            var userIdentity = await _redHouseDbContext.UserIdentities.FindAsync(userIdentityId);
+            var userIdentity = await _redHouseDbContext.UserIdentities
+                .Include(u => u.IdentityFiles)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(u => u.Id == userIdentityId);
             if (userIdentity == null)
             {
                 return new ResponsDto<UserIdentity>
@@ -86,11 +89,15 @@ namespace server.Services
         {
             // Define a separate method without optional arguments
 
-            var complains = await _redHouseDbContext.UserIdentities.Where(u => u.RequestStatus == "Pendding").ToArrayAsync();
+            var userIdentities = await _redHouseDbContext.UserIdentities
+                .Where(u => u.RequestStatus == "Pending")
+                .Include(u => u.IdentityFiles)
+                .Include(u => u.User)
+                .ToArrayAsync();
 
             return new ResponsDto<UserIdentity>
             {
-                ListDto = complains,
+                ListDto = userIdentities,
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -109,7 +116,7 @@ namespace server.Services
 
             userIdentity.RequestStatus = "Rejected";
             _redHouseDbContext.Update(userIdentity);
-                _redHouseDbContext.SaveChanges();
+            _redHouseDbContext.SaveChanges();
 
 
             return new ResponsDto<UserIdentity>
@@ -133,7 +140,7 @@ namespace server.Services
 
             userIdentity.RequestStatus = "Accepted";
             _redHouseDbContext.Update(userIdentity);
-                _redHouseDbContext.SaveChanges();
+            _redHouseDbContext.SaveChanges();
 
 
             return new ResponsDto<UserIdentity>

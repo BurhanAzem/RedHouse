@@ -41,6 +41,7 @@ class ManagePropertiesController extends GetxController {
   double? Latitude;
   double? Longitude;
 
+  String propertiesFilter = "All";
   int propertiesUserId = 0;
   List<Property> userProperties = [];
   CameraPosition? currentPosition;
@@ -63,7 +64,7 @@ class ManagePropertiesController extends GetxController {
         view,
         availableDate,
         propertyStatus,
-        numberOfUnits?.text ?? "",
+        numberOfUnits.text,
         parkingSpots.text,
         listingType,
         isAvaliableBasement,
@@ -97,7 +98,8 @@ class ManagePropertiesController extends GetxController {
   }
 
   getPropertiesUser() async {
-    var response = await PropertyData.getPropertiesForUser(propertiesUserId);
+    var response = await PropertyData.getPropertiesForUser(
+        propertiesUserId, propertiesFilter);
 
     if (response['statusCode'] == 200) {
       userProperties = (response['listDto'] as List<dynamic>)

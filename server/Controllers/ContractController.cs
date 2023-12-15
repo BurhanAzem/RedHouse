@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using server.Services;
 using RedHouse_Server.Dtos.ApplicationDtos;
 using RedHouse_Server.Dtos.ContractDtos;
+using Cooking_School.Dtos;
 
 namespace RedHouse_Server.Controllers
 {
@@ -139,6 +140,23 @@ namespace RedHouse_Server.Controllers
         {
             var result = await _contractServices.NumberOfContracts();
             // Set the token value in the cookie
+            return Ok(result);
+        }
+
+        [HttpGet("/contracts/filter")]
+        public async Task<IActionResult> FilterContracts([FromQuery] SearchDto searchDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _contractServices.FilterContracts(searchDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
         }
 

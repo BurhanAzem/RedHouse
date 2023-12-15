@@ -8,6 +8,22 @@ export const posts = atom({
     default: []
 })
 
+
+export const searchedProperties = atom({
+    key: 'searchedProperties',
+    default: []
+})
+
+export const searchedDContracts = atom({
+    key: 'searchedDContracts',
+    default: []
+})
+
+export const requestsState = atom({
+    key: 'requests',
+    default: []
+})
+
 export const isCreatingPost = atom({
     key: 'creating',
     default: false
@@ -73,6 +89,11 @@ export const studentPosts = atom({
 
 export const PostDetails = atom({
     key: 'PostDetails',
+    default: {}
+})
+
+export const contractDetails = atom({
+    key: 'contractDetails',
     default: {}
 })
 

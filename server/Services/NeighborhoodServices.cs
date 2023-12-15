@@ -16,96 +16,96 @@ namespace server.Services
             _redHouseDbContext = blueHouseDbContext;
         }
 
-        public async Task<ResponsDto<Neighborhood>> AddNeighborhood(NeighborhoodDto neighborhoodDto)
-        {
-            var porperty = await _redHouseDbContext.Neighborhoods.FindAsync(neighborhoodDto.PropertyId);
-            if (porperty == null)
-            {
-                return new ResponsDto<Neighborhood>
-                {
-                    Exception = new Exception("Property Not Exist"),
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
-            }
-            Location location = new Location
-            {
-                City = neighborhoodDto.Location.City,
-                Country = neighborhoodDto.Location.Country,
-                Region = neighborhoodDto.Location.Region,
-                PostalCode = neighborhoodDto.Location.PostalCode,
-                StreetAddress = neighborhoodDto.Location.StreetAddress,
-                Latitude = neighborhoodDto.Location.Latitude,
-                Longitude = neighborhoodDto.Location.Longitude,
-            };
+        // public async Task<ResponsDto<Neighborhood>> AddNeighborhood(NeighborhoodDto neighborhoodDto)
+        // {
+        //     var porperty = await _redHouseDbContext.Neighborhoods.FindAsync(neighborhoodDto.PropertyId);
+        //     if (porperty == null)
+        //     {
+        //         return new ResponsDto<Neighborhood>
+        //         {
+        //             Exception = new Exception("Property Not Exist"),
+        //             StatusCode = HttpStatusCode.BadRequest,
+        //         };
+        //     }
+        //     Location location = new Location
+        //     {
+        //         City = neighborhoodDto.Location.City,
+        //         Country = neighborhoodDto.Location.Country,
+        //         Region = neighborhoodDto.Location.Region,
+        //         PostalCode = neighborhoodDto.Location.PostalCode,
+        //         StreetAddress = neighborhoodDto.Location.StreetAddress,
+        //         Latitude = neighborhoodDto.Location.Latitude,
+        //         Longitude = neighborhoodDto.Location.Longitude,
+        //     };
 
-            var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
-            _redHouseDbContext.SaveChangesAsync();
+        //     var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
+        //     _redHouseDbContext.SaveChangesAsync();
 
-            Neighborhood neighborhood = new Neighborhood
-            {
-                LocationId = locationRes.Entity.Id,
-                NeighborhoodName = neighborhoodDto.NeighborhoodName,
-                NeighborhoodType = neighborhoodDto.NeighborhoodType,
-                PropertyId = neighborhoodDto.PropertyId,
-            };
-            var neighborhoodRes = await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
-            await _redHouseDbContext.SaveChangesAsync();
+        //     Neighborhood neighborhood = new Neighborhood
+        //     {
+        //         LocationId = locationRes.Entity.Id,
+        //         NeighborhoodName = neighborhoodDto.NeighborhoodName,
+        //         NeighborhoodType = neighborhoodDto.NeighborhoodType,
+        //         PropertyId = neighborhoodDto.PropertyId,
+        //     };
+        //     var neighborhoodRes = await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
+        //     await _redHouseDbContext.SaveChangesAsync();
 
-            return new ResponsDto<Neighborhood>
-            {
-                Dto = neighborhoodRes.Entity,
-                Message = "Neighborhood Added Successfully",
-                StatusCode = HttpStatusCode.OK,
-            };
-        }
+        //     return new ResponsDto<Neighborhood>
+        //     {
+        //         Dto = neighborhoodRes.Entity,
+        //         Message = "Neighborhood Added Successfully",
+        //         StatusCode = HttpStatusCode.OK,
+        //     };
+        // }
 
-        public async Task<ResponsDto<Neighborhood>> AddRangeNeighborhood(ListNeighborhoodDto listNeighborhoodDto)
-        {
-            foreach (var neighborhoodDto in listNeighborhoodDto.NeighborhoodDtos)
-            {
-                var porperty = await _redHouseDbContext.Properties.FindAsync(neighborhoodDto.PropertyId);
-                if (porperty == null)
-                {
-                    return new ResponsDto<Neighborhood>
-                    {
-                        Exception = new Exception("Property Not Exist"),
-                        StatusCode = HttpStatusCode.BadRequest,
-                    };
-                }
-                Location location = new Location
-                {
-                    City = neighborhoodDto.Location.City,
-                    Country = neighborhoodDto.Location.Country,
-                    Region = neighborhoodDto.Location.Region,
-                    PostalCode = neighborhoodDto.Location.PostalCode,
-                    StreetAddress = neighborhoodDto.Location.StreetAddress,
-                    Latitude = neighborhoodDto.Location.Latitude,
-                    Longitude = neighborhoodDto.Location.Longitude,
-                };
+        // public async Task<ResponsDto<Neighborhood>> AddRangeNeighborhood(ListNeighborhoodDto listNeighborhoodDto)
+        // {
+        //     foreach (var neighborhoodDto in listNeighborhoodDto.NeighborhoodDtos)
+        //     {
+        //         var porperty = await _redHouseDbContext.Properties.FindAsync(neighborhoodDto.PropertyId);
+        //         if (porperty == null)
+        //         {
+        //             return new ResponsDto<Neighborhood>
+        //             {
+        //                 Exception = new Exception("Property Not Exist"),
+        //                 StatusCode = HttpStatusCode.BadRequest,
+        //             };
+        //         }
+        //         Location location = new Location
+        //         {
+        //             City = neighborhoodDto.Location.City,
+        //             Country = neighborhoodDto.Location.Country,
+        //             Region = neighborhoodDto.Location.Region,
+        //             PostalCode = neighborhoodDto.Location.PostalCode,
+        //             StreetAddress = neighborhoodDto.Location.StreetAddress,
+        //             Latitude = neighborhoodDto.Location.Latitude,
+        //             Longitude = neighborhoodDto.Location.Longitude,
+        //         };
 
-                var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
-                await _redHouseDbContext.SaveChangesAsync();
+        //         var locationRes = await _redHouseDbContext.Locations.AddAsync(location);
+        //         await _redHouseDbContext.SaveChangesAsync();
 
-                Neighborhood neighborhood = new Neighborhood
-                {
-                    LocationId = locationRes.Entity.Id,
-                    NeighborhoodName = neighborhoodDto.NeighborhoodName,
-                    NeighborhoodType = neighborhoodDto.NeighborhoodType,
-                    PropertyId = neighborhoodDto.PropertyId,
-                };
-                var neighborhoodRes = await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
-                await _redHouseDbContext.SaveChangesAsync();
-
-
-            }
+        //         Neighborhood neighborhood = new Neighborhood
+        //         {
+        //             LocationId = locationRes.Entity.Id,
+        //             NeighborhoodName = neighborhoodDto.NeighborhoodName,
+        //             NeighborhoodType = neighborhoodDto.NeighborhoodType,
+        //             PropertyId = neighborhoodDto.PropertyId,
+        //         };
+        //         var neighborhoodRes = await _redHouseDbContext.Neighborhoods.AddAsync(neighborhood);
+        //         await _redHouseDbContext.SaveChangesAsync();
 
 
-            return new ResponsDto<Neighborhood>
-            {
-                Message = "Neighborhoods Added Successfully",
-                StatusCode = HttpStatusCode.OK,
-            };
-        }
+        //     }
+
+
+        //     return new ResponsDto<Neighborhood>
+        //     {
+        //         Message = "Neighborhoods Added Successfully",
+        //         StatusCode = HttpStatusCode.OK,
+        //     };
+        // }
 
         public async Task<ResponsDto<Neighborhood>> GetNeighborhoods(int propertyId)
         {

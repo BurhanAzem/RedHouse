@@ -519,6 +519,8 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocationId");
+
                     b.ToTable("Users");
                 });
 
@@ -582,7 +584,7 @@ namespace RedHouse_Server.Migrations
                     b.ToTable("BookingDays");
                 });
 
-            modelBuilder.Entity("server.Models.Complain", b =>
+            modelBuilder.Entity("server.Models.Complaint", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -602,7 +604,9 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Complains");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Complaints");
                 });
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
@@ -786,6 +790,8 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserIdentities");
                 });
 
@@ -924,6 +930,17 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RedHouse_Server.Models.User", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+                });
+
             modelBuilder.Entity("server.Models.Booking", b =>
                 {
                     b.HasOne("RedHouse_Server.Models.Property", "Property")
@@ -952,6 +969,17 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Booking");
+                });
+
+            modelBuilder.Entity("server.Models.Complaint", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
@@ -1008,6 +1036,17 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("server.Models.UserIdentity", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.Contract", b =>

@@ -74,6 +74,11 @@ class ApplicationsController extends GetxController {
     print(response['message']);
   }
 
+  ignoreApplication(int id) async {
+    var response = await ApplicationData.ignoreApplication(id);
+    print(response['message']);
+  }
+
   deleteApplication(int id) async {
     var response = await ApplicationData.deleteApplication(id);
     print(response['message']);

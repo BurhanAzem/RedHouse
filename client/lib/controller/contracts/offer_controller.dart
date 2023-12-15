@@ -62,6 +62,16 @@ class OfferController extends GetxController {
         );
       }
     }
+
+    // if (response['statusCode'] == 200) {
+    //   print(response['listDto']);
+    // } else {
+    //   Get.defaultDialog(
+    //     title: "Error",
+    //     middleText:
+    //         "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+    //   );
+    // }
   }
 
   getAllOffersForUser(int userId) async {

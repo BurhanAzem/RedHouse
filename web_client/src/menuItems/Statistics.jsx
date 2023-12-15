@@ -11,6 +11,7 @@ import 'chart.js/auto';
 import Chart from "chart.js/auto";
 import { CategoryScale } from 'chart.js/auto';
 import Cookies from 'js-cookie'
+import Footer from '../components/Footer.jsx'
 
 Chart.register(CategoryScale);
 
@@ -31,6 +32,8 @@ const Statistics = () => {
   const [lastTenYears, setLastTenYears] = useState([])
   const [currentYear, setCurrentYear] = useState(new Date(Date.now()).getFullYear())
   const [numberOfPropertiesPerTime, setNumberOfPropertiesPerTime] = useState([])
+  const [numberOfUsersPerTime, setNumberOfUsersPerTime] = useState([])
+
 
 
   const [properties_time, setProperties_time] = useState([])
@@ -280,8 +283,10 @@ const Statistics = () => {
     const getLastTenYears = async () => {
 
       let list = Array(10);
-      for (let i = 0; i < 10; i++) {
-        list[i] = (currentYear - i).toString();
+      let j = 0;
+      for (let i = 9; i >= 0; i--) {
+        list[j] = (currentYear - i).toString();
+        j++;
       }
       console.log(currentYear);
 
@@ -316,7 +321,34 @@ const Statistics = () => {
       }
     }
 
+
+    const getNumberOfUsersPerTime = async () => {
+      try {
+        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/users/users-numbers-in-last-ten-year`);
+        setNumberOfUsersPerTime(result.data)
+        console.log(result);
+        await getLastTenYears()
+      } catch (err) {
+        if (err.message == 'Network Error' && !err.response)
+          toast.error('Network error - make sure server is running!', {
+            position: "top-center",
+            autoClose: 10000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+        if (err.response.status == 401) {
+          navigate('/login')
+        }
+        console.log(err)
+      }
+    }
+
     //// fetchData()
+    getNumberOfUsersPerTime()
     getVisits()
     getNumberOfProperties()
     getNumberOfUsers()
@@ -333,7 +365,7 @@ const Statistics = () => {
   // },2);
   // }, []);
 
-  const data = {
+  const propertiesData = {
     labels: lastTenYears,
     datasets: [
       {
@@ -347,12 +379,27 @@ const Statistics = () => {
     ],
   };
 
+
+  const usersData = {
+    labels: lastTenYears,
+    datasets: [
+      {
+        label: "First dataset",
+        data: numberOfUsersPerTime,
+        fill: true,
+        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "rgba(75,192,192,1)",
+        borderWidth: 2, // Adjust this value to change the line width
+      },
+    ],
+  };
+
   return (
     <>
+      <div style={{ height: "50px" }}></div>
+      {/* <div style={{ height: "10px" }}></div>
       <div style={{ height: "10px" }}></div>
-      <div style={{ height: "10px" }}></div>
-      <div style={{ height: "10px" }}></div>
-      <div style={{ height: "10px" }}></div>
+      <div style={{ height: "10px" }}></div> */}
 
       <div className="row" id='statistics'>
         <div className="col-md-3">
@@ -400,13 +447,13 @@ const Statistics = () => {
       <div style={{ paddingRight: "0px" }}>
         <div className="l-search" style={{ margin: "40px" }}>Properties / Time</div>
         <div className="items" style={{ height: "400px" }}>
-          <Line aria-setsize={{}} data={data} />
+          <Line aria-setsize={{}} data={propertiesData} />
         </div>
         <div className="l-search" style={{ margin: "40px" }}>Users / Time</div>
         <div className="items" style={{ height: "400px" }}>
-          <Line aria-setsize={{}} data={data} />
+          <Line aria-setsize={{}} data={usersData}  />
         </div>
-
+        <Footer/>
       </div>
     </>
 

@@ -63,7 +63,7 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpGet("/userIdentities")]
-        public async Task<IActionResult> GetRequestsVerifyUserIdentities(int id)
+        public async Task<IActionResult> GetRequestsVerifyUserIdentities()
         {
             if (!ModelState.IsValid)
             {

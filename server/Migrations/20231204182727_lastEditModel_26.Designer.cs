@@ -12,8 +12,8 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    [Migration("20231127100328_lastEditModel_13")]
-    partial class lastEditModel_13
+    [Migration("20231204182727_lastEditModel_26")]
+    partial class lastEditModel_26
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -522,6 +522,8 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocationId");
+
                     b.ToTable("Users");
                 });
 
@@ -564,28 +566,9 @@ namespace RedHouse_Server.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("server.Models.BookingDay", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DayDate")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
-
-                    b.ToTable("BookingDays");
-                });
-
-            modelBuilder.Entity("server.Models.Complain", b =>
+            modelBuilder.Entity("server.Models.Complaint", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -605,7 +588,9 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Complains");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Complaints");
                 });
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
@@ -789,6 +774,8 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserIdentities");
                 });
 
@@ -927,6 +914,17 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RedHouse_Server.Models.User", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+                });
+
             modelBuilder.Entity("server.Models.Booking", b =>
                 {
                     b.HasOne("RedHouse_Server.Models.Property", "Property")
@@ -938,7 +936,7 @@ namespace RedHouse_Server.Migrations
                     b.HasOne("RedHouse_Server.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Property");
@@ -946,15 +944,17 @@ namespace RedHouse_Server.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("server.Models.BookingDay", b =>
+            
+
+            modelBuilder.Entity("server.Models.Complaint", b =>
                 {
-                    b.HasOne("server.Models.Booking", "Booking")
+                    b.HasOne("RedHouse_Server.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Booking");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("server.Models.ContractActivity", b =>
@@ -1011,6 +1011,17 @@ namespace RedHouse_Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("server.Models.UserIdentity", b =>
+                {
+                    b.HasOne("RedHouse_Server.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RedHouse_Server.Models.Contract", b =>

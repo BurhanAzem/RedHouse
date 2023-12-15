@@ -96,6 +96,24 @@ namespace RedHouse_Server.Controllers
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
         }
+        
+
+        [HttpGet("/properties/{id}/booking-days")]
+        public async Task<IActionResult> GetAvilableBookingDaysForProperty(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _bookingServices.GetAvilableBookingDaysForProperty(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
 
 
         [HttpDelete("/bookings/{id}")]

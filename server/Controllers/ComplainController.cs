@@ -18,16 +18,16 @@ namespace RedHouse_Server.Controllers
     [ApiController]
     public class ComplainController : ControllerBase
     {
-        private IComplainServices _complainServices;
+        private IComplaintServices _complainServices;
 
-        public ComplainController(IComplainServices complainServices)
+        public ComplainController(IComplaintServices complainServices)
         {
             _complainServices = complainServices;
         }
         
         // [Authorize]
-        [HttpPost("/complains")]
-        public async Task<IActionResult> CreateComplain([FromBody] ComplainDto complainDto)
+        [HttpPost("/complaints")]
+        public async Task<IActionResult> CreateComplain([FromBody] ComplaintDto complainDto)
         {
             if (!ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpGet("/complains/{id}")]
+        [HttpGet("/complaints/{id}")]
         public async Task<IActionResult> GetComplain(int id)
         {
             if (!ModelState.IsValid)
@@ -62,19 +62,46 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpGet("/users/{id}/complains")]
+        [HttpGet("/users/{id}/complaints")]
         public async Task<IActionResult> GetAllComplain(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _complainServices.GetComplains(id);
+            var result = await _complainServices.GetComplaints(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
                 throw new StatusCodeException(code.Value, result.Exception);
             }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+
+        [HttpGet("/complaints/for-day")]
+        public async Task<IActionResult> GetComplaintsForDay([FromQuery] DateTime day)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _complainServices.GetComplaintsForDay(day);
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
+
+        [HttpGet("/complaints/number-of-complaints-per-day")]
+        public async Task<IActionResult> GetNumberOfComplaintsPerDay([FromQuery] int page, int limit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _complainServices.GetNumberOfComplaintsPerDay(page, limit);
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 

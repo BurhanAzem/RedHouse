@@ -124,6 +124,27 @@ class ApplicationData {
     }
   }
 
+  static ignoreApplication(int id) async {
+    if (await checkInternet()) {
+      var response = await http.post(
+          Uri.parse('${AppLink.applications}/$id/ignore'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
   // static ignoreApplication(int id) async {
   //   if (await checkInternet()) {
   //     var response = await http.post(

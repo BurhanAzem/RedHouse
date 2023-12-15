@@ -15,20 +15,20 @@ namespace server.Services
             _redHouseDbContext = refHouseDbContext;
         }
 
-        public async Task<ResponsDto<User>> GetAgents(string userName, int pageNumber = 1, int pageSize = 10)
+        public async Task<ResponsDto<User>> FilterAgents(SearchDto searchDto)
         {
-            // Validate and adjust page number and page size if needed
-            pageNumber = pageNumber < 1 ? 1 : pageNumber;
-            pageSize = pageSize < 1 ? 10 : pageSize;
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
 
-            var query = _redHouseDbContext.Users.Where(u => u.Name.Contains(userName));
-
+            var query = _redHouseDbContext.Users.Where(u => u.UserRole == "Agent").Include(u => u.Location).AsQueryable();
+            if (searchDto.SearchQuery != null)
+                query = query.Where(u => u.Name.Contains(searchDto.SearchQuery));
             var totalItems = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
 
             var users = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)searchDto.Limit)
                 .ToArrayAsync();
 
             if (users == null || !users.Any())
@@ -51,6 +51,7 @@ namespace server.Services
             };
         }
 
+<<<<<<< HEAD
 
 
         public async Task<ResponsDto<User>> GetAllUsers(int pageNumber = 1, int pageSize = 10)
@@ -67,6 +68,21 @@ namespace server.Services
             var users = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
+=======
+        public async Task<ResponsDto<User>> FilterUsers(SearchDto searchDto)
+        {
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
+            var query = _redHouseDbContext.Users.Include(u => u.Location).AsQueryable();
+            if (searchDto.SearchQuery != null)
+                query = query.Where(u => u.Name.Contains(searchDto.SearchQuery));
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
+
+            var users = await query
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)searchDto.Limit)
+>>>>>>> 617bbd39e0c39bec3a6756db2c0634de2c1793f3
                 .ToArrayAsync();
 
             if (users == null || !users.Any())
@@ -88,6 +104,45 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+<<<<<<< HEAD
+=======
+
+        // public async Task<ResponsDto<User>> GetAllUsers(int pageNumber = 1, int pageSize = 10)
+        // {
+        //     // Validate and adjust page number and page size if needed
+        //     pageNumber = pageNumber < 1 ? 1 : pageNumber;
+        //     pageSize = pageSize < 1 ? 10 : pageSize;
+
+        //     var query = _redHouseDbContext.Users;
+
+        //     var totalItems = await query.CountAsync();
+        //     var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+        //     var users = await query
+        //         .Skip((pageNumber - 1) * pageSize)
+        //         .Take(pageSize)
+        //         .ToArrayAsync();
+
+        //     if (users == null || !users.Any())
+        //     {
+        //         return new ResponsDto<User>
+        //         {
+        //             Exception = new Exception("Users Not Found"),
+        //             StatusCode = HttpStatusCode.NotFound,
+        //         };
+        //     }
+
+        //     return new ResponsDto<User>
+        //     {
+        //         ListDto = users,
+        //         // PageNumber = pageNumber,
+        //         // PageSize = pageSize,
+        //         // TotalItems = totalItems,
+        //         // TotalPages = totalPages,
+        //         StatusCode = HttpStatusCode.OK,
+        //     };
+        // }
+>>>>>>> 617bbd39e0c39bec3a6756db2c0634de2c1793f3
 
         public async Task<List<int>> GetNumberOfUsersInLastTenYears()
         {
@@ -101,12 +156,20 @@ namespace server.Services
                 List<User> usersInThisYear = uersOfTheLastTenYears.Where(o => o.Created.Year == (DateTime.Now.Year - i)).ToList();
 
                 avgUsersNumberPerYearInLastTenYears[i] = usersInThisYear.Count();
-
             }
-            return avgUsersNumberPerYearInLastTenYears;
+
+            avgUsersNumberPerYearInLastTenYears.Reverse();
+            return avgUsersNumberPerYearInLastTenYears.ToList(); // Convert it back to a list
         }
 
 
+<<<<<<< HEAD
+=======
+
+        // public async Task<ResponsDto<User>> GetApplication(int applicationId)
+        // {
+        //     var users = await _redHouseDbContext.Users.ToArrayAsync();
+>>>>>>> 617bbd39e0c39bec3a6756db2c0634de2c1793f3
 
 
         public async Task<ResponsDto<User>> GetUser(int userId)

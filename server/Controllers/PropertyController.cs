@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Dtos.PropertyDtos;
 using Microsoft.AspNetCore.Authorization;
+using Cooking_School.Dtos;
 
 namespace RedHouse_Server.Controllers
 {
@@ -74,6 +75,24 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+
+        [HttpGet("/properties/filter")]
+        public async Task<IActionResult> FilterProperties([FromQuery] SearchDto searchDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _propertyServices.FilterProperties(searchDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
         [HttpDelete("/properties/{id}")]
         public async Task<IActionResult> DeleteProperty(int id)
         {
@@ -113,13 +132,13 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpGet("/users/{id}/properties")]
-        public async Task<IActionResult> GetAllPropertiesForUser(int id)
+        public async Task<IActionResult> GetAllPropertiesForUser(int id, [FromQuery] MyPropertiesFilterDto myPropertiesFilterDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _propertyServices.GetAllPropertiesForUser(id);
+            var result = await _propertyServices.GetAllPropertiesForUser(id, myPropertiesFilterDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

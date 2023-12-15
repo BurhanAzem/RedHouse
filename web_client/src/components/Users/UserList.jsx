@@ -34,12 +34,12 @@ const PostList = () => {
       setUsers([]);
       setLoading(true);
 
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users?searchQuery=${keyword}&languageFilter=${languageFilter}&page=${page}&limit=${limit}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users?searchQuery=${keyword}&page=${page}&limit=${limit}`);
       setUsers(response.data.data);
       console.log(response);
-      setPage(response.data.pagination.page);
-      setPages(response.data.pagination.totalPage);
-      setRows(response.data.pagination.totalRows);
+      // setPage(response.data.pagination.page);
+      // setPages(response.data.pagination.totalPage);
+      // setRows(response.data.pagination.totalRows);
     } catch (err) {
       if (err.message === 'Network Error' && !err.response) {
         toast.error('Network error - make sure the server is running!', {
