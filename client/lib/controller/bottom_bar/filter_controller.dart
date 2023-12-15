@@ -22,42 +22,41 @@ class FilterController extends GetxController {
     longitude: 0,
   ).obs;
 
-  bool buyHouse = false;
-  bool buyHouseTemp = false;
-  bool buyApartment = false;
-  bool buyApartmentTemp = false;
-  bool buyTownhouse = false;
-  bool buyTownhouseTemp = false;
-  bool buyCastle = false;
-  bool buyCastleTemp = false;
-  bool buyDepartment = false;
-  bool buyDepartmentTemp = false;
+  // Property type
+  bool buyHouse = true;
+  bool buyHouseTemp = true;
+  bool buyApartment = true;
+  bool buyApartmentTemp = true;
+  bool buyTownhouse = true;
+  bool buyTownhouseTemp = true;
+  bool buyCastle = true;
+  bool buyCastleTemp = true;
+  bool buyDepartment = true;
+  bool buyDepartmentTemp = true;
 
-  bool rentHouse = false;
-  bool rentHouseTemp = false;
-  bool rentApartment = false;
-  bool rentApartmentTemp = false;
-  bool rentTownhouse = false;
-  bool rentTownhouseTemp = false;
-  bool rentCastle = false;
-  bool rentCastleTemp = false;
-  bool rentDepartment = false;
-  bool rentDepartmentTemp = false;
+  bool rentHouse = true;
+  bool rentHouseTemp = true;
+  bool rentApartment = true;
+  bool rentApartmentTemp = true;
+  bool rentTownhouse = true;
+  bool rentTownhouseTemp = true;
+  bool rentCastle = true;
+  bool rentCastleTemp = true;
+  bool rentDepartment = true;
+  bool rentDepartmentTemp = true;
 
+  // Price
   final buyMaxController = TextEditingController();
   final buyMinController = TextEditingController();
-  final rentMaxController = TextEditingController();
-  final rentMinController = TextEditingController();
   final buyMaxControllerTemp = TextEditingController();
   final buyMinControllerTemp = TextEditingController();
+
+  final rentMaxController = TextEditingController();
+  final rentMinController = TextEditingController();
   final rentMaxControllerTemp = TextEditingController();
   final rentMinControllerTemp = TextEditingController();
 
-  String buyView = "Any";
-  String buyViewTemp = "Any";
-  String rentView = "Any";
-  String rentViewTemp = "Any";
-
+  // Bed Bath
   RxString bedButtonTemp = "Any".obs;
   RxString bedButton = "Any".obs;
   RxString bathButtonTemp = "Any".obs;
@@ -82,24 +81,77 @@ class FilterController extends GetxController {
     '5+',
   ];
 
+  // Property view
+  String buyView = "Any";
+  String buyViewTemp = "Any";
+  String rentView = "Any";
+  String rentViewTemp = "Any";
+
+  // Listing by
   String buyListingBy = "Any";
   String buyListingByTemp = "Any";
   String rentListingBy = "Any";
   String rentListingByTemp = "Any";
 
+  // Property size
   final buySizeMax = TextEditingController();
   final buySizeMin = TextEditingController();
   final buySizeMaxTemp = TextEditingController();
   final buySizeMinTemp = TextEditingController();
+
   final rentSizeMax = TextEditingController();
   final rentSizeMin = TextEditingController();
   final rentSizeMaxTemp = TextEditingController();
   final rentSizeMinTemp = TextEditingController();
 
+  // Rent type
+  String rentType = "All";
+  String rentTypeTemp = "All";
+
+  // Property status
+  bool buyComingSoon = true;
+  bool buyComingSoonTemp = true;
+  bool buyAcceptingOffers = true;
+  bool buyAcceptingOffersTemp = true;
+  bool buyUnderContract = true;
+  bool buyUnderContractTemp = true;
+
+  bool rentComingSoon = true;
+  bool rentComingSoonTemp = true;
+  bool rentAcceptingOffers = true;
+  bool rentAcceptingOffersTemp = true;
+  bool rentUnderContract = true;
+  bool rentUnderContractTemp = true;
+
+  // Parking spots
+  final buyParkingSpots = TextEditingController();
+  final buyParkingSpotsTemp = TextEditingController();
+  final rentParkingSpots = TextEditingController();
+  final rentParkingSpotsTemp = TextEditingController();
+
+  // Basement
+  bool buyBasement = true;
+  bool buyBasementTemp = true;
+  bool rentBasement = true;
+  bool rentBasementTemp = true;
+
+  // Year built
+  final buyYearBuiltMax = TextEditingController();
+  final buyYearBuiltMin = TextEditingController();
+  final buyYearBuiltMaxTemp = TextEditingController();
+  final buyYearBuiltMinTemp = TextEditingController();
+
+  final rentYearBuiltMax = TextEditingController();
+  final rentYearBuiltMin = TextEditingController();
+  final rentYearBuiltMaxTemp = TextEditingController();
+  final rentYearBuiltMinTemp = TextEditingController();
+
+  // For style when filter on
   bool filtersON = false;
   bool priceON = false;
   bool bedBathON = false;
   bool propertyTypeON = false;
+
   String priceText = "Price";
   String bedBathText = "Bed / Bath";
   String propertyTypeText = "Property type";
@@ -306,7 +358,7 @@ class FilterController extends GetxController {
     if (listingType) {
       listingPropertyType = "For sell";
     } else {
-      listingPropertyType = "For rent";
+      listingPropertyType = "For monthly rent";
     }
     var response = await PropertyData.getProperties(
       propertyTypes,

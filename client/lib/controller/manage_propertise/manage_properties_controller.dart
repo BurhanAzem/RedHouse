@@ -1,5 +1,6 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
+import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:client/model/property.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
@@ -7,35 +8,30 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class ManagePropertiesController extends GetxController {
-
-  String propertiesFilter = "All";
-  int propertiesUserId = 0;
-  List<Property> userProperties = [];
-
   GlobalKey<FormState> formKey1 = GlobalKey<FormState>(); // In AddProperty1
   GlobalKey<FormState> formKey2 = GlobalKey<FormState>(); // In AddNeighbour
   GoogleMapController? mapController1; // In AddProperty1
   GoogleMapController? mapController2; // In AddNeighbour
   int activeStep = 0;
 
-  late TextEditingController price;
-  late TextEditingController numberOfBedrooms;
-  late TextEditingController numberOfBathrooms;
-  late TextEditingController squareMeter;
-  late TextEditingController propertyDescription;
-  DateTime builtYear = DateTime(2000);
+  TextEditingController price = TextEditingController();
+  TextEditingController numberOfBedrooms = TextEditingController();
+  TextEditingController numberOfBathrooms = TextEditingController();
+  TextEditingController squareMeter = TextEditingController();
+  TextEditingController propertyDescription = TextEditingController();
+  TextEditingController numberOfUnits = TextEditingController();
+  TextEditingController parkingSpots = TextEditingController();
+  TextEditingController streetAddress = TextEditingController();
+  DateTime builtYear = DateTime.now();
+  DateTime availableDate = DateTime.now();
   String propertyType = "House";
   String view = "City";
-  DateTime availableDate = DateTime(2023);
   String propertyStatus = "Accepting offers";
-  TextEditingController? numberOfUnits;
-  late TextEditingController parkingSpots;
   String listingType = "For sell";
-  String isAvaliableBasement = "Yes";
-  late TextEditingController streetAddress;
   String listingBy = "Landlord";
-  int userId = 0;
+  String isAvaliableBasement = "Yes";
   List<String> downloadUrls = [];
+  int userId = 0;
   StatusRequest statusRequest = StatusRequest.loading;
 
   String? City;
@@ -45,26 +41,13 @@ class ManagePropertiesController extends GetxController {
   double? Latitude;
   double? Longitude;
 
+  String propertiesFilter = "All";
+  int propertiesUserId = 0;
+  List<Property> userProperties = [];
   CameraPosition? currentPosition;
   Set<Marker> markers = {}; // Empty marker
-
-  @override
-  void onInit() {
-    price = TextEditingController();
-    numberOfBedrooms = TextEditingController();
-    numberOfBathrooms = TextEditingController();
-    squareMeter = TextEditingController();
-    propertyDescription = TextEditingController();
-    view = "City";
-    availableDate = DateTime(2023);
-    propertyStatus = "Accepting offers";
-    numberOfUnits = TextEditingController();
-    parkingSpots = TextEditingController();
-    streetAddress = TextEditingController();
-    listingBy = "Landlord";
-    activeStep = 0;
-    super.onInit();
-  }
+  List<NeighborhoodDto> propertyNeighborhoods = [];
+  TextEditingController neighborhoodStreet = TextEditingController();
 
   @override
   AddProperty() async {
@@ -81,7 +64,7 @@ class ManagePropertiesController extends GetxController {
         view,
         availableDate,
         propertyStatus,
-        numberOfUnits?.text ?? "",
+        numberOfUnits.text,
         parkingSpots.text,
         listingType,
         isAvaliableBasement,
@@ -115,7 +98,8 @@ class ManagePropertiesController extends GetxController {
   }
 
   getPropertiesUser() async {
-    var response = await PropertyData.getPropertiesForUser(propertiesUserId, propertiesFilter);
+    var response = await PropertyData.getPropertiesForUser(
+        propertiesUserId, propertiesFilter);
 
     if (response['statusCode'] == 200) {
       userProperties = (response['listDto'] as List<dynamic>)
@@ -144,7 +128,7 @@ class ManagePropertiesController extends GetxController {
 
   Widget easyStepper() {
     return Padding(
-      padding: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 25),
       child: EasyStepper(
         finishedStepBackgroundColor: const Color(0xffd92328),
         activeStepBorderColor: Colors.black,

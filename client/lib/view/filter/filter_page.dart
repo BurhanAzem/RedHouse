@@ -17,6 +17,8 @@ class _FilterPageState extends State<FilterPage> {
   @override
   void initState() {
     super.initState();
+
+    // Property type
     controller.buyHouseTemp = controller.buyHouse;
     controller.buyApartmentTemp = controller.buyApartment;
     controller.buyTownhouseTemp = controller.buyTownhouse;
@@ -29,24 +31,54 @@ class _FilterPageState extends State<FilterPage> {
     controller.rentCastleTemp = controller.rentCastle;
     controller.rentDepartmentTemp = controller.rentDepartment;
 
-    controller.rentMaxControllerTemp.text = controller.rentMaxController.text;
-    controller.rentMinControllerTemp.text = controller.rentMinController.text;
+    // Price
     controller.buyMaxControllerTemp.text = controller.buyMaxController.text;
     controller.buyMinControllerTemp.text = controller.buyMinController.text;
+    controller.rentMaxControllerTemp.text = controller.rentMaxController.text;
+    controller.rentMinControllerTemp.text = controller.rentMinController.text;
 
+    // Property view
     controller.buyViewTemp = controller.buyView;
     controller.rentViewTemp = controller.rentView;
 
+    // Bed Bath
     controller.copyBathButtonTemp();
     controller.copyBedButtonTemp();
 
-    controller.rentListingByTemp = controller.rentListingBy;
+    // Listing by
     controller.buyListingByTemp = controller.buyListingBy;
+    controller.rentListingByTemp = controller.rentListingBy;
 
-    controller.rentSizeMaxTemp.text = controller.rentSizeMax.text;
-    controller.rentSizeMinTemp.text = controller.rentSizeMin.text;
+    // Property size
     controller.buySizeMaxTemp.text = controller.buySizeMax.text;
     controller.buySizeMinTemp.text = controller.buySizeMin.text;
+    controller.rentSizeMaxTemp.text = controller.rentSizeMax.text;
+    controller.rentSizeMinTemp.text = controller.rentSizeMin.text;
+
+    // Rent type
+    controller.rentTypeTemp = controller.rentType;
+
+    // Property status
+    controller.buyComingSoonTemp = controller.buyComingSoon;
+    controller.buyAcceptingOffersTemp = controller.buyAcceptingOffers;
+    controller.buyUnderContractTemp = controller.buyUnderContract;
+    controller.rentComingSoonTemp = controller.rentComingSoon;
+    controller.rentAcceptingOffersTemp = controller.rentAcceptingOffers;
+    controller.rentUnderContractTemp = controller.rentUnderContract;
+
+    // Parking spots
+    controller.buyParkingSpotsTemp.text = controller.buyParkingSpots.text;
+    controller.rentParkingSpotsTemp.text = controller.rentParkingSpots.text;
+
+    // Basement
+    controller.buyBasementTemp = controller.buyBasement;
+    controller.rentBasementTemp = controller.rentBasement;
+
+    // Year built
+    controller.buyYearBuiltMaxTemp.text = controller.buyYearBuiltMax.text;
+    controller.buyYearBuiltMinTemp.text = controller.buyYearBuiltMin.text;
+    controller.rentYearBuiltMaxTemp.text = controller.rentYearBuiltMax.text;
+    controller.rentYearBuiltMinTemp.text = controller.rentYearBuiltMin.text;
   }
 
   @override

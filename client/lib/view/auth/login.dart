@@ -85,6 +85,7 @@ class _LoginState extends State<Login> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Email
                     const Text(
                       "Email",
                       style: TextStyle(fontSize: 18, color: Colors.black),
@@ -99,12 +100,14 @@ class _LoginState extends State<Login> {
                       decoration: InputDecoration(
                         suffixIcon: const Icon(Icons.email),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                     ),
+
+                    // Password
                     Container(height: 20),
                     const Text(
                       "Password",
@@ -121,7 +124,7 @@ class _LoginState extends State<Login> {
                       decoration: InputDecoration(
                         suffixIcon: const Icon(Icons.lock),
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

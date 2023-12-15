@@ -37,7 +37,7 @@ class _BedBathState extends State<BedBath> {
                             color: Colors.white,
                             borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(30))),
-                        height: MediaQuery.of(context).size.height / 1.97,
+                        height: MediaQuery.of(context).size.height / 1.95,
                         child: Column(
                           children: [
                             Column(
@@ -142,7 +142,12 @@ class BedBathRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("    Bedrooms", style: TextStyle(fontSize: 20)),
+          Text("    Bedrooms",
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.w500,
+                // color: Colors.grey[700],
+              )),
           Container(
             height: 72,
             child: Obx(() {
@@ -154,8 +159,13 @@ class BedBathRow extends StatelessWidget {
               );
             }),
           ),
-          Container(height: 15),
-          const Text("    Bathrooms", style: TextStyle(fontSize: 20)),
+          Container(height: 25),
+          Text("    Bathrooms",
+              style: TextStyle(
+                fontSize: 21,
+                fontWeight: FontWeight.w500,
+                // color: Colors.grey[700],
+              )),
           Container(
             height: 72,
             child: Obx(() {
@@ -193,7 +203,7 @@ class BedBathRow extends StatelessWidget {
         ),
         color: controller.isBedButtonTemp(label) ? Colors.black : Colors.white,
         textColor:
-            controller.isBedButtonTemp(label) ? Colors.white : Colors.black,
+            controller.isBedButtonTemp(label) ? Colors.white : Colors.grey[800],
         child: Text(
           label,
           style: const TextStyle(fontSize: 14),
@@ -222,8 +232,9 @@ class BedBathRow extends StatelessWidget {
           ),
         ),
         color: controller.isBathButtonTemp(label) ? Colors.black : Colors.white,
-        textColor:
-            controller.isBathButtonTemp(label) ? Colors.white : Colors.black,
+        textColor: controller.isBathButtonTemp(label)
+            ? Colors.white
+            : Colors.grey[800],
         child: Text(
           label,
           style: const TextStyle(fontSize: 14),

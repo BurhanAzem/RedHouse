@@ -10,11 +10,38 @@ class AddProperty4 extends StatefulWidget {
   _AddProperty4State createState() => _AddProperty4State();
 }
 
-class _AddProperty4State extends State<AddProperty4> {
+class _AddProperty4State extends State<AddProperty4>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
+
+  @override
+  void initState() {
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
+    );
+
+    // Create a Tween for the animation
+    _textAnimation = IntTween(
+            begin: 0, end: "Enter more information about your property".length)
+        .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    const options = [
-      "Any",
+    const viewOptions = [
       "City",
       "Village",
       "Mountain",
@@ -42,37 +69,79 @@ class _AddProperty4State extends State<AddProperty4> {
               },
             ),
             title: const Text(
-              "More Informations",
+              "Add Property",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          body: Container(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              child: ListView(
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
+                  MaterialButton(
+                    onPressed: () {
+                      setState(() {
+                        controller.increaseActiveStep();
+                        print(controller.activeStep);
+                      });
+                      Get.to(() => AddProperty5());
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.5,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Body
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            children: [
+              controller.easyStepper(),
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 25),
+                child: Form(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      controller.easyStepper(),
-                      Image.asset("assets/images/logo.png", scale: 10),
-                      Container(height: 5),
-                      const Text(
-                        "How much is the monthly rent?",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 23),
+                      // Introduction
+                      Image.asset("assets/images/logo.png", scale: 11),
+                      Container(
+                        child: AnimatedBuilder(
+                          animation: _textAnimation,
+                          builder: (context, child) {
+                            String animatedText =
+                                "Enter more information about your property"
+                                    .substring(0, _textAnimation.value);
+                            return Text(
+                              animatedText,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                      Container(height: 20),
+
+                      // Property price
+                      Container(height: 25),
                       const Text(
                         "Property price",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Container(height: 5),
                       Container(
@@ -83,20 +152,23 @@ class _AddProperty4State extends State<AddProperty4> {
                             suffixIcon: const Icon(Icons.money),
                             hintText: "Example: 2000",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.all(5),
+                            contentPadding: const EdgeInsets.all(10),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
                       ),
-                      Container(height: 20),
+
+                      // Parking spots
+                      Container(height: 30),
                       const Text(
-                        "Parking Spots",
+                        "Parking spots",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Container(height: 5),
                       Container(
@@ -107,20 +179,23 @@ class _AddProperty4State extends State<AddProperty4> {
                             suffixIcon: const Icon(Icons.numbers),
                             hintText: "Example: 3",
                             floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.all(5),
+                            contentPadding: const EdgeInsets.all(10),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                         ),
                       ),
-                      Container(height: 20),
+
+                      // Is available basement ?
+                      Container(height: 30),
                       const Text(
-                        "Is Avaliable Basement",
+                        "Is available basement ?",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400),
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Container(height: 5),
                       Container(
@@ -152,13 +227,16 @@ class _AddProperty4State extends State<AddProperty4> {
                           underline: const SizedBox(),
                         ),
                       ),
-                      Container(height: 20),
+
+                      // Property view
+                      Container(height: 30),
                       const Text(
                         "Property view",
                         style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Container(height: 5),
                       Container(
@@ -173,7 +251,7 @@ class _AddProperty4State extends State<AddProperty4> {
                         ),
                         child: DropdownButton<String>(
                           value: controller.view,
-                          items: options.map((String option) {
+                          items: viewOptions.map((String option) {
                             return DropdownMenuItem<String>(
                               value: option,
                               child: Text(option),
@@ -192,31 +270,9 @@ class _AddProperty4State extends State<AddProperty4> {
                       ),
                     ],
                   ),
-                  Container(height: 25),
-                  MaterialButton(
-                    onPressed: () {
-                      setState(() {
-                        controller.increaseActiveStep();
-                        print(controller.activeStep);
-                      });
-                      Get.to(() => AddProperty5());
-                    },
-                    color: const Color(0xffd92328),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Text(
-                      "Continue",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  Container(height: 15),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
         );
       },

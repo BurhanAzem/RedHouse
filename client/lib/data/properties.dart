@@ -168,15 +168,13 @@ class PropertyData {
   }
 
   static getPropertiesForUser(int userId, String propertiesFilter) async {
-
-final Map<String, dynamic> filters = {
+    final Map<String, dynamic> filters = {
       "propertiesFilter": propertiesFilter,
     };
 
-
-
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/users/$userId/properties", filters);
+      final Uri uri =
+          Uri.https("10.0.2.2:7042", "/users/$userId/properties", filters);
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',

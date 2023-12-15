@@ -96,4 +96,9 @@ class OfferController extends GetxController {
     var response = await OfferData.acceptOffer(offerId);
     print(response);
   }
+
+  deleteOffer(int id) async {
+    var response = await OfferData.deleteOffer(id);
+    print(response['message']);
+  }
 }
