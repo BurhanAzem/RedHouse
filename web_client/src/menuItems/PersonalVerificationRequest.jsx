@@ -228,16 +228,28 @@ const PersonalVerificationRequest = ({ requestData }) => {
 
       <div className="post-down">
         <div onClick={handleLinkClick}>
-
+          <div style={{fontWeight: "800"}}>Card ID</div>
           <div>
             {requestData.identityFiles && requestData.identityFiles.length > 0 && (
-              <img src={requestData.identityFiles[0].downloadUrls} alt="" />
+              <img
+                style={{ width: '950px', marginTop: '20px' }}
+                src={requestData.identityFiles[0].downloadUrls}
+                alt=""
+              />
             )}
+
+
           </div>
-          <hr />
+          <hr style={{marginTop: "40px"}}/>
           <div>
+          <div style={{fontWeight: "800"}}>Personal pic</div>
+
             {requestData.identityFiles && requestData.identityFiles.length > 1 && (
-              <img src={requestData.identityFiles[1].downloadUrls} alt="" />
+              <img
+                style={{ width: '950px', marginTop: '20px' }}
+                src={requestData.identityFiles[0].downloadUrls}
+                alt=""
+              />
             )}
           </div>
 

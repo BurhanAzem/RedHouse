@@ -277,7 +277,7 @@ namespace RedHouse_Server.Services
                                     on property.Id equals offer.PropertyId
                                 join contract in _redHouseDbContext.Contracts
                                     on offer.Id equals contract.OfferId
-                                where contract.IsShouldPay == 0 && offer.CustomerId == userId
+                                where offer.CustomerId == userId
                                 select property);
                 }
                 else
@@ -287,7 +287,7 @@ namespace RedHouse_Server.Services
                                     on property.Id equals offer.PropertyId
                                 join contract in _redHouseDbContext.Contracts
                                     on offer.Id equals contract.OfferId
-                                where contract.IsShouldPay == 0 && offer.CustomerId == userId
+                                where offer.CustomerId == userId
                                 select property);
                     if (myPropertiesFilterDto.PropertiesFilter == "Rented properties")
                     {

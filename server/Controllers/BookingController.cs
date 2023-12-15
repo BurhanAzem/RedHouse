@@ -99,13 +99,13 @@ namespace RedHouse_Server.Controllers
         
 
         [HttpGet("/properties/{id}/booking-days")]
-        public async Task<IActionResult> GetAvilableBookingDaysForProperty(int id)
+        public async Task<IActionResult> GetBookingDaysForProperty(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _bookingServices.GetAvilableBookingDaysForProperty(id);
+            var result = await _bookingServices.GetBookingDaysForProperty(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

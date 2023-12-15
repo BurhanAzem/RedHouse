@@ -17,7 +17,7 @@ namespace server.Services
         public Task<ResponsDto<Booking>> DeleteBooking(int bookingId);
         public Task<ResponsDto<Booking>> UpdateBooking(BookingDto bookingDto, int bookingId);
         public Task<ResponsDto<Booking>> AcceptBooking(int offerId);
-        public Task<ResponsDto<BookingDay>> GetAvilableBookingDaysForProperty(int propertyId);
+        public Task<ResponsDto<BookingDay>> GetBookingDaysForProperty(int propertyId);
         public Task<int> NumberOfBookings();
 
     }

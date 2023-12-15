@@ -2,6 +2,7 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/account_information.dart';
+import 'package:client/view/more/account_verification.dart';
 import 'package:client/view/more/compline.dart';
 import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';
@@ -297,7 +298,7 @@ class _MoreState extends State<More> {
 
           InkWell(
             onTap: () {
-              // Get.to(() => Compline());
+              Get.to(() => AccountVerification());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
