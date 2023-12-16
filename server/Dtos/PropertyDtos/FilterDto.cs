@@ -18,7 +18,7 @@ namespace server.Dtos.PropertyDtos
         public string? MinBuiltYear { get; set; }
         public string? MaxBuiltYear { get; set; }
 
-        public bool? HasBasement { get; set; }
+        public string? HasBasement { get; set; }
 
         public string? ParkingSpots { get; set; }
 

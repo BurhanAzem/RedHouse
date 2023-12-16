@@ -301,6 +301,7 @@ class FilterController extends GetxController {
     String? maxBuiltYear;
 
     String? parkingSpots;
+    bool? hasBassmentUnit;
 
     if (listingType) {
       if (buyHouse) {
@@ -345,6 +346,8 @@ class FilterController extends GetxController {
       minPropertySize = buySizeMin.text;
 
       parkingSpots = buyParkingSpots.text;
+
+      hasBassmentUnit = buyBasement;
 
       view = buyView;
     } else {
@@ -391,6 +394,8 @@ class FilterController extends GetxController {
 
       parkingSpots = rentParkingSpots.text;
       
+      hasBassmentUnit = rentBasement;
+
       view = rentView;
     }
 
@@ -426,7 +431,8 @@ class FilterController extends GetxController {
         minBuiltYear,
         maxBuiltYear,
         parkingSpots,
-        rentType);
+        rentType,
+        hasBassmentUnit);
 
     if (response['statusCode'] == 200) {
       listProperty = ListProperty.fromJson(response);

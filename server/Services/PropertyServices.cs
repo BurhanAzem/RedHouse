@@ -253,9 +253,11 @@ namespace RedHouse_Server.Services
                 }
             }
 
-            if (filterDto.HasBasement != null)
+            if (!string.IsNullOrEmpty(filterDto.HasBasement))
             {
-                query = query.Where(p => p.IsAvailableBasement.Equals(filterDto.HasBasement));
+                
+                query = query.Where(p => p.IsAvailableBasement == filterDto.HasBasement);
+
             }
 
             if (!string.IsNullOrEmpty(filterDto.ParkingSpots))
@@ -273,7 +275,7 @@ namespace RedHouse_Server.Services
             {
                 foreach (var propertyType in filterDto.PropertyTypes)
                 {
-                    query = query.Where(p => propertyType == p.PropertyType);
+                    query.Union(query.Where(p => propertyType == p.PropertyType));
                 }
 
             }
@@ -292,7 +294,7 @@ namespace RedHouse_Server.Services
             {
                 foreach (var propertyStatus in filterDto.PropertyStatus)
                 {
-                    query = query.Where(p => propertyStatus == p.PropertyStatus);
+                   query.Union(query.Where(p => propertyStatus == p.PropertyStatus));
                 }
             }
             else

@@ -55,7 +55,7 @@ class PropertyData {
       "numberOfUnits": int.tryParse(numberOfUnits) ?? 0,
       "parkingSpots": int.tryParse(parkingSpots) ?? 0,
       "listingType": listingType,
-      "isAvailableBasement": isAvailableBasement,
+      "isAvailableBasement": isAvailableBasement == 'Yes' ?  "true" : "false",
       "listingBy": listingBy,
       "locationDto": {
         "streetAddress": streetAddress,
@@ -106,9 +106,10 @@ class PropertyData {
     String maxBuiltYear,
     String parkingSpots,
     String rentType,
+    bool hasBassmentUnit,
   ) async {
     final Map<String, dynamic> filters = {
-      "PropertyTypes": propertyTypes, // Send as a list
+      "PropertyTypes": propertyTypes,
       "MinPrice": minPrice,
       "MaxPrice": maxPrice,
       "NumberOfBedRooms": numberOfBedrooms,
@@ -133,6 +134,8 @@ class PropertyData {
       "maxBuiltYear": maxBuiltYear,
       "parkingSpots": parkingSpots,
       "rentType": rentType,
+      "hasBasement":
+          hasBassmentUnit.toString(), // Assuming 1 for true and 0 for false
     };
 
     if (await checkInternet()) {
