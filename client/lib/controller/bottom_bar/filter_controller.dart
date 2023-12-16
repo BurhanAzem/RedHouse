@@ -11,7 +11,10 @@ class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
   String currentCity = "";
   ListProperty listProperty = ListProperty(listDto: []);
-  Rx<Location> location = Location(
+
+  List<Location> listAutoCompleteLocation = [];
+
+  Location location = Location(
     id: 0,
     streetAddress: "",
     city: "",
@@ -20,7 +23,7 @@ class FilterController extends GetxController {
     country: "",
     latitude: 0,
     longitude: 0,
-  ).obs;
+  );
 
   // Property type
   bool buyHouse = true;
@@ -436,6 +439,26 @@ class FilterController extends GetxController {
 
     if (response['statusCode'] == 200) {
       listProperty = ListProperty.fromJson(response);
+      print(listProperty.listDto);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+
+  getListAutoCompleteLocation(String listAutoCompleteLocationQuery) async {
+    
+    var response = await PropertyData.getListAutoCompleteLocation(listAutoCompleteLocationQuery);
+
+    if (response['statusCode'] == 200) {
+      listAutoCompleteLocation = (response['listDto'] as List<dynamic>)
+          .map((e) => Location.fromJson(e as Map<String, dynamic>))
+          .toList();
+          
       print(listProperty.listDto);
     } else {
       Get.defaultDialog(

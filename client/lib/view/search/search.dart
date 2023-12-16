@@ -54,7 +54,7 @@ class _SearchState extends State<Search> {
 
           //
           if (controller.isListIcon)
-            const Expanded(child: MapWidget())
+            const Expanded(child: MapWidget())   
           else
             Expanded(
               child: ListWidget(properties: controller.visibleProperties),

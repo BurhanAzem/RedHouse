@@ -255,7 +255,7 @@ namespace RedHouse_Server.Services
 
             if (!string.IsNullOrEmpty(filterDto.HasBasement))
             {
-                
+
                 query = query.Where(p => p.IsAvailableBasement == filterDto.HasBasement);
 
             }
@@ -294,7 +294,7 @@ namespace RedHouse_Server.Services
             {
                 foreach (var propertyStatus in filterDto.PropertyStatus)
                 {
-                   query.Union(query.Where(p => propertyStatus == p.PropertyStatus));
+                    query.Union(query.Where(p => propertyStatus == p.PropertyStatus));
                 }
             }
             else
@@ -616,6 +616,40 @@ namespace RedHouse_Server.Services
             return new ResponsDto<Property>
             {
                 ListDto = properties,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+
+
+        public async Task<ResponsDto<Location>> GetListAutoCompleteLocation(string query)
+        {
+            if (query == "")
+                return new ResponsDto<Location>
+                {
+                    ListDto = _redHouseDbContext.Locations.Take(20).ToList(),
+                    // PageNumber = pageNumber,
+                    // PageSize = pageSize,
+                    // TotalItems = totalItems,
+                    // TotalPages = totalPages,
+                    StatusCode = HttpStatusCode.OK,
+                };
+
+            var locations = await _redHouseDbContext.Locations.Where(u => u.Country.Contains(query)
+                                                                       || u.City.Contains(query)
+                                                                       || u.PostalCode.Contains(query)
+                                                                       || u.Region.Contains(query)
+                                                                       || u.StreetAddress.Contains(query)).ToListAsync();
+
+
+
+            return new ResponsDto<Location>
+            {
+                ListDto = locations.Take(20).ToList(),
                 // PageNumber = pageNumber,
                 // PageSize = pageSize,
                 // TotalItems = totalItems,

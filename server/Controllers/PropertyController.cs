@@ -93,6 +93,24 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("/properties/auto-complete-location/{query}")]
+        public async Task<IActionResult> GetListAutoCompleteLocation(string query)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _propertyServices.GetListAutoCompleteLocation(query);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
         [HttpDelete("/properties/{id}")]
         public async Task<IActionResult> DeleteProperty(int id)
         {

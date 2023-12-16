@@ -55,7 +55,7 @@ class PropertyData {
       "numberOfUnits": int.tryParse(numberOfUnits) ?? 0,
       "parkingSpots": int.tryParse(parkingSpots) ?? 0,
       "listingType": listingType,
-      "isAvailableBasement": isAvailableBasement == 'Yes' ?  "true" : "false",
+      "isAvailableBasement": isAvailableBasement == 'Yes' ? "true" : "false",
       "listingBy": listingBy,
       "locationDto": {
         "streetAddress": streetAddress,
@@ -98,7 +98,7 @@ class PropertyData {
     String numberOfBedrooms,
     String view,
     String listingType,
-    Rx<Location> location,
+    Location location,
     List<String> propertyStatus,
     String minPropertySize,
     String maxPropertySize,
@@ -116,17 +116,17 @@ class PropertyData {
       "NumberOfBathRooms": numberOfBathrooms,
       "View": view == "Any" ? "" : view,
       "ListingType": listingType,
-      "LocationDto.StreetAddress": location.value.streetAddress!,
-      "LocationDto.City": location.value.city!,
-      "LocationDto.Region": location.value.region!,
-      "LocationDto.PostalCode": location.value.postalCode!,
-      "LocationDto.Country": location.value.country!,
-      "LocationDto.Latitude": location.value.latitude == 0.0
+      "LocationDto.StreetAddress": location.streetAddress!,
+      "LocationDto.City": location.city!,
+      "LocationDto.Region": location.region!,
+      "LocationDto.PostalCode": location.postalCode!,
+      "LocationDto.Country": location.country!,
+      "LocationDto.Latitude": location.latitude == 0.0
           ? ""
-          : location.value.latitude!.toString(),
-      "LocationDto.Longitude": location.value.longitude == 0.0
+          : location.latitude!.toString(),
+      "LocationDto.Longitude": location.longitude == 0.0
           ? ""
-          : location.value.longitude!.toString(),
+          : location.longitude!.toString(),
       "propertyStatus": propertyStatus,
       "minPropertySize": minPropertySize,
       "maxPropertySize": maxPropertySize,
@@ -180,6 +180,29 @@ class PropertyData {
         print(responsebody["dto"]);
 
         return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+
+  static getListAutoCompleteLocation(String listAutoCompleteLocationQuery) async {
+    if (await checkInternet()) {
+      var response = await http.get(Uri.parse('${AppLink.properties}/auto-complete-location/$listAutoCompleteLocationQuery'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["dto"]);
+
+      return (responsebody);
       } else {
         return StatusRequest.serverfailure;
       }
