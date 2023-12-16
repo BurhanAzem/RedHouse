@@ -101,26 +101,26 @@ class PropertyData {
     Rx<Location> location,
   ) async {
     String? propertyTypesParam = propertyTypes.toString();
-    if (propertyTypes.length != 0) propertyTypesParam = propertyTypes.join(',');
+    if (propertyTypes.isNotEmpty) propertyTypesParam = propertyTypes.join(',');
     final Map<String, String?> filters = {
-      "PropertyTypes": propertyTypesParam!,
+      "PropertyTypes": propertyTypesParam,
       "MinPrice": minPrice.toString(),
       "MaxPrice": maxPrice.toString(),
       "NumberOfBedRooms": numberOfBedrooms.toString(),
       "NumberOfBathRooms": numberOfBathrooms.toString(),
       "View": view == "Any" ? "" : view,
       "ListingType": listingType,
-      "LocationDto.StreetAddress": location.value.streetAddress!,
-      "LocationDto.City": location.value.city!,
-      "LocationDto.Region": location.value.region!,
-      "LocationDto.PostalCode": location.value.postalCode!,
-      "LocationDto.Country": location.value.country!,
+      "LocationDto.StreetAddress": location.value.streetAddress,
+      "LocationDto.City": location.value.city,
+      "LocationDto.Region": location.value.region,
+      "LocationDto.PostalCode": location.value.postalCode,
+      "LocationDto.Country": location.value.country,
       "LocationDto.Latitude": location.value.latitude == 0.0
           ? ""
-          : location.value.latitude!.toString(),
+          : location.value.latitude.toString(),
       "LocationDto.Longitude": location.value.longitude == 0.0
           ? ""
-          : location.value.longitude!.toString(),
+          : location.value.longitude.toString(),
     };
 
     if (await checkInternet()) {
