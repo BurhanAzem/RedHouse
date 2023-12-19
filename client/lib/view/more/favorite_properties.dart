@@ -137,7 +137,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
                 width: 255,
                 child: MaterialButton(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   onPressed: () {
                     Get.offAll(() => const BottomBar());

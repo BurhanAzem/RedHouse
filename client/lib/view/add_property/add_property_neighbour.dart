@@ -237,6 +237,11 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour>
                         )
                       : Expanded(
                           child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: controller.currentPosition!,
+                            onMapCreated: (mapcontroller) {
+                              controller.mapController2 = mapcontroller;
+                            },
                             markers: controller.markers,
                             onTap: (latlng) async {
                               print(controller.markers);
@@ -303,11 +308,6 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour>
                                 print(controller.propertyNeighborhoods);
                                 setState(() {});
                               }
-                            },
-                            mapType: MapType.normal,
-                            initialCameraPosition: controller.currentPosition!,
-                            onMapCreated: (mapcontroller) {
-                              controller.mapController2 = mapcontroller;
                             },
                           ),
                         ),

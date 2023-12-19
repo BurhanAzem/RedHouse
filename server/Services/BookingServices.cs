@@ -101,10 +101,42 @@ namespace server.Services
                 };
             }
 
+            var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+            var thirtyDaysAfter = DateTime.Now.AddDays(30);
+
+
+            foreach (var day in bookingDto.BookingDays)
+            {
+                if (day < thirtyDaysAgo || day > thirtyDaysAfter)
+                    return new ResponsDto<Booking>
+                    {
+                        Exception = new Exception("You are trying booking not available day"),
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+
+                var bookingDay = await _redHouseDbContext.BookingDays.Where(b => b.DayDate.Day == day.Day && b.DayDate.Month == day.Month).FirstAsync();
+                if (bookingDay != null)
+                    return new ResponsDto<Booking>
+                    {
+                        Exception = new Exception("You are trying booking not available day"),
+                        StatusCode = HttpStatusCode.BadRequest,
+                    };
+                _redHouseDbContext.SaveChanges();
+            }
+
+
+            Random random = new Random();
+            // Generate two random 5-digit numbers and concatenate them to form a 10-digit number
+            int firstPart = random.Next(10000, 99999);
+            int secondPart = random.Next(10000, 99999);
+            int thirdPart = random.Next(10000, 99999);
+            string random_number_str = $"{firstPart:D5}{secondPart:D5}{thirdPart:D5}";
+
             Booking booking = new Booking
             {
                 UserId = bookingDto.UserId,
-                PropertyId = bookingDto.PropertyId
+                PropertyId = bookingDto.PropertyId,
+                BookingCode = random_number_str
             };
 
 
@@ -190,7 +222,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<BookingDay>> GetAvilableBookingDaysForProperty(int propertyId)
+        public async Task<ResponsDto<BookingDay>> GetBookingDaysForProperty(int propertyId)
         {
             var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
             if (property == null)
@@ -202,8 +234,19 @@ namespace server.Services
                 };
             }
 
-            var booking =  _redHouseDbContext.Bookings.FirstOrDefault(b => b.PropertyId == propertyId);
-            var bookingDays = await _redHouseDbContext.BookingDays.Where(b => b.BookingId == booking.Id).ToArrayAsync();
+            var booking = _redHouseDbContext.Bookings.FirstOrDefault(b => b.PropertyId == propertyId);
+            List<BookingDay> bookingDays = new List<BookingDay>();
+            if (booking != null)
+            {
+                var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+                var thirtyDaysAfter = DateTime.Now.AddDays(30);
+
+                bookingDays = await _redHouseDbContext.BookingDays
+                   .Where(b => b.BookingId == booking.Id && b.DayDate > thirtyDaysAgo && b.DayDate < thirtyDaysAfter) 
+                   .ToListAsync();
+
+                // Rest of your code
+            }
 
             return new ResponsDto<BookingDay>
             {
@@ -241,7 +284,7 @@ namespace server.Services
             return await _redHouseDbContext.Bookings.CountAsync();
         }
 
-       
+
 
 
 

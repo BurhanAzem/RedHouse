@@ -292,6 +292,16 @@ class FilterController extends GetxController {
     String? numberOfBedrooms;
     String? view;
     String? listingPropertyType;
+    List<String>? propertyStatus = [];
+
+    String? minPropertySize;
+    String? maxPropertySize;
+
+    String? minBuiltYear;
+    String? maxBuiltYear;
+
+    String? parkingSpots;
+    bool? hasBassmentUnit;
 
     if (listingType) {
       if (buyHouse) {
@@ -314,8 +324,31 @@ class FilterController extends GetxController {
         propertyTypes.add("Entire Department Community");
       }
 
+      if (buyComingSoon) {
+        propertyStatus.add("Coming soon");
+      }
+
+      if (buyAcceptingOffers) {
+        propertyStatus.add("Accepting offers");
+      }
+
+      if (buyUnderContract) {
+        propertyStatus.add("Under contract");
+      }
+
       minPrice = buyMinController.text;
       maxPrice = buyMaxController.text;
+
+      minBuiltYear = buyYearBuiltMin.text;
+      maxBuiltYear = buyYearBuiltMax.text;
+
+      maxPropertySize = buySizeMax.text;
+      minPropertySize = buySizeMin.text;
+
+      parkingSpots = buyParkingSpots.text;
+
+      hasBassmentUnit = buyBasement;
+
       view = buyView;
     } else {
       if (rentHouse) {
@@ -338,8 +371,31 @@ class FilterController extends GetxController {
         propertyTypes.add("Entire Department Community");
       }
 
+      if (rentComingSoon) {
+        propertyStatus.add("Coming soon");
+      }
+
+      if (rentAcceptingOffers) {
+        propertyStatus.add("Accepting offers");
+      }
+
+      if (rentUnderContract) {
+        propertyStatus.add("Under contract");
+      }
+
       minPrice = rentMinController.text;
       maxPrice = rentMaxController.text;
+
+      minBuiltYear = rentYearBuiltMin.text;
+      maxBuiltYear = rentYearBuiltMax.text;
+
+      maxPropertySize = rentSizeMax.text;
+      minPropertySize = rentSizeMin.text;
+
+      parkingSpots = rentParkingSpots.text;
+      
+      hasBassmentUnit = rentBasement;
+
       view = rentView;
     }
 
@@ -358,18 +414,25 @@ class FilterController extends GetxController {
     if (listingType) {
       listingPropertyType = "For sell";
     } else {
-      listingPropertyType = "For monthly rent";
+      listingPropertyType = "For rent";
     }
     var response = await PropertyData.getProperties(
-      propertyTypes,
-      minPrice,
-      maxPrice,
-      numberOfBathrooms,
-      numberOfBedrooms,
-      view,
-      listingPropertyType.toString(),
-      location,
-    );
+        propertyTypes,
+        minPrice,
+        maxPrice,
+        numberOfBathrooms,
+        numberOfBedrooms,
+        view,
+        listingPropertyType.toString(),
+        location,
+        propertyStatus,
+        minPropertySize,
+        maxPropertySize,
+        minBuiltYear,
+        maxBuiltYear,
+        parkingSpots,
+        rentType,
+        hasBassmentUnit);
 
     if (response['statusCode'] == 200) {
       listProperty = ListProperty.fromJson(response);

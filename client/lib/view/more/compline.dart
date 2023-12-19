@@ -18,31 +18,7 @@ class Compline extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body:
-          // Column(
-          //   children: [
-          //     Row(
-          //       children: [
-          //         MaterialButton(
-          //           onPressed: () {},
-          //           color: const Color.fromARGB(255, 0, 0, 0),
-          //           shape: RoundedRectangleBorder(
-          //             borderRadius: BorderRadius.circular(10),
-          //           ),
-          //           child: const Text(
-          //             "Save",
-          //             style: TextStyle(
-          //               fontSize: 16,
-          //               color: Colors.white,
-          //               fontWeight: FontWeight.w700,
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
-          Center(
+      body: Center(
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(20),
@@ -51,11 +27,15 @@ class Compline extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
+                  const Row(
                     children: [
-                      const Text(
+                      Text(
                         "Name",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
@@ -76,9 +56,9 @@ class Compline extends StatelessWidget {
                     ),
                   ),
                   Container(height: 15),
-                  Row(
+                  const Row(
                     children: [
-                      const Text(
+                      Text(
                         "Email",
                         style: TextStyle(fontSize: 18, color: Colors.black),
                       ),
@@ -138,7 +118,7 @@ class Compline extends StatelessWidget {
                     width: 340,
                     child: MaterialButton(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       onPressed: () {},
                       minWidth: 300,
@@ -146,11 +126,11 @@ class Compline extends StatelessWidget {
                       color: Colors.black87,
                       child: const Center(
                         child: Text(
-                          "Save",
+                          "Send",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

@@ -410,9 +410,6 @@ class _BuyFilterState extends State<BuyFilter> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 13, horizontal: 16),
                     child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
                       onPressed: () {
                         if ((controller.buyMinControllerTemp.text != "" &&
                                 controller.buyMaxControllerTemp.text != "" &&
@@ -530,16 +527,19 @@ class _BuyFilterState extends State<BuyFilter> {
                           Navigator.pop(context);
                         }
                       },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       minWidth: 300,
                       height: 45,
                       color: Colors.black87,
                       child: const Center(
                         child: Text(
-                          "See  homes",
+                          "See homes",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

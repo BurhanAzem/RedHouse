@@ -3,6 +3,7 @@ import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/link_api.dart';
 import 'package:client/model/location.dart';
+import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +35,7 @@ class PropertyData {
     String country,
     dynamic latitude,
     dynamic longitude,
+    List<NeighborhoodDto> propertyNeighborhoods,
   ) async {
     String formattedBuiltYear =
         DateFormat('yyyy-MM-ddTHH:mm:ss').format(builtYear);
@@ -55,7 +57,7 @@ class PropertyData {
       "numberOfUnits": int.tryParse(numberOfUnits) ?? 0,
       "parkingSpots": int.tryParse(parkingSpots) ?? 0,
       "listingType": listingType,
-      "isAvailableBasement": isAvailableBasement,
+      "isAvailableBasement": isAvailableBasement == 'Yes' ? "true" : "false",
       "listingBy": listingBy,
       "locationDto": {
         "streetAddress": streetAddress,
@@ -66,7 +68,8 @@ class PropertyData {
         "latitude": latitude,
         "longitude": longitude
       },
-      "propertyFiles": downloadUrls
+      "propertyFiles": downloadUrls,
+      "neighborhoodDtos": propertyNeighborhoods,
     };
     if (await checkInternet()) {
       var response = await http.post(Uri.parse(AppLink.properties),
@@ -90,7 +93,7 @@ class PropertyData {
     }
   }
 
-  static getProperties(
+  static Future<dynamic> getProperties(
     List<String> propertyTypes,
     String minPrice,
     String maxPrice,
@@ -99,15 +102,21 @@ class PropertyData {
     String view,
     String listingType,
     Rx<Location> location,
+    List<String> propertyStatus,
+    String minPropertySize,
+    String maxPropertySize,
+    String minBuiltYear,
+    String maxBuiltYear,
+    String parkingSpots,
+    String rentType,
+    bool hasBassmentUnit,
   ) async {
-    String? propertyTypesParam = propertyTypes.toString();
-    if (propertyTypes.isNotEmpty) propertyTypesParam = propertyTypes.join(',');
-    final Map<String, String?> filters = {
-      "PropertyTypes": propertyTypesParam,
-      "MinPrice": minPrice.toString(),
-      "MaxPrice": maxPrice.toString(),
-      "NumberOfBedRooms": numberOfBedrooms.toString(),
-      "NumberOfBathRooms": numberOfBathrooms.toString(),
+    final Map<String, dynamic> filters = {
+      "PropertyTypes": propertyTypes,
+      "MinPrice": minPrice,
+      "MaxPrice": maxPrice,
+      "NumberOfBedRooms": numberOfBedrooms,
+      "NumberOfBathRooms": numberOfBathrooms,
       "View": view == "Any" ? "" : view,
       "ListingType": listingType,
       "LocationDto.StreetAddress": location.value.streetAddress,
@@ -121,23 +130,37 @@ class PropertyData {
       "LocationDto.Longitude": location.value.longitude == 0.0
           ? ""
           : location.value.longitude.toString(),
+      "propertyStatus": propertyStatus,
+      "minPropertySize": minPropertySize,
+      "maxPropertySize": maxPropertySize,
+      "minBuiltYear": minBuiltYear,
+      "maxBuiltYear": maxBuiltYear,
+      "parkingSpots": parkingSpots,
+      "rentType": rentType,
+      "hasBasement":
+          hasBassmentUnit.toString(), // Assuming 1 for true and 0 for false
     };
 
     if (await checkInternet()) {
       final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
 
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}',
-      });
-      print(response.statusCode);
+      try {
+        var response = await http.get(uri, headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${getToken()}',
+        });
+        print(response.statusCode);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map<String, dynamic> responseBody = json.decode(response.body);
+          print(responseBody["listDto"]);
 
-        return (responsebody);
-      } else {
+          return responseBody;
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        print(e.toString());
         return StatusRequest.serverfailure;
       }
     } else {

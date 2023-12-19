@@ -89,12 +89,14 @@ class _AllApplicationsState extends State<AllApplications> {
             children: [
               Container(
                 width: 180,
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1.0),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: DropdownButton<String>(
+                  alignment: Alignment.centerLeft,
+                  isExpanded: true,
                   value: controller.applicationStatus,
                   onChanged: (String? newValue) {
                     setState(() {
@@ -112,13 +114,15 @@ class _AllApplicationsState extends State<AllApplications> {
               ),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 width: 180,
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black, width: 1.0),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: DropdownButton<String>(
+                  alignment: Alignment.centerLeft,
+                  isExpanded: true,
                   value: controller.applicationType,
                   onChanged: (String? newValue) {
                     setState(() {

@@ -119,6 +119,8 @@ class _AllOffersState extends State<AllOffers>
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: DropdownButton<String>(
+                    alignment: Alignment.centerLeft,
+                    isExpanded: true,
                     value: controller.offerStatusSelect,
                     onChanged: (String? newValue) {
                       setState(() {
@@ -143,6 +145,8 @@ class _AllOffersState extends State<AllOffers>
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: DropdownButton<String>(
+                    alignment: Alignment.centerLeft,
+                    isExpanded: true,
                     value: controller.offerTypeSelect,
                     onChanged: (String? newValue) {
                       setState(() {

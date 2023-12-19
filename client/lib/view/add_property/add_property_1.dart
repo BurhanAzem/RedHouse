@@ -58,15 +58,6 @@ class _AddProperty1State extends State<AddProperty1>
       controller.propertyNeighborhoods = [];
     });
 
-    // StreamSubscription<Position> positionStream =
-    //     Geolocator.getPositionStream().listen(
-    //   (Position? position) {
-    //     print(position == null
-    //         ? 'Unknown'
-    //         : '${position.latitude.toString()}, ${position.longitude.toString()}');
-    //   },
-    // );
-
     getLatAndLong();
 
     // Initialize AnimationController
@@ -203,9 +194,10 @@ class _AddProperty1State extends State<AddProperty1>
                             initialCameraPosition: controller.currentPosition!,
                             onCameraMove: (position) {
                               controller.currentPosition = CameraPosition(
-                                  target: LatLng(position.target.latitude,
-                                      position.target.longitude),
-                                  zoom: position.zoom);
+                                target: LatLng(position.target.latitude,
+                                    position.target.longitude),
+                                zoom: position.zoom,
+                              );
                             },
                             onMapCreated: (mapcontroller) {
                               getLatAndLong();

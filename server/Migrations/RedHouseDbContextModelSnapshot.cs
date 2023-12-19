@@ -548,6 +548,13 @@ namespace RedHouse_Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BookingCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("BookingDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
@@ -963,7 +970,7 @@ namespace RedHouse_Server.Migrations
             modelBuilder.Entity("server.Models.BookingDay", b =>
                 {
                     b.HasOne("server.Models.Booking", "Booking")
-                        .WithMany()
+                        .WithMany("BookingDays")
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1059,6 +1066,11 @@ namespace RedHouse_Server.Migrations
             modelBuilder.Entity("RedHouse_Server.Models.Property", b =>
                 {
                     b.Navigation("propertyFiles");
+                });
+
+            modelBuilder.Entity("server.Models.Booking", b =>
+                {
+                    b.Navigation("BookingDays");
                 });
 
             modelBuilder.Entity("server.Models.UserIdentity", b =>

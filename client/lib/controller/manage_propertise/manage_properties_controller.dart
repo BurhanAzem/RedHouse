@@ -41,7 +41,7 @@ class ManagePropertiesController extends GetxController {
   double? Latitude;
   double? Longitude;
 
-  String propertiesFilter = "All";
+  String propertiesFilter = "All properties";
   int propertiesUserId = 0;
   List<Property> userProperties = [];
   CameraPosition? currentPosition;
@@ -80,6 +80,7 @@ class ManagePropertiesController extends GetxController {
         Country!,
         Latitude,
         Longitude,
+        propertyNeighborhoods
       );
 
       if (response['statusCode'] == 200) {

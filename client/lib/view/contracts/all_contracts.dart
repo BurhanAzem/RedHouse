@@ -53,13 +53,13 @@ class _AllContractsState extends State<AllContracts>
     super.build(context);
     const contractStatus = [
       "All",
-      "Closed contracts",
-      "Active contracts",
+      "Closed",
+      "Active",
     ];
     const contractType = [
       "All",
-      "Rent contracts",
-      "Buy contracts",
+      "For rent",
+      "For sell",
     ];
 
     if (isLoading) {
@@ -115,6 +115,8 @@ class _AllContractsState extends State<AllContracts>
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: DropdownButton<String>(
+                    alignment: Alignment.centerLeft,
+                    isExpanded: true,
                     value: controller.contractStatus,
                     onChanged: (String? newValue) {
                       setState(() {
@@ -139,6 +141,8 @@ class _AllContractsState extends State<AllContracts>
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: DropdownButton<String>(
+                    alignment: Alignment.centerLeft,
+                    isExpanded: true,
                     value: controller.contractType,
                     onChanged: (String? newValue) {
                       setState(() {

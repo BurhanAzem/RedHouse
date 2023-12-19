@@ -462,9 +462,6 @@ class _RentFilterState extends State<RentFilter> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 13, horizontal: 16),
                     child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
                       onPressed: () {
                         if ((controller.rentMinControllerTemp.text != "" &&
                                 controller.rentMaxControllerTemp.text != "" &&
@@ -595,16 +592,19 @@ class _RentFilterState extends State<RentFilter> {
                           Navigator.pop(context);
                         }
                       },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       minWidth: 300,
                       height: 45,
                       color: Colors.black87,
                       child: const Center(
                         child: Text(
-                          "See  homes",
+                          "See homes",
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
