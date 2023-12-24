@@ -72,7 +72,7 @@ class PropertyData {
       var response = await http.post(Uri.parse(AppLink.properties),
           headers: <String, String>{
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer $getToken()()'
+            'Authorization': 'Bearer $getToken()'
           },
           body: json.encode(data),
           encoding: Encoding.getByName("utf-8"));
@@ -121,12 +121,10 @@ class PropertyData {
       "LocationDto.Region": location.region!,
       "LocationDto.PostalCode": location.postalCode!,
       "LocationDto.Country": location.country!,
-      "LocationDto.Latitude": location.latitude == 0.0
-          ? ""
-          : location.latitude!.toString(),
-      "LocationDto.Longitude": location.longitude == 0.0
-          ? ""
-          : location.longitude!.toString(),
+      "LocationDto.Latitude":
+          location.latitude == 0.0 ? "" : location.latitude!.toString(),
+      "LocationDto.Longitude":
+          location.longitude == 0.0 ? "" : location.longitude!.toString(),
       "propertyStatus": propertyStatus,
       "minPropertySize": minPropertySize,
       "maxPropertySize": maxPropertySize,
@@ -188,10 +186,12 @@ class PropertyData {
     }
   }
 
-
-  static getListAutoCompleteLocation(String listAutoCompleteLocationQuery) async {
+  static getListAutoCompleteLocation(
+      String listAutoCompleteLocationQuery) async {
     if (await checkInternet()) {
-      var response = await http.get(Uri.parse('${AppLink.properties}/auto-complete-location/$listAutoCompleteLocationQuery'),
+      var response = await http.get(
+          Uri.parse(
+              '${AppLink.properties}/auto-complete-location/$listAutoCompleteLocationQuery'),
           headers: <String, String>{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
@@ -202,7 +202,56 @@ class PropertyData {
         Map responsebody = json.decode(response.body);
         print(responsebody["dto"]);
 
-      return (responsebody);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static getPropertyPriceLastTenYearRent(int propertyId) async {
+    if (await checkInternet()) {
+      var response = await http.get(
+          Uri.parse(
+              '${AppLink.properties}/$propertyId/property-history-price-as-rent'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["dto"]);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static getPropertyPriceLastTenYearSell(int propertyId) async {
+    if (await checkInternet()) {
+      var response = await http.get(
+          Uri.parse(
+              '${AppLink.properties}/$propertyId/property-history-price-as-sell'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      var responsebody = response.body;
+      print(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        List<dynamic> responseList = json.decode(response.body);
+        print(responseList);
+
+        return responseList;
       } else {
         return StatusRequest.serverfailure;
       }

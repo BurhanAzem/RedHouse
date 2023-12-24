@@ -18,6 +18,7 @@ namespace server.Models
         public Property Property { get; set; }
         public string BookingCode { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.Now;
+        public string BookingStatus { get; set; }
         public  ICollection<BookingDay> BookingDays { get; set; }
     }
 }

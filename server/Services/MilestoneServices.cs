@@ -31,7 +31,7 @@ namespace server.Services
             milestone.MilestoneStatus = "Paid";
             _redHouseDbContext.Milestones.Update(milestone);
             _redHouseDbContext.SaveChanges();
-            
+
 
             return new ResponsDto<Milestone>
             {
@@ -85,32 +85,32 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            if (DateTime.Now.Day == contract.Offer.OfferDate.Day)
+            // if (DateTime.Now.Day == contract.Offer.OfferDate.Day)
+            // {
+
+            Milestone milestone = new Milestone
             {
+                ContractId = contractId,
+                Description = contract.Offer.Description,
+                Amount = contract.Offer.Price,
+                MilestoneDate = contract.Offer.OfferDate,
+                MilestoneName = "Monthly Bills",
+                MilestoneStatus = "Pending"
+            };
+            var milestoneRes = await _redHouseDbContext.Milestones.AddAsync(milestone);
+            _redHouseDbContext.SaveChanges();
 
-                Milestone milestone = new Milestone
-                {
-                    ContractId = contractId,
-                    Description = contract.Offer.Description,
-                    Amount = contract.Offer.Price,
-                    MilestoneDate = contract.Offer.OfferDate,
-                    MilestoneName = "Monthly Bills",
-                    MilestoneStatus = "Pending"
-                };
-                var milestoneRes = await _redHouseDbContext.Milestones.AddAsync(milestone);
-                _redHouseDbContext.SaveChanges();
-
-                return new ResponsDto<Milestone>
-                {
-                    Dto = milestoneRes.Entity,
-                    Message = "Milestone Created Successfully",
-                    StatusCode = HttpStatusCode.OK,
-                };
-            }
             return new ResponsDto<Milestone>
             {
+                Dto = milestoneRes.Entity,
+                Message = "Milestone Created Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
+            // }
+            // return new ResponsDto<Milestone>
+            // {
+            //     StatusCode = HttpStatusCode.OK,
+            // };
         }
 
         public async Task<ResponsDto<Milestone>> DeleteMilestone(int contractId)

@@ -58,9 +58,24 @@ namespace server.Services
         }
 
 
-        public Task<ResponsDto<Contract>> GetContract(int contractId)
+        public async Task<ResponsDto<Contract>> GetContract(int contractId)
         {
-            throw new NotImplementedException();
+            var contract = await _redHouseDbContext.Contracts
+                .Include(c => c.Offer)
+                .FirstOrDefaultAsync(c => c.Id == contractId);
+            if (contract == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception("Contract Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            return new ResponsDto<Contract>
+            {
+                Dto = contract,
+                StatusCode = HttpStatusCode.OK,
+            };
         }
 
         public async Task<int> NumberOfContracts()
@@ -83,8 +98,8 @@ namespace server.Services
                                                     .Include(o => o.Offer.Landlord)
                                                     .Include(o => o.Offer.Customer).AsQueryable();
             if (searchDto.SearchQuery != null)
-                query = query.Where(p => p.Offer.PropertyId == int.Parse(searchDto.SearchQuery) 
-                                    || p.Offer.LandlordId == int.Parse(searchDto.SearchQuery) 
+                query = query.Where(p => p.Offer.PropertyId == int.Parse(searchDto.SearchQuery)
+                                    || p.Offer.LandlordId == int.Parse(searchDto.SearchQuery)
                                     || p.Offer.CustomerId == int.Parse(searchDto.SearchQuery));
             // if (query == null)
             //     query = query.Where(p => p.Location.City == searchDto.SearchQuery 
@@ -92,7 +107,7 @@ namespace server.Services
             //     || p.Location.Country == searchDto.SearchQuery
             //     || p.Location.Region == searchDto.SearchQuery
             //     || p.Location.PostalCode == searchDto.SearchQuery);
-                
+
             var totalItems = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
 
@@ -118,6 +133,7 @@ namespace server.Services
                 // TotalItems = totalItems,
                 // TotalPages = totalPages,
                 StatusCode = HttpStatusCode.OK,
-            };        }
+            };
+        }
     }
 }

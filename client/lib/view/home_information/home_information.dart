@@ -6,6 +6,7 @@ import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/home_information/action_buttons_widget.dart';
 import 'package:client/view/home_information/image_slider_widget.dart';
 import 'package:client/view/home_information/check_property.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -44,6 +45,11 @@ class _HomeInformationState extends State<HomeInformation> {
       ),
       zoom: 13,
     );
+
+    widget.property.listingType == "For daily rent" ||
+            widget.property.listingType == "For monthly rent"
+        ? filterController.getPropertyPriceLastTenYearRent(widget.property.id)
+        : filterController.getPropertyPriceLastTenYearSell(widget.property.id);
 
     homeMarker = [
       Marker(
@@ -346,6 +352,7 @@ class _HomeInformationState extends State<HomeInformation> {
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 30),
                       // here Parking Spots
                       if (widget.property.parkingSpots == 0)
@@ -620,6 +627,51 @@ class _HomeInformationState extends State<HomeInformation> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Container(
+                  height: 400,
+                  child: LineChart(
+                    LineChartData(
+                      // minY: 0,
+                      // maxY: 6,
+                      gridData: FlGridData(
+                        show: false,
+                        getDrawingHorizontalLine: (value) {
+                          return FlLine(
+                            color: const Color(0xff37434d),
+                            strokeWidth: 1,
+                          );
+                        },
+                        drawVerticalLine: true,
+                        getDrawingVerticalLine: (value) {
+                          return FlLine(
+                            color: const Color(0xff37434d),
+                            strokeWidth: 1,
+                          );
+                        },
+                      ),
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots:
+                              widget.property.listingType == "For daily rent" ||
+                                      widget.property.listingType ==
+                                          "For monthly rent"
+                                  ? filterController.flSpotListRent
+                                  : filterController.flSpotListSell,
+                          color: Colors.green,
+                          isCurved: false,
+                          // colors: gradientColors,
+                          barWidth: 3,
+                          // dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(
+                              show: true, color: Colors.greenAccent[100]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
