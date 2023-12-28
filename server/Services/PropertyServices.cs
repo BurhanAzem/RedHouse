@@ -663,7 +663,7 @@ namespace RedHouse_Server.Services
         {
             var properties = await _redHouseDbContext.Properties.Include(p => p.Location).ToListAsync();
             properties = properties.Where(p => CalculateDistance((double)p.Location.Latitude, (double)p.Location.Longitude,
-               (double)latitude, (double)longitude) <= 5).ToList();
+               (double)latitude, (double)longitude) <= 25).ToList();
             return new ResponsDto<Property>
             {
                 ListDto = properties,
