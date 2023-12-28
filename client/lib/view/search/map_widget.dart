@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/main.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({Key? key}) : super(key: key);
@@ -48,6 +49,9 @@ class _MapWidgetState extends State<MapWidget>
   void loadData() async {
     filterControllerr.getProperties();
 
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+        print(position);
     mapListController.isLoading = true;
     _timer = Timer(const Duration(seconds: 1), () {
       if (mounted) {

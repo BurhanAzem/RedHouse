@@ -6,6 +6,7 @@ using server.Dtos.PropertyDtos;
 using Microsoft.EntityFrameworkCore;
 using server.Models;
 using Microsoft.IdentityModel.Tokens;
+using RedHouse_Server.Dtos.LocationDtos;
 
 namespace RedHouse_Server.Services
 {
@@ -656,6 +657,53 @@ namespace RedHouse_Server.Services
                 // TotalPages = totalPages,
                 StatusCode = HttpStatusCode.OK,
             };
+        }
+
+        public async Task<ResponsDto<Property>> GetClosestPropertiesToTheCurrentLocation(double latitude, double longitude)
+        {
+            var properties = await _redHouseDbContext.Properties.Include(p => p.Location).ToListAsync();
+            properties = properties.Where(p => CalculateDistance((double)p.Location.Latitude, (double)p.Location.Longitude,
+               (double)latitude, (double)longitude) <= 5).ToList();
+            return new ResponsDto<Property>
+            {
+                ListDto = properties,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+
+        public double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
+        {
+            const double EarthRadiusKm = 6371;
+
+            // Convert latitude and longitude from degrees to radians
+            lat1 = DegreeToRadian(lat1);
+            lon1 = DegreeToRadian(lon1);
+            lat2 = DegreeToRadian(lat2);
+            lon2 = DegreeToRadian(lon2);
+
+            // Calculate differences
+            double dLat = lat2 - lat1;
+            double dLon = lon2 - lon1;
+
+            // Haversine formula
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(lat1) * Math.Cos(lat2) * Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+            // Distance in kilometers
+            double distance = EarthRadiusKm * c;
+
+            return distance;
+        }
+
+        private static double DegreeToRadian(double angle)
+        {
+            return Math.PI * angle / 180.0;
         }
     }
 }

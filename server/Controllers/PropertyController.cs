@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using server.Dtos.PropertyDtos;
 using Microsoft.AspNetCore.Authorization;
 using Cooking_School.Dtos;
+using RedHouse_Server.Dtos.LocationDtos;
 
 namespace RedHouse_Server.Controllers
 {
@@ -84,6 +85,24 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _propertyServices.FilterProperties(searchDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+
+        [HttpGet("/properties/closest")]
+        public async Task<IActionResult> GetClosestPropertiesToTheCurrentLocation([FromQuery] double latitude, [FromQuery] double longitude)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _propertyServices.GetClosestPropertiesToTheCurrentLocation(latitude, longitude);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

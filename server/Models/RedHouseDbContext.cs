@@ -16,6 +16,13 @@ namespace RedHouse_Server.Models
 
         }
 
+        [DbFunction("dbo.CalculateDistance", "")]
+        public static double CalculateDistance(
+        double lat1, double lon1, double lat2, double lon2)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //         builder.Entity<Contract>()
@@ -46,7 +53,7 @@ namespace RedHouse_Server.Models
             base.OnModelCreating(builder);
         }
 
-        
+
 
         public DbSet<User> Users { get; set; }
         public DbSet<Property> Properties { get; set; }
