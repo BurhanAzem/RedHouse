@@ -1,9 +1,11 @@
-import 'dart:math';
+import 'package:client/controller/booking/booking_controller.dart';
+import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';
+import 'package:client/view/home_information/booking_buttons.dart';
 import 'package:client/view/home_information/check_account.dart';
-import 'package:client/view/home_information/action_buttons_widget.dart';
+import 'package:client/view/home_information/application_buttons.dart';
 import 'package:client/view/home_information/image_slider_widget.dart';
 import 'package:client/view/home_information/check_property.dart';
 import 'package:flutter/material.dart';
@@ -27,17 +29,20 @@ class HomeInformation extends StatefulWidget {
 class _HomeInformationState extends State<HomeInformation> {
   FilterController filterController = Get.put(FilterController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
+  ManagePropertiesController controller = Get.put(ManagePropertiesController());
+  BookingController bookingController = Get.put(BookingController());
   GoogleMapController? mapController;
-  late CameraPosition homePosition;
-  List<Marker> homeMarker = [];
+  late CameraPosition propertyPosition;
   int slider = 1;
+
+  late final Map<String, BitmapDescriptor> neighborhoodIcons;
+  Set<Marker> propertyMarker = {};
 
   @override
   void initState() {
     super.initState();
-    setState(() {});
-    print(widget.property);
-    homePosition = CameraPosition(
+
+    propertyPosition = CameraPosition(
       target: LatLng(
         widget.property.location!.latitude,
         widget.property.location!.longitude,
@@ -45,18 +50,193 @@ class _HomeInformationState extends State<HomeInformation> {
       zoom: 13,
     );
 
-    homeMarker = [
+    propertyMarker.add(
       Marker(
         markerId: MarkerId(widget.property.id.toString()),
         position: LatLng(
           widget.property.location!.latitude,
           widget.property.location!.longitude,
         ),
-        icon: filterController.listingType
+        icon: widget.property.listingType == "For sell"
             ? BitmapDescriptor.defaultMarker
-            : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+            : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
       ),
-    ];
+    );
+
+    // Initialize the neighborhoodIcons map asynchronously
+    initNeighborhoodIcons().then((icons) {
+      setState(() {
+        neighborhoodIcons = icons;
+      });
+      loadData();
+    });
+  }
+
+  void loadData() async {
+    await controller.getNeighborhoodsForProperty(widget.property.id);
+    print(controller.propertyNeighborhoods);
+
+    await bookingController.getBookingDaysForProperty(widget.property.id);
+    print(bookingController.preBookedDays);
+
+    // Now you can use neighborhoodIcons in your loop
+    for (var neighborhood in controller.propertyNeighborhoods) {
+      BitmapDescriptor? icon = neighborhoodIcons[neighborhood.neighborhoodType];
+      if (icon != null) {
+        propertyMarker.add(
+          Marker(
+            markerId: MarkerId(neighborhood.neighborhoodType),
+            position: LatLng(
+              neighborhood.location.latitude!,
+              neighborhood.location.longitude!,
+            ),
+            icon: icon,
+            infoWindow: InfoWindow(title: neighborhood.neighborhoodType),
+          ),
+        );
+      }
+    }
+    setState(() {});
+  }
+
+  Future<Map<String, BitmapDescriptor>> initNeighborhoodIcons() async {
+    return {
+      "Parking": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/parking.png",
+      ),
+      "School": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/school.png",
+      ),
+      "Hospital": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/hospital.png",
+      ),
+      "Mosque": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/mosque.png",
+      ),
+      "Gymnasium": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/gym.png",
+      ),
+      "Gas Station": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/gas-station.png",
+      ),
+      "ATM": await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(),
+        "assets/images/atm.png",
+      ),
+    };
+  }
+
+  Future<void> _showAvailableDates() async {
+    DateTime currentDate = DateTime.now();
+    DateTime tomorrow =
+        DateTime(currentDate.year, currentDate.month, currentDate.day + 1);
+    DateTime lastDate =
+        DateTime(currentDate.year, currentDate.month, currentDate.day + 32);
+
+    DateTime? firstAvailableDate = findFirstAvailableDate(tomorrow, lastDate);
+
+    if (firstAvailableDate == null) {
+      // No available date found, show dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Theme(
+            data: ThemeData(
+              dialogBackgroundColor: Colors.white,
+            ),
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
+              ),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxHeight: 400),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        "All days are booked",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      child: Text(
+                        "All days from tomorrow through the month are booked",
+                        style: TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w400),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ButtonBar(children: [
+                      SizedBox(
+                        height: 40,
+                        child: MaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            "Close",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17.5,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+      return;
+    }
+
+    await showDatePicker(
+      context: context,
+      initialDate: firstAvailableDate,
+      firstDate: tomorrow,
+      lastDate: lastDate,
+      selectableDayPredicate: (DateTime date) {
+        // Prevent selection of dates in the bookingdays list
+        if (bookingController.preBookedDays.contains(date)) {
+          return false; // Date is booked, not selectable
+        }
+
+        return true; // Date is available and not in the bookingdays list, selectable
+      },
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(),
+          child: child ?? Container(),
+        );
+      },
+    );
+  }
+
+  DateTime? findFirstAvailableDate(DateTime start, DateTime end) {
+    DateTime currentDate = start;
+    while (currentDate.isBefore(end)) {
+      if (!bookingController.preBookedDays.contains(currentDate)) {
+        return currentDate;
+      }
+      currentDate = currentDate.add(const Duration(days: 1));
+    }
+    return null; // No available date found
   }
 
   @override
@@ -485,23 +665,64 @@ class _HomeInformationState extends State<HomeInformation> {
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Colors.black,
-                            ))
+                            )),
+
+                      // When is it available ?
+                      if (widget.property.listingType == "For daily rent")
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 30),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(width: 0.9),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: InkWell(
+                                onTap: _showAvailableDates,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "When is it available ?",
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                    IconButton(
+                                      onPressed: _showAvailableDates,
+                                      icon:
+                                          const Icon(Icons.date_range_outlined),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
                     ],
                   ),
                 ),
+
+                // Googel map
                 const SizedBox(height: 30),
                 SizedBox(
                     height: 230,
                     child: GoogleMap(
                       mapType: MapType.normal,
-                      initialCameraPosition: homePosition,
+                      initialCameraPosition: propertyPosition,
                       onMapCreated: (controller) {
                         setState(() {
                           mapController = controller;
                         });
                       },
-                      markers: homeMarker.toSet(),
+                      markers: propertyMarker,
                     )),
+
+                // Ckeck history
                 const SizedBox(height: 30),
                 Container(
                   padding: const EdgeInsets.only(left: 25),
@@ -625,9 +846,14 @@ class _HomeInformationState extends State<HomeInformation> {
               ],
             ),
           ),
-          if (widget.property.userId != loginController.userDto?["id"] ||
-              widget.property.propertyStatus == "Under contract")
-            ActionButtonsWidget(property: widget.property),
+          if (widget.property.userId != loginController.userDto?["id"] &&
+              widget.property.propertyStatus != "Under contract")
+            if (widget.property.userId != loginController.userDto?["id"] ||
+                widget.property.propertyStatus != "Under contract")
+              if (widget.property.listingType == "For daily rent")
+                BookingButtons(property: widget.property)
+              else
+                ApplicationButtons(property: widget.property),
         ],
       ),
     );

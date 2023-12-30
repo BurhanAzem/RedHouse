@@ -28,7 +28,7 @@ class _TopNavigationBar extends State<ManageProperties>
           "Manage Properties",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -42,7 +42,7 @@ class _TopNavigationBar extends State<ManageProperties>
               child: Text("Applications"),
             ),
             Tab(
-              child: Text("Other"),
+              child: Text("Books"),
             ),
           ],
           overlayColor: MaterialStatePropertyAll(Colors.grey[700]),

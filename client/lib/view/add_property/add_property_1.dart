@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/view/add_property/add_property_neighbour.dart';
+import 'package:client/view/add_property/add_property_2.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +56,7 @@ class _AddProperty1State extends State<AddProperty1>
       controller.downloadUrls = [];
       controller.neighborhoodStreet.text = "";
       controller.propertyNeighborhoods = [];
+      controller.isUploading = false;
     });
 
     getLatAndLong();
@@ -252,8 +253,7 @@ class _AddProperty1State extends State<AddProperty1>
 
               // Street address
               Container(
-                margin: const EdgeInsets.only(
-                    top: 15, right: 15, left: 15, bottom: 25),
+                margin: const EdgeInsets.only(top: 10, right: 15, left: 15),
                 child: Form(
                   key: controller.formKey1,
                   child: Column(

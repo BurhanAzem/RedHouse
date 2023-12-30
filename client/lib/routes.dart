@@ -1,5 +1,5 @@
 import 'package:client/view/add_property/add_property_1.dart';
-import 'package:client/view/add_property/add_property_2.dart';
+import 'package:client/view/add_property/add_property_3.dart';
 // import 'package:client/view/add_property/add_property_3.dart';
 import 'package:client/view/add_property/add_property_4.dart';
 import 'package:client/view/add_property/add_property_5.dart';

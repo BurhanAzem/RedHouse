@@ -191,7 +191,7 @@ class _IncomingOffeState extends State<IncomingOffer> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600))),
                                 Text(
-                                    widget.offer.offerExpireDate
+                                    widget.offer.offerExpires
                                         .toString()
                                         .substring(0, 11),
                                     style: const TextStyle(

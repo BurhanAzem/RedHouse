@@ -11,5 +11,4 @@ class AppLink {
   static const String applications= "$server/applications";
   static const String neighborhoods= "$server/neighborhoods";
   static const String userIdentities= "$server/userIdentities";
-
 }

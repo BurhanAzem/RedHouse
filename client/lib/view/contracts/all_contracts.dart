@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:client/controller/contracts/contracts_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/model/user.dart';
-import 'package:client/routes.dart';
 import 'package:client/view/contracts/contract.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -192,12 +190,12 @@ class _AllContractsState extends State<AllContracts>
                       labelColor: Colors.black,
                       labelStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                       unselectedLabelColor: Colors.grey[700],
                       unselectedLabelStyle: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                     ),
                     body: TabBarView(

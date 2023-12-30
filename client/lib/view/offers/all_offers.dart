@@ -194,12 +194,12 @@ class _AllOffersState extends State<AllOffers>
                       labelColor: Colors.black,
                       labelStyle: const TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                       unselectedLabelColor: Colors.grey[700],
                       unselectedLabelStyle: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                     ),
                     body: TabBarView(
@@ -289,7 +289,7 @@ class _AllOffersState extends State<AllOffers>
                             ),
                             Text(
                               DateFormat('yyyy-MM-dd')
-                                  .format(offer.offerExpireDate),
+                                  .format(offer.offerExpires),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,
@@ -443,7 +443,7 @@ class _AllOffersState extends State<AllOffers>
                             ),
                             Text(
                               DateFormat('yyyy-MM-dd')
-                                  .format(offer.offerExpireDate),
+                                  .format(offer.offerExpires),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 12,

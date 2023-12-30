@@ -178,7 +178,7 @@ class _SentOfferState extends State<SentOffer> {
                                             fontSize: 16,
                                             fontWeight: FontWeight.w600))),
                                 Text(
-                                    widget.offer.offerExpireDate
+                                    widget.offer.offerExpires
                                         .toString()
                                         .substring(0, 11),
                                     style: const TextStyle(

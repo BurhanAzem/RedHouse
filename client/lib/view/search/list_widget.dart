@@ -76,7 +76,7 @@ class _ListWidgetState extends State<ListWidget>
                 width: 190,
                 child: MaterialButton(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                   onPressed: () {
                     Get.to(() => FilterPage());

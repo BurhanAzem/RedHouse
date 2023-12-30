@@ -89,17 +89,17 @@ namespace server.Services
             var property = await _redHouseDbContext.Properties.FindAsync(bookingDto.PropertyId);
 
 
-            var bookings = await _redHouseDbContext.Bookings.Where(o => o.UserId == bookingDto.UserId
-                                                                                && o.PropertyId == bookingDto.PropertyId).ToArrayAsync();
-            var searchedBooking = bookings.FirstOrDefault();
-            if (searchedBooking != null)
-            {
-                return new ResponsDto<Booking>
-                {
-                    Exception = new Exception("You can't create more than one book to the same property"),
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
-            }
+            // var bookings = await _redHouseDbContext.Bookings.Where(o => o.UserId == bookingDto.UserId
+            //                                                                     && o.PropertyId == bookingDto.PropertyId).ToArrayAsync();
+            // var searchedBooking = bookings.FirstOrDefault();
+            // if (searchedBooking != null)
+            // {
+            //     return new ResponsDto<Booking>
+            //     {
+            //         Exception = new Exception("You can't create more than one book to the same property"),
+            //         StatusCode = HttpStatusCode.BadRequest,
+            //     };
+            // }
 
             var thirtyDaysAgo = DateTime.Now.AddDays(-30);
             var thirtyDaysAfter = DateTime.Now.AddDays(30);
@@ -114,13 +114,28 @@ namespace server.Services
                         StatusCode = HttpStatusCode.BadRequest,
                     };
 
-                var bookingDay = await _redHouseDbContext.BookingDays.Where(b => b.DayDate.Day == day.Day && b.DayDate.Month == day.Month).FirstAsync();
+                // var bookingDay = await _redHouseDbContext.BookingDays.Where(b => b.DayDate.Day == day.Day && b.DayDate.Month == day.Month).FirstAsync();
+
+                var bookingDay = await _redHouseDbContext.BookingDays
+                .Where(b => b.DayDate.Day == day.Day && b.DayDate.Month == day.Month)
+                .FirstOrDefaultAsync();
+
                 if (bookingDay != null)
+                {
+                    // Handle the case where a matching element is found
                     return new ResponsDto<Booking>
                     {
-                        Exception = new Exception("You are trying booking not available day"),
+                        Exception = new Exception("You are trying to book on a day that is not available"),
                         StatusCode = HttpStatusCode.BadRequest,
                     };
+                }
+
+                // if (bookingDay != null)
+                //     return new ResponsDto<Booking>
+                //     {
+                //         Exception = new Exception("You are trying booking not available day"),
+                //         StatusCode = HttpStatusCode.BadRequest,
+                //     };
                 _redHouseDbContext.SaveChanges();
             }
 
@@ -234,19 +249,15 @@ namespace server.Services
                 };
             }
 
-            var booking = _redHouseDbContext.Bookings.FirstOrDefault(b => b.PropertyId == propertyId);
+            // var bookings =await _redHouseDbContext.Bookings.Where(b => b.PropertyId == propertyId).Include(b => b.BookingDays).ToListAsync();
             List<BookingDay> bookingDays = new List<BookingDay>();
-            if (booking != null)
-            {
-                var thirtyDaysAgo = DateTime.Now.AddDays(-30);
-                var thirtyDaysAfter = DateTime.Now.AddDays(30);
 
-                bookingDays = await _redHouseDbContext.BookingDays
-                   .Where(b => b.BookingId == booking.Id && b.DayDate > thirtyDaysAgo && b.DayDate < thirtyDaysAfter) 
-                   .ToListAsync();
+            var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+            var thirtyDaysAfter = DateTime.Now.AddDays(30);
 
-                // Rest of your code
-            }
+            bookingDays = await _redHouseDbContext.BookingDays
+               .Where(b => b.Booking.PropertyId == propertyId && b.DayDate > thirtyDaysAgo && b.DayDate < thirtyDaysAfter)
+               .ToListAsync();
 
             return new ResponsDto<BookingDay>
             {

@@ -1,5 +1,4 @@
 import 'package:client/data/history.dart';
-import 'package:client/model/user.dart';
 import 'package:client/model/user_history.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

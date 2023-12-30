@@ -1,26 +1,109 @@
+import 'package:client/model/neighborhood/locationNeighborhood.dart';
+import 'package:client/model/neighborhood/neighborhoodDto.dart';
+import 'package:client/view/add_property/add_property_3.dart';
 import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
-import 'package:client/view/add_property/add_property_4.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class AddProperty2 extends StatefulWidget {
-  AddProperty2({Key? key}) : super(key: key);
+class AddPropertyNeighbour extends StatefulWidget {
+  AddPropertyNeighbour({Key? key}) : super(key: key);
 
   @override
-  _AddProperty2State createState() => _AddProperty2State();
+  _AddPropertyNeighbourState createState() => _AddPropertyNeighbourState();
 }
 
-class _AddProperty2State extends State<AddProperty2>
+class _AddPropertyNeighbourState extends State<AddPropertyNeighbour>
     with SingleTickerProviderStateMixin {
+  String neighborhoodType = "Select Neighborhood Type";
+
   ManagePropertiesController propertyController =
       Get.put(ManagePropertiesController());
 
   late AnimationController _animationController;
   late Animation<int> _textAnimation;
 
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+
+  // Give icon for each neighborhood
+  void addCustomerIcon() {
+    if (neighborhoodType == "Parking") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/parking.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "School") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/school.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Hospital") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/hospital.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Mosque") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/mosque.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Gymnasium") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/gym.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "Gas Station") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/gas-station.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    } else if (neighborhoodType == "ATM") {
+      BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(), "assets/images/atm.png")
+          .then(
+        (icon) {
+          setState(() {
+            markerIcon = icon;
+          });
+        },
+      );
+    }
+  }
+
   @override
   void initState() {
-    print(propertyController.propertyNeighborhoods);
+    print(propertyController.markers);
 
     // Initialize AnimationController
     _animationController = AnimationController(
@@ -29,9 +112,9 @@ class _AddProperty2State extends State<AddProperty2>
     );
 
     // Create a Tween for the animation
-    _textAnimation = IntTween(
-            begin: 0, end: "Enter information about the property type".length)
-        .animate(_animationController);
+    _textAnimation =
+        IntTween(begin: 0, end: "Locate property neighborhoods".length)
+            .animate(_animationController);
 
     // Start the animation
     _animationController.forward();
@@ -46,12 +129,15 @@ class _AddProperty2State extends State<AddProperty2>
 
   @override
   Widget build(BuildContext context) {
-    const typeOptions = [
-      "House",
-      "Apartment Unit",
-      "Townhouse",
-      "Castle",
-      "Entire Department"
+    const options = [
+      "Select Neighborhood Type",
+      "Parking",
+      "School",
+      "Hospital",
+      "Mosque",
+      "Gymnasium",
+      "Gas Station",
+      "ATM",
     ];
 
     return GetBuilder<ManagePropertiesController>(
@@ -90,7 +176,7 @@ class _AddProperty2State extends State<AddProperty2>
                         controller.increaseActiveStep();
                         print(controller.activeStep);
                       });
-                      Get.to(() => AddProperty4());
+                      Get.to(() => AddProperty2());
                     },
                     child: const Text(
                       'Next',
@@ -111,43 +197,131 @@ class _AddProperty2State extends State<AddProperty2>
             physics: const NeverScrollableScrollPhysics(), // Disable scrolling
             children: [
               controller.easyStepper(),
+
+              // Introduction
               Container(
-                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 25),
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset("assets/images/logo.png", scale: 11),
+                    Container(
+                      child: AnimatedBuilder(
+                        animation: _textAnimation,
+                        builder: (context, child) {
+                          String animatedText = "Locate property neighborhoods"
+                              .substring(0, _textAnimation.value);
+                          return Text(
+                            animatedText,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Googel Map
+              Container(
+                height: 320,
+                child: Visibility(
+                  visible: true,
+                  child: controller.currentPosition == null
+                      ? Container(
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        )
+                      : Expanded(
+                          child: GoogleMap(
+                            mapType: MapType.normal,
+                            initialCameraPosition: controller.currentPosition!,
+                            onMapCreated: (mapcontroller) {
+                              controller.mapController2 = mapcontroller;
+                            },
+                            markers: controller.markers,
+                            onTap: (latlng) async {
+                              print(controller.markers);
+                              print(controller.propertyNeighborhoods);
+                              print(neighborhoodType);
+
+                              if (neighborhoodType !=
+                                  "Select Neighborhood Type") {
+                                try {
+                                  List<Placemark> placemarks =
+                                      await placemarkFromCoordinates(
+                                          latlng.latitude, latlng.longitude);
+
+                                  if (placemarks.isNotEmpty) {
+                                    final placemark = placemarks[0];
+                                    controller.neighborhoodStreet.text =
+                                        placemark.street!;
+
+                                    // Remove the marker with the specified ID
+                                    controller.markers.removeWhere(
+                                      (marker) =>
+                                          marker.markerId.value ==
+                                          neighborhoodType,
+                                    );
+                                    // Remove the neighborhood with the neighborhood type
+                                    controller.propertyNeighborhoods
+                                        .removeWhere(
+                                      (neighborhood) =>
+                                          neighborhood.neighborhoodType ==
+                                          neighborhoodType,
+                                    );
+
+                                    // Add a new marker
+                                    controller.markers.add(
+                                      Marker(
+                                        markerId: MarkerId(neighborhoodType),
+                                        position: latlng,
+                                        infoWindow:
+                                            InfoWindow(title: neighborhoodType),
+                                        icon: markerIcon,
+                                      ),
+                                    );
+                                    // Add a new neighborhood
+                                    controller.propertyNeighborhoods
+                                        .add(NeighborhoodDto(
+                                      neighborhoodType: neighborhoodType,
+                                      location: LocationNeighborhood(
+                                        city: placemark.locality,
+                                        postalCode: placemark.postalCode!,
+                                        country: placemark.country,
+                                        region: placemark.locality,
+                                        streetAddress: placemark.street,
+                                        latitude: latlng.latitude,
+                                        longitude: latlng.longitude,
+                                      ),
+                                    ));
+                                  }
+                                } catch (e) {
+                                  Get.defaultDialog(
+                                      title: "ُEntered invalid location",
+                                      middleText: 'Error: $e');
+                                }
+                                print(controller.markers);
+                                print(controller.propertyNeighborhoods);
+                                setState(() {});
+                              }
+                            },
+                          ),
+                        ),
+                ),
+              ),
+
+              // Street address and Dropdown Button
+              Container(
+                margin: const EdgeInsets.only(top: 15, right: 15, left: 15),
                 child: Form(
+                  key: controller.formKey2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Introduction
-                      Image.asset("assets/images/logo.png", scale: 11),
-                      Container(
-                        child: AnimatedBuilder(
-                          animation: _textAnimation,
-                          builder: (context, child) {
-                            String animatedText =
-                                "Enter information about the property type"
-                                    .substring(0, _textAnimation.value);
-                            return Text(
-                              animatedText,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      // Property type
-                      Container(height: 25),
-                      const Text(
-                        "Property type",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Container(height: 5),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         width: double.infinity,
@@ -159,8 +333,8 @@ class _AddProperty2State extends State<AddProperty2>
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: DropdownButton<String>(
-                          value: controller.propertyType,
-                          items: typeOptions.map((String option) {
+                          value: neighborhoodType,
+                          items: options.map((String option) {
                             return DropdownMenuItem<String>(
                               value: option,
                               child: Text(option),
@@ -169,7 +343,8 @@ class _AddProperty2State extends State<AddProperty2>
                           onChanged: (String? newValue) {
                             if (newValue != null) {
                               setState(() {
-                                controller.propertyType = newValue;
+                                neighborhoodType = newValue;
+                                addCustomerIcon();
                               });
                             }
                           },
@@ -177,112 +352,39 @@ class _AddProperty2State extends State<AddProperty2>
                           underline: const SizedBox(),
                         ),
                       ),
-
-                      // Number of units
-                      Container(height: 30),
-                      const Row(
-                        children: [
-                          Text(
-                            "Number of units",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
+                      const SizedBox(height: 15),
+                      Container(
+                        child: const Text(
+                          "Street address",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w500,
                           ),
-                          Text(
-                            " (if needed)",
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                        ),
                       ),
                       Container(height: 5),
-                      TextFormField(
-                        controller: controller.numberOfUnits,
-                        decoration: InputDecoration(
-                          suffixIcon: const Icon(Icons.numbers),
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          contentPadding: const EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black54),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          controller: controller.neighborhoodStreet,
+                          readOnly: true,
+                          enabled: false,
+                          style: const TextStyle(color: Colors.black54),
+                          decoration: const InputDecoration(
+                            hintText: "Here will appear Street address",
+                            hintStyle: TextStyle(color: Colors.black54),
+                            suffixIcon: Icon(
+                              Icons.map,
+                              color: Colors.black54,
+                            ),
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                            contentPadding: EdgeInsets.all(10),
                           ),
                         ),
-                      ),
-
-                      // Listing type
-                      Container(height: 35),
-                      const Text(
-                        "Listing type",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Container(height: 5),
-                          RadioListTile(
-                            dense: true, // Set to true to reduce the height
-                            title: Text(
-                              "For daily rent",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                            value: "For daily rent",
-                            groupValue: controller.listingType,
-                            activeColor: const Color.fromARGB(255, 11, 93, 161),
-                            onChanged: (value) {
-                              setState(() {
-                                controller.listingType = value.toString();
-                              });
-                            },
-                          ),
-                          RadioListTile(
-                            dense: true, // Set to true to reduce the height
-                            title: Text(
-                              "For monthly rent",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                            value: "For monthly rent",
-                            groupValue: controller.listingType,
-                            activeColor: const Color.fromARGB(255, 11, 93, 161),
-                            onChanged: (value) {
-                              setState(() {
-                                controller.listingType = value.toString();
-                              });
-                            },
-                          ),
-                          RadioListTile(
-                            dense: true, // Set to true to reduce the height
-                            title: Text(
-                              "For sell",
-                              style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey[800],
-                              ),
-                            ),
-                            value: "For sell",
-                            groupValue: controller.listingType,
-                            activeColor: const Color.fromARGB(255, 11, 93, 161),
-                            onChanged: (value) {
-                              setState(() {
-                                controller.listingType = value.toString();
-                              });
-                            },
-                          ),
-                        ],
                       ),
                     ],
                   ),

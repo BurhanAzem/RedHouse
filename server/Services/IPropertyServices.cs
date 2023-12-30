@@ -12,6 +12,7 @@ namespace RedHouse_Server.Services
         public Task<ResponsDto<Property>> AddProperty(PropertyDto propertyDto);
         public Task<ResponsDto<Property>> GetProperty(int propertyId);
         public Task<ResponsDto<Property>> GetProperties(FilterDto filterDto);
+        public Task<ResponsDto<Location>> GetListAutoCompleteLocation(string query);
         public Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId, MyPropertiesFilterDto myPropertiesFilterDto);
         public Task<ResponsDto<Property>> DeleteProperty(int propertyId);
         public Task<ResponsDto<Property>> UpdateProperty(PropertyDto propertyDto, int propertyId);

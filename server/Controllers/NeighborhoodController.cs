@@ -44,14 +44,14 @@ namespace RedHouse_Server.Controllers
 
         
 
-        [HttpGet("/neighborhoods")]
-        public async Task<IActionResult> GetAllNeighborhood(int propertyId)
+        [HttpGet("/neighborhoods/{Id}")]
+        public async Task<IActionResult> GetAllNeighborhood(int Id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _neighborhoodServices.GetNeighborhoods(propertyId);
+            var result = await _neighborhoodServices.GetNeighborhoods(Id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

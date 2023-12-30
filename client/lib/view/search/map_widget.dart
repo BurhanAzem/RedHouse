@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:fluster/fluster.dart';
 import 'package:intl/intl.dart';
-import 'package:shimmer/main.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -70,7 +70,7 @@ class _MapWidgetState extends State<MapWidget>
       return;
     }
 
-    if (mapListController.newZoom < 11) {
+    if (mapListController.newZoom < 10) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -99,7 +99,7 @@ class _MapWidgetState extends State<MapWidget>
       mapListController.visibleMarkers.clear();
       mapListController.visibleProperties.clear();
 
-      if (mapListController.newZoom >= 11) {
+      if (mapListController.newZoom >= 10) {
         mapListController.visibleProperties = filterControllerr
             .listProperty.listDto
             .where((property) =>
@@ -299,6 +299,7 @@ class _MapWidgetState extends State<MapWidget>
 class MapMarker extends Clusterable {
   MapListController controller = Get.put(MapListController());
   FilterController filterController = Get.put(FilterController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
 
   Property property;
   final LatLng position;
@@ -316,9 +317,12 @@ class MapMarker extends Clusterable {
           position.latitude,
           position.longitude,
         ),
-        icon: filterController.listingType
-            ? BitmapDescriptor.defaultMarker
-            : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet),
+        icon: property.userId == loginController.userDto?["id"]
+            ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet)
+            : filterController.listingType
+                ? BitmapDescriptor.defaultMarker
+                : BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueBlue),
         onTap: () {
           _showMarkerInfo(property);
         },

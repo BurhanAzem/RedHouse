@@ -5,10 +5,13 @@ import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
 import 'package:client/view/home_information/check_account.dart';
+import 'package:client/view/home_information/create_booking.dart';
 import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SentApplication extends StatefulWidget {
   const SentApplication({super.key});
@@ -17,17 +20,30 @@ class SentApplication extends StatefulWidget {
   _SentApplicationState createState() => _SentApplicationState();
 }
 
-class _SentApplicationState extends State<SentApplication> {
-  int _currentStep = 0;
+class _SentApplicationState extends State<SentApplication>
+    with TickerProviderStateMixin {
   StepperType stepperType = StepperType.vertical;
   late Application application;
   ApplicationsController controller = Get.put(ApplicationsController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   bool isLoading = true; // Add a boolean variable for loading state
 
+  late AnimationController _vibrateController;
+  late Animation<double> _vibrateAnimation;
+
   @override
   void initState() {
     super.initState();
+    _vibrateController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
+    _vibrateAnimation = Tween(begin: 4.0, end: -4.0).animate(
+      CurvedAnimation(
+        parent: _vibrateController,
+        curve: Curves.easeInOut,
+      ),
+    );
     loadData();
     setState(() {});
   }
@@ -71,7 +87,7 @@ class _SentApplicationState extends State<SentApplication> {
           "Application Details",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -92,9 +108,7 @@ class _SentApplicationState extends State<SentApplication> {
                   color: Color(0xffd92328),
                 ),
                 Text(
-                  (application.applicationDate.toString().length <= 10)
-                      ? "       ${application.applicationDate.toString()}"
-                      : "       ${application.applicationDate.toString().substring(0, 9)}",
+                  DateFormat('yyyy-MM-dd').format(application.applicationDate),
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
@@ -218,17 +232,17 @@ class _SentApplicationState extends State<SentApplication> {
               ),
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   application.message ?? "No message available",
-                  style: TextStyle(fontSize: 15),
+                  style: const TextStyle(fontSize: 15),
                 ),
               ),
             ),
             Container(height: 25),
             InkWell(
               onTap: () {
-                Get.to(() => HomeInformation(property: application.property));
+                Get.to(() => HomeWidget(property: application.property));
               },
               child: Container(
                 decoration: const BoxDecoration(
@@ -275,8 +289,11 @@ class _SentApplicationState extends State<SentApplication> {
             ),
             Container(height: 20),
 
-            // If this appliaction have offer, show "See Offer"
-            if (true) seeOffer(),
+            // createBooking or seeOffer
+            if (application.property.listingType == "For daily rent")
+              createBooking()
+            else
+              seeOffer(),
           ],
         ),
       ),
@@ -288,7 +305,9 @@ class _SentApplicationState extends State<SentApplication> {
       // width: 300,
       height: 40,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          // If this appliaction have offer, show "See Offer"
+        },
         style: ElevatedButton.styleFrom(
           primary: Colors.black,
           onPrimary: Colors.white,
@@ -308,6 +327,48 @@ class _SentApplicationState extends State<SentApplication> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget createBooking() {
+    return AnimatedBuilder(
+      animation: _vibrateAnimation,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(_vibrateAnimation.value, 0.0),
+          child: Container(
+            height: 40,
+            child: ElevatedButton(
+              onPressed: () {
+                if (application.applicationStatus == "Approved") {
+                  Get.to(() => CreateBooking(property: application.property));
+                } else {
+                  // Start the vibrating animation
+                  _vibrateController.forward(from: 0.0);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.black,
+                onPrimary: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    FontAwesomeIcons.add,
+                    size: 18,
+                  ),
+                  SizedBox(width: 8),
+                  Text("Create Booking"),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

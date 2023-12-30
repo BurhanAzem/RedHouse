@@ -142,6 +142,7 @@ class _AllPropertiesState extends State<Properties>
                 }).toList(),
               ),
             ),
+            Container(height: 10),
 
             // userProperties isEmpty
             if (controller.userProperties.isEmpty)

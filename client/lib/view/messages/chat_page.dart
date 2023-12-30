@@ -85,7 +85,7 @@ class _ChatPageState extends State<ChatPage> {
     }
     // Format: FullMonthName Day
     else {
-      return DateFormat('MMMM dd', 'en_US').format(messageTime);
+      return DateFormat('MMM dd', 'en_US').format(messageTime);
     }
   }
 

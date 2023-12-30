@@ -10,7 +10,7 @@ class Offer {
   int customerId;
   int? propertryId;
   DateTime offerDate;
-  DateTime offerExpireDate;
+  DateTime offerExpires;
   String description;
   int price;
   String offerStatus;
@@ -24,7 +24,7 @@ class Offer {
     required this.customerId,
     required this.propertryId,
     required this.offerDate,
-    required this.offerExpireDate,
+    required this.offerExpires,
     required this.description,
     required this.offerStatus,
     required this.price,

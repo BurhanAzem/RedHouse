@@ -26,8 +26,7 @@ class _MyFeedbackState extends State<MyFeedback> {
   }
 
   void loadData() async {
-    historyController =
-        Get.put(HistoryController(), permanent: true);
+    historyController = Get.put(HistoryController(), permanent: true);
     await historyController.getHistoryUser(loginController.userDto?["id"]);
 
     setState(() {

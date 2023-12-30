@@ -48,40 +48,39 @@ class ManagePropertiesController extends GetxController {
   Set<Marker> markers = {}; // Empty marker
   List<NeighborhoodDto> propertyNeighborhoods = [];
   TextEditingController neighborhoodStreet = TextEditingController();
+  bool isUploading = false; // Add a flag for uploading photos
 
-  @override
-  AddProperty() async {
+  addProperty() async {
     if (formKey1.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
       var response = await PropertyData.addProperty(
-        propertyType,
-        price.text,
-        numberOfBedrooms.text,
-        numberOfBathrooms.text,
-        squareMeter.text,
-        propertyDescription.text,
-        builtYear,
-        view,
-        availableDate,
-        propertyStatus,
-        numberOfUnits.text,
-        parkingSpots.text,
-        listingType,
-        isAvaliableBasement,
-        listingBy,
-        userId,
-        downloadUrls,
+          propertyType,
+          price.text,
+          numberOfBedrooms.text,
+          numberOfBathrooms.text,
+          squareMeter.text,
+          propertyDescription.text,
+          builtYear,
+          view,
+          availableDate,
+          propertyStatus,
+          numberOfUnits.text,
+          parkingSpots.text,
+          listingType,
+          isAvaliableBasement,
+          listingBy,
+          userId,
+          downloadUrls,
 
-        // For location
-        streetAddress.text,
-        City!,
-        Region!,
-        PostalCode,
-        Country!,
-        Latitude,
-        Longitude,
-        propertyNeighborhoods
-      );
+          // For location
+          streetAddress.text,
+          City!,
+          Region!,
+          PostalCode,
+          Country!,
+          Latitude,
+          Longitude,
+          propertyNeighborhoods);
 
       if (response['statusCode'] == 200) {
         print("================================================== LsitDto");
@@ -116,6 +115,24 @@ class ManagePropertiesController extends GetxController {
     }
   }
 
+  getNeighborhoodsForProperty(int propertyId) async {
+    var response = await PropertyData.getNeighborhoodsForProperty(propertyId);
+
+    if (response['statusCode'] == 200) {
+      propertyNeighborhoods = (response['listDto'] as List<dynamic>)
+          .map((e) => NeighborhoodDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+      print(propertyNeighborhoods);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+  
+
   // ALL this for front end
   void increaseActiveStep() {
     activeStep++;
@@ -129,13 +146,12 @@ class ManagePropertiesController extends GetxController {
 
   Widget easyStepper() {
     return Padding(
-      padding: const EdgeInsets.only(top: 25),
+      padding: const EdgeInsets.only(top: 20),
       child: EasyStepper(
         finishedStepBackgroundColor: const Color(0xffd92328),
         activeStepBorderColor: Colors.black,
         stepShape: StepShape.circle,
         lineStyle: const LineStyle(),
-
         activeStep: activeStep,
         activeStepTextColor: Colors.black87,
         finishedStepTextColor: Colors.black87,
@@ -235,24 +251,7 @@ class ManagePropertiesController extends GetxController {
               ),
             ),
           ),
-          EasyStep(
-            customStep: CircleAvatar(
-              radius: 8,
-              backgroundColor: Colors.grey,
-              child: CircleAvatar(
-                radius: 7,
-                backgroundColor:
-                    activeStep >= 9 ? const Color(0xffd92328) : Colors.grey,
-              ),
-            ),
-          ),
         ],
-
-        // ON Step Reached
-        onStepReached: (index) {
-          activeStep = index;
-          update();
-        },
       ),
     );
   }

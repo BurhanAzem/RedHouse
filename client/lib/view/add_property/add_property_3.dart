@@ -3,22 +3,55 @@ import 'package:client/view/add_property/add_property_4.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddProperty3 extends StatefulWidget {
-  AddProperty3({Key? key}) : super(key: key);
+class AddProperty2 extends StatefulWidget {
+  AddProperty2({Key? key}) : super(key: key);
 
   @override
-  _AddProperty3State createState() => _AddProperty3State();
+  _AddProperty2State createState() => _AddProperty2State();
 }
 
-class _AddProperty3State extends State<AddProperty3> {
+class _AddProperty2State extends State<AddProperty2>
+    with SingleTickerProviderStateMixin {
+  ManagePropertiesController propertyController =
+      Get.put(ManagePropertiesController());
+
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
+
+  @override
+  void initState() {
+    print(propertyController.propertyNeighborhoods);
+
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
+    );
+
+    // Create a Tween for the animation
+    _textAnimation = IntTween(
+            begin: 0, end: "Enter information about the property type".length)
+        .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    const options = [
+    const typeOptions = [
       "House",
       "Apartment Unit",
       "Townhouse",
-      "Castel",
-      "Entire Department Community",
+      "Castle",
+      "Entire Department"
     ];
 
     return GetBuilder<ManagePropertiesController>(
@@ -40,72 +73,17 @@ class _AddProperty3State extends State<AddProperty3> {
               },
             ),
             title: const Text(
-              "Property Description",
+              "Add Property",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: 19,
                 fontWeight: FontWeight.w600,
               ),
             ),
-          ),
-          body: Container(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              child: ListView(
+            actions: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      controller.easyStepper(),
-                      Image.asset("assets/images/logo.png", scale: 10),
-                      Container(height: 5),
-                      const Text(
-                        "Describe the property",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 23),
-                      ),
-                      Container(height: 5),
-                      const Text(
-                        "Write several sentences describing the upgrades and desirable features that will attract renters to your property.",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 15),
-                      ),
-                      Container(height: 20),
-                      const Text(
-                        "Property description",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      Container(height: 5),
-                      Container(
-                        child: TextFormField(
-                          minLines: 7,
-                          maxLines: 10,
-                          controller: controller.propertyDescription,
-                          style: const TextStyle(),
-                          decoration: InputDecoration(
-                            // suffixIcon: Icon(Icons.description),
-                            hintText:
-                                "Example: New house in the center of the city, there is close school and very beautiful view",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.all(5),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Container(height: 5),
-                      // Container(
-                      //   alignment: Alignment.center,
-                      //   child:
-                      //       Image.asset("assets/images/red-tree.png", scale: 3),
-                      // ),
-                    ],
-                  ),
-                  Container(height: 25),
                   MaterialButton(
                     onPressed: () {
                       setState(() {
@@ -114,22 +92,203 @@ class _AddProperty3State extends State<AddProperty3> {
                       });
                       Get.to(() => AddProperty4());
                     },
-                    color: const Color(0xffd92328),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
                     child: const Text(
-                      "Continue",
+                      'Next',
                       style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.5,
                       ),
                     ),
                   ),
-                  Container(height: 15),
                 ],
               ),
-            ),
+            ],
+          ),
+
+          // Body
+          body: ListView(
+            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+            children: [
+              controller.easyStepper(),
+              Container(
+                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 25),
+                child: Form(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Introduction
+                      Image.asset("assets/images/logo.png", scale: 11),
+                      Container(
+                        child: AnimatedBuilder(
+                          animation: _textAnimation,
+                          builder: (context, child) {
+                            String animatedText =
+                                "Enter information about the property type"
+                                    .substring(0, _textAnimation.value);
+                            return Text(
+                              animatedText,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      // Property type
+                      Container(height: 25),
+                      const Text(
+                        "Property type",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Container(height: 5),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.black,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: DropdownButton<String>(
+                          value: controller.propertyType,
+                          items: typeOptions.map((String option) {
+                            return DropdownMenuItem<String>(
+                              value: option,
+                              child: Text(option),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                controller.propertyType = newValue;
+                              });
+                            }
+                          },
+                          isExpanded: true,
+                          underline: const SizedBox(),
+                        ),
+                      ),
+
+                      // Number of units
+                      Container(height: 30),
+                      const Row(
+                        children: [
+                          Text(
+                            "Number of units",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            " (if needed)",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                      Container(height: 5),
+                      TextFormField(
+                        controller: controller.numberOfUnits,
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.numbers),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+
+                      // Listing type
+                      Container(height: 35),
+                      const Text(
+                        "Listing type",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Container(height: 5),
+                          RadioListTile(
+                            dense: true, // Set to true to reduce the height
+                            title: Text(
+                              "For daily rent",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                            value: "For daily rent",
+                            groupValue: controller.listingType,
+                            activeColor: const Color.fromARGB(255, 11, 93, 161),
+                            onChanged: (value) {
+                              setState(() {
+                                controller.listingType = value.toString();
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            dense: true, // Set to true to reduce the height
+                            title: Text(
+                              "For monthly rent",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                            value: "For monthly rent",
+                            groupValue: controller.listingType,
+                            activeColor: const Color.fromARGB(255, 11, 93, 161),
+                            onChanged: (value) {
+                              setState(() {
+                                controller.listingType = value.toString();
+                              });
+                            },
+                          ),
+                          RadioListTile(
+                            dense: true, // Set to true to reduce the height
+                            title: Text(
+                              "For sell",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                            value: "For sell",
+                            groupValue: controller.listingType,
+                            activeColor: const Color.fromARGB(255, 11, 93, 161),
+                            onChanged: (value) {
+                              setState(() {
+                                controller.listingType = value.toString();
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       },

@@ -6,10 +6,12 @@ import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
 import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:client/view/offers/create_offer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class IncomingApplication extends StatefulWidget {
   const IncomingApplication({super.key});
@@ -89,9 +91,7 @@ class _IncomingApplicationState extends State<IncomingApplication> {
                   color: Color(0xffd92328),
                 ),
                 Text(
-                  (application.applicationDate.toString().length <= 10)
-                      ? "       ${application.applicationDate.toString()}"
-                      : "       ${application.applicationDate.toString().substring(0, 9)}",
+                  DateFormat('yyyy-MM-dd').format(application.applicationDate),
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, fontSize: 12),
                 ),
@@ -219,7 +219,7 @@ class _IncomingApplicationState extends State<IncomingApplication> {
             Container(height: 15),
             InkWell(
               onTap: () {
-                Get.to(() => HomeInformation(property: application.property));
+                Get.to(() => HomeWidget(property: application.property));
               },
               child: Container(
                 decoration: const BoxDecoration(
@@ -285,47 +285,47 @@ class _IncomingApplicationState extends State<IncomingApplication> {
         Container(
           height: 40,
           width: 160,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(40),
-            border: Border.all(
-              color: Colors.black,
-              width: 1,
-            ),
-          ),
-          child: MaterialButton(
+          child: ElevatedButton(
             onPressed: () {
               controller.approvedApplication(application.id);
               loadAllApplications();
               setState(() {});
             },
-            child: const Text(
-              "Approve",
-              style: TextStyle(fontSize: 16, color: Colors.white),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.black,
+              onPrimary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
+            child: Text("Approve"),
           ),
         ),
         Container(
           height: 40,
           width: 160,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: Colors.black,
               width: 1,
             ),
           ),
-          child: MaterialButton(
+          child: ElevatedButton(
             onPressed: () {
               controller.deleteApplication(application.id);
               loadAllApplications();
               setState(() {});
               Navigator.pop(context);
             },
-            child: const Text(
-              "Ignore",
-              style: TextStyle(fontSize: 16),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.white,
+              onPrimary: Colors.black,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
+            child: Text("Ignore"),
           ),
         ),
       ],

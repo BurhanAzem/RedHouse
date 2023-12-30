@@ -3,12 +3,12 @@ import 'package:client/controller/applications/applications_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
-import 'package:client/routes.dart';
 import 'package:client/view/manage_properties/incoming_application.dart';
 import 'package:client/view/manage_properties/sent_application.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AllApplications extends StatefulWidget {
   const AllApplications({Key? key});
@@ -246,10 +246,8 @@ class _AllApplicationsState extends State<AllApplications> {
                             color: const Color(0xffd92328),
                           ),
                           Text(
-                            (application.applicationDate.toString().length <=
-                                    10)
-                                ? "       ${application.applicationDate.toString()}"
-                                : "       ${application.applicationDate.toString().substring(0, 9)}",
+                            DateFormat('yyyy-MM-dd')
+                                .format(application.applicationDate),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 12),
                           ),
@@ -391,10 +389,8 @@ class _AllApplicationsState extends State<AllApplications> {
                             color: const Color(0xffd92328),
                           ),
                           Text(
-                            (application.applicationDate.toString().length <=
-                                    10)
-                                ? "       ${application.applicationDate.toString()}"
-                                : "       ${application.applicationDate.toString().substring(0, 9)}",
+                             DateFormat('yyyy-MM-dd')
+                                .format(application.applicationDate),
                             style: const TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 12),
                           ),

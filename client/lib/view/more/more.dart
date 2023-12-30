@@ -90,7 +90,7 @@ class _MoreState extends State<More> {
                     const SizedBox(height: 20),
                     MaterialButton(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       onPressed: () {
                         Get.toNamed("/login");

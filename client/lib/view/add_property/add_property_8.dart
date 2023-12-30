@@ -99,7 +99,7 @@ class _AddProperty8State extends State<AddProperty8>
 
                       // AddPropertyFuture is a function that performs controller.AddProperty
                       Future<void> addPropertyFuture() async {
-                        await controller.AddProperty();
+                        await controller.addProperty();
 
                         print(bottomBarController.currentIndex);
                         if (bottomBarController.currentIndex == 3) {
@@ -219,28 +219,56 @@ class _AddProperty8State extends State<AddProperty8>
                       ),
                       Container(height: 35),
 
-                      // Finish
-                      // Container(height: 25),
-                      // Text(
-                      //   "Please note you can not edit property data again",
-                      //   textAlign: TextAlign.center,
-                      //   style: TextStyle(
-                      //       fontSize: 18,
-                      //       color: Colors.grey[500],
-                      //       fontWeight: FontWeight.w500),
-                      // ),
-
                       // button
                       MaterialButton(
                         minWidth: 500,
                         height: 44,
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {});
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          SnackBar snackBar = const SnackBar(
+                            content: Text("Added Successfully"),
+                            backgroundColor: Colors.blue,
+                          );
+
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              // Show a loading dialog while processing
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+
+                          BottomBarController bottomBarController =
+                              Get.put(BottomBarController(), permanent: true);
+
+                          // AddPropertyFuture is a function that performs controller.AddProperty
+                          Future<void> addPropertyFuture() async {
+                            await controller.addProperty();
+
+                            print(bottomBarController.currentIndex);
+                            if (bottomBarController.currentIndex == 3) {
+                              Get.offAll(() => const BottomBar());
+                            } else if (bottomBarController.currentIndex == 4) {
+                              Get.offAll(() => const BottomBar());
+                              Get.to(() => const MyProperties());
+                            }
+
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+
+                          // Execute the addPropertyFuture asynchronously and navigate when done
+                          addPropertyFuture();
+                        },
                         color: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Text(
-                          "Save property",
+                          "Save your property",
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.white,
