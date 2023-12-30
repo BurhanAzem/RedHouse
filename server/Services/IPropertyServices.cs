@@ -4,6 +4,7 @@ using RedHouse_Server.Models;
 using Cooking_School.Dtos;
 using server.Dtos.PropertyDtos;
 using server.Models;
+using RedHouse_Server.Dtos.LocationDtos;
 
 namespace RedHouse_Server.Services
 {
@@ -14,6 +15,7 @@ namespace RedHouse_Server.Services
         public Task<ResponsDto<Property>> GetProperties(FilterDto filterDto);
         public Task<ResponsDto<Location>> GetListAutoCompleteLocation(string query);
         public Task<ResponsDto<Property>> GetAllPropertiesForUser(int userId, MyPropertiesFilterDto myPropertiesFilterDto);
+        public Task<ResponsDto<Property>> GetClosestPropertiesToTheCurrentLocation(double latitude, double longitude); 
         public Task<ResponsDto<Property>> DeleteProperty(int propertyId);
         public Task<ResponsDto<Property>> UpdateProperty(PropertyDto propertyDto, int propertyId);
         public Task<List<int>> GetPricePropertyHistoryAsRent(int propertyId);

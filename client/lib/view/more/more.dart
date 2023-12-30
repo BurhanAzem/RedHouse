@@ -145,6 +145,15 @@ class _MoreState extends State<More> {
           ),
           const SizedBox(height: 20),
 
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+                alignment: Alignment.centerLeft,
+                height: 130,
+                width: 130,
+                child: Image.asset("assets/images/red-tree.png")),
+          ),
+
           // Here settings list
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

@@ -3,6 +3,7 @@ import 'package:client/model/list_property.dart';
 import 'package:client/model/location.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/search/map_widget.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,6 +14,9 @@ class FilterController extends GetxController {
   ListProperty listProperty = ListProperty(listDto: []);
 
   List<Location> listAutoCompleteLocation = [];
+
+  List<FlSpot> flSpotListRent = [];
+  List<FlSpot> flSpotListSell = [];
 
   Location location = Location(
     id: 0,
@@ -231,62 +235,6 @@ class FilterController extends GetxController {
     update();
   }
 
-  // String rentPropertyTypes() {
-  //   if (!rentHouse &&
-  //       !rentApartment &&
-  //       !rentTownhouse &&
-  //       !rentCastle &&
-  //       !rentDepartment) {
-  //     return 'Any';
-  //   } else {
-  //     List<String> selectedTypes = [];
-  //     if (rentHouse) {
-  //       selectedTypes.add('House');
-  //     }
-  //     if (rentApartment) {
-  //       selectedTypes.add('Apartment Unit');
-  //     }
-  //     if (rentTownhouse) {
-  //       selectedTypes.add('Townhouse');
-  //     }
-  //     if (rentCastle) {
-  //       selectedTypes.add('Castle');
-  //     }
-  //     if (rentDepartment) {
-  //       selectedTypes.add('Entire Department community');
-  //     }
-  //     return selectedTypes.join(', ');
-  //   }
-  // }
-
-  // String buyPropertyTypes() {
-  //   if (buyHouse &&
-  //       buyApartment &&
-  //       buyTownhouse &&
-  //       buyCastle &&
-  //       buyDepartment) {
-  //     return 'Any';
-  //   } else {
-  //     List<String> selectedTypes = [];
-  //     if (buyHouse) {
-  //       selectedTypes.add('House');
-  //     }
-  //     if (buyApartment) {
-  //       selectedTypes.add('Apartment Unit');
-  //     }
-  //     if (buyTownhouse) {
-  //       selectedTypes.add('Townhouse');
-  //     }
-  //     if (buyCastle) {
-  //       selectedTypes.add('Castle');
-  //     }
-  //     if (buyDepartment) {
-  //       selectedTypes.add('Entire Department community');
-  //     }
-  //     return selectedTypes.join(', ');
-  //   }
-  // }
-
   getProperties() async {
     List<String>? propertyTypes = [];
     String? minPrice;
@@ -452,21 +400,57 @@ class FilterController extends GetxController {
   getListAutoCompleteLocation(String query) async {
     query = query.isEmpty ? " " : query;
     var response = await PropertyData.getListAutoCompleteLocation(query);
+    getListAutoCompleteLocation(String listAutoCompleteLocationQuery) async {
+      var response = await PropertyData.getListAutoCompleteLocation(
+          listAutoCompleteLocationQuery);
 
-    if (response['statusCode'] == 200) {
-      listAutoCompleteLocation = (response['listDto'] as List<dynamic>)
-          .map((e) => Location.fromJson(e as Map<String, dynamic>))
-          .toList();
+      if (response['statusCode'] == 200) {
+        listAutoCompleteLocation = (response['listDto'] as List<dynamic>)
+            .map((e) => Location.fromJson(e as Map<String, dynamic>))
+            .toList();
 
-      print(listAutoCompleteLocation);
-      print(listProperty.listDto);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
+        print(listAutoCompleteLocation);
+        print(listProperty.listDto);
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
+  }
+
+  getPropertyPriceLastTenYearRent(int propertyId) async {
+    List<dynamic> response =
+        await PropertyData.getPropertyPriceLastTenYearRent(propertyId);
+
+    List<dynamic> priceLastTenYears = response;
+    int curYear = DateTime.now().year;
+    for (int i = 9; i >= 0; i--) {
+      var flSpot = new FlSpot(
+          (curYear - i).toDouble(), priceLastTenYears[9 - i].toDouble());
+
+      flSpotListRent.add(flSpot);
+    }
+
+    print(flSpotListRent);
+  }
+
+  getPropertyPriceLastTenYearSell(int propertyId) async {
+    var response =
+        await PropertyData.getPropertyPriceLastTenYearSell(propertyId);
+
+    List<dynamic> priceLastTenYears = response;
+    int curYear = DateTime.now().year;
+
+    for (int i = 9; i >= 0; i--) {
+      var flSpot =
+          FlSpot((curYear - i).toDouble(), priceLastTenYears[i].toDouble());
+      flSpotListSell.add(flSpot);
+    }
+
+    print(flSpotListSell);
   }
 
   List<MapMarker> getMarkerLocations(List<Property> properties) {

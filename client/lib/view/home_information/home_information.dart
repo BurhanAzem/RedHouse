@@ -8,6 +8,7 @@ import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/home_information/application_buttons.dart';
 import 'package:client/view/home_information/image_slider_widget.dart';
 import 'package:client/view/home_information/check_property.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -41,6 +42,11 @@ class _HomeInformationState extends State<HomeInformation> {
   @override
   void initState() {
     super.initState();
+
+    widget.property.listingType == "For daily rent" ||
+            widget.property.listingType == "For monthly rent"
+        ? filterController.getPropertyPriceLastTenYearRent(widget.property.id)
+        : filterController.getPropertyPriceLastTenYearSell(widget.property.id);
 
     propertyPosition = CameraPosition(
       target: LatLng(
@@ -221,7 +227,15 @@ class _HomeInformationState extends State<HomeInformation> {
       },
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(),
+          data: ThemeData.dark().copyWith(
+        // Customize the highlight color to red
+        colorScheme: const ColorScheme.dark(
+          primary: Color.fromARGB(255, 196, 39, 27),
+        ),
+        buttonTheme: const ButtonThemeData(
+          textTheme: ButtonTextTheme.primary,
+        ),
+      ),
           child: child ?? Container(),
         );
       },
@@ -526,6 +540,7 @@ class _HomeInformationState extends State<HomeInformation> {
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 30),
                       // here Parking Spots
                       if (widget.property.parkingSpots == 0)
@@ -677,6 +692,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
+                                color: Colors.black,
                                 border: Border.all(width: 0.9),
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(10),
@@ -690,12 +706,17 @@ class _HomeInformationState extends State<HomeInformation> {
                                   children: [
                                     const Text(
                                       "When is it available ?",
-                                      style: TextStyle(fontSize: 16),
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     IconButton(
                                       onPressed: _showAvailableDates,
-                                      icon:
-                                          const Icon(Icons.date_range_outlined),
+                                      icon: const Icon(
+                                        Icons.date_range_outlined,
+                                        color: Colors.white,
+                                      ),
                                     )
                                   ],
                                 ),
@@ -841,6 +862,51 @@ class _HomeInformationState extends State<HomeInformation> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Container(
+                  height: 400,
+                  child: LineChart(
+                    LineChartData(
+                      // minY: 0,
+                      // maxY: 6,
+                      gridData: FlGridData(
+                        show: false,
+                        getDrawingHorizontalLine: (value) {
+                          return const FlLine(
+                            color: Color(0xff37434d),
+                            strokeWidth: 1,
+                          );
+                        },
+                        drawVerticalLine: true,
+                        getDrawingVerticalLine: (value) {
+                          return const FlLine(
+                            color: Color(0xff37434d),
+                            strokeWidth: 1,
+                          );
+                        },
+                      ),
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      lineBarsData: [
+                        LineChartBarData(
+                          spots:
+                              widget.property.listingType == "For daily rent" ||
+                                      widget.property.listingType ==
+                                          "For monthly rent"
+                                  ? filterController.flSpotListRent
+                                  : filterController.flSpotListSell,
+                          color: Colors.green,
+                          isCurved: false,
+                          // colors: gradientColors,
+                          barWidth: 3,
+                          // dotData: FlDotData(show: false),
+                          belowBarData: BarAreaData(
+                              show: true, color: Colors.greenAccent[100]),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

@@ -12,6 +12,7 @@ import 'package:fluster/fluster.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MapWidget extends StatefulWidget {
   const MapWidget({Key? key}) : super(key: key);
@@ -42,12 +43,16 @@ class _MapWidgetState extends State<MapWidget>
   @override
   void initState() {
     super.initState();
-    loadData();
+    // loadData();
   }
 
   void loadData() async {
     filterControllerr.getProperties();
 
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+        print(position);
+        
     mapListController.isLoading = true;
     _timer = Timer(const Duration(seconds: 1), () {
       if (mounted) {
@@ -116,12 +121,12 @@ class _MapWidgetState extends State<MapWidget>
             .map((marker) => marker.toMarker())
             .toSet();
 
-        reverseGeocode(centerCoordinates);
+        reciveGeocode(centerCoordinates);
       }
     });
   }
 
-  Future<void> reverseGeocode(LatLng coordinates) async {
+  Future<void> reciveGeocode(LatLng coordinates) async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
         coordinates.latitude,

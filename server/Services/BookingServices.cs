@@ -1,7 +1,10 @@
 using System;
 using System.Net;
 using Cooking_School.Dtos;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client.Extensibility;
+using Microsoft.IdentityModel.Tokens;
 using RedHouse_Server.Dtos.ApplicationDtos;
 using RedHouse_Server.Dtos.ContractDtos;
 using RedHouse_Server.Dtos.OfferDtos;
@@ -101,41 +104,28 @@ namespace server.Services
             //     };
             // }
 
-            var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+            var thirtyDaysAgo = DateTime.Now;
             var thirtyDaysAfter = DateTime.Now.AddDays(30);
 
 
-            foreach (var day in bookingDto.BookingDays)
+            foreach (var date in bookingDto.BookingDays)
             {
-                if (day < thirtyDaysAgo || day > thirtyDaysAfter)
+                if (date < thirtyDaysAgo || date > thirtyDaysAfter)
                     return new ResponsDto<Booking>
                     {
-                        Exception = new Exception("You are trying booking not available day"),
+                        Exception = new Exception("You are trying booking not available day #"),
                         StatusCode = HttpStatusCode.BadRequest,
                     };
 
-                // var bookingDay = await _redHouseDbContext.BookingDays.Where(b => b.DayDate.Day == day.Day && b.DayDate.Month == day.Month).FirstAsync();
-
-                var bookingDay = await _redHouseDbContext.BookingDays
-                .Where(b => b.DayDate.Day == day.Day && b.DayDate.Month == day.Month)
-                .FirstOrDefaultAsync();
-
+                var bookingDay = await _redHouseDbContext.BookingDays.Where(b => b.DayDate.Day == date.Day
+                                                                              && b.DayDate.Month == date.Month
+                                                                              && b.Booking.PropertyId == bookingDto.PropertyId).FirstOrDefaultAsync();
                 if (bookingDay != null)
-                {
-                    // Handle the case where a matching element is found
                     return new ResponsDto<Booking>
                     {
-                        Exception = new Exception("You are trying to book on a day that is not available"),
+                        Exception = new Exception("You are trying booking not available day *"),
                         StatusCode = HttpStatusCode.BadRequest,
                     };
-                }
-
-                // if (bookingDay != null)
-                //     return new ResponsDto<Booking>
-                //     {
-                //         Exception = new Exception("You are trying booking not available day"),
-                //         StatusCode = HttpStatusCode.BadRequest,
-                //     };
                 _redHouseDbContext.SaveChanges();
             }
 
@@ -151,24 +141,71 @@ namespace server.Services
             {
                 UserId = bookingDto.UserId,
                 PropertyId = bookingDto.PropertyId,
-                BookingCode = random_number_str
+                BookingCode = random_number_str,
+                BookingStatus = "InProcess"
             };
 
 
             var bookingRes = await _redHouseDbContext.Bookings.AddAsync(booking);
             _redHouseDbContext.SaveChanges();
 
+            List<DateTime> EndingOfBookingDayIntervals = new List<DateTime>();
 
-            foreach (var day in bookingDto.BookingDays)
+            for (int i = 0; i < bookingDto.BookingDays.Count; i++)
             {
                 BookingDay bookingDay = new BookingDay
                 {
                     BookingId = bookingRes.Entity.Id,
-                    DayDate = day
+                    DayDate = bookingDto.BookingDays[i]
                 };
                 await _redHouseDbContext.BookingDays.AddAsync(bookingDay);
                 _redHouseDbContext.SaveChanges();
             }
+
+            if (!bookingDto.BookingDays.IsNullOrEmpty())
+            {
+                if (bookingDto.BookingDays.Count == 1)
+                {
+                    var jobId = $"RecurringJob_{bookingDto.BookingDays[0]}";
+
+                    // Assuming bookingDto.BookingDays[0] contains the exact DateTime you want the job to run
+                    var cronExpression = $"{59} {11} {bookingDto.BookingDays[0].Day} {bookingDto.BookingDays[0].Month} ?";
+
+                    // Remove the existing recurring job if it exists
+                    RecurringJob.RemoveIfExists(jobId);
+
+                    // Schedule the new recurring job
+                    RecurringJob.AddOrUpdate(jobId, () => EndBookingProcess(bookingRes.Entity.Id), cronExpression);
+                }
+                for (int i = 0; i < bookingDto.BookingDays.Count - 1; i++)
+                {
+                    if (bookingDto.BookingDays[i + 1].Day - bookingDto.BookingDays[i].Day == 1)
+                    {
+                        ScheduleRecurringJob(bookingDto.BookingDays[i], "11:59", ResumeBookingProcess); // Resume
+                        ScheduleRecurringJob(bookingDto.BookingDays[i], "12:01", PauseBookingProcess); // Pause
+                    }
+                }
+
+                void ScheduleRecurringJob(DateTime date, string time, Func<int, Task> myAsyncAction)
+                {
+                    var jobId = $"RecurringJob_{date}_{time}";
+
+                    var cronExpression = $"{time.Split(':')[1]} {time.Split(':')[0]} {date.Day} {date.Month} ?";
+
+                    RecurringJob.RemoveIfExists(jobId);
+
+                    RecurringJob.AddOrUpdate(jobId, () => myAsyncAction(bookingRes.Entity.Id), cronExpression);
+                }
+
+
+
+            }
+
+
+            // Rest of your code
+
+
+            // Rest of your code
 
             return new ResponsDto<Booking>
             {
@@ -177,6 +214,54 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+        public async Task EndBookingProcess(int bookingId)
+        {
+            // Your asynchronous code here
+            var bookings = await _redHouseDbContext.Bookings
+                .Where(b => b.Id == bookingId).ToListAsync();
+            var booking = bookings.FirstOrDefault();
+            if (booking != null)
+            {
+                booking.BookingStatus = "Done";
+                _redHouseDbContext.Bookings.Update(booking);
+                _redHouseDbContext.SaveChanges();
+            }
+
+            // Do something with 'booking' if needed
+        }
+
+        public async Task PauseBookingProcess(int bookingId)
+        {
+            // Your asynchronous code here
+            var bookings = await _redHouseDbContext.Bookings
+                .Where(b => b.Id == bookingId).ToListAsync();
+            var booking = bookings.FirstOrDefault();
+            if (booking != null)
+            {
+                booking.BookingStatus = "Pause";
+                _redHouseDbContext.Bookings.Update(booking);
+                _redHouseDbContext.SaveChanges();
+            }
+
+            // Do something with 'booking' if needed
+        }
+        public async Task ResumeBookingProcess(int bookingId)
+        {
+            // Your asynchronous code here
+            var bookings = await _redHouseDbContext.Bookings
+                .Where(b => b.Id == bookingId).ToListAsync();
+            var booking = bookings.FirstOrDefault();
+            if (booking != null)
+            {
+                booking.BookingStatus = "InProcess";
+                _redHouseDbContext.Bookings.Update(booking);
+                _redHouseDbContext.SaveChanges();
+            }
+
+            // Do something with 'booking' if needed
+        }
+
 
 
 
@@ -249,15 +334,19 @@ namespace server.Services
                 };
             }
 
-            // var bookings =await _redHouseDbContext.Bookings.Where(b => b.PropertyId == propertyId).Include(b => b.BookingDays).ToListAsync();
+            var booking = _redHouseDbContext.Bookings.FirstOrDefault(b => b.PropertyId == propertyId);
             List<BookingDay> bookingDays = new List<BookingDay>();
+            if (booking != null)
+            {
+                var thirtyDaysAgo = DateTime.Now.AddDays(-30);
+                var thirtyDaysAfter = DateTime.Now.AddDays(30);
 
-            var thirtyDaysAgo = DateTime.Now.AddDays(-30);
-            var thirtyDaysAfter = DateTime.Now.AddDays(30);
+                bookingDays = await _redHouseDbContext.BookingDays
+                   .Where(b => b.BookingId == booking.Id && b.DayDate > thirtyDaysAgo && b.DayDate < thirtyDaysAfter)
+                   .ToListAsync();
 
-            bookingDays = await _redHouseDbContext.BookingDays
-               .Where(b => b.Booking.PropertyId == propertyId && b.DayDate > thirtyDaysAgo && b.DayDate < thirtyDaysAfter)
-               .ToListAsync();
+                // Rest of your code
+            }
 
             return new ResponsDto<BookingDay>
             {

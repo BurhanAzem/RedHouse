@@ -100,6 +100,54 @@ class _SearhcLoactionScreenState extends State<SearhcLoactionScreen> {
                         press: () {},
                         location: "Nablus,  Palestine",
                       ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Jenin,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Ramallah,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Jericho,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Al-Bireh,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Tulkarm,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Hebron,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Bethlehem,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Khan Yunis,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Rafah,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Qalqilya,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Tubas,  Palestine",
+                      ),
+                      LocationListTile(
+                        press: () {},
+                        location: "Bayt Jala,  Palestine",
+                      ),
                     ],
                   )
                 : ListView.builder(
@@ -113,15 +161,17 @@ class _SearhcLoactionScreenState extends State<SearhcLoactionScreen> {
 
                       return GestureDetector(
                         onTap: () {
-                          filterController.location = location;
-                          filterController.getProperties();
-                          Get.to(() => const MapWidget());
+                          filterController.location =
+                              location;
+                              filterController.getProperties();
+                          Get.to(() => MapWidget());
                           setState(() {});
                         },
+                        // LatLng(
+                        //     location.latitude, location.longitude)
                         child: LocationListTile(
                           press: () {},
-                          location:
-                              '${location.city}, ${location.country}, ${location.postalCode}',
+                          location: '${location.city}, ${location.country}, ${location.postalCode}',
                         ),
                       );
                     },

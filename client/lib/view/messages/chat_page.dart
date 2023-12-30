@@ -144,15 +144,15 @@ class _ChatPageState extends State<ChatPage> {
               },
               itemBuilder: (context) => [
                 // If the landlord and this application does not have a offer, show "Create offer"
-                if (currentUserId ==
-                    widget.application.property.userId.toString())
+                // if (currentUserId ==
+                //     widget.application.property.userId.toString())
                   const PopupMenuItem(
                     value: "Create offer",
                     child: Text("Create offer"),
                   ),
 
                 // If this appliaction has offer, show "See offer"
-                if (true)
+                // if (true)
                   const PopupMenuItem(
                     value: "See offer",
                     child: Text("See offer"),
@@ -289,9 +289,9 @@ class _ChatPageState extends State<ChatPage> {
                         const SizedBox(width: 5),
                         Text(
                           formatMessageTimestamp(data['timestamp']),
-                          style: const TextStyle(
+                          style:  TextStyle(
                             fontSize: 13,
-                            color: Colors.purple,
+                            color: Colors.orange[700],
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -301,7 +301,7 @@ class _ChatPageState extends State<ChatPage> {
                       formatMessageTimestamp(data['timestamp']),
                       style: const TextStyle(
                         fontSize: 13,
-                        color: Colors.purple,
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -318,10 +318,10 @@ class _ChatPageState extends State<ChatPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             border: Border(
                 top: BorderSide(
-              color: Colors.purple,
+              color: Colors.orange[700]!,
               width: 2,
             )),
           ),
@@ -350,10 +350,10 @@ class _ChatPageState extends State<ChatPage> {
             // send button
             IconButton(
                 onPressed: sendMessage,
-                icon: const Icon(
+                icon:  Icon(
                   Icons.send,
                   size: 25,
-                  color: Colors.purple,
+                  color: Colors.orange[700],
                 ))
           ],
         ),

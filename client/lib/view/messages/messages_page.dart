@@ -329,7 +329,7 @@ class _MessagesState extends State<Messages> {
               height: 48,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.purple,
+                color: Colors.orange[700],
               ),
               child: Center(
                 child: Text(
@@ -349,7 +349,7 @@ class _MessagesState extends State<Messages> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.5,
-                    color: Colors.purple,
+                     color: Colors.orange[700],
                   ),
                 ),
                 subtitle: Row(
