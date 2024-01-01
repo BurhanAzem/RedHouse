@@ -35,7 +35,7 @@ namespace RedHouse_Server.Models
         public int ParkingSpots { get; set; }
         public string ListingType { get; set; }
         public string IsAvailableBasement { get; set; } = "false";
-        public string ListingBy { get; set; } = "Landlord";
+        public string ListingBy { get; set; } = "User";
         public ICollection<PropertyFile>? propertyFiles { get; set; }
     }
 }

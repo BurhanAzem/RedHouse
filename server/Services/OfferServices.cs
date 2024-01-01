@@ -57,6 +57,33 @@ namespace server.Services
             };
 
 
+            User customer = await _redHouseDbContext.Users.FindAsync(offer.CustomerId);
+            User landlord = await _redHouseDbContext.Users.FindAsync(offer.LandlordId);
+            
+            customer.CustomerScores++;
+            landlord.LandlordScores++;
+
+            if (customer.UserRole != "Agent" && customer.CustomerScores >= 5 && customer.LandlordScores >= 5){
+                customer.UserRole = "Agent";
+            }else if (customer.UserRole != "Customer" && customer.CustomerScores >= 5 && customer.LandlordScores < 5){
+                customer.UserRole = "Customer";
+            }else if (customer.UserRole != "Landlord" && customer.CustomerScores < 5 && customer.LandlordScores >= 5){
+                customer.UserRole = "Landlord";
+            }
+             _redHouseDbContext.Users.Update(customer);
+            _redHouseDbContext.SaveChanges();
+
+            if (landlord.UserRole != "Agent" && landlord.CustomerScores >= 5 && landlord.LandlordScores >= 5){
+                landlord.UserRole = "Agent";
+            }else if (landlord.UserRole != "Customer" && landlord.CustomerScores >= 5 && landlord.LandlordScores < 5){
+                landlord.UserRole = "Customer";
+            }else if (landlord.UserRole != "Landlord" && landlord.CustomerScores < 5 && landlord.LandlordScores >= 5){
+                landlord.UserRole = "Landlord";
+            }
+            _redHouseDbContext.Users.Update(landlord);
+            _redHouseDbContext.SaveChanges();
+
+
             var milestoneRes = await _redHouseDbContext.Milestones.AddAsync(milestone);
             _redHouseDbContext.SaveChanges();
 

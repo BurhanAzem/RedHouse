@@ -28,7 +28,7 @@ class FilterController extends GetxController {
     latitude: 0,
     longitude: 0,
   );
-
+  bool isLoading = false;
   // Property type
   bool buyHouse = true;
   bool buyHouseTemp = true;
@@ -236,6 +236,8 @@ class FilterController extends GetxController {
   }
 
   getProperties() async {
+    isLoading = true;
+
     List<String>? propertyTypes = [];
     String? minPrice;
     String? maxPrice;
@@ -385,8 +387,41 @@ class FilterController extends GetxController {
         rentType,
         hasBassmentUnit);
 
+    if (response is Map<String, dynamic> &&
+        response.containsKey('statusCode')) {
+      // Your existing code
+      if (response['statusCode'] == 200) {
+        listProperty = ListProperty.fromJson(response);
+        print(listProperty.listDto);
+      } else {
+        // Your error handling code
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
+    } else {
+      // Handle the case where response is not of the expected type.
+      Get.defaultDialog(
+        title: "Error",
+        middleText: "statusCode: 500, Internal server error}",
+      );
+    }
+    isLoading = false;
+
+  }
+
+  getListAutoCompleteLocation(String query) async {
+    query = query.isEmpty ? "*" : query;
+    var response = await PropertyData.getListAutoCompleteLocation(query);
+
     if (response['statusCode'] == 200) {
-      listProperty = ListProperty.fromJson(response);
+      listAutoCompleteLocation = (response['listDto'] as List<dynamic>)
+          .map((e) => Location.fromJson(e as Map<String, dynamic>))
+          .toList();
+
+      print(listAutoCompleteLocation);
       print(listProperty.listDto);
     } else {
       Get.defaultDialog(
@@ -394,30 +429,6 @@ class FilterController extends GetxController {
         middleText:
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
-    }
-  }
-
-  getListAutoCompleteLocation(String query) async {
-    query = query.isEmpty ? " " : query;
-    var response = await PropertyData.getListAutoCompleteLocation(query);
-    getListAutoCompleteLocation(String listAutoCompleteLocationQuery) async {
-      var response = await PropertyData.getListAutoCompleteLocation(
-          listAutoCompleteLocationQuery);
-
-      if (response['statusCode'] == 200) {
-        listAutoCompleteLocation = (response['listDto'] as List<dynamic>)
-            .map((e) => Location.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-        print(listAutoCompleteLocation);
-        print(listProperty.listDto);
-      } else {
-        Get.defaultDialog(
-          title: "Error",
-          middleText:
-              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-        );
-      }
     }
   }
 
