@@ -20,62 +20,62 @@ class ContractsControllerImp extends AllContractsController {
   String contractTo = "Landlord";
   int userId = 1;
   List<Contract> contracts = [];
-  List<Milestone>? milestones = [
-    Milestone(
-        id: 1,
-        milestoneName: 'Payment of dues for the month of October 10',
-        description:
-            'Payment of dues for the month of October 10 Payment of dues for the month of October 10Payment of dues for the month of October 10 Payment of dues for the month of October 10Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
-        milestoneDate: '2023-11-11',
-        amount: 100,
-        milestoneStatus: 'Paid',
-        contractId: 2),
-        Milestone(
-        id: 1,
-        milestoneName: 'Payment of dues for the month of October 10',
-        description:
-            'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
-        milestoneDate: '2023-11-11',
-        amount: 100,
-        milestoneStatus: 'Paid',
-        contractId: 2),
-        Milestone(
-        id: 1,
-        milestoneName: 'Payment of dues for the month of October 10',
-        description:
-            'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
-        milestoneDate: '2023-11-11',
-        amount: 100,
-        milestoneStatus: 'Paid',
-        contractId: 2),
-        Milestone(
-        id: 1,
-        milestoneName: 'Payment of dues for the month of October 10',
-        description:
-            'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
-        milestoneDate: '2023-11-11',
-        amount: 100,
-        milestoneStatus: 'Paid',
-        contractId: 2),
-        Milestone(
-        id: 1,
-        milestoneName: 'Payment of dues for the month of October 10',
-        description:
-            ' Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
-        milestoneDate: '2023-11-11',
-        amount: 100,
-        milestoneStatus: 'Pending',
-        contractId: 2),
-        Milestone(
-        id: 1,
-        milestoneName: 'Payment of dues for the month of October 10',
-        description:
-            'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
-        milestoneDate: '2023-11-11',
-        amount: 100,
-        milestoneStatus: 'Pending',
-        contractId: 2),
-  ];
+  // List<Milestone>? milestones = [
+  //   Milestone(
+  //       id: 1,
+  //       milestoneName: 'Payment of dues for the month of October 10',
+  //       description:
+  //           'Payment of dues for the month of October 10 Payment of dues for the month of October 10Payment of dues for the month of October 10 Payment of dues for the month of October 10Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
+  //       milestoneDate: '2023-11-11',
+  //       amount: 100,
+  //       milestoneStatus: 'Paid',
+  //       contractId: 2),
+  //       Milestone(
+  //       id: 1,
+  //       milestoneName: 'Payment of dues for the month of October 10',
+  //       description:
+  //           'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
+  //       milestoneDate: '2023-11-11',
+  //       amount: 100,
+  //       milestoneStatus: 'Paid',
+  //       contractId: 2),
+  //       Milestone(
+  //       id: 1,
+  //       milestoneName: 'Payment of dues for the month of October 10',
+  //       description:
+  //           'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
+  //       milestoneDate: '2023-11-11',
+  //       amount: 100,
+  //       milestoneStatus: 'Paid',
+  //       contractId: 2),
+  //       Milestone(
+  //       id: 1,
+  //       milestoneName: 'Payment of dues for the month of October 10',
+  //       description:
+  //           'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
+  //       milestoneDate: '2023-11-11',
+  //       amount: 100,
+  //       milestoneStatus: 'Paid',
+  //       contractId: 2),
+  //       Milestone(
+  //       id: 1,
+  //       milestoneName: 'Payment of dues for the month of October 10',
+  //       description:
+  //           ' Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
+  //       milestoneDate: '2023-11-11',
+  //       amount: 100,
+  //       milestoneStatus: 'Pending',
+  //       contractId: 2),
+  //       Milestone(
+  //       id: 1,
+  //       milestoneName: 'Payment of dues for the month of October 10',
+  //       description:
+  //           'Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10 Payment of dues for the month of October 10',
+  //       milestoneDate: '2023-11-11',
+  //       amount: 100,
+  //       milestoneStatus: 'Pending',
+  //       contractId: 2),
+  // ];
 
   getAllContrcats() async {
     var response = await ContractsData.getContrcats(
