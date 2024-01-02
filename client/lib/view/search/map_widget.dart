@@ -22,7 +22,7 @@ class MapWidget extends StatefulWidget {
 }
 
 class _MapWidgetState extends State<MapWidget>
-    with AutomaticKeepAliveClientMixin {
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   MapListController mapListController = Get.put(MapListController());
   FilterController filterControllerr = Get.put(FilterController());
   GoogleMapController? mapController;
@@ -43,16 +43,33 @@ class _MapWidgetState extends State<MapWidget>
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(
+            mapListController.currentPosition.target, 15.0),
+      );
+      print(mapListController.currentPosition.target);
+      print("Widget is now visible. Do something here!---------------------------------------------------------------");
     // loadData();
   }
 
-  void loadData() async {
-    filterControllerr.getProperties();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Perform actions when the app comes to the foreground
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(
+            mapListController.currentPosition.target, 15.0),
+      );
+      print(mapListController.currentPosition.target);
+      print("Widget is now visible. Do something here!---------------------------------------------------------------");
+    }
+  }
 
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-        print(position);
-        
+  void loadData() async {
+    // filterControllerr.getProperties();
+    mapListController.currentPosition =
+        await mapListController.getCurrentPosition();
     mapListController.isLoading = true;
     _timer = Timer(const Duration(seconds: 1), () {
       if (mounted) {
@@ -63,7 +80,7 @@ class _MapWidgetState extends State<MapWidget>
     });
   }
 
-  Future<void> whenCameraMove() async {
+  Future<void> whenCameraMove(CameraPosition position) async {
     print(
         "============================================================ whenCameraMove");
     if (mapController == null) {
@@ -90,19 +107,16 @@ class _MapWidgetState extends State<MapWidget>
       userNotified = false;
     }
 
-    final LatLng centerCoordinates = LatLng(
-      (bounds.southwest.latitude + bounds.northeast.latitude) / 2,
-      (bounds.southwest.longitude + bounds.northeast.longitude) / 2,
-    );
+    LatLng centerCoordinates = position.target;
 
     mapListController.currentPosition = CameraPosition(
-      target: centerCoordinates,
+      target: position.target,
       zoom: mapListController.newZoom,
     );
 
     setState(() {
-      mapListController.visibleMarkers.clear();
-      mapListController.visibleProperties.clear();
+      // mapListController.visibleMarkers.clear();
+      // mapListController.visibleProperties.clear();
 
       if (mapListController.newZoom >= 10) {
         mapListController.visibleProperties = filterControllerr
@@ -137,6 +151,9 @@ class _MapWidgetState extends State<MapWidget>
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
           mapListController.currentLocationName.value = locality;
+          // filterControllerr.location.region = locality;
+          filterControllerr.getProperties();
+
           print("Area in ${mapListController.currentLocationName.value}");
         }
       }
@@ -173,26 +190,28 @@ class _MapWidgetState extends State<MapWidget>
     super.build(context);
     mapListController.mapContext = context;
 
+    var target;
     return VisibilityDetector(
       key: const Key('Map'),
       onVisibilityChanged: (VisibilityInfo info) {
         if (mapListController.isLoading) {
           setState(() {});
           loadData();
-          whenCameraMove();
+          // whenCameraMove();
         }
       },
       child: Stack(
         children: [
           Visibility(
-            visible: mapListController.isLoading,
+            visible: mapListController.isLoading || filterControllerr.isLoading,
             child: const LinearProgressIndicator(
                 backgroundColor: Colors.black,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 minHeight: 2),
           ),
           Visibility(
-            visible: !mapListController.isLoading,
+            visible:
+                !mapListController.isLoading || filterControllerr.isLoading,
             child: GoogleMap(
               zoomControlsEnabled: true,
               mapType: currentMapType,
@@ -201,11 +220,18 @@ class _MapWidgetState extends State<MapWidget>
                 setState(() {
                   mapController = controller;
                 });
+                mapController?.animateCamera(
+                  CameraUpdate.newLatLngZoom(
+                      mapListController.currentPosition.target, 10.0),
+                );
               },
+              myLocationButtonEnabled: true,
               markers: mapListController.visibleMarkers,
               onCameraMove: (CameraPosition position) {
-                mapListController.newZoom = position.zoom;
-                whenCameraMove();
+                setState(() {
+                  mapListController.newZoom = position.zoom;
+                  whenCameraMove(position);
+                });
               },
             ),
           ),
@@ -244,7 +270,23 @@ class _MapWidgetState extends State<MapWidget>
                     shape: const CircleBorder(),
                     clipBehavior: Clip.antiAlias,
                     child: InkWell(
-                      onTap: toggleLocationButton,
+                      onTap: () async {
+                        CameraPosition currentPosition =
+                            await mapListController.getCurrentPosition();
+                        print(currentPosition);
+
+                        mapController!.animateCamera(
+                          CameraUpdate.newLatLngZoom(
+                            currentPosition.target,
+                            15.0,
+                          ),
+                        );
+
+                        setState(() {
+                          // You can include additional state changes here if needed
+                          toggleLocationButton();
+                        });
+                      },
                       child: Container(
                         width: 50,
                         height: 50,
@@ -254,14 +296,17 @@ class _MapWidgetState extends State<MapWidget>
                               ? Colors.black
                               : Colors.white,
                         ),
-                        child: Icon(Icons.my_location,
-                            size: 25,
-                            color: locationButtonSelected
-                                ? Colors.white
-                                : Colors.black),
+                        child: Icon(
+                          Icons.my_location,
+                          size: 25,
+                          color: locationButtonSelected
+                              ? Colors.white
+                              : Colors.black,
+                        ),
                       ),
                     ),
                   ),
+
                   const SizedBox(height: 10),
                   Material(
                     elevation: 4,
@@ -285,6 +330,24 @@ class _MapWidgetState extends State<MapWidget>
                       ),
                     ),
                   ),
+                  // const SizedBox(height: 10),
+                  // Material(
+                  //   elevation: 4,
+                  //   shape: const CircleBorder(),
+                  //   clipBehavior: Clip.antiAlias,
+                  //   child: InkWell(
+                  //     onTap: toggleDrawButton,
+                  //     child: Container(
+                  //         width: 50,
+                  //         height: 50,
+                  //         decoration: BoxDecoration(
+                  //           shape: BoxShape.circle,
+                  //           color: Colors.black,
+                  //         ),
+                  //         child:
+                  //             Icon(Icons.location_on, size: 25, color: Colors.white)),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

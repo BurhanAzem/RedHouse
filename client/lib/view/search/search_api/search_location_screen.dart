@@ -1,6 +1,9 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/model/location.dart';
+import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/search/map_widget.dart';
+import 'package:client/view/search/search.dart';
 import 'package:client/view/search/search_api/location_list_tile.dart';
 import 'package:client/view/search/search_api/network_utility.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +20,7 @@ class SearhcLoactionScreen extends StatefulWidget {
 
 class _SearhcLoactionScreenState extends State<SearhcLoactionScreen> {
   FilterController filterController = Get.put(FilterController());
+  MapListController mapListController = Get.put(MapListController());
 
   void placeAutocomplate(String query) async {
     Uri uri =
@@ -46,7 +50,9 @@ class _SearhcLoactionScreenState extends State<SearhcLoactionScreen> {
             padding: const EdgeInsets.all(16),
             child: TextFormField(
               onChanged: (value) {
-                filterController.getListAutoCompleteLocation(value);
+                setState(() {
+                  filterController.getListAutoCompleteLocation(value);
+                });
               },
               textInputAction: TextInputAction.search,
               decoration: const InputDecoration(
@@ -153,25 +159,45 @@ class _SearhcLoactionScreenState extends State<SearhcLoactionScreen> {
                 : ListView.builder(
                     itemCount: filterController.listAutoCompleteLocation.length,
                     itemBuilder: (context, index) {
-                      Location location =
-                          filterController.listAutoCompleteLocation[index];
-                      location.latitude = 0;
-                      location.longitude = 0;
-                      location.id = 0;
+                      Location location;
+                      if (index <
+                          filterController.listAutoCompleteLocation.length) {
+                        location =
+                            filterController.listAutoCompleteLocation[index];
+                        // Rest of your code...
+                      } else {
+                        return SizedBox.shrink(); // or any other fallback UI
+                      }
+                      // location.latitude = 0;
+                      // location.longitude = 0;
+                      // location.id = 0;
 
                       return GestureDetector(
-                        onTap: () {
-                          filterController.location =
-                              location;
-                              filterController.getProperties();
-                          Get.to(() => MapWidget());
-                          setState(() {});
-                        },
+                        onTap: () {},
                         // LatLng(
                         //     location.latitude, location.longitude)
                         child: LocationListTile(
-                          press: () {},
-                          location: '${location.city}, ${location.country}, ${location.postalCode}',
+                          press: () {
+                            // filterController.getProperties();
+                            LatLng centerCoordinates = new LatLng(
+                                location.latitude,
+                                location.longitude);
+                                print(centerCoordinates);
+                                print("##################################################################################");
+
+                            setState(() {
+                              mapListController.currentPosition =
+                                  CameraPosition(
+                                target: centerCoordinates,
+                                zoom: 10,
+                              );
+                            });
+
+                            Get.to(() => BottomBar());
+                            setState(() {});
+                          },
+                          location:
+                              '${location.city}, ${location.country}, ${location.postalCode}',
                         ),
                       );
                     },

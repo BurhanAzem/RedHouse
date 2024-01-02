@@ -1,6 +1,7 @@
 import 'package:client/model/property.dart';
 import 'package:client/view/search/map_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -21,4 +22,19 @@ class MapListController extends GetxController {
 
   // Favorite properties
   List<Property> favoriteProperties = <Property>[];
+
+  Future<CameraPosition> getCurrentPosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    LatLng centerCoordinates =
+        new LatLng(position.latitude, position.longitude);
+
+    currentPosition = CameraPosition(
+      target: centerCoordinates,
+      zoom: 10,
+    );
+    return currentPosition;
+  }
+
+
 }
