@@ -43,6 +43,9 @@ class _MapWidgetState extends State<MapWidget>
   @override
   void initState() {
     super.initState();
+    _timer = Timer(const Duration(seconds: 1), () {
+      
+    });
     WidgetsBinding.instance!.addObserver(this);
 mapController?.animateCamera(
         CameraUpdate.newLatLngZoom(

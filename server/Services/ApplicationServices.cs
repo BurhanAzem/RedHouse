@@ -304,6 +304,36 @@ namespace server.Services
             throw new NotImplementedException();
         }
 
+        public async Task<ResponsDto<Application>> IsApplicationApproved(int propertyId, int userId)
+        {
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception($"property Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var application = await _redHouseDbContext.Applications.FirstOrDefaultAsync(a => a.PropertyId == propertyId && a.UserId == userId);
+            if (application.ApplicationStatus == "Approved")
+            {
+                return new ResponsDto<Application>
+                {
+                    Message = "Approved",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            else
+            {
+                return new ResponsDto<Application>
+                {
+                    Message = "Rejected",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+        }
     }
 
 }
