@@ -13,7 +13,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { usersRows } from '../../state';
+import { selectedUser, usersRows } from '../../state';
 import { useRecoilState } from 'recoil';
 import { Link } from 'react-router-dom'
 import ClipLoader from "react-spinners/ClipLoader";
@@ -25,6 +25,7 @@ function UsersTable() {
 
   const navigate = useNavigate();
 
+  const [_selectedUser, setSelectedUser] = useRecoilState(selectedUser)
 
 
   React.useEffect(() => {
@@ -163,7 +164,7 @@ function UsersTable() {
                       ></img>
                     </TableCell>
 
-                    <Link to={`/students/${user && btoa(user.id)}`} >
+                    <Link to={`/users/${user && btoa(user.id)}`}  >
                       <TableCell id='username-link' align="left">{user && user.name}</TableCell>
                     </Link>
                     <TableCell align="left">{user && user.email}</TableCell>

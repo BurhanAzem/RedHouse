@@ -43,6 +43,7 @@ import ContractDetails from './menuItems/ContractDetails.jsx';
 import ContractsList from './menuItems/ContractsList.jsx';
 import PropertiesList from './menuItems/PropertiesList.jsx';
 import PropertyDetails from './menuItems/PropertyDetails.jsx';
+import User from './menuItems/User.jsx';
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;600;700;800;900&family=Work+Sans:ital,wght@0,200;0,800;1,100;1,600&display=swap');
 </style>
@@ -78,7 +79,8 @@ const router = createBrowserRouter(
       <Route path="/" element={<Layout />}>
         <Route element={<Admin />} >
           <Route path="/" element={<Statistics />} />
-          <Route path="/users" element={<Users />} />s
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id" element={<User />} />
           <Route path="/properties" element={<Properties />} >
             <Route path="" element={<PropertiesList />} />
             <Route path=":propertyCode" element={<PropertyDetails />} />
