@@ -174,5 +174,24 @@ namespace RedHouse_Server.Controllers
 
 
         }
+
+        [HttpGet("/applications/is-application-approved")]
+        public async Task<IActionResult> IsApplicationApproved([FromQuery] int propertyId, int userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _applicationServices.IsApplicationApproved(propertyId, userId);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+
+        }
     }
 }

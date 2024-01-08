@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -11,10 +12,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader, useLoadScript } from "@react-google-maps/api";
 
-import { Map, GoogleApiWrapper } from 'google-maps-react'
-import MapContainer from './MapContainer'
 import { makeStyles } from '@material-ui/core/styles';
 import Complaint from "./Complaint";
 import Property from "./Property";
@@ -26,11 +25,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const PropertiesList = () => {
-  const { isLoaded } = useState(true) 
+  const { isLoaded } = useJsApiLoader({
+    id: process.env.REACT_APP_GOOGLE_API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY
+  })
+  const containerStyle = {
+    width: '600px',
+    height: '800px'
+  };
 
-  const center = (() => ({ lat: 18.52043, lng: 73.856743 }), []);
+  const center = {
+    lat: -3.745,
+    lng: -38.523
+  };
+  // const { isLoaded } = useState(true)
+  // const onLoad = React.useCallback(function callback(map) {
+  //   // This is just an example of getting and using the map instance!!! don't just blindly copy!
+  //   const bounds = new window.google.maps.LatLngBounds(center);
+  //   map.fitBounds(bounds);
 
+  //   setMap(map)
+  // }, [])
+
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null)
+  // }, [])
+  // const [map, setMap] = React.useState(null)
+
+  
   const classes = useStyles();
   const [complaints, setComplaints] = useState([]);
   const [page, setPage] = useState(1);
@@ -44,7 +68,7 @@ const PropertiesList = () => {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
-
+  const position = { lat: 53, lang: 10 }
   const [properties, setProperties] = useRecoilState(searchedProperties);
 
 
@@ -108,7 +132,24 @@ const PropertiesList = () => {
 
       <div className="container" id='row-items'>
 
-        <MapContainer />
+        {/* <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
+          <div style={{height: "80vh"}}>
+            <Map zoom={9} center={position}> </Map>
+          </div>
+        </APIProvider> */}
+
+        {isLoaded ? (
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={10}
+          // onLoad={onLoad}
+          // onUnmount={onUnmount}
+        >
+          { /* Child components, such as markers, info windows, etc. */}
+          <></>
+        </GoogleMap>
+        ) : <>Loading map,   Opps !</>}
       </div>
 
       <div style={{ paddingRight: "0px" }}>
@@ -168,6 +209,4 @@ const PropertiesList = () => {
   );
 };
 
-export default GoogleApiWrapper({
-  apiKey: process.env.REACT_APP_GOOGLE_API_KEY
-})(PropertiesList);
+export default (PropertiesList);

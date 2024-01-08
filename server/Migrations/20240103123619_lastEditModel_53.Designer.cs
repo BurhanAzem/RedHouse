@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedHouse_Server.Models;
 
@@ -11,9 +12,11 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    partial class RedHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240103123619_lastEditModel_53")]
+    partial class lastEditModel_53
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -499,11 +502,7 @@ namespace RedHouse_Server.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-<<<<<<< HEAD
-                    b.Property<int>("CustomerScores")
-=======
                     b.Property<int>("CustomerScore")
->>>>>>> 01e97e3990ccd9477fd8f82266b3a909fdae5b06
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -512,11 +511,7 @@ namespace RedHouse_Server.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
-<<<<<<< HEAD
-                    b.Property<int>("LandlordScores")
-=======
                     b.Property<int>("LandlordScore")
->>>>>>> 01e97e3990ccd9477fd8f82266b3a909fdae5b06
                         .HasColumnType("int");
 
                     b.Property<int>("LocationId")

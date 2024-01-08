@@ -149,7 +149,7 @@ namespace server.Services
 
         public async Task<ResponsDto<User>> GetUser(int userId)
         {
-            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            var user = await _redHouseDbContext.Users.Where(u => u.Id == userId).Include(u => u.Location).FirstOrDefaultAsync();
             if (user == null)
             {
                 return new ResponsDto<User>

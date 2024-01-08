@@ -92,6 +92,15 @@ export const PostDetails = atom({
     default: {}
 })
 
+export const selectedUser = atom({
+    key: 'selectedUser',
+    default: {}
+})
+export const selectedProperty = atom({
+    key: 'selectedProperty',
+    default: {}
+})
+
 export const contractDetails = atom({
     key: 'contractDetails',
     default: {}
