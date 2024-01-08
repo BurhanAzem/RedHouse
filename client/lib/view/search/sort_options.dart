@@ -29,6 +29,10 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
         return "Lowest price";
       case 3:
         return "Highest price";
+      case 4:
+        return "Lowest space";
+      case 5:
+        return "Highest space";
       default:
         return "Default";
     }
@@ -79,7 +83,7 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 10),
                                   height:
-                                      MediaQuery.of(context).size.height / 2.24,
+                                      MediaQuery.of(context).size.height / 1.8,
                                   child: Column(
                                     children: [
                                       Column(
@@ -133,6 +137,28 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                                             value: 3,
                                             groupValue: _temporaryValue,
                                             title: const Text("Highest price"),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _temporaryValue = value!;
+                                              });
+                                            },
+                                            activeColor: Colors.green,
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 4,
+                                            groupValue: _temporaryValue,
+                                            title: const Text("Lowest space"),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _temporaryValue = value!;
+                                              });
+                                            },
+                                            activeColor: Colors.green,
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 5,
+                                            groupValue: _temporaryValue,
+                                            title: const Text("Highest space"),
                                             onChanged: (value) {
                                               setState(() {
                                                 _temporaryValue = value!;

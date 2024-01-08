@@ -19,6 +19,8 @@ class MapListController extends GetxController {
   bool? isLoadingImage;
   bool isLoading = true;
   bool isListIcon = true;
+  // bool isIconVisible = true;
+  
 
   // Favorite properties
   List<Property> favoriteProperties = <Property>[];
@@ -26,8 +28,7 @@ class MapListController extends GetxController {
   Future<CameraPosition> getCurrentPosition() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    LatLng centerCoordinates =
-        new LatLng(position.latitude, position.longitude);
+    LatLng centerCoordinates = LatLng(position.latitude, position.longitude);
 
     currentPosition = CameraPosition(
       target: centerCoordinates,
@@ -35,6 +36,4 @@ class MapListController extends GetxController {
     );
     return currentPosition;
   }
-
-
 }

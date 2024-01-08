@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AddProperty1 extends StatefulWidget {
   AddProperty1({Key? key}) : super(key: key);
@@ -27,11 +28,12 @@ class _AddProperty1State extends State<AddProperty1>
   late Animation<int> _textAnimation;
 
   Future<void> getLatAndLong() async {
-    Position cl = await Geolocator.getCurrentPosition().then((value) => value);
+    Position cl = await Geolocator.getCurrentPosition();
     double lat = cl.latitude;
     double long = cl.longitude;
     controller.currentPosition =
-        CameraPosition(target: LatLng(lat, long), zoom: 13);
+        CameraPosition(target: LatLng(lat, long), zoom: 15);
+    print(controller.currentPosition);
   }
 
   @override
@@ -59,8 +61,6 @@ class _AddProperty1State extends State<AddProperty1>
       controller.isUploading = false;
     });
 
-    getLatAndLong();
-
     // Initialize AnimationController
     _animationController = AnimationController(
       vsync: this,
@@ -72,15 +72,11 @@ class _AddProperty1State extends State<AddProperty1>
         IntTween(begin: 0, end: "Locate your property on the map".length)
             .animate(_animationController);
 
-    // Start the animation
-    _animationController.forward();
-
     super.initState();
   }
 
   @override
   void dispose() {
-    getLatAndLong();
     _animationController.dispose();
     super.dispose();
   }
@@ -147,159 +143,324 @@ class _AddProperty1State extends State<AddProperty1>
           ),
 
           // Body
-          body: ListView(
-            physics: const NeverScrollableScrollPhysics(), // Disable scrolling
-            children: [
-              controller.easyStepper(),
+          body: FutureBuilder<void>(
+            future: getLatAndLong(),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // Show a loading indicator while waiting for the future to complete
+                return shimmer();
+              } else {
+                // Start the animation
+                _animationController.forward();
 
-              // Introduction
-              Container(
-                margin: const EdgeInsets.only(right: 15, left: 15, bottom: 20),
+                // Build the UI once the future completes
+                return ListView(
+                  physics:
+                      const NeverScrollableScrollPhysics(), // Disable scrolling
+                  children: [
+                    controller.easyStepper(),
+
+                    // Introduction
+                    Container(
+                      margin: const EdgeInsets.only(
+                          right: 15, left: 15, bottom: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset("assets/images/logo.png", scale: 11),
+                          Container(
+                            child: AnimatedBuilder(
+                              animation: _textAnimation,
+                              builder: (context, child) {
+                                String animatedText =
+                                    "Locate your property on the map"
+                                        .substring(0, _textAnimation.value);
+                                return Text(
+                                  animatedText,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Google Map
+                    Container(
+                      height: 387,
+                      child: Visibility(
+                        visible: true,
+                        child: controller.currentPosition == null
+                            ? Container(
+                                alignment: Alignment.center,
+                                child: const CircularProgressIndicator())
+                            : Expanded(
+                                child: GoogleMap(
+                                  mapType: MapType.normal,
+                                  initialCameraPosition:
+                                      controller.currentPosition!,
+                                  onCameraMove: (position) {
+                                    controller.currentPosition = CameraPosition(
+                                      target: LatLng(position.target.latitude,
+                                          position.target.longitude),
+                                      zoom: position.zoom,
+                                    );
+                                  },
+                                  onMapCreated: (mapcontroller) {
+                                    getLatAndLong();
+                                    controller.mapController1 = mapcontroller;
+                                  },
+                                  markers: controller.markers
+                                      .where((marker) =>
+                                          marker.markerId.value == "1")
+                                      .toSet(),
+                                  onTap: (latlng) async {
+                                    try {
+                                      List<Placemark> placemarks =
+                                          await placemarkFromCoordinates(
+                                              latlng.latitude,
+                                              latlng.longitude);
+
+                                      if (placemarks.isNotEmpty) {
+                                        final placemark = placemarks[0];
+                                        controller.City = placemark.locality;
+                                        controller.PostalCode =
+                                            placemark.postalCode!;
+                                        controller.streetAddress.text =
+                                            placemark.street!;
+                                        controller.Country = placemark.country;
+                                        controller.Region = placemark.locality;
+                                        controller.Latitude = latlng.latitude;
+                                        controller.Longitude = latlng.longitude;
+
+                                        // Remove the marker with the specified ID
+                                        controller.markers.removeWhere(
+                                          (marker) =>
+                                              marker.markerId.value == "1",
+                                        );
+
+                                        // Add a new marker with ID "1"
+                                        controller.markers.add(
+                                          Marker(
+                                            markerId: const MarkerId("1"),
+                                            position: latlng,
+                                          ),
+                                        );
+
+                                        arePlacemarksAvailable = true;
+                                      }
+                                    } catch (e) {
+                                      Get.defaultDialog(
+                                          title: "ُEntered invalid location",
+                                          middleText: 'Error: $e');
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                      ),
+                    ),
+
+                    // Street address
+                    Container(
+                      margin:
+                          const EdgeInsets.only(top: 10, right: 15, left: 15),
+                      child: Form(
+                        key: controller.formKey1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              child: const Text(
+                                "Street address",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Container(height: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black54),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: TextFormField(
+                                controller: controller.streetAddress,
+                                readOnly: true,
+                                enabled: false,
+                                style: const TextStyle(color: Colors.black54),
+                                decoration: const InputDecoration(
+                                  hintText: "Here will appear Street address",
+                                  hintStyle: TextStyle(color: Colors.black54),
+                                  suffixIcon: Icon(
+                                    Icons.map,
+                                    color: Colors.black54,
+                                  ),
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.always,
+                                  contentPadding: EdgeInsets.all(10),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  Widget shimmer() {
+    return Center(
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: ListView(
+          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
+          children: [
+            controller.easyStepper(),
+
+            // Introduction
+            Container(
+              margin: const EdgeInsets.only(right: 15, left: 15, bottom: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset("assets/images/logo.png", scale: 11),
+                  const Text(
+                    "Locate your property on the map",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Google Map
+            Container(
+              height: 387,
+              child: Expanded(
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: controller.currentPosition!,
+                  onCameraMove: (position) {
+                    controller.currentPosition = CameraPosition(
+                      target: LatLng(position.target.latitude,
+                          position.target.longitude),
+                      zoom: position.zoom,
+                    );
+                  },
+                  onMapCreated: (mapcontroller) {
+                    getLatAndLong();
+                    controller.mapController1 = mapcontroller;
+                  },
+                  markers: controller.markers
+                      .where((marker) => marker.markerId.value == "1")
+                      .toSet(),
+                  onTap: (latlng) async {
+                    try {
+                      List<Placemark> placemarks =
+                          await placemarkFromCoordinates(
+                              latlng.latitude, latlng.longitude);
+
+                      if (placemarks.isNotEmpty) {
+                        final placemark = placemarks[0];
+                        controller.City = placemark.locality;
+                        controller.PostalCode = placemark.postalCode!;
+                        controller.streetAddress.text = placemark.street!;
+                        controller.Country = placemark.country;
+                        controller.Region = placemark.locality;
+                        controller.Latitude = latlng.latitude;
+                        controller.Longitude = latlng.longitude;
+
+                        // Remove the marker with the specified ID
+                        controller.markers.removeWhere(
+                          (marker) => marker.markerId.value == "1",
+                        );
+
+                        // Add a new marker with ID "1"
+                        controller.markers.add(
+                          Marker(
+                            markerId: const MarkerId("1"),
+                            position: latlng,
+                          ),
+                        );
+
+                        arePlacemarksAvailable = true;
+                      }
+                    } catch (e) {
+                      Get.defaultDialog(
+                          title: "ُEntered invalid location",
+                          middleText: 'Error: $e');
+                    }
+                    setState(() {});
+                  },
+                ),
+              ),
+            ),
+
+            // Street address
+            Container(
+              margin: const EdgeInsets.only(top: 10, right: 15, left: 15),
+              child: Form(
+                key: controller.formKey1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset("assets/images/logo.png", scale: 11),
                     Container(
-                      child: AnimatedBuilder(
-                        animation: _textAnimation,
-                        builder: (context, child) {
-                          String animatedText =
-                              "Locate your property on the map"
-                                  .substring(0, _textAnimation.value);
-                          return Text(
-                            animatedText,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                            ),
-                          );
-                        },
+                      child: const Text(
+                        "Street address",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black54,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Container(height: 5),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black54),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: TextFormField(
+                        controller: controller.streetAddress,
+                        readOnly: true,
+                        enabled: false,
+                        style: const TextStyle(color: Colors.black54),
+                        decoration: const InputDecoration(
+                          hintText: "Here will appear Street address",
+                          hintStyle: TextStyle(color: Colors.black54),
+                          suffixIcon: Icon(
+                            Icons.map,
+                            color: Colors.black54,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: EdgeInsets.all(10),
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-
-              // Google Map
-              Container(
-                height: 387,
-                child: Visibility(
-                  visible: true,
-                  child: controller.currentPosition == null
-                      ? Container(
-                          alignment: Alignment.center,
-                          child: const CircularProgressIndicator())
-                      : Expanded(
-                          child: GoogleMap(
-                            mapType: MapType.normal,
-                            initialCameraPosition: controller.currentPosition!,
-                            onCameraMove: (position) {
-                              controller.currentPosition = CameraPosition(
-                                target: LatLng(position.target.latitude,
-                                    position.target.longitude),
-                                zoom: position.zoom,
-                              );
-                            },
-                            onMapCreated: (mapcontroller) {
-                              getLatAndLong();
-                              controller.mapController1 = mapcontroller;
-                            },
-                            markers: controller.markers
-                                .where((marker) => marker.markerId.value == "1")
-                                .toSet(),
-                            onTap: (latlng) async {
-                              try {
-                                List<Placemark> placemarks =
-                                    await placemarkFromCoordinates(
-                                        latlng.latitude, latlng.longitude);
-
-                                if (placemarks.isNotEmpty) {
-                                  final placemark = placemarks[0];
-                                  controller.City = placemark.locality;
-                                  controller.PostalCode = placemark.postalCode!;
-                                  controller.streetAddress.text =
-                                      placemark.street!;
-                                  controller.Country = placemark.country;
-                                  controller.Region = placemark.locality;
-                                  controller.Latitude = latlng.latitude;
-                                  controller.Longitude = latlng.longitude;
-
-                                  // Remove the marker with the specified ID
-                                  controller.markers.removeWhere(
-                                    (marker) => marker.markerId.value == "1",
-                                  );
-
-                                  // Add a new marker with ID "1"
-                                  controller.markers.add(
-                                    Marker(
-                                      markerId: const MarkerId("1"),
-                                      position: latlng,
-                                    ),
-                                  );
-
-                                  arePlacemarksAvailable = true;
-                                }
-                              } catch (e) {
-                                Get.defaultDialog(
-                                    title: "ُEntered invalid location",
-                                    middleText: 'Error: $e');
-                              }
-                              setState(() {});
-                            },
-                          ),
-                        ),
-                ),
-              ),
-
-              // Street address
-              Container(
-                margin: const EdgeInsets.only(top: 10, right: 15, left: 15),
-                child: Form(
-                  key: controller.formKey1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: const Text(
-                          "Street address",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.black54,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      Container(height: 5),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black54),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: TextFormField(
-                          controller: controller.streetAddress,
-                          readOnly: true,
-                          enabled: false,
-                          style: const TextStyle(color: Colors.black54),
-                          decoration: const InputDecoration(
-                            hintText: "Here will appear Street address",
-                            hintStyle: TextStyle(color: Colors.black54),
-                            suffixIcon: Icon(
-                              Icons.map,
-                              color: Colors.black54,
-                            ),
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: EdgeInsets.all(10),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

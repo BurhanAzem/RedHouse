@@ -87,9 +87,7 @@ class _MessagesState extends State<Messages> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(), // Show a loading indicator
-      );
+      return const Center();
     }
 
     return Scaffold(
@@ -134,42 +132,6 @@ class _MessagesState extends State<Messages> {
             }),
     );
   }
-
-  // Widget _buildUserList({required Function onMessageSent}) {
-  //   return StreamBuilder<QuerySnapshot>(
-  //     stream: FirebaseFirestore.instance.collection('users').snapshots(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasError) {
-  //         return const Text("error");
-  //       }
-
-  //       if (snapshot.connectionState == ConnectionState.waiting) {
-  //         return const Center(
-  //           child: CircularProgressIndicator(),
-  //         );
-  //       }
-
-  //       // Filter users based on the condition
-  //       List<DocumentSnapshot> filteredUsers = snapshot.data!.docs.where((doc) {
-  //         Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
-  //         return data['email'] != currentUserEmail &&
-  //             applicationController.approvedApplicationsForUser.any(
-  //               (application) =>
-  //                   application.user.email == data['email'] ||
-  //                   application.property.user?.email == data['email'],
-  //             );
-  //       }).toList();
-
-  //       print(filteredUsers);
-
-  //       return ListView(
-  //         children: filteredUsers
-  //             .map<Widget>((doc) => _buildUserItem(doc, onMessageSent))
-  //             .toList(),
-  //       );
-  //     },
-  //   );
-  // }
 
   Widget _buildUserList({required Function onMessageSent}) {
     return StreamBuilder<QuerySnapshot>(
@@ -240,70 +202,7 @@ class _MessagesState extends State<Messages> {
           return _buildUserListItem(
               chatRoomId, data, application, onMessageSent);
         } else {
-          return Center(
-            child: Shimmer.fromColors(
-              baseColor: Colors.grey[300]!,
-              highlightColor: Colors.grey[100]!,
-              child: Container(
-                height: 75,
-                child: ListTile(
-                  title: Row(
-                    children: [
-                      const SizedBox(width: 10),
-                      Container(
-                        width: 48,
-                        height: 48,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.yellow[900],
-                        ),
-                        child: Center(
-                          child: Text(
-                            loginController.getShortenedName(data['name']),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: ListTile(
-                          title: Text(
-                            data['email'],
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                              color: Colors.yellow[900],
-                            ),
-                          ),
-                          subtitle: const Row(
-                            children: [
-                              Text(
-                                "Now you can communicate",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "11:55 PM",
-                                style: TextStyle(
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
+          return shimmer(data);
         }
       },
     );
@@ -349,7 +248,7 @@ class _MessagesState extends State<Messages> {
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.5,
-                     color: Colors.orange[700],
+                    color: Colors.orange[700],
                   ),
                 ),
                 subtitle: Row(
@@ -455,5 +354,72 @@ class _MessagesState extends State<Messages> {
     } catch (error) {
       print("Error creating chat room document: $error");
     }
+  }
+
+  Widget shimmer(Map<String, dynamic> data) {
+    return Center(
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: Container(
+          height: 75,
+          child: ListTile(
+            title: Row(
+              children: [
+                const SizedBox(width: 10),
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.yellow[900],
+                  ),
+                  child: Center(
+                    child: Text(
+                      loginController.getShortenedName(data['name']),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ListTile(
+                    title: Text(
+                      data['email'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Colors.yellow[900],
+                      ),
+                    ),
+                    subtitle: const Row(
+                      children: [
+                        Text(
+                          "Now you can communicate",
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          "11:55 PM",
+                          style: TextStyle(
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -11,6 +11,7 @@ import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({Key? key}) : super(key: key);
@@ -73,26 +74,64 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     super.initState();
+    // checkPermission();
     loginController.userDto = json.decode(sharepref.getString("user") ?? "{}");
     print(loginController.userDto);
     print(loginController.userDto);
-    
-    // mapListController.isListIcon = true;
-    // mapListController.favoriteProperties.clear();
+  }
+
+  Future<void> checkPermission() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    print(permission);
+
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      // Request location permission
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        // Location permission granted, you can now enable the location service
+        bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+
+        if (!isLocationEnabled) {
+          // Location service is not enabled, prompt the user to enable it
+          isLocationEnabled = await Geolocator.openLocationSettings();
+        }
+
+        // At this point, the location service should be enabled
+      } else {
+        // Location permission denied
+        // You might want to handle this case accordingly
+        print("Location permission denied");
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: bottomBarController.currentIndex,
-        children: const [
-          Search(),
-          AllContracts(),
-          Notifications(),
-          ManageProperties(),
-          More(),
-        ],
+      body: FutureBuilder<void>(
+        future: checkPermission(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show a loading indicator while waiting for the future to complete
+            return Center(child: CircularProgressIndicator());
+          } else {
+            // Build the UI once the future completes
+            return IndexedStack(
+              index: bottomBarController.currentIndex,
+              children: const [
+                Search(),
+                AllContracts(),
+                Notifications(),
+                ManageProperties(),
+                More(),
+              ],
+            );
+          }
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: bottomBarController.currentIndex,

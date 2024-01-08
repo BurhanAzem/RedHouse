@@ -1,15 +1,24 @@
+import 'package:client/controller/complaint/complaint_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class Compline extends StatelessWidget {
+class Compline extends StatefulWidget {
   const Compline({super.key});
 
+  @override
+  State<Compline> createState() => _ComplineState();
+}
+
+class _ComplineState extends State<Compline> {
+  ComplaintController controller = Get.put(ComplaintController());
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "Send complaint",
+          "Send Complaint",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
@@ -49,7 +58,7 @@ class Compline extends StatelessWidget {
                     decoration: InputDecoration(
                       suffixIcon: const Icon(Icons.email),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: const EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -75,7 +84,7 @@ class Compline extends StatelessWidget {
                     decoration: InputDecoration(
                       suffixIcon: const Icon(Icons.email),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: const EdgeInsets.all(5),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -106,7 +115,7 @@ class Compline extends StatelessWidget {
                         hintText:
                             "Example: New house in the center of the city, there is close school and very beautiful view",
                         floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(5),
+                        contentPadding: const EdgeInsets.all(10),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -115,14 +124,14 @@ class Compline extends StatelessWidget {
                   ),
                   Container(height: 30),
                   Container(
-                    width: 340,
+                    width: 400,
                     child: MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       onPressed: () {},
-                      minWidth: 300,
-                      height: 45,
+                      minWidth: 400,
+                      height: 40,
                       color: Colors.black87,
                       child: const Center(
                         child: Text(

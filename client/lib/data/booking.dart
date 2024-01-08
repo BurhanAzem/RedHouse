@@ -23,7 +23,7 @@ class BookingData {
     var data = {
       "userId": userId,
       "propertyId": propertyId,
-      "bookingDays": formattedBookingDays, // Use the formatted list
+      "bookingDays": formattedBookingDays,
       // "builtYear": formattedBuiltYear,
     };
 

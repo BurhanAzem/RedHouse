@@ -43,28 +43,31 @@ class _MapWidgetState extends State<MapWidget>
   @override
   void initState() {
     super.initState();
+    _timer = Timer(const Duration(seconds: 1), () {});
     WidgetsBinding.instance!.addObserver(this);
-mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-            mapListController.currentPosition.target, 15.0),
-      );
-      print(mapListController.currentPosition.target);
-      print("Widget is now visible. Do something here!---------------------------------------------------------------");
+    mapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(
+          mapListController.currentPosition.target, 15.0),
+    );
+    print(mapListController.currentPosition.target);
+    print(
+        "Widget is now visible. Do something here!---------------------------------------------------------------");
     // loadData();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // Perform actions when the app comes to the foreground
-      mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-            mapListController.currentPosition.target, 15.0),
-      );
-      print(mapListController.currentPosition.target);
-      print("Widget is now visible. Do something here!---------------------------------------------------------------");
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.resumed) {
+  //     // Perform actions when the app comes to the foreground
+  //     mapController?.animateCamera(
+  //       CameraUpdate.newLatLngZoom(
+  //           mapListController.currentPosition.target, 15.0),
+  //     );
+  //     print(mapListController.currentPosition.target);
+  //     print(
+  //         "Widget is now visible. Do something here!---------------------------------------------------------------");
+  //   }
+  // }
 
   void loadData() async {
     // filterControllerr.getProperties();
@@ -172,7 +175,8 @@ mapController?.animateCamera(
     setState(() {
       locationButtonSelected = !locationButtonSelected;
     });
-    Timer(const Duration(seconds: 1), () {
+
+    Timer(const Duration(seconds: 20), () {
       setState(() {
         locationButtonSelected = !locationButtonSelected;
       });
@@ -190,7 +194,6 @@ mapController?.animateCamera(
     super.build(context);
     mapListController.mapContext = context;
 
-    var target;
     return VisibilityDetector(
       key: const Key('Map'),
       onVisibilityChanged: (VisibilityInfo info) {
@@ -200,159 +203,171 @@ mapController?.animateCamera(
           // whenCameraMove();
         }
       },
-      child: Stack(
-        children: [
-          Visibility(
-            visible: mapListController.isLoading || filterControllerr.isLoading,
-            child: const LinearProgressIndicator(
-                backgroundColor: Colors.black,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                minHeight: 2),
-          ),
-          Visibility(
-            visible:
-                !mapListController.isLoading || filterControllerr.isLoading,
-            child: GoogleMap(
-              zoomControlsEnabled: true,
-              mapType: currentMapType,
-              initialCameraPosition: mapListController.currentPosition,
-              onMapCreated: (controller) {
-                setState(() {
-                  mapController = controller;
-                });
-                mapController?.animateCamera(
-                  CameraUpdate.newLatLngZoom(
-                      mapListController.currentPosition.target, 10.0),
-                );
-              },
-              myLocationButtonEnabled: true,
-              markers: mapListController.visibleMarkers,
-              onCameraMove: (CameraPosition position) {
-                setState(() {
-                  mapListController.newZoom = position.zoom;
-                  whenCameraMove(position);
-                });
-              },
+      child: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: locationButtonSelected
+            ? SizedBox(
+                height: 40,
+                child: FloatingActionButton.extended(
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
+                  onPressed: () {
+                    // Get.to(() => AddProperty1());
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  label: const Text("Are there properties nearby?"),
+                ),
+              )
+            : null,
+
+        // Body
+        body: Stack(
+          children: [
+            Visibility(
+              visible:
+                  mapListController.isLoading || filterControllerr.isLoading,
+              child: const LinearProgressIndicator(
+                  backgroundColor: Colors.black,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  minHeight: 2),
             ),
-          ),
-          Visibility(
-            visible: !mapListController.isLoading,
-            child: Container(
-              padding: const EdgeInsets.only(top: 15, right: 8),
-              alignment: Alignment.topRight,
-              child: Column(
-                children: <Widget>[
-                  Material(
-                    elevation: 4,
-                    shape: const CircleBorder(),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      onTap: changeMapType,
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              mapButtonSelected ? Colors.black : Colors.white,
-                        ),
-                        child: Icon(Icons.map,
-                            size: 25,
-                            color: mapButtonSelected
-                                ? Colors.white
-                                : Colors.black),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Material(
-                    elevation: 4,
-                    shape: const CircleBorder(),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      onTap: () async {
-                        CameraPosition currentPosition =
-                            await mapListController.getCurrentPosition();
-                        print(currentPosition);
-
-                        mapController!.animateCamera(
-                          CameraUpdate.newLatLngZoom(
-                            currentPosition.target,
-                            15.0,
-                          ),
-                        );
-
-                        setState(() {
-                          // You can include additional state changes here if needed
-                          toggleLocationButton();
-                        });
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: locationButtonSelected
-                              ? Colors.black
-                              : Colors.white,
-                        ),
-                        child: Icon(
-                          Icons.my_location,
-                          size: 25,
-                          color: locationButtonSelected
-                              ? Colors.white
-                              : Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-                  Material(
-                    elevation: 4,
-                    shape: const CircleBorder(),
-                    clipBehavior: Clip.antiAlias,
-                    child: InkWell(
-                      onTap: toggleDrawButton,
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              drawButtonSelected ? Colors.black : Colors.white,
-                        ),
-                        child: Icon(Icons.layers,
-                            size: 25,
-                            color: drawButtonSelected
-                                ? Colors.white
-                                : Colors.black),
-                      ),
-                    ),
-                  ),
-                  // const SizedBox(height: 10),
-                  // Material(
-                  //   elevation: 4,
-                  //   shape: const CircleBorder(),
-                  //   clipBehavior: Clip.antiAlias,
-                  //   child: InkWell(
-                  //     onTap: toggleDrawButton,
-                  //     child: Container(
-                  //         width: 50,
-                  //         height: 50,
-                  //         decoration: BoxDecoration(
-                  //           shape: BoxShape.circle,
-                  //           color: Colors.black,
-                  //         ),
-                  //         child:
-                  //             Icon(Icons.location_on, size: 25, color: Colors.white)),
-                  //   ),
-                  // ),
-                ],
+            Visibility(
+              visible:
+                  !mapListController.isLoading || filterControllerr.isLoading,
+              child: GoogleMap(
+                zoomControlsEnabled: true,
+                mapType: currentMapType,
+                initialCameraPosition: mapListController.currentPosition,
+                onMapCreated: (controller) {
+                  setState(() {
+                    mapController = controller;
+                  });
+                  mapController?.animateCamera(
+                    CameraUpdate.newLatLngZoom(
+                        mapListController.currentPosition.target, 10.0),
+                  );
+                },
+                myLocationButtonEnabled: true,
+                markers: mapListController.visibleMarkers,
+                onCameraMove: (CameraPosition position) {
+                  setState(() {
+                    mapListController.newZoom = position.zoom;
+                    whenCameraMove(position);
+                  });
+                },
               ),
             ),
-          )
-        ],
+            Visibility(
+              visible: !mapListController.isLoading,
+              child: Container(
+                padding: const EdgeInsets.only(top: 15, right: 8),
+                alignment: Alignment.topRight,
+                child: Column(
+                  children: <Widget>[
+                    Material(
+                      elevation: 4,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                        onTap: changeMapType,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                mapButtonSelected ? Colors.black : Colors.white,
+                          ),
+                          child: Icon(Icons.map,
+                              size: 25,
+                              color: mapButtonSelected
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Material(
+                      elevation: 4,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                        onTap: () async {
+                          if (!locationButtonSelected) {
+                            bool isLocationEnabled =
+                                await Geolocator.isLocationServiceEnabled();
+
+                            if (!isLocationEnabled) {
+                              isLocationEnabled =
+                                  await Geolocator.openLocationSettings();
+                            }
+
+                            setState(() {
+                              toggleLocationButton();
+                            });
+
+                            CameraPosition currentPosition =
+                                await mapListController.getCurrentPosition();
+
+                            mapController!.animateCamera(
+                              CameraUpdate.newLatLngZoom(
+                                currentPosition.target,
+                                15.0,
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: locationButtonSelected
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                          child: Icon(
+                            Icons.my_location,
+                            size: 25,
+                            color: locationButtonSelected
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Material(
+                      elevation: 4,
+                      shape: const CircleBorder(),
+                      clipBehavior: Clip.antiAlias,
+                      child: InkWell(
+                        onTap: toggleDrawButton,
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: drawButtonSelected
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                          child: Icon(Icons.layers,
+                              size: 25,
+                              color: drawButtonSelected
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -363,6 +378,9 @@ mapController?.animateCamera(
     super.dispose();
   }
 }
+
+// MapMarker
+// MapMarker
 
 class MapMarker extends Clusterable {
   MapListController controller = Get.put(MapListController());

@@ -11,12 +11,12 @@ abstract class OnBoardingController extends GetxController {
 class OnBoardingControllerImp extends OnBoardingController {
   @override
   toOnBoardingFour() {
-    Get.offAllNamed(AppRoute.onBoardingFour);
+    Get.toNamed(AppRoute.onBoardingFour);
   }
 
   @override
   toOnBoardingOne() {
-    Get.toNamed(AppRoute.onBoardingOne);
+    Get.offAllNamed(AppRoute.onBoardingOne);
   }
 
   @override

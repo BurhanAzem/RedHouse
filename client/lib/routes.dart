@@ -1,6 +1,5 @@
 import 'package:client/view/add_property/add_property_1.dart';
 import 'package:client/view/add_property/add_property_3.dart';
-// import 'package:client/view/add_property/add_property_3.dart';
 import 'package:client/view/add_property/add_property_4.dart';
 import 'package:client/view/add_property/add_property_5.dart';
 import 'package:client/view/add_property/add_property_6.dart';
@@ -51,14 +50,12 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.onBoardingFour: (context) => const OnBoardingFour(),
   AppRoute.addProperty1: (context) => AddProperty1(),
   AppRoute.addProperty2: (context) => AddProperty2(),
-  // AppRoute.addProperty3: (context) => AddProperty3(),
   AppRoute.addProperty4: (context) => AddProperty4(),
   AppRoute.addProperty5: (context) => AddProperty5(),
   AppRoute.addProperty6: (context) => AddProperty6(),
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
   AppRoute.allContracts: (context) => AllContracts(),
-  // AppRoute.applicationDetails: (context) => ApplicationDetails(),
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
   AppRoute.manageProperties: (context) => const ManageProperties(),

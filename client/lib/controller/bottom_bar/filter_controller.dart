@@ -28,7 +28,9 @@ class FilterController extends GetxController {
     latitude: 0,
     longitude: 0,
   );
+
   bool isLoading = false;
+
   // Property type
   bool buyHouse = true;
   bool buyHouseTemp = true;
@@ -409,7 +411,6 @@ class FilterController extends GetxController {
       );
     }
     isLoading = false;
-
   }
 
   getListAutoCompleteLocation(String query) async {

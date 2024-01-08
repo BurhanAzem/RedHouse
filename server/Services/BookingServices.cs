@@ -313,7 +313,7 @@ namespace server.Services
                 };
             }
 
-            var bookings = await _redHouseDbContext.Bookings.Where(b => b.UserId == userId).Include(b => b.Property).ToArrayAsync();
+            var bookings = await _redHouseDbContext.Bookings.Where(b => b.UserId == userId).Include(b => b.Property).Include(b => b.BookingDays).ToArrayAsync();
 
             return new ResponsDto<Booking>
             {

@@ -59,9 +59,7 @@ class _AllPropertiesState extends State<Properties>
     controller.propertiesUserId = loginController.userDto?["id"];
     await controller.getPropertiesUser();
 
-    setState(() {
-      isLoading = false; // Set isLoading to false when data is loaded
-    });
+    isLoading = false; // Set isLoading to false when data is loaded
 
     _isLoading = true;
     _timer = Timer(const Duration(seconds: 1), () {

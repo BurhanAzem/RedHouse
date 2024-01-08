@@ -3,7 +3,7 @@ import 'package:client/main.dart';
 import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/account_information.dart';
 import 'package:client/view/more/account_verification.dart';
-import 'package:client/view/more/compline.dart';
+import 'package:client/view/more/complaint.dart';
 import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';
 import 'package:client/view/more/my_properties.dart';
@@ -50,7 +50,9 @@ class _MoreState extends State<More> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    sharepref.clear();
+                    sharepref.remove("user");
+                    print(loginController.userDto);
+                    print(loginController.userDto);
                     Get.offAllNamed("/login");
                   },
                   child: const Text('Log out',

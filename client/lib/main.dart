@@ -1,6 +1,8 @@
 import 'package:client/core/services/network_controller.dart';
+import 'package:client/middleware.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/onboarding/welcoming.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,9 @@ void main() async {
   );
 
   sharepref = await SharedPreferences.getInstance();
-  sharepref.setString("first", "yes"); // first: yes or no
+  // sharepref.clear();
+  print("========================================================= sharepref");
+  print(sharepref.getString("first"));
   runApp(const MyApp());
   Get.put<NetworkController>(NetworkController(), permanent: true);
 }
@@ -49,8 +53,15 @@ class MyApp extends StatelessWidget {
           centerTitle: true,
         ),
       ),
-      home: BottomBar(),
+      initialRoute: "/welcoming",
       routes: routes,
+      getPages: [
+        GetPage(
+            name: "/welcoming",
+            page: () => const Welcoming(),
+            middlewares: [AuthMiddleWare()]),
+        GetPage(name: "/bottom-bar", page: () => const BottomBar())
+      ],
     );
   }
 }
