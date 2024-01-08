@@ -46,33 +46,33 @@ class _MapWidgetState extends State<MapWidget>
     _timer = Timer(const Duration(seconds: 1), () {
       
     });
-    WidgetsBinding.instance!.addObserver(this);
-mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-            mapListController.currentPosition.target, 15.0),
-      );
-      print(mapListController.currentPosition.target);
-      print("Widget is now visible. Do something here!---------------------------------------------------------------");
-    // loadData();
+//     WidgetsBinding.instance!.addObserver(this);
+// mapController?.animateCamera(
+//         CameraUpdate.newLatLngZoom(
+//             mapListController.currentPosition.target, 15.0),
+//       );
+//       print(mapListController.currentPosition.target);
+//       print("Widget is now visible. Do something here!---------------------------------------------------------------");
+//     // loadData();
   }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // Perform actions when the app comes to the foreground
-      mapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-            mapListController.currentPosition.target, 15.0),
-      );
-      print(mapListController.currentPosition.target);
-      print("Widget is now visible. Do something here!---------------------------------------------------------------");
-    }
-  }
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.resumed) {
+  //     // Perform actions when the app comes to the foreground
+  //     mapController?.animateCamera(
+  //       CameraUpdate.newLatLngZoom(
+  //           mapListController.currentPosition.target, 15.0),
+  //     );
+  //     print(mapListController.currentPosition.target);
+  //     print("Widget is now visible. Do something here!---------------------------------------------------------------");
+  //   }
+  // }
 
   void loadData() async {
     // filterControllerr.getProperties();
-    mapListController.currentPosition =
-        await mapListController.getCurrentPosition();
+    // mapListController.currentPosition =
+    //     await mapListController.getCurrentPosition();
     mapListController.isLoading = true;
     _timer = Timer(const Duration(seconds: 1), () {
       if (mounted) {
@@ -84,6 +84,7 @@ mapController?.animateCamera(
   }
 
   Future<void> whenCameraMove(CameraPosition position) async {
+    filterControllerr.currentPosition = position;
     print(
         "============================================================ whenCameraMove");
     if (mapController == null) {
@@ -218,7 +219,7 @@ mapController?.animateCamera(
             child: GoogleMap(
               zoomControlsEnabled: true,
               mapType: currentMapType,
-              initialCameraPosition: mapListController.currentPosition,
+              initialCameraPosition: filterControllerr.currentPosition,
               onMapCreated: (controller) {
                 setState(() {
                   mapController = controller;
