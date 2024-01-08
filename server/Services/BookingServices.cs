@@ -367,7 +367,7 @@ namespace server.Services
 
         public async Task<ResponsDto<Booking>> GetBooking(int bookingId)
         {
-            var booking = await _redHouseDbContext.Bookings.FindAsync(bookingId);
+            var booking = await _redHouseDbContext.Bookings.Where(b => b.Id == bookingId).Include(b => b.User).Include(b => b.Property).Include(b => b.BookingDays).FirstOrDefaultAsync();
             if (booking == null)
             {
                 return new ResponsDto<Booking>
