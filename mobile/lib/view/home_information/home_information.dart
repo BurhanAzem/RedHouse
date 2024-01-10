@@ -1,5 +1,5 @@
 import 'package:client/controller/booking/booking_controller.dart';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';
@@ -228,14 +228,13 @@ class _HomeInformationState extends State<HomeInformation> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-        // Customize the highlight color to red
-        colorScheme: const ColorScheme.dark(
-          primary: Color.fromARGB(255, 196, 39, 27),
-        ),
-        buttonTheme: const ButtonThemeData(
-          textTheme: ButtonTextTheme.primary,
-        ),
-      ),
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
           child: child ?? Container(),
         );
       },

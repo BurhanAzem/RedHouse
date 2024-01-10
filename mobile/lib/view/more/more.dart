@@ -2,6 +2,7 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/account_information.dart';
+import 'package:client/view/more/account_upgrade.dart';
 import 'package:client/view/more/account_verification.dart';
 import 'package:client/view/more/complaint.dart';
 import 'package:client/view/more/favorite_properties.dart';
@@ -293,7 +294,7 @@ class _MoreState extends State<More> {
 
           InkWell(
             onTap: () {
-              Get.to(() => Compline());
+              Get.to(() => Complaint());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -324,13 +325,27 @@ class _MoreState extends State<More> {
           ),
 
           InkWell(
-            onTap: () {
-              // Get.to(() => Compline());
-            },
+            onTap: () {},
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
                 "Select agent",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          InkWell(
+            onTap: () {
+              Get.to(() => AccountUpgrade());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Account upgrade",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,

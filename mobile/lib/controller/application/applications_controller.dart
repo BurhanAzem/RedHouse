@@ -16,7 +16,7 @@ class ApplicationsController extends GetxController {
   int userId = 1; // customer id
   DateTime applicationDate = DateTime.now();
   TextEditingController message = TextEditingController();
-  String aapplicationStatus = "Pendding";
+  String _applicationStatus = "Pendding";
   TextEditingController suggestedPrice = TextEditingController();
 
   String responseMessage = "";
@@ -27,7 +27,7 @@ class ApplicationsController extends GetxController {
       userId,
       applicationDate,
       message.text,
-      aapplicationStatus,
+      _applicationStatus,
       int.tryParse(suggestedPrice.text) ?? 0,
     );
 

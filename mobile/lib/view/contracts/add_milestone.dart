@@ -1,4 +1,4 @@
-import 'package:client/controller/contracts/milestone_controller.dart';
+import 'package:client/controller/contract/milestone_controller.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/view/contracts/contract.dart';
 import 'package:flutter/material.dart';

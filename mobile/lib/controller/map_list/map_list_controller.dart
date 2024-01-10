@@ -19,10 +19,8 @@ class MapListController extends GetxController {
   bool? isLoadingImage;
   bool isLoading = true;
   bool isListIcon = true;
-  // bool isIconVisible = true;
+  String query = "initial";
   
-
-  // Favorite properties
   List<Property> favoriteProperties = <Property>[];
 
   Future<CameraPosition> getCurrentPosition() async {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/home_information.dart';
@@ -25,6 +26,8 @@ class _MapWidgetState extends State<MapWidget>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   MapListController mapListController = Get.put(MapListController());
   FilterController filterControllerr = Get.put(FilterController());
+  ManagePropertiesController propertiesController =
+      Get.put(ManagePropertiesController());
   GoogleMapController? mapController;
 
   bool userNotified = false;
@@ -44,33 +47,14 @@ class _MapWidgetState extends State<MapWidget>
   void initState() {
     super.initState();
     _timer = Timer(const Duration(seconds: 1), () {});
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     mapController?.animateCamera(
-      CameraUpdate.newLatLngZoom(
-          mapListController.currentPosition.target, 15.0),
+      CameraUpdate.newLatLngZoom(mapListController.currentPosition.target, 15),
     );
     print(mapListController.currentPosition.target);
-    print(
-        "Widget is now visible. Do something here!---------------------------------------------------------------");
-    // loadData();
   }
 
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.resumed) {
-  //     // Perform actions when the app comes to the foreground
-  //     mapController?.animateCamera(
-  //       CameraUpdate.newLatLngZoom(
-  //           mapListController.currentPosition.target, 15.0),
-  //     );
-  //     print(mapListController.currentPosition.target);
-  //     print(
-  //         "Widget is now visible. Do something here!---------------------------------------------------------------");
-  //   }
-  // }
-
   void loadData() async {
-    // filterControllerr.getProperties();
     mapListController.currentPosition =
         await mapListController.getCurrentPosition();
     mapListController.isLoading = true;
@@ -154,7 +138,6 @@ class _MapWidgetState extends State<MapWidget>
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
           mapListController.currentLocationName.value = locality;
-          // filterControllerr.location.region = locality;
           filterControllerr.getProperties();
 
           print("Area in ${mapListController.currentLocationName.value}");
@@ -211,8 +194,14 @@ class _MapWidgetState extends State<MapWidget>
                 child: FloatingActionButton.extended(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
-                  onPressed: () {
-                    // Get.to(() => AddProperty1());
+                  onPressed: () async {
+                    CameraPosition currentPosition =
+                        await mapListController.getCurrentPosition();
+
+                    await propertiesController.getClosestProperties(
+                        currentPosition.target.latitude,
+                        currentPosition.target.longitude);
+                    print(propertiesController.closestProperties);
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -241,12 +230,13 @@ class _MapWidgetState extends State<MapWidget>
                 mapType: currentMapType,
                 initialCameraPosition: mapListController.currentPosition,
                 onMapCreated: (controller) {
-                  setState(() {
-                    mapController = controller;
-                  });
+                  mapController = controller;
+
                   mapController?.animateCamera(
                     CameraUpdate.newLatLngZoom(
-                        mapListController.currentPosition.target, 10.0),
+                      mapListController.currentPosition.target,
+                      13,
+                    ),
                   );
                 },
                 myLocationButtonEnabled: true,
@@ -374,6 +364,7 @@ class _MapWidgetState extends State<MapWidget>
 
   @override
   void dispose() {
+    mapController?.dispose();
     _timer.cancel();
     super.dispose();
   }

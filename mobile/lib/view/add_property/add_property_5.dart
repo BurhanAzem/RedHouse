@@ -1,4 +1,4 @@
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_6.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,10 +48,14 @@ class _AddProperty5State extends State<AddProperty5>
       firstDate: DateTime.utc(1980, 1, 1),
       lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
-        return Theme(
+         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor:
-                const Color(0xffd92328), // Change the color of the header
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
           ),
           child: child ?? Container(),
         );
@@ -174,6 +178,7 @@ class _AddProperty5State extends State<AddProperty5>
                       Container(height: 5),
                       TextFormField(
                         controller: controller.squareMeter,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(Icons.square_foot),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -196,6 +201,7 @@ class _AddProperty5State extends State<AddProperty5>
                       Container(height: 5),
                       TextFormField(
                         controller: controller.numberOfBedrooms,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(Icons.numbers),
                           floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -218,6 +224,7 @@ class _AddProperty5State extends State<AddProperty5>
                       Container(height: 5),
                       TextFormField(
                         controller: controller.numberOfBathrooms,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(Icons.numbers),
                           floatingLabelBehavior: FloatingLabelBehavior.always,

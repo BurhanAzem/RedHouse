@@ -44,6 +44,7 @@ class ManagePropertiesController extends GetxController {
   String propertiesFilter = "All properties";
   int propertiesUserId = 0;
   List<Property> userProperties = [];
+  List<Property> closestProperties = [];
   CameraPosition? currentPosition;
   Set<Marker> markers = {}; // Empty marker
   List<NeighborhoodDto> propertyNeighborhoods = [];
@@ -131,7 +132,23 @@ class ManagePropertiesController extends GetxController {
       );
     }
   }
-  
+
+  getClosestProperties(double latitude, double longitude) async {
+    var response = await PropertyData.getClosestProperties(latitude, longitude);
+
+    if (response['statusCode'] == 200) {
+      closestProperties = (response['listDto'] as List<dynamic>)
+          .map((e) => Property.fromJson(e as Map<String, dynamic>))
+          .toList();
+      print(closestProperties);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
 
   // ALL this for front end
   void increaseActiveStep() {

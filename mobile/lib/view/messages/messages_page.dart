@@ -1,4 +1,4 @@
-import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/controller/history/history_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/application.dart';
@@ -142,9 +142,7 @@ class _MessagesState extends State<Messages> {
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center();
         }
 
         // Filter users based on the condition

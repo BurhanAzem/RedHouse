@@ -7,6 +7,7 @@ class BookingController extends GetxController {
   int userId = 1;
   int propertyId = 1;
   List<DateTime> bookingDays = [];
+  String bookingCode = "";
 
   TextEditingController cardNumber = TextEditingController();
   TextEditingController cardName = TextEditingController();
@@ -19,6 +20,8 @@ class BookingController extends GetxController {
 
     if (response['statusCode'] == 200) {
       print(response['listDto']);
+      bookingCode = response['dto']['bookingCode'];
+      print(bookingCode);
     } else {
       Get.defaultDialog(
         title: "Error",

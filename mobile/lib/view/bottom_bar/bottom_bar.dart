@@ -78,6 +78,7 @@ class _BottomBarState extends State<BottomBar> {
     loginController.userDto = json.decode(sharepref.getString("user") ?? "{}");
     print(loginController.userDto);
     print(loginController.userDto);
+    setState(() {});
   }
 
   Future<void> checkPermission() async {
@@ -103,7 +104,6 @@ class _BottomBarState extends State<BottomBar> {
         // At this point, the location service should be enabled
       } else {
         // Location permission denied
-        // You might want to handle this case accordingly
         print("Location permission denied");
       }
     }

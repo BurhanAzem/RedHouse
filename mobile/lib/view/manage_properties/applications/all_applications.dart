@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/user.dart';
-import 'package:client/view/manage_properties/incoming_application.dart';
-import 'package:client/view/manage_properties/sent_application.dart';
+import 'package:client/view/manage_properties/applications/incoming_application.dart';
+import 'package:client/view/manage_properties/applications/sent_application.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -57,7 +57,8 @@ class _AllApplicationsState extends State<AllApplications> {
 
     const applicationType = [
       "All",
-      "For rent",
+      "For daily rent",
+      "For monthly rent",
       "For sell",
     ];
 

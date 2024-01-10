@@ -2,14 +2,14 @@ import 'package:client/controller/complaint/complaint_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Compline extends StatefulWidget {
-  const Compline({super.key});
+class Complaint extends StatefulWidget {
+  const Complaint({super.key});
 
   @override
-  State<Compline> createState() => _ComplineState();
+  State<Complaint> createState() => _ComplineState();
 }
 
-class _ComplineState extends State<Compline> {
+class _ComplineState extends State<Complaint> {
   ComplaintController controller = Get.put(ComplaintController());
   
   @override

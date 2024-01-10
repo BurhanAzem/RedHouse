@@ -440,8 +440,8 @@ class FilterController extends GetxController {
     List<dynamic> priceLastTenYears = response;
     int curYear = DateTime.now().year;
     for (int i = 9; i >= 0; i--) {
-      var flSpot = new FlSpot(
-          (curYear - i).toDouble(), priceLastTenYears[9 - i].toDouble());
+      var flSpot =
+          FlSpot((curYear - i).toDouble(), priceLastTenYears[9 - i].toDouble());
 
       flSpotListRent.add(flSpot);
     }

@@ -1,7 +1,7 @@
 import 'package:client/model/neighborhood/locationNeighborhood.dart';
 import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:client/view/add_property/add_property_3.dart';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
@@ -330,7 +330,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour>
                             color: Colors.black,
                             width: 1.0,
                           ),
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: DropdownButton<String>(
                           value: neighborhoodType,

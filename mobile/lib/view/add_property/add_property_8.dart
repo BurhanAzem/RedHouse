@@ -1,5 +1,5 @@
 import 'package:client/controller/bottom_bar/bottom_bar.dart';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/more/my_properties.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,10 @@ class _AddProperty8State extends State<AddProperty8>
 
     // Create a Tween for the animation
     _textAnimation = IntTween(
-            begin: 0, end: "Enter more information about your property".length)
+            begin: 0,
+            end:
+                "After you have entered the information about your property, you can now save the property"
+                    .length)
         .animate(_animationController);
 
     // Start the animation
@@ -43,8 +46,6 @@ class _AddProperty8State extends State<AddProperty8>
 
   @override
   Widget build(BuildContext context) {
-    final List<String> options = ["Landlord", "Agent"];
-
     return GetBuilder<ManagePropertiesController>(
       init: ManagePropertiesController(),
       builder: (ManagePropertiesController controller) {
@@ -71,62 +72,6 @@ class _AddProperty8State extends State<AddProperty8>
                 fontWeight: FontWeight.w600,
               ),
             ),
-            actions: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      setState(() {});
-                      ScaffoldMessenger.of(context).clearSnackBars();
-                      SnackBar snackBar = const SnackBar(
-                        content: Text("Added Successfully"),
-                        backgroundColor: Colors.blue,
-                      );
-
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          // Show a loading dialog while processing
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        },
-                      );
-
-                      BottomBarController bottomBarController =
-                          Get.put(BottomBarController(), permanent: true);
-
-                      // AddPropertyFuture is a function that performs controller.AddProperty
-                      Future<void> addPropertyFuture() async {
-                        await controller.addProperty();
-
-                        print(bottomBarController.currentIndex);
-                        if (bottomBarController.currentIndex == 3) {
-                          Get.offAll(() => const BottomBar());
-                        } else if (bottomBarController.currentIndex == 4) {
-                          Get.offAll(() => const BottomBar());
-                          Get.to(() => const MyProperties());
-                        }
-
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-
-                      // Execute the addPropertyFuture asynchronously and navigate when done
-                      addPropertyFuture();
-                    },
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
           ),
 
           // Body
@@ -147,7 +92,7 @@ class _AddProperty8State extends State<AddProperty8>
                           animation: _textAnimation,
                           builder: (context, child) {
                             String animatedText =
-                                "Enter more information about your property"
+                                "After you have entered the information about your property, you can now save the property"
                                     .substring(0, _textAnimation.value);
                             return Text(
                               animatedText,
@@ -160,64 +105,14 @@ class _AddProperty8State extends State<AddProperty8>
                         ),
                       ),
 
-                      // listing By
-                      Container(height: 25),
-                      const Text(
-                        "Listing by",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Container(height: 5),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: DropdownButton<String>(
-                          value: controller.listingBy,
-                          items: options.map((String option) {
-                            return DropdownMenuItem<String>(
-                              value: option,
-                              child: Text(option),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              controller.listingBy = newValue ?? "";
-                              controller.listingBy = controller.listingBy;
-                            });
-                          },
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                        ),
-                      ),
-
                       // Image
-                      Container(height: 40),
-                      Container(
-                        height: 1.5,
-                        color: Colors.black38,
-                      ),
-                      // Container(height: 5),
+                      Container(height: 30),
                       Container(
                         alignment: Alignment.center,
                         child:
-                            Image.asset("assets/images/red-tree.png", scale: 2),
+                            Image.asset("assets/images/red-tree.png", scale: 1),
                       ),
-                      Container(height: 15),
-                      Container(
-                        height: 1.5,
-                        color: Colors.black38,
-                      ),
-                      Container(height: 35),
+                      Container(height: 60),
 
                       // button
                       MaterialButton(
@@ -265,7 +160,7 @@ class _AddProperty8State extends State<AddProperty8>
                         },
                         color: Colors.black,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: const Text(
                           "Save your property",

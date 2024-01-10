@@ -1,4 +1,4 @@
-import 'package:client/controller/contracts/offer_controller.dart';
+import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

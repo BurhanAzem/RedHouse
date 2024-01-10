@@ -72,7 +72,7 @@ class _ListWidgetState extends State<ListWidget>
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 17),
-              Container(
+              SizedBox(
                 width: 190,
                 child: MaterialButton(
                   shape: RoundedRectangleBorder(
@@ -364,7 +364,7 @@ class _ListWidgetState extends State<ListWidget>
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 170,
                                   child: Text(
                                     property.location!.streetAddress,
@@ -373,7 +373,7 @@ class _ListWidgetState extends State<ListWidget>
                                   ),
                                 ),
                                 const SizedBox(height: 1),
-                                Container(
+                                SizedBox(
                                   width: 170,
                                   child: Text(
                                     "${property.location!.city}, ${property.location!.country}",
@@ -383,7 +383,7 @@ class _ListWidgetState extends State<ListWidget>
                                 ),
                               ],
                             ),
-                            Container(
+                            SizedBox(
                               width: 180,
                               child: MaterialButton(
                                 shape: RoundedRectangleBorder(

@@ -1,5 +1,5 @@
 import 'package:client/controller/booking/booking_controller.dart';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';

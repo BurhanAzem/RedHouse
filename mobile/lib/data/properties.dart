@@ -290,6 +290,34 @@ class PropertyData {
     }
   }
 
+static getClosestProperties(double latitude, double longitude) async {
+  final Map<String, dynamic> filters = {
+    "latitude": latitude.toString(),
+    "longitude": longitude.toString(),
+  };
+
+  if (await checkInternet()) {
+    final Uri uri = Uri.https("10.0.2.2:7042", "properties/closest", filters);
+
+    var response = await http.get(uri, headers: <String, String>{
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ${getToken()}',
+    });
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Map responsebody = json.decode(response.body);
+      print(responsebody["listDto"]);
+
+      return (responsebody);
+    } else {
+      return StatusRequest.serverfailure;
+    }
+  } else {
+    return StatusRequest.offlinefailure;
+  }
+}
   static getNeighborhoodsForProperty(int propertyId) async {
     if (await checkInternet()) {
       final Uri uri = Uri.https("10.0.2.2:7042", "/neighborhoods/$propertyId");

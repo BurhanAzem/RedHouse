@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:client/controller/contracts/offer_controller.dart';
+import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/model/user.dart';

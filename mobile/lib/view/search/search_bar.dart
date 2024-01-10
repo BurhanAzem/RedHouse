@@ -1,7 +1,12 @@
+import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
-import 'package:client/view/search/search_api/search_location_screen.dart';
+import 'package:client/model/location.dart';
+import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/search/location_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SearchBarRow extends StatefulWidget {
   final VoidCallback onToggleView;
@@ -27,7 +32,10 @@ class _SearchBarRowState extends State<SearchBarRow> {
         children: [
           GestureDetector(
             onTap: () {
-              Get.to(() => const SearhcLoactionScreen());
+              showSearch(
+                context: context,
+                delegate: CustomSearch(),
+              );
             },
             child: Container(
               height: 50,
@@ -104,5 +112,243 @@ class _SearchBarRowState extends State<SearchBarRow> {
         ],
       ),
     );
+  }
+}
+
+class CustomSearch extends SearchDelegate {
+  FilterController filterController = Get.put(FilterController());
+  MapListController mapListController = Get.put(MapListController());
+
+  Future<void> loadData() async {
+    await filterController.getListAutoCompleteLocation(query);
+    print(filterController.listAutoCompleteLocation);
+  }
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
+    return theme.copyWith(
+      appBarTheme: const AppBarTheme(),
+      textTheme: theme.textTheme.copyWith(
+        headline6: const TextStyle(
+          fontSize: 18,
+          color: Colors.black87,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: InputBorder.none,
+        hintStyle: TextStyle(color: Colors.grey[600]),
+      ),
+      textSelectionTheme: const TextSelectionThemeData(
+        cursorColor: Colors.black,
+      ),
+    );
+  }
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      if (query == "")
+        IconButton(
+          onPressed: () async {},
+          icon: const Icon(Icons.keyboard_voice, size: 30, color: Colors.black),
+        )
+      else
+        IconButton(
+          onPressed: () {
+            query = "";
+          },
+          icon: const Icon(Icons.close, size: 27, color: Colors.black),
+        ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        close(context, null);
+      },
+      icon: const Icon(Icons.arrow_back, size: 27, color: Colors.black),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return const Text("");
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query != "") {
+      return FutureBuilder<void>(
+        future: loadData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return Column(
+              children: [
+                const Divider(
+                  height: 1.5,
+                  color: Colors.grey,
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filterController.listAutoCompleteLocation.length,
+                    itemBuilder: (context, index) {
+                      Location location =
+                          filterController.listAutoCompleteLocation[index];
+
+                      return LocationListTile(
+                        location: location,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          }
+        },
+      );
+    } else {
+      return Scaffold(
+        body: ListView(
+          children: [
+            const Divider(
+              height: 1.5,
+              color: Colors.grey,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: filterController.listingType
+                              ? Colors.black
+                              : Colors.transparent,
+                          width: 3.0,
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Buy',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                            color: filterController.listingType
+                                ? Colors.black
+                                : Colors.black45,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: !filterController.listingType
+                              ? Colors.black
+                              : Colors.transparent,
+                          width: 3.0,
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Rent',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 17,
+                            color: !filterController.listingType
+                                ? Colors.black
+                                : Colors.black45,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Divider(
+              height: 1.5,
+              color: Colors.grey,
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      // Add your logic here for handling the tap event
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.my_location,
+                            size: 22,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Use current location",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 17),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    height: 1.5,
+                    color: Colors.grey,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      // Add your logic here for handling the tap event
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      child: Row(
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.car,
+                            size: 20,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "Search by commute time",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 17),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Divider(
+                    height: 1.5,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

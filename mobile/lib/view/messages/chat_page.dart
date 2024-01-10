@@ -123,7 +123,7 @@ class _ChatPageState extends State<ChatPage> {
                 print(value);
                 switch (value) {
                   case "Send complaint":
-                    Get.to(const Compline());
+                    Get.to(const Complaint());
                     break;
                   case "Create offer":
                     Get.to(
@@ -138,7 +138,7 @@ class _ChatPageState extends State<ChatPage> {
                     );
                     break;
                   case "Send complaint":
-                    Get.to(const Compline());
+                    Get.to(const Complaint());
                     break;
                 }
               },

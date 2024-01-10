@@ -1,4 +1,4 @@
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_7.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,10 +24,14 @@ class _AddProperty6State extends State<AddProperty6>
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 20)),
       builder: (BuildContext context, Widget? child) {
-        return Theme(
+         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor:
-                const Color(0xffd92328), // Change the color of the header
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
           ),
           child: child ?? Container(),
         );
@@ -281,7 +285,7 @@ class _AddProperty6State extends State<AddProperty6>
                             Container(
                               alignment: Alignment.center,
                               child: Image.asset("assets/images/red-tree.png",
-                                  scale: 2.7),
+                                  scale: 2.9),
                             ),
                           ],
                         )

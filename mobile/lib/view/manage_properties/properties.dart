@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_1.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -55,7 +55,7 @@ class _AllPropertiesState extends State<Properties>
     setState(() {});
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
     controller.propertiesUserId = loginController.userDto?["id"];
     await controller.getPropertiesUser();
 

@@ -1,4 +1,4 @@
-import 'package:client/controller/applications/applications_controller.dart';
+import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/application_buttons.dart';

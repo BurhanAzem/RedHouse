@@ -374,7 +374,7 @@ namespace RedHouse_Server.Services
 
             if (myPropertiesFilterDto.PropertiesFilter != "Posted properties")
             {
-                if (myPropertiesFilterDto.PropertiesFilter == "All")
+                if (myPropertiesFilterDto.PropertiesFilter == "All properties")
                 {
                     query.Union(from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
                                 join offer in _redHouseDbContext.Offers

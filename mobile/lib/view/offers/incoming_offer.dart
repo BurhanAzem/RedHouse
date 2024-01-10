@@ -1,4 +1,4 @@
-import 'package:client/controller/contracts/offer_controller.dart';
+import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/view/home_information/home_information.dart';

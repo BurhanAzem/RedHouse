@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_8.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,8 +71,7 @@ class _AddProperty7State extends State<AddProperty7>
         await ref.putFile(photo);
         final url = await ref.getDownloadURL();
         setState(() {
-          controller.downloadUrls
-              .add(url); // Store the download URL in the list
+          controller.downloadUrls.add(url);
         });
       } catch (e) {
         print('Error occurred while uploading: $e');

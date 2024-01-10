@@ -1,6 +1,7 @@
 import 'package:client/controller/booking/booking_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
+import 'package:client/view/home_information/booking_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,7 +23,8 @@ class CreateBooking extends StatefulWidget {
 class _CreateBookingState extends State<CreateBooking>
     with SingleTickerProviderStateMixin {
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  BookingController bookingController = Get.put(BookingController());
+  BookingController bookingController =
+      Get.put(BookingController(), permanent: true);
 
   late AnimationController _animationController;
   late Animation<int> _textAnimation1;
@@ -68,47 +70,53 @@ class _CreateBookingState extends State<CreateBooking>
   }
 
   nextStep1() {
+    continueStep();
     // Remove any non-digit characters
-    String sanitizedValue =
-        bookingController.cardNumber.text.replaceAll(RegExp(r'\D'), '');
+    // String sanitizedValue =
+    //     bookingController.cardNumber.text.replaceAll(RegExp(r'\D'), '');
 
-    if (sanitizedValue.length != 16 ||
-        bookingController.cardCCV.text.length != 4 ||
-        bookingController.cardDate.text.length != 5 ||
-        bookingController.cardName.text.isEmpty) {
-      setState(() {
-        checkStep1 = true;
-      });
-    } else {
-      setState(() {
-        checkStep1 = false;
-      });
-      continueStep();
-    }
+    // if (sanitizedValue.length != 16 ||
+    //     bookingController.cardCCV.text.length != 4 ||
+    //     bookingController.cardDate.text.length != 5 ||
+    //     bookingController.cardName.text.isEmpty) {
+    //   setState(() {
+    //     checkStep1 = true;
+    //   });
+    // } else {
+    //   setState(() {
+    //     checkStep1 = false;
+    //   });
+    //   continueStep();
+    // }
   }
 
-  nextStep2() {
-    setState(() {});
+  void nextStep2() async {
     ScaffoldMessenger.of(context).clearSnackBars();
 
     Future<void> addBookingFuture() async {
       bookingController.propertyId = widget.property.id;
       bookingController.userId = loginController.userDto?["id"];
       await bookingController.createBooking();
+      print(bookingController.bookingCode);
+
+      // Navigator.of(context).pop();
+
+      Get.off(() => BookingCode(bookingCode: bookingController.bookingCode));
 
       SnackBar snackBar = const SnackBar(
-        content: Text("Created successfully"),
+        content: Text("Booking Done Successfully"),
         backgroundColor: Colors.blue,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.of(context).pop();
     }
 
-    addBookingFuture();
+    await addBookingFuture(); // await the Future
   }
 
   @override
   void initState() {
+    bookingController.bookingDays.clear();
+
     // Initialize AnimationController
     _animationController = AnimationController(
       vsync: this,
@@ -242,7 +250,14 @@ class _CreateBookingState extends State<CreateBooking>
       },
       builder: (BuildContext context, Widget? child) {
         return Theme(
-          data: ThemeData.light().copyWith(),
+          data: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
           child: child ?? Container(),
         );
       },

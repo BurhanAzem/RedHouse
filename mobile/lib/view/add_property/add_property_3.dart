@@ -1,4 +1,4 @@
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_4.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -156,7 +156,7 @@ class _AddProperty2State extends State<AddProperty2>
                             color: Colors.black,
                             width: 1.0,
                           ),
-                          borderRadius: BorderRadius.circular(10.0),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: DropdownButton<String>(
                           value: controller.propertyType,
@@ -202,6 +202,7 @@ class _AddProperty2State extends State<AddProperty2>
                       Container(height: 5),
                       TextFormField(
                         controller: controller.numberOfUnits,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           suffixIcon: const Icon(Icons.numbers),
                           floatingLabelBehavior: FloatingLabelBehavior.always,

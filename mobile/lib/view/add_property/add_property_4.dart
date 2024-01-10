@@ -1,4 +1,4 @@
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
+import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_5.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -147,7 +147,7 @@ class _AddProperty4State extends State<AddProperty4>
                       Container(
                         child: TextFormField(
                           controller: controller.price,
-                          style: const TextStyle(),
+                          keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             suffixIcon: const Icon(Icons.money),
                             hintText: "Example: 2000",
@@ -171,18 +171,16 @@ class _AddProperty4State extends State<AddProperty4>
                         ),
                       ),
                       Container(height: 5),
-                      Container(
-                        child: TextFormField(
-                          controller: controller.parkingSpots,
-                          style: const TextStyle(),
-                          decoration: InputDecoration(
-                            suffixIcon: const Icon(Icons.numbers),
-                            hintText: "Example: 3",
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            contentPadding: const EdgeInsets.all(10),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
+                      TextFormField(
+                        controller: controller.parkingSpots,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          suffixIcon: const Icon(Icons.numbers),
+                          hintText: "Example: 3",
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          contentPadding: const EdgeInsets.all(10),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),

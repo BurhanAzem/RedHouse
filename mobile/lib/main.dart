@@ -2,6 +2,8 @@ import 'package:client/core/services/network_controller.dart';
 import 'package:client/middleware.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/view/more/account_upgrade.dart';
+import 'package:client/view/more/payment.dart';
 import 'package:client/view/onboarding/welcoming.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:client/firebase_options.dart';

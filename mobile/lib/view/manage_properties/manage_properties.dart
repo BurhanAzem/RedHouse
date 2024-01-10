@@ -1,4 +1,5 @@
-import 'package:client/view/manage_properties/all_applications.dart';
+import 'package:client/view/manage_properties/applications/all_applications.dart';
+import 'package:client/view/manage_properties/bookings/all_bookings.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class _TopNavigationBar extends State<ManageProperties>
               child: Text("Applications"),
             ),
             Tab(
-              child: Text("Books"),
+              child: Text("Bookings"),
             ),
           ],
           overlayColor: MaterialStatePropertyAll(Colors.grey[700]),
@@ -67,7 +68,7 @@ class _TopNavigationBar extends State<ManageProperties>
             child: AllApplications(),
           ),
           Center(
-            child: Text("It's sunny here"),
+            child: AllBookings(),
           ),
         ],
       ),

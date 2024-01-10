@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:client/controller/manage_propertise/manage_properties_controller.dart';
 import 'package:client/controller/users_auth/account_verification_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/user.dart';
-import 'package:client/view/add_property/add_property_8.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
-import 'package:client/view/more/more.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -20,7 +19,8 @@ class AccountVerification extends StatefulWidget {
   _AccountVerificationState createState() => _AccountVerificationState();
 }
 
-class _AccountVerificationState extends State<AccountVerification> {
+class _AccountVerificationState extends State<AccountVerification>
+    with SingleTickerProviderStateMixin {
   AccountVerificationController controller =
       Get.put(AccountVerificationController(), permanent: true);
 
@@ -28,9 +28,10 @@ class _AccountVerificationState extends State<AccountVerification> {
       firebase_storage.FirebaseStorage.instance;
 
   List<File> _photos = [];
-  bool isUploading = false; // Add a flag for uploading
-
   final ImagePicker _picker = ImagePicker();
+  late AnimationController _animationController;
+  late Animation<int> _textAnimation;
+  bool isCard = true;
 
   Future<List<XFile>?> imgFromGallery() async {
     final pickedFiles = await _picker.pickMultiImage();
@@ -39,7 +40,7 @@ class _AccountVerificationState extends State<AccountVerification> {
       setState(() {
         _photos =
             pickedFiles.map((pickedFile) => File(pickedFile.path)).toList();
-        isUploading = true; // Set the flag to indicate uploading
+        // controller.isUploading = true; // Set the flag to indicate uploading
       });
       await uploadFiles(); // Upload files immediately
     } else {
@@ -54,9 +55,8 @@ class _AccountVerificationState extends State<AccountVerification> {
 
     if (pickedFile != null) {
       setState(() {
-        _photos.add(
-            File(pickedFile.path)); // Append the selected image to the list
-        isUploading = true; // Set the flag to indicate uploading
+        _photos.add(File(pickedFile.path));
+        // controller.isUploading = true; // Set the flag to indicate uploading
       });
       uploadFiles(); // Upload the new image immediately
     } else {
@@ -74,36 +74,53 @@ class _AccountVerificationState extends State<AccountVerification> {
         await ref.putFile(photo);
         final url = await ref.getDownloadURL();
         setState(() {
-          controller.downloadUrls
-              .add(url); // Store the download URL in the list
+          if (isCard) {
+            controller.cardID = url;
+          } else {
+            controller.personal = url;
+          }
         });
       } catch (e) {
         print('Error occurred while uploading: $e');
       }
     }
-    setState(() {
-      isUploading = false; // Set the flag to indicate uploading is complete
-    });
+  }
+
+  @override
+  void initState() {
+    // Initialize AnimationController
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 4000),
+    );
+
+    // Create a Tween for the animation
+    _textAnimation = IntTween(
+            begin: 0,
+            end:
+                "Verify your account by submiting your card ID and recent personal image"
+                    .length)
+        .animate(_animationController);
+
+    // Start the animation
+    _animationController.forward();
+
+    controller.cardID = "";
+    controller.personal = "";
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    const options = [
-      "House",
-      "Apartment Unit",
-      "Townhouse",
-      "Entire Department Community"
-    ];
-
     return GetBuilder<AccountVerificationController>(
       init: AccountVerificationController(),
       builder: (AccountVerificationController controller) {
-        @override
-        void initState() {
-          super.initState();
-          setState(() {});
-        }
-
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
@@ -113,7 +130,7 @@ class _AccountVerificationState extends State<AccountVerification> {
               ),
               onPressed: () {
                 setState(() {
-                  Get.to(() => BottomBar());
+                  Get.to(() => const BottomBar());
                 });
               },
             ),
@@ -126,154 +143,198 @@ class _AccountVerificationState extends State<AccountVerification> {
               ),
             ),
           ),
+
+          // Body
           body: Container(
-            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             child: Form(
               child: ListView(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // controller.easyStepper(),
-                      // Image.asset("assets/images/logo.png", scale: 10),
-                      Container(height: 5),
-                      const Text(
-                        "Verify your account by submiting your card ID and recent personal image",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 20),
-                      ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 25),
+
+                      // Introduction
+                      Image.asset("assets/images/logo.png", scale: 11),
                       Container(
-                        alignment: Alignment.center,
-                        child: const Text(
-                          "Uploud image for card ID",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        child: AnimatedBuilder(
+                          animation: _textAnimation,
+                          builder: (context, child) {
+                            String animatedText =
+                                "Verify your account by submiting your card ID and recent personal image"
+                                    .substring(0, _textAnimation.value);
+                            return Text(
+                              animatedText,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      const SizedBox(height: 5),
-                      Center(
-                        child: GestureDetector(
+
+                      // Card ID photo
+                      const SizedBox(height: 25),
+                      if (controller.cardID == "")
+                        InkWell(
                           onTap: () {
                             _showPicker(context);
+                            isCard = true;
                           },
-                          child: CircleAvatar(
-                            radius: 20,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              width: 100,
-                              height: 100,
-                              child: const Icon(
-                                Icons.add,
-                                size: 25,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                          margin: const EdgeInsets.all(15),
-                          foregroundDecoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5))),
                           child: Container(
-                            margin: const EdgeInsets.all(100),
-                            child: controller.downloadUrls.isNotEmpty &&
-                                    controller.downloadUrls[0] != null
-                                ? Image.network(controller.downloadUrls[0]!)
-                                : null,
-                          )),
-                      const SizedBox(height: 20),
-                      Container(
-                        alignment: Alignment.center,
-                        child: const Text(
-                          "Uploud personal image",
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
+                            width: 1000,
+                            height: 250,
+                            foregroundDecoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Uploud image for card ID",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                Icon(
+                                  FontAwesomeIcons.solidAddressCard,
+                                  size: 140,
+                                  color: Colors.black54,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Center(
-                        child: GestureDetector(
+                        )
+                      else
+                        InkWell(
                           onTap: () {
                             _showPicker(context);
+                            isCard = true;
                           },
-                          child: CircleAvatar(
-                            radius: 20,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              width: 100,
-                              height: 100,
-                              child: const Icon(
-                                Icons.add,
-                                size: 25,
-                                color: Colors.white,
+                          child: Container(
+                            width: 1000,
+                            height: 250,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            ),
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(
+                                  controller.cardID,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(15),
-                        foregroundDecoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5))),
-                        child: Container(
-                          margin: const EdgeInsets.all(100),
-                          child: controller.downloadUrls.length >= 1 &&
-                                  controller.downloadUrls[1] != null
-                              ? Image.network(controller.downloadUrls[1]!)
-                              : null,
+
+                      // Personal photo
+                      const SizedBox(height: 25),
+                      if (controller.personal == "")
+                        InkWell(
+                          onTap: () {
+                            _showPicker(context);
+                            isCard = false;
+                          },
+                          child: Container(
+                            width: 1000,
+                            height: 250,
+                            foregroundDecoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            ),
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Uploud personal image",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(height: 15),
+                                Icon(
+                                  FontAwesomeIcons.userGroup,
+                                  size: 135,
+                                  color: Colors.black54,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        InkWell(
+                          onTap: () {
+                            _showPicker(context);
+                            isCard = false;
+                          },
+                          child: Container(
+                            width: 1000,
+                            height: 250,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black54),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                            ),
+                            child: ClipRRect(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.network(
+                                  controller.personal,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      )
                     ],
                   ),
-                  Container(height: 25),
-                  isUploading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : MaterialButton(
-                          onPressed: () {
-                            String? userDtoJson = sharepref.getString("user");
-                            Map<String, dynamic> userDto =
-                                json.decode(userDtoJson ?? "{}");
-                            User user = User.fromJson(userDto);
-                            controller.userId = user.id!;
 
-                            setState(() {
-                              controller.VerifyAccount();
-                            });
-                            Get.to(() => BottomBar());
-                          },
-                          color: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Text(
-                            "Done",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
+                  // Button
+                  const SizedBox(height: 25),
+                  if (controller.cardID != "" && controller.personal != "")
+                    MaterialButton(
+                      onPressed: () {
+                        String? userDtoJson = sharepref.getString("user");
+                        Map<String, dynamic> userDto =
+                            json.decode(userDtoJson ?? "{}");
+                        User user = User.fromJson(userDto);
+                        controller.userId = user.id!;
+
+                        setState(() {
+                          controller.VerifyAccount();
+                        });
+                        Get.to(() => const BottomBar());
+                      },
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Text(
+                        "Done",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
                         ),
-                  Container(height: 15),
+                      ),
+                    ),
                 ],
               ),
             ),

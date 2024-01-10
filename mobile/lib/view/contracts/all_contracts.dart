@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:client/controller/contracts/contracts_controller.dart';
+import 'package:client/controller/contract/contracts_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/model/user.dart';
@@ -27,7 +27,7 @@ class _AllContractsState extends State<AllContracts>
     setState(() {});
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
     ContractsControllerImp controller =
         Get.put(ContractsControllerImp(), permanent: true);
     String? userDtoJson = sharepref.getString("user");
@@ -36,9 +36,15 @@ class _AllContractsState extends State<AllContracts>
     controller.userId = user.id!;
     await controller.getAllContrcats();
 
-    setState(() {
-      isLoading = false; // Set isLoading to false when data is loaded
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false; // Set isLoading to false when data is loaded
+      });
+    }
+
+    // setState(() {
+    //   isLoading = false; // Set isLoading to false when data is loaded
+    // });
   }
 
   @override
@@ -46,9 +52,9 @@ class _AllContractsState extends State<AllContracts>
 
   @override
   Widget build(BuildContext context) {
-    // loadData();
-    ContractsControllerImp controller = Get.put(ContractsControllerImp());
     super.build(context);
+
+    ContractsControllerImp controller = Get.put(ContractsControllerImp());
     const contractStatus = [
       "All",
       "Closed",
@@ -507,6 +513,4 @@ class _AllContractsState extends State<AllContracts>
       ),
     );
   }
-
-
 }
