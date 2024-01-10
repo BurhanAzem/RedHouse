@@ -68,6 +68,7 @@ class _MapWidgetState extends State<MapWidget>
   }
 
   Future<void> whenCameraMove(CameraPosition position) async {
+    filterControllerr.currentPosition = position;
     print(
         "============================================================ whenCameraMove");
     if (mapController == null) {

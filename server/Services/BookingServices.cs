@@ -365,9 +365,23 @@ namespace server.Services
             };
         }
 
-        public Task<ResponsDto<Booking>> GetBooking(int bookingId)
+        public async Task<ResponsDto<Booking>> GetBooking(int bookingId)
         {
-            throw new NotImplementedException();
+            var booking = await _redHouseDbContext.Bookings.Where(b => b.Id == bookingId).Include(b => b.User).Include(b => b.Property).Include(b => b.BookingDays).FirstOrDefaultAsync();
+            if (booking == null)
+            {
+                return new ResponsDto<Booking>
+                {
+                    Exception = new Exception("Booking Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            return new ResponsDto<Booking>
+            {
+                Dto = booking,
+                StatusCode = HttpStatusCode.OK,
+            };
         }
 
         public async Task<ResponsDto<Offer>> GetOffer(int offerId)

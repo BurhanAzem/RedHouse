@@ -12,9 +12,9 @@ class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
   String currentCity = "";
   ListProperty listProperty = ListProperty(listDto: []);
-
   List<Location> listAutoCompleteLocation = [];
-
+  CameraPosition currentPosition =
+      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
   List<FlSpot> flSpotListRent = [];
   List<FlSpot> flSpotListSell = [];
 
