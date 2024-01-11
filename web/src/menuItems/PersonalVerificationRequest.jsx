@@ -228,7 +228,7 @@ const PersonalVerificationRequest = ({ requestData }) => {
 
       <div className="post-down">
         <div onClick={handleLinkClick}>
-          <div style={{fontWeight: "800"}}>Card ID</div>
+          <div style={{ fontWeight: "800" }}>Card ID</div>
           <div>
             {requestData.identityFiles && requestData.identityFiles.length > 0 && (
               <img
@@ -240,9 +240,9 @@ const PersonalVerificationRequest = ({ requestData }) => {
 
 
           </div>
-          <hr style={{marginTop: "40px"}}/>
+          <hr style={{ marginTop: "40px" }} />
           <div>
-          <div style={{fontWeight: "800"}}>Personal pic</div>
+            <div style={{ fontWeight: "800" }}>Personal pic</div>
 
             {requestData.identityFiles && requestData.identityFiles.length > 1 && (
               <img
@@ -254,10 +254,17 @@ const PersonalVerificationRequest = ({ requestData }) => {
           </div>
 
         </div>
-        <div className="change-date">
-          <span><button id='update-btn' style={{ backgroundColor: "#00BF63" }} onClick={() => approve(requestData.id)}>Approve</button></span>
-          <span><button id='update-btn' style={{ backgroundColor: "red" }} onClick={() => reject(requestData.id)}>Reject</button></span>
-
+        <div className="change-date" style={{marginLeft: "-20px"}}>
+          <span
+            id='delete-post'
+            style={{ borderStyle: "solid", borderColor: "#00BF63", color: "#00BF63", cursor: "pointer", paddingLeft: "5px", paddingRight: "5px", marginLeft: "-30", borderRadius: "8px" }}
+            onClick={() => approve(requestData.id)}>Approve
+          </span>
+          <span
+            id='delete-post'
+            style={{ borderStyle: "solid", borderColor: "red", color: "red", cursor: "pointer", paddingLeft: "5px", paddingRight: "5px", borderRadius: "8px" }}
+            onClick={() => reject(requestData.id)}>Reject
+          </span>
         </div>
       </div>
     </div >

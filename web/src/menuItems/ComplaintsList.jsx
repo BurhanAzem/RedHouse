@@ -112,9 +112,7 @@ const ComplaintsList = () => {
             complaints.map((post) => <Complaint key={post.id} complaintData={post} />)
           ) : (
             <h1 className="posts-found">No Posts Found</h1>
-          )}
-          Total Posts: {rows} Page: {page} of {pages}
-        </div>
+          )}        </div>
       )}
       <p className="text-danger">{msg}</p>
       <nav className="d-flex justify-content-center">

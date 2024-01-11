@@ -23,7 +23,7 @@ namespace RedHouse_Server.Controllers
         {
             _offerServices = offerServices;
         }
-        
+
         // [Authorize]
         [HttpPost("/offers")]
         public async Task<IActionResult> CreateOffer([FromBody] OfferDto offerDto)
@@ -78,6 +78,25 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+
+        [HttpGet("/offers/is-created")]
+        public async Task<IActionResult> IsOfferCreatedFor([FromQuery] int propertyId, int landlordId, int customerId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _offerServices.IsOfferCreatedFor(propertyId, landlordId, customerId);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+
 
 
         [HttpGet("/users/{id}/offers")]

@@ -311,19 +311,47 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId)
+        public async Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId, string bookingsTo)
         {
             var user = await _redHouseDbContext.Users.FindAsync(userId);
             if (user == null)
             {
                 return new ResponsDto<Booking>
                 {
-                    Exception = new Exception($"User with {userId} Id Not Exist"),
+                    Exception = new Exception("User Not Exist"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
 
-            var bookings = await _redHouseDbContext.Bookings.Where(b => b.UserId == userId).Include(b => b.Property).ToArrayAsync();
+            var query = _redHouseDbContext.Bookings
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(b => b.BookingDays)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable();
+
+
+            if (bookingsTo.Trim() == "Landlord")
+            {
+                query = from p in _redHouseDbContext.Properties
+                        join a in query on p.Id equals a.PropertyId
+                        where p.UserId == userId
+                        select a;
+
+            }
+
+            // Now you can use the 'query' variable for further processing
+
+            if (bookingsTo.Trim() == "Customer")
+            {
+                query = query.Where(a => a.UserId == userId);
+            }
+
+            var bookings = await query.ToArrayAsync();
 
             return new ResponsDto<Booking>
             {
@@ -348,14 +376,14 @@ namespace server.Services
             List<BookingDay> bookingDays = new List<BookingDay>();
             // if (booking != null)
             // {
-                var thirtyDaysAgo = DateTime.Now;
-                var thirtyDaysAfter = DateTime.Now.AddDays(30);
+            var thirtyDaysAgo = DateTime.Now;
+            var thirtyDaysAfter = DateTime.Now.AddDays(30);
 
-                bookingDays = await _redHouseDbContext.BookingDays
-                   .Where(b => b.Booking.PropertyId == propertyId && b.Booking.BookingStatus != "Done")
-                   .ToListAsync();
+            bookingDays = await _redHouseDbContext.BookingDays
+               .Where(b => b.Booking.PropertyId == propertyId && b.Booking.BookingStatus != "Done")
+               .ToListAsync();
 
-                // Rest of your code
+            // Rest of your code
             // }
 
             return new ResponsDto<BookingDay>

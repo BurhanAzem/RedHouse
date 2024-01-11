@@ -88,10 +88,9 @@ const User = () => {
 
 
   return (
-    <div className='container' id='student-container'>
+    <div >
       <ToastContainer />
       <div className='row' id={isViewingPostDetails ? 'disableRow' : 'profile-info'}>
-        <div className='col-md-3' id='left-profile'>
           <div className='pic'>
             {<img src={require('../assets/user-pic.png')} alt="" id="profile-pic" />}
 
@@ -105,53 +104,52 @@ const User = () => {
               </h5>
             </Link>
           </div>
-        </div>
 
         {/* <div className="col-md-1 zero-width vertical-line"></div> */}
 
-        <div className='col-md-8' id='right-profile'>
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>User Role (level): </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.userRole}</span>
-          </div>
 
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>Customer Score : </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.customerScore}</span>
-          </div>
-
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>Landlord Score : </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.customerScore}</span>
-          </div>
-
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>Email: </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.email}</span>
-          </div>
-
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>Phone Number: </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.phoneNumber}</span>
-          </div>
-
-
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>IsVerifed: </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.isVerified ? "Yes" : "No"}</span>
-          </div>
-
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>Added Date: </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.created}</span>
-          </div>
-
-          <div className="language" style={{ marginBottom: "10px" }}>
-            <span style={{ fontSize: "20px", fontWeight: "700" }}>User Location (Postal Code): </span>
-            <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData.location && userData.location.postalCode}</span>
-          </div>
+      </div>
+      <div className='row' style={{textAlign: "center", marginTop: "10px"}}>
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>User Role (level): </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.userRole}</span>
         </div>
-        <hr className='student-line'></hr>
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>Customer Score : </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.customerScore}</span>
+        </div>
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>Landlord Score : </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.customerScore}</span>
+        </div>
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>Email: </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.email}</span>
+        </div>
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>Phone Number: </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.phoneNumber}</span>
+        </div>
+
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>IsVerifed: </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.isVerified ? "Yes" : "No"}</span>
+        </div>
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>Added Date: </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData && userData.created}</span>
+        </div>
+
+        <div className="language" style={{ marginBottom: "10px" }}>
+          <span style={{ fontSize: "20px", fontWeight: "700" }}>User Location (Postal Code): </span>
+          <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "20px" }}>{userData.location && userData.location.postalCode}</span>
+        </div>
       </div>
 
     </div>

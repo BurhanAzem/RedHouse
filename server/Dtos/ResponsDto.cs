@@ -1,5 +1,6 @@
 ﻿
 using System.Net;
+using server.Dtos;
 
 namespace Cooking_School.Dtos
 {
@@ -10,7 +11,8 @@ namespace Cooking_School.Dtos
         public string? Message { get; set; }
         public Exception? Exception { get; set; }
         public IList<Exception>? Exceptions { get; set; }
-
+        public Pagination? Pagination { get; set; }
+  
         public HttpStatusCode? StatusCode { get; set; }
 
     }

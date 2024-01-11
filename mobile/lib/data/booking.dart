@@ -115,4 +115,32 @@ class BookingData {
       return StatusRequest.offlinefailure;
     }
   }
+
+  static getUserBookings(int userId, String? bookingTo) async {
+    final Map<String, dynamic> filters = {
+      "bookingsTo": bookingTo,
+    };
+
+    if (await checkInternet()) {
+      final Uri uri =
+          Uri.https("10.0.2.2:7042", "users/$userId/bookings", filters);
+
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+      print(response.statusCode);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        print(responsebody["listDto"]);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
 }

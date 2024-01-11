@@ -18,10 +18,7 @@ import countapi from 'countapi-js';
 import { ToastContainer, toast } from 'react-toastify'
 import { isLoading, keywordQuery, searchedProperties } from '../state'
 import Cookies from 'js-cookie'
-import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
-import { Map, GoogleApiWrapper } from 'google-maps-react'
-import MapContainer from './MapContainer'
 import SearchBar from '../components/SearchBar/SearchBar'
 import PropertiesList from './PropertiesList'
 import ClipLoader from 'react-spinners/ClipLoader'
@@ -33,7 +30,7 @@ const Properties = () => {
   const center = (() => ({ lat: 18.52043, lng: 73.856743 }), []);
 
   const [page, setPage] = useState(1); // Start page from 1
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [pages, setPages] = useState(0);
   const [rows, setRows] = useState(0);
   const [keyword, setKeyword] = useRecoilState(keywordQuery);
@@ -51,42 +48,7 @@ const Properties = () => {
     return cookieValue;
   }
 
-  useEffect(() => {
-    getProperties();
-  }, [keyword])
-
-
-
-  const getProperties = async () => {
-    try {
-      setProperties([]);
-
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/properties/filter?searchQuery=${keyword}&page=${page}&limit=${limit}`);
-      setProperties(response.data.listDto);
-      console.log(response.data.listDto);
-      // setPage(response.data.pagination.page);
-      // setPages(response.data.pagination.totalPage);
-      // setRows(response.data.pagination.totalRows);
-    } catch (err) {
-      if (err.message === 'Network Error' && !err.response) {
-        toast.error('Network error - make sure the server is running!', {
-          position: "top-center",
-          autoClose: 10000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      } else if (err.response && err.response.status === 401) {
-        navigate('/login');
-      }
-      console.error(err);
-    } finally {
-      setLoading(false); // Set loading to false when the request is completed (success or error)
-    }
-  };
+  
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {

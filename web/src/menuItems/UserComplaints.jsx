@@ -65,10 +65,10 @@ const UserComplaints = () => {
 
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/complaints/number-of-complaints-per-day?page=${page}&limit=${limit}`);
       setComplaintsPerDay(response.data.value.listDto);
-      console.log(response.data.value.listDto);
-      setPage(response.data.pagination.page);
-      setPages(response.data.pagination.totalPage);
-      setRows(response.data.pagination.totalRows);
+      console.log(response.data.value);
+      setPage(response.data.value.pagination.pageNumber);
+      setPages(response.data.value.pagination.totalPages);
+      setRows(response.data.value.pagination.totalRows);
     } catch (err) {
       if (err.message === 'Network Error' && !err.response) {
         toast.error('Network error - make sure the server is running!', {
@@ -357,9 +357,9 @@ const UserComplaints = () => {
                               </TableCell>
 
                               <Link to={`/complaints-list/${inDay && btoa(inDay.complainDate)}`} >
-                                <TableCell id='username-link' align="left">{inDay && inDay.complainDate}</TableCell>
+                                <TableCell id='username-link' align="left">{inDay && inDay.complainDate.substring(0, 10)}</TableCell>
                               </Link>
-                              <TableCell style={{justifyContent: "center", paddingLeft: "80px"}} >{inDay && inDay.complaints.length}</TableCell>
+                              <TableCell style={{justifyContent: "center", paddingLeft: "80px"}} >{inDay && inDay.complaints}</TableCell>
                             </TableRow>
                           ))
                           :

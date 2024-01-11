@@ -66,10 +66,10 @@ const Complaint = ({ complaintData }) => {
 
   const deleteComplaint = async () => {
     Swal.fire({
-      title: 'Are you sure you want to delete this post?',
+      title: 'Are you sure the complaint is solved ?',
       showCancelButton: true,
       confirmButtonColor: '#00BF63',
-      confirmButtonText: 'Delete',
+      confirmButtonText: 'Yes',
       customClass: "Custom_btn"
 
     }).then(async (result) => {
@@ -177,10 +177,14 @@ const Complaint = ({ complaintData }) => {
         </div>
         <div className="col-md-4" id='delete-lang-post'>
 
-          <span id='delete-post'>
-            <FontAwesomeIcon icon={faTrash}
-              onClick={() => deleteComplaint()} />
+          <span
+            id='delete-post'
+            style={{ borderStyle: "solid", borderColor: "green", color: "green", cursor: "pointer", paddingLeft: "5px", paddingRight: "5px", borderRadius: "8px" }}
+            onClick={() => deleteComplaint()}
+          >
+            Solved
           </span>
+
 
 
         </div>

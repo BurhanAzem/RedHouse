@@ -19,6 +19,12 @@ import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import Swal from 'sweetalert2'
 
+
+
+import Map, { NavigationControl, Marker } from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+
 import { faFire } from '@fortawesome/free-solid-svg-icons'
 
 // type ValuePiece = Date | null;
@@ -44,7 +50,7 @@ const PropertyDetails = () => {
 
 
   return (
-    <div className="container" id='post'>
+    <div className="container" id='post' style={{marginTop: "80px"}}>
       <ToastContainer />
       <div className="row" id='post-up'>
         <div className="col-md-8">
@@ -56,7 +62,7 @@ const PropertyDetails = () => {
 
           <span id='delete-post'>
             <FontAwesomeIcon icon={faTrash}
-               />
+            />
           </span>
 
 
@@ -162,6 +168,29 @@ const PropertyDetails = () => {
             <span style={{ fontWeight: "600" }}>Description: </span>
             <span style={{ color: "#C4271B", fontWeight: "700", fontSize: "15px" }}>{propertyData && propertyData.propertyDescription}</span>
             {/* <span style={{ fontWeight: "800" }}>  |  </span> */}
+          </div>
+          <hr style={{ marginTop: "20px" }} />
+          <span style={{ fontWeight: "600", marginLeft: "2px" }}>Location: </span>
+          <div className="row" style={{ width: "98%", height: "calc(100vh - 450px)", zIndex: "100", display: "flex", marginTop: "5px", marginLeft: "4px" }}>
+
+            <Map
+              mapLib={maplibregl}
+              initialViewState={{
+                longitude: 35.2137,
+                latitude: 31.7683,
+                zoom: 8
+              }}
+              mapStyle="https://api.maptiler.com/maps/streets/style.json?key=edydkbpOGIMm1fvtdvS4"
+            >
+              <NavigationControl position="top-left" />
+              <Marker
+                key={propertyData && propertyData.id}  // Don't forget to add a unique key for each Marker
+                latitude={propertyData && propertyData.location.latitude}
+                longitude={propertyData && propertyData.location.longitude}
+                color="red"
+              />
+
+            </Map>
           </div>
           <hr style={{ marginTop: "20px" }} />
           <div>

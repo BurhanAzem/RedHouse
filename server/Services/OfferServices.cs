@@ -244,6 +244,55 @@ namespace server.Services
             };
         }
 
+        public async Task<ResponsDto<Offer>> IsOfferCreatedFor(int propertyId, int landlordId, int customerId)
+        {
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"property Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var landlord = await _redHouseDbContext.Users.FindAsync(landlordId);
+            if (landlord == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var customer = await _redHouseDbContext.Users.FindAsync(customerId);
+            if (customer == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var offer = await _redHouseDbContext.Offers.FirstOrDefaultAsync(o => o.PropertyId == propertyId && o.LandlordId == landlordId && o.CustomerId == customerId);
+            if (offer== null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Message = "Not Created",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            else
+            {
+                return new ResponsDto<Offer>
+                {
+                    Message = "Created",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+        }
+
         public async Task<int> NumberOfOffers()
         {
             return await _redHouseDbContext.Offers.CountAsync();

@@ -10,7 +10,7 @@ namespace server.Services
     public interface IUserIdentityServices
     {
         public Task<ResponsDto<UserIdentity>> CreateUserIdentity(UserIdentityDto userIdentityDto);
-        public Task<ResponsDto<UserIdentity>> GetRequestsVerifyUserIdentities();
+        public Task<ResponsDto<UserIdentity>> GetRequestsVerifyUserIdentities(SearchDto searchDto);
         public Task<ResponsDto<UserIdentity>> GetUserIdentity(int userIdentityId);
         public Task<ResponsDto<UserIdentity>> VerifyUserIdentity(int userIdentityId);
         public Task<ResponsDto<UserIdentity>> RejectUserIdentity(int userIdentityId);

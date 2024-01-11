@@ -150,7 +150,7 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpPut("/properties/{id}")]
-        public async Task<IActionResult> UpdateProperty([FromBody] PropertyDto propertyDto, int id)
+        public async Task<IActionResult> UpdateProperty([FromBody] UpdatePropertyDto propertyDto, int id)
         {
             if (!ModelState.IsValid)
             {
