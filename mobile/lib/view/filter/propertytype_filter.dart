@@ -95,6 +95,7 @@ class _PropertyTypeState extends State<PropertyType> {
                             // controller.propertyTypeText = controller.rentPropertyTypes();
 
                             controller.getProperties();
+                            // mapListController.isLoading = true;
 
                             Navigator.pop(context);
                           },
@@ -166,10 +167,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
         const PropertyTypeSheetHeading(),
         Container(height: 5),
         CheckboxListTile(
-          title:  Text(
+          title: Text(
             "House",
             style: TextStyle(
-            fontSize: 18,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
@@ -186,7 +187,7 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
           title: Text(
             "Apartment Unit",
             style: TextStyle(
-            fontSize: 18,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
@@ -200,10 +201,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
           activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title:  Text(
+          title: Text(
             "Townhouse",
             style: TextStyle(
-             fontSize: 18,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
@@ -217,10 +218,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
           activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title:  Text(
+          title: Text(
             "Castle",
             style: TextStyle(
-             fontSize: 18,
+              fontSize: 18,
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
@@ -234,7 +235,7 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
           activeColor: const Color.fromARGB(255, 11, 93, 161),
         ),
         CheckboxListTile(
-          title:  Text(
+          title: Text(
             "Entire Department",
             style: TextStyle(
               fontSize: 18,

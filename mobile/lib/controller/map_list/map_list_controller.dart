@@ -12,15 +12,12 @@ class MapListController extends GetxController {
   double newZoom = 0.0;
   BuildContext? mapContext;
 
-  List<MapMarker> allMarkers = [];
   Set<Marker> visibleMarkers = <Marker>{};
   Set<Property> visibleProperties = <Property>{};
 
-  bool? isLoadingImage;
   bool isLoading = true;
   bool isListIcon = true;
-  String query = "initial";
-  
+
   List<Property> favoriteProperties = <Property>[];
 
   Future<CameraPosition> getCurrentPosition() async {

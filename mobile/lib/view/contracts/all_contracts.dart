@@ -38,13 +38,9 @@ class _AllContractsState extends State<AllContracts>
 
     if (mounted) {
       setState(() {
-        isLoading = false; // Set isLoading to false when data is loaded
+        isLoading = false;
       });
     }
-
-    // setState(() {
-    //   isLoading = false; // Set isLoading to false when data is loaded
-    // });
   }
 
   @override
@@ -62,7 +58,8 @@ class _AllContractsState extends State<AllContracts>
     ];
     const contractType = [
       "All",
-      "For rent",
+      "For daily rent",
+      "For monthly rent",
       "For sell",
     ];
 
@@ -113,7 +110,7 @@ class _AllContractsState extends State<AllContracts>
               children: [
                 Container(
                   width: 180,
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 1.0),
                     borderRadius: BorderRadius.circular(10.0),
@@ -131,14 +128,17 @@ class _AllContractsState extends State<AllContracts>
                     items: contractStatus.map((String option) {
                       return DropdownMenuItem<String>(
                         value: option,
-                        child: Text(option),
+                        child: Text(
+                          option,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       );
                     }).toList(),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: 180,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black, width: 1.0),
@@ -157,7 +157,10 @@ class _AllContractsState extends State<AllContracts>
                     items: contractType.map((String option) {
                       return DropdownMenuItem<String>(
                         value: option,
-                        child: Text(option),
+                        child: Text(
+                          option,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       );
                     }).toList(),
                   ),
@@ -189,19 +192,19 @@ class _AllContractsState extends State<AllContracts>
                       },
                       tabs: const [
                         Tab(text: 'Landlord Contracts'),
-                        Tab(text: 'Customer Contracts'),
+                        Tab(text: 'Client Contracts'),
                       ],
                       overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
                       indicatorColor: Colors.black,
                       labelColor: Colors.black,
                       labelStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 17,
                       ),
                       unselectedLabelColor: Colors.grey[700],
                       unselectedLabelStyle: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 16,
+                        fontSize: 17,
                       ),
                     ),
                     body: TabBarView(
@@ -245,8 +248,7 @@ class _AllContractsState extends State<AllContracts>
                                               size: 25,
                                             ),
                                             Text(
-                                              (controller.contracts != null &&
-                                                      controller.contracts
+                                              (controller.contracts
                                                           .isNotEmpty &&
                                                       index <
                                                           controller

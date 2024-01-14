@@ -53,7 +53,7 @@ class _HomeInformationState extends State<HomeInformation> {
         widget.property.location!.latitude,
         widget.property.location!.longitude,
       ),
-      zoom: 13,
+      zoom: 14,
     );
 
     propertyMarker.add(

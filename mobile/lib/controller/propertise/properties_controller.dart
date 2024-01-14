@@ -2,6 +2,7 @@ import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:client/model/property.dart';
+import 'package:client/view/search/closest_properties.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,12 +45,15 @@ class ManagePropertiesController extends GetxController {
   String propertiesFilter = "All properties";
   int propertiesUserId = 0;
   List<Property> userProperties = [];
-  List<Property> closestProperties = [];
   CameraPosition? currentPosition;
   Set<Marker> markers = {}; // Empty marker
   List<NeighborhoodDto> propertyNeighborhoods = [];
   TextEditingController neighborhoodStreet = TextEditingController();
   bool isUploading = false; // Add a flag for uploading photos
+
+  // The closest properties to your location
+  List<Property> closestProperties = [];
+  Set<Marker> allMarkers = {};
 
   addProperty() async {
     if (formKey1.currentState!.validate()) {

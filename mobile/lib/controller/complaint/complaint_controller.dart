@@ -1,4 +1,3 @@
-import 'package:client/data/booking.dart';
 import 'package:client/data/complaint.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,10 +5,12 @@ import 'package:get/get.dart';
 class ComplaintController extends GetxController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
   int userId = 1;
-  String description = "";
+  TextEditingController email = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController description = TextEditingController();
 
   sendComplaint() async {
-    var response = await ComplaintData.sendComplaint(userId, description);
+    var response = await ComplaintData.sendComplaint(userId, description.text);
 
     print(response['listDto']);
 

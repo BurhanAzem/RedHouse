@@ -76,9 +76,9 @@ class LoginControllerImp extends LoginController {
         Get.offAllNamed("/bottom-bar");
       } else {
         Get.defaultDialog(
-            title: "ُWarning",
-            middleText:
-                'There is something wronge ! \n statusCode: $response.["statusCode"], exceptions: $response.["exceptions"]');
+          title: "ُWarning",
+          middleText: 'The email or password you entered invalid',
+        );
         statusRequest = StatusRequest.failure;
       }
       return;
@@ -87,7 +87,9 @@ class LoginControllerImp extends LoginController {
     // update();
     else {
       Get.defaultDialog(
-          title: "ُWarning", middleText: 'There is something wronge!');
+        title: "ُWarning",
+        middleText: 'There is something wronge!',
+      );
       statusRequest = StatusRequest.failure;
     }
   }

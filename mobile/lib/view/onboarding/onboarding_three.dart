@@ -17,7 +17,7 @@ class OnBoardingThree extends StatelessWidget {
             Container(
               height: 30,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -45,7 +45,7 @@ class OnBoardingThree extends StatelessWidget {
                   height: 77,
                 ),
                 
-                Row(
+                const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -93,7 +93,7 @@ class OnBoardingThree extends StatelessWidget {
                           height: 6,
                           width: 6,
                           decoration: BoxDecoration(
-                          color: Color(0xffd92328),
+                            color: Colors.black,
                               borderRadius: BorderRadius.circular(10)),
                         ))
               ],
@@ -108,11 +108,11 @@ class OnBoardingThree extends StatelessWidget {
                         controller.toOnBoardingFour();
 
                       },
-                      child: Text(
-                          "Next", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),), // Provide a child for the button
-                      color: Color(0xffd92328),
+                      child: const Text(
+                          "Next", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),), // Provide a child for the button
+                      color: Colors.black,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     
                       ),

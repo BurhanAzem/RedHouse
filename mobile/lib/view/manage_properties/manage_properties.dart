@@ -40,7 +40,7 @@ class _TopNavigationBar extends State<ManageProperties>
               child: Text("Properties"),
             ),
             Tab(
-              child: Text("Applications"),
+              child: Text("Requests"),
             ),
             Tab(
               child: Text("Bookings"),

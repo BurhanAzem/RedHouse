@@ -9,7 +9,7 @@ class OfferController extends GetxController {
 
   String offerTypeSelect = "All";
   String offerStatusSelect = "All";
-  String offerToSelect = "All";
+  String offerToSelect = "Customer";
 
   late List<Offer> userOffers;
 
@@ -40,7 +40,7 @@ class OfferController extends GetxController {
       price.text,
       description.text,
       offerStatus,
-      offerExpireDate!,
+      offerExpireDate,
       offerDate,
     );
 

@@ -18,7 +18,7 @@ class SignUpControllerImp extends SignUpController {
   late TextEditingController postalCode;
   late StatusRequest statusRequest;
 
-  final formstateRegister = GlobalKey<FormState>();
+  GlobalKey<FormState> formstateRegister = GlobalKey<FormState>();
 
   @override
   void onInit() {

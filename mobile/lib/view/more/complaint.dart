@@ -1,5 +1,8 @@
 import 'package:client/controller/complaint/complaint_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/core/functions/validInput.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class Complaint extends StatefulWidget {
@@ -11,7 +14,12 @@ class Complaint extends StatefulWidget {
 
 class _ComplineState extends State<Complaint> {
   ComplaintController controller = Get.put(ComplaintController());
-  
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
+  String nameError = "";
+  String emailError = "";
+  String descriptionError = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,31 +37,60 @@ class _ComplineState extends State<Complaint> {
       ),
       body: Center(
         child: SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(), // Disable scrolling
           child: Container(
             padding: const EdgeInsets.all(20),
             child: Form(
-              // key: controller.formstate,
+              key: controller.formstate,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
-                    children: [
-                      Text(
-                        "Name",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
+                  // Name
+                  const Text(
+                    "Name",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   Container(height: 5),
                   TextFormField(
                     validator: (val) {
-                      // return validInput(val!, 5, 100, "email");
+                      nameError = validInput(val!, 2, 100, "username");
+                      return nameError.isNotEmpty ? nameError : null;
                     },
-                    // controller: controller.email,
+                    controller: controller.name,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      suffixIcon: const Icon(FontAwesomeIcons.solidUser),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+
+                  // Email
+                  Container(height: 20),
+                  const Text(
+                    "Email",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    validator: (val) {
+                      emailError = validInput(val!, 5, 100, "email");
+                      return emailError.isNotEmpty ? emailError : null;
+                    },
+                    controller: controller.email,
+                    // obscureText: true,
                     style: const TextStyle(),
                     decoration: InputDecoration(
                       suffixIcon: const Icon(Icons.email),
@@ -64,51 +101,30 @@ class _ComplineState extends State<Complaint> {
                       ),
                     ),
                   ),
-                  Container(height: 15),
-                  const Row(
-                    children: [
-                      Text(
-                        "Email",
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                  Container(height: 5),
-                  TextFormField(
-                    validator: (val) {
-                      // return validInput(val!, 5, 30, "password");
-                    },
-                    // controller: controller.password,
-                    obscureText: true,
-                    style: const TextStyle(),
-                    decoration: InputDecoration(
-                      suffixIcon: const Icon(Icons.email),
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      contentPadding: const EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+
+                  // Description
+                  Container(height: 20),
+                  const Text(
+                    "Compline description",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ),
-                  Container(height: 15),
-                  const Row(
-                    children: [
-                      Text(
-                        "Compline description",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
                   ),
                   Container(height: 5),
                   Container(
                     child: TextFormField(
+                      validator: (val) {
+                        descriptionError =
+                            validInput(val!, 10, 100, "description");
+                        return descriptionError.isNotEmpty
+                            ? descriptionError
+                            : null;
+                      },
                       minLines: 10,
                       maxLines: 20,
-                      // controller: controller.propertyDescription,
+                      controller: controller.description,
                       style: const TextStyle(),
                       decoration: InputDecoration(
                         // suffixIcon: Icon(Icons.description),
@@ -122,14 +138,38 @@ class _ComplineState extends State<Complaint> {
                       ),
                     ),
                   ),
-                  Container(height: 30),
+
+                  // Button
+                  Container(height: 40),
                   Container(
                     width: 400,
                     child: MaterialButton(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {});
+                        if (controller.formstate.currentState!.validate() &&
+                            controller.name.text.isNotEmpty &&
+                            controller.email.text.isNotEmpty &&
+                            controller.description.text.isNotEmpty) {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          SnackBar snackBar = const SnackBar(
+                            content: Text("Send Successfully"),
+                            backgroundColor: Colors.blue,
+                          );
+                          controller.userId = loginController.userDto?["id"];
+
+                          Future<void> sendComplaintFuture() async {
+                            await controller.sendComplaint();
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          }
+
+                          sendComplaintFuture();
+                        }
+                      },
                       minWidth: 400,
                       height: 40,
                       color: Colors.black87,

@@ -173,7 +173,7 @@ class _PriceState extends State<Price> {
                                   controller.checkFiltersON();
 
                                   controller.getProperties();
-                                  mapListController.isLoading = true;
+                                  // mapListController.isLoading = true;
                                   Navigator.pop(context);
                                 }
                               }

@@ -76,8 +76,10 @@ class _AllPropertiesState extends State<Properties>
     super.build(context);
 
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(), // Show a loading indicator
+      return Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.grey[200],
+        ),
       );
     }
 

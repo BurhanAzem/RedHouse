@@ -587,7 +587,7 @@ class _RentFilterState extends State<RentFilter> {
                           controller.formatBedBath();
                           controller.checkFiltersON();
                           controller.getProperties();
-                          mapListController.isLoading = true;
+                          // mapListController.isLoading = true;
 
                           Navigator.pop(context);
                         }

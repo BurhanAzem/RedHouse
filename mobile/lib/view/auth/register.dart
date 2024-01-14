@@ -1,5 +1,5 @@
 import 'package:client/controller/users_auth/signup_controller.dart';
-import 'package:client/routes.dart';
+import 'package:client/core/functions/validInput.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,8 +12,13 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   SignUpControllerImp controller = Get.put(SignUpControllerImp());
-  List<String> options = ['Customer', 'Landlord', 'Agent'];
   bool loading = false;
+  String passwordError = "";
+  String emailError = "";
+  String firstNameError = "";
+  String lastNameError = "";
+  String phoneError = "";
+  String postalCodeError = "";
 
   void setLoading(bool value) {
     setState(() {
@@ -85,6 +90,10 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(height: 5),
                 TextFormField(
+                  validator: (val) {
+                    firstNameError = validInput(val!, 2, 100, "username");
+                    return firstNameError.isNotEmpty ? firstNameError : null;
+                  },
                   controller: controller.firstName,
                   style: const TextStyle(),
                   decoration: InputDecoration(
@@ -103,6 +112,10 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(height: 5),
                 TextFormField(
+                  validator: (val) {
+                    lastNameError = validInput(val!, 2, 100, "username");
+                    return lastNameError.isNotEmpty ? lastNameError : null;
+                  },
                   controller: controller.lastName,
                   style: const TextStyle(),
                   decoration: InputDecoration(
@@ -121,6 +134,10 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(height: 5),
                 TextFormField(
+                  validator: (val) {
+                    emailError = validInput(val!, 5, 100, "email");
+                    return emailError.isNotEmpty ? emailError : null;
+                  },
                   controller: controller.email,
                   style: const TextStyle(),
                   decoration: InputDecoration(
@@ -139,6 +156,10 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(height: 5),
                 TextFormField(
+                  validator: (val) {
+                    passwordError = validInput(val!, 8, 100, "password");
+                    return passwordError.isNotEmpty ? passwordError : null;
+                  },
                   controller: controller.password,
                   obscureText: true,
                   style: const TextStyle(),
@@ -158,6 +179,10 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(height: 5),
                 TextFormField(
+                  validator: (val) {
+                    phoneError = validInput(val!, 10, 100, "phone");
+                    return phoneError.isNotEmpty ? phoneError : null;
+                  },
                   controller: controller.phoneNumber,
                   style: const TextStyle(),
                   decoration: InputDecoration(
@@ -176,6 +201,10 @@ class _RegisterState extends State<Register> {
                 ),
                 Container(height: 5),
                 TextFormField(
+                  validator: (val) {
+                    postalCodeError = validInput(val!, 4, 100, "postalCode");
+                    return postalCodeError.isNotEmpty ? postalCodeError : null;
+                  },
                   controller: controller.postalCode,
                   style: const TextStyle(),
                   decoration: InputDecoration(
@@ -187,47 +216,17 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                 ),
-                Container(height: 22),
-                const Text(
-                  "User Role",
-                  style: TextStyle(fontSize: 18, color: Colors.black),
-                ),
-                Container(height: 5),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: DropdownButton<String>(
-                    value: controller.userRole,
-                    items: options.map((String option) {
-                      return DropdownMenuItem<String>(
-                        value: option,
-                        child: Text(option),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        setState(() {
-                          controller.userRole = newValue;
-                        });
-                      }
-                    },
-                    isExpanded: true,
-                    underline: const SizedBox(),
-                  ),
-                ),
-                Container(height: 5),
+                Container(height: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     InkWell(
-                      child: const Text("I already have an account"),
+                      child: const Text(
+                        "I already have an account",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                       onTap: () {
                         Get.offNamed("/login");
                       },
@@ -239,18 +238,27 @@ class _RegisterState extends State<Register> {
             Container(height: 20),
             MaterialButton(
               onPressed: () async {
-                setLoading(true);
-                await controller.signUp();
-                setLoading(false);
+                setState(() {});
+                if (controller.formstateRegister.currentState!.validate() &&
+                    controller.password.text.isNotEmpty &&
+                    controller.email.text.isNotEmpty &&
+                    controller.firstName.text.isNotEmpty &&
+                    controller.lastName.text.isNotEmpty &&
+                    controller.phoneNumber.text.isNotEmpty &&
+                    controller.postalCode.text.isNotEmpty) {
+                  setLoading(true);
+                  await controller.signUp();
+                  setLoading(false);
+                }
               },
-              color: const Color(0xffd92328),
+              color: Colors.black,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: const Text(
                 "Sign Up",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -265,7 +273,7 @@ class _RegisterState extends State<Register> {
             Container(height: 15),
             MaterialButton(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 side: const BorderSide(width: 1),
               ),
               onPressed: () {},
@@ -287,7 +295,7 @@ class _RegisterState extends State<Register> {
             Container(height: 5),
             MaterialButton(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
                 side: const BorderSide(width: 1),
               ),
               onPressed: () {},

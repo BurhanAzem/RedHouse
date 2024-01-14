@@ -61,7 +61,7 @@ class _SearchBarRowState extends State<SearchBarRow> {
                     child: Obx(() {
                       return Text(
                         controller.currentLocationName.value == ""
-                            ? "City, ZIP, School, AddressAddress"
+                            ? "City, ZIP, School, Address"
                             : "Area in ${controller.currentLocationName.value}",
                         style: const TextStyle(
                           fontSize: 17,

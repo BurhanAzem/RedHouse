@@ -661,7 +661,7 @@ namespace RedHouse_Server.Services
 
         public async Task<ResponsDto<Property>> GetClosestPropertiesToTheCurrentLocation(double latitude, double longitude)
         {
-            var properties = await _redHouseDbContext.Properties.Include(p => p.Location).ToListAsync();
+            var properties = await _redHouseDbContext.Properties.Include(p => p.Location).Include(p => p.User).Include(p => p.propertyFiles).ToListAsync();
             properties = properties.Where(p => CalculateDistance((double)p.Location.Latitude, (double)p.Location.Longitude,
                (double)latitude, (double)longitude) <= 25).ToList();
             return new ResponsDto<Property>

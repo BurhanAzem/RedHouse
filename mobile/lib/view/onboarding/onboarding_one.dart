@@ -91,8 +91,9 @@ class OnBoardingOne extends StatelessWidget {
                               height: 6,
                               width: 6,
                               decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  borderRadius: BorderRadius.circular(10)),
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ))
                   ],
                 ),
@@ -104,7 +105,7 @@ class OnBoardingOne extends StatelessWidget {
                   child: MaterialButton(
                     onPressed: () {
                       controller.toOnBoardingTwo();
-                    }, // Provide a child for the button
+                    },
                     color: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),

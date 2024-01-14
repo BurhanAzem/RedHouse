@@ -310,28 +310,32 @@ class _AccountVerificationState extends State<AccountVerification>
                   // Button
                   const SizedBox(height: 25),
                   if (controller.cardID != "" && controller.personal != "")
-                    MaterialButton(
-                      onPressed: () {
-                        String? userDtoJson = sharepref.getString("user");
-                        Map<String, dynamic> userDto =
-                            json.decode(userDtoJson ?? "{}");
-                        User user = User.fromJson(userDto);
-                        controller.userId = user.id!;
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: MaterialButton(
+                        height: 40,
+                        onPressed: () {
+                          String? userDtoJson = sharepref.getString("user");
+                          Map<String, dynamic> userDto =
+                              json.decode(userDtoJson ?? "{}");
+                          User user = User.fromJson(userDto);
+                          controller.userId = user.id!;
 
-                        setState(() {
-                          controller.VerifyAccount();
-                        });
-                        Get.to(() => const BottomBar());
-                      },
-                      color: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Text(
-                        "Done",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
+                          setState(() {
+                            controller.VerifyAccount();
+                          });
+                          Get.to(() => const BottomBar());
+                        },
+                        color: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          "Done",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                     ),

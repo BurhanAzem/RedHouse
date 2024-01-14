@@ -90,7 +90,7 @@ class OnBoardingFour extends StatelessWidget {
                               height: 6,
                               width: 6,
                               decoration: BoxDecoration(
-                                  color: const Color(0xffd92328),
+                                  color: Colors.black,
                                   borderRadius: BorderRadius.circular(10)),
                             ))
                   ],
@@ -108,14 +108,14 @@ class OnBoardingFour extends StatelessWidget {
                       print(sharepref.getString("first"));
                       Get.offAllNamed("/bottom-bar");
                     },
-                    color: const Color(0xffd92328),
+                    color: Colors.black,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Text(
                       "Next",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w700),
+                          color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
                 )

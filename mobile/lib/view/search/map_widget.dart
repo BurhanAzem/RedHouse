@@ -5,11 +5,11 @@ import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/search/closest_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fluster/fluster.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -25,7 +25,8 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   MapListController mapListController = Get.put(MapListController());
-  FilterController filterControllerr = Get.put(FilterController());
+  FilterController filterController = Get.put(FilterController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
   ManagePropertiesController propertiesController =
       Get.put(ManagePropertiesController());
   GoogleMapController? mapController;
@@ -39,6 +40,7 @@ class _MapWidgetState extends State<MapWidget>
   bool locationButtonSelected = false;
   bool drawButtonSelected = false;
   MapType currentMapType = MapType.normal;
+  late BitmapDescriptor icon;
 
   @override
   bool get wantKeepAlive => true; // Keep the state alive
@@ -46,12 +48,21 @@ class _MapWidgetState extends State<MapWidget>
   @override
   void initState() {
     super.initState();
+    loadIcon();
     _timer = Timer(const Duration(seconds: 1), () {});
     WidgetsBinding.instance.addObserver(this);
     mapController?.animateCamera(
       CameraUpdate.newLatLngZoom(mapListController.currentPosition.target, 15),
     );
     print(mapListController.currentPosition.target);
+    setState(() {});
+  }
+
+  Future<void> loadIcon() async {
+    icon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      "assets/images/flag.png",
+    );
   }
 
   void loadData() async {
@@ -68,7 +79,7 @@ class _MapWidgetState extends State<MapWidget>
   }
 
   Future<void> whenCameraMove(CameraPosition position) async {
-    filterControllerr.currentPosition = position;
+    filterController.currentPosition = position;
     print(
         "============================================================ whenCameraMove");
     if (mapController == null) {
@@ -107,7 +118,7 @@ class _MapWidgetState extends State<MapWidget>
       // mapListController.visibleProperties.clear();
 
       if (mapListController.newZoom >= 10) {
-        mapListController.visibleProperties = filterControllerr
+        mapListController.visibleProperties = filterController
             .listProperty.listDto
             .where((property) =>
                 property.location!.latitude >= bounds.southwest.latitude &&
@@ -116,11 +127,30 @@ class _MapWidgetState extends State<MapWidget>
                 property.location!.longitude <= bounds.northeast.longitude)
             .toSet();
 
-        mapListController.allMarkers = filterControllerr
-            .getMarkerLocations(filterControllerr.listProperty.listDto);
+        // mapListController.allMarkers = filterControllerr
+        //     .getMarkerLocations(filterControllerr.listProperty.listDto);
 
-        mapListController.visibleMarkers = mapListController.allMarkers
-            .map((marker) => marker.toMarker())
+        // mapListController.visibleMarkers = mapListController.allMarkers
+        //     .map((marker) => marker.toMarker())
+        //     .toSet();
+
+        mapListController.visibleMarkers = filterController.listProperty.listDto
+            .map((property) => Marker(
+                  markerId: MarkerId(property.id.toString()),
+                  position: LatLng(
+                    property.location?.latitude ?? 0.0,
+                    property.location?.longitude ?? 0.0,
+                  ),
+                  icon: property.userId == loginController.userDto?["id"]
+                      ? icon
+                      : filterController.listingType
+                          ? BitmapDescriptor.defaultMarker
+                          : BitmapDescriptor.defaultMarkerWithHue(
+                              BitmapDescriptor.hueBlue),
+                  onTap: () {
+                    _showMarkerInfo(property);
+                  },
+                ))
             .toSet();
 
         reciveGeocode(centerCoordinates);
@@ -139,7 +169,7 @@ class _MapWidgetState extends State<MapWidget>
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
           mapListController.currentLocationName.value = locality;
-          filterControllerr.getProperties();
+          filterController.getProperties();
 
           print("Area in ${mapListController.currentLocationName.value}");
         }
@@ -173,6 +203,150 @@ class _MapWidgetState extends State<MapWidget>
     });
   }
 
+  void _showMarkerInfo(Property property) {
+    String homePrice() {
+      String price =
+          "\$${NumberFormat.decimalPattern().format(property.price)}";
+      if (property.listingType == "For monthly rent") {
+        price += "/monthly";
+      } else if (property.listingType == "For daily rent") {
+        price += "/daily";
+      }
+      return price;
+    }
+
+    showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(30))),
+              height: MediaQuery.of(context).size.height / 2.2,
+              width: 500,
+              child: InkWell(
+                onTap: () {
+                  Get.off(() => HomeInformation(property: property));
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (property.propertyFiles != null &&
+                        property.propertyFiles!.isNotEmpty)
+                      HomeImageWidget(
+                        property: property,
+                      ),
+                    Container(
+                      padding:
+                          const EdgeInsets.only(left: 25, top: 15, right: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 12,
+                                height: 12,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color.fromARGB(255, 196, 39, 27),
+                                ),
+                              ),
+                              Text(
+                                " ${property.listingType}",
+                                style: const TextStyle(fontSize: 17.5),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            homePrice(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          const SizedBox(height: 6),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${property.numberOfBedRooms} ',
+                                  style: const TextStyle(
+                                    fontSize: 16.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 196, 39, 27),
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: 'bedrooms, ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${property.numberOfBathRooms} ',
+                                  style: const TextStyle(
+                                    fontSize: 16.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 196, 39, 27),
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: 'bathrooms, ',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '${property.squareMetersArea} ',
+                                  style: const TextStyle(
+                                    fontSize: 16.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(255, 196, 39, 27),
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: 'meters',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            "${property.location!.city}, ${property.location!.country}",
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            property.propertyDescription,
+                            style: const TextStyle(),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -196,13 +370,14 @@ class _MapWidgetState extends State<MapWidget>
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   onPressed: () async {
-                    CameraPosition currentPosition =
-                        await mapListController.getCurrentPosition();
+                    Get.to(() => ClosestProperties());
+                    // CameraPosition currentPosition =
+                    //     await mapListController.getCurrentPosition();
 
-                    await propertiesController.getClosestProperties(
-                        currentPosition.target.latitude,
-                        currentPosition.target.longitude);
-                    print(propertiesController.closestProperties);
+                    // await propertiesController.getClosestProperties(
+                    //     currentPosition.target.latitude,
+                    //     currentPosition.target.longitude);
+                    // print(propertiesController.closestProperties);
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -217,7 +392,7 @@ class _MapWidgetState extends State<MapWidget>
           children: [
             Visibility(
               visible:
-                  mapListController.isLoading || filterControllerr.isLoading,
+                  mapListController.isLoading || filterController.isLoading,
               child: const LinearProgressIndicator(
                   backgroundColor: Colors.black,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -225,7 +400,7 @@ class _MapWidgetState extends State<MapWidget>
             ),
             Visibility(
               visible:
-                  !mapListController.isLoading || filterControllerr.isLoading,
+                  !mapListController.isLoading || filterController.isLoading,
               child: GoogleMap(
                 zoomControlsEnabled: true,
                 mapType: currentMapType,
@@ -371,189 +546,13 @@ class _MapWidgetState extends State<MapWidget>
   }
 }
 
-// MapMarker
-// MapMarker
+// HomeImageWidget
+// HomeImageWidget
 
-class MapMarker extends Clusterable {
-  MapListController controller = Get.put(MapListController());
-  FilterController filterController = Get.put(FilterController());
-  LoginControllerImp loginController = Get.put(LoginControllerImp());
-
-  Property property;
-  final LatLng position;
-
-  MapMarker({
-    required this.property,
-    required this.position,
-  });
-
-  get context => null;
-
-  Marker toMarker() => Marker(
-        markerId: MarkerId(property.id.toString()),
-        position: LatLng(
-          position.latitude,
-          position.longitude,
-        ),
-        icon: property.userId == loginController.userDto?["id"]
-            ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueViolet)
-            : filterController.listingType
-                ? BitmapDescriptor.defaultMarker
-                : BitmapDescriptor.defaultMarkerWithHue(
-                    BitmapDescriptor.hueBlue),
-        onTap: () {
-          _showMarkerInfo(property);
-        },
-      );
-
-  void _showMarkerInfo(Property property) {
-    String homePrice() {
-      String price =
-          "\$${NumberFormat.decimalPattern().format(property.price)}";
-      if (property.listingType == "For monthly rent") {
-        price += "/monthly";
-      } else if (property.listingType == "For daily rent") {
-        price += "/daily";
-      }
-      return price;
-    }
-
-    showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-      context: controller.mapContext ?? context,
-      isScrollControlled: true,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Container(
-                decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(30))),
-                height: MediaQuery.of(context).size.height / 2.2,
-                width: 500,
-                child: InkWell(
-                  onTap: () {
-                    Get.off(() => HomeInformation(property: property));
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (property.propertyFiles != null &&
-                          property.propertyFiles!.isNotEmpty)
-                        homeImageWidget(
-                          property: property,
-                        ),
-                      Container(
-                        padding:
-                            const EdgeInsets.only(left: 25, top: 15, right: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 12,
-                                  height: 12,
-                                  decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Color.fromARGB(255, 196, 39, 27),
-                                  ),
-                                ),
-                                Text(
-                                  " ${property.listingType}",
-                                  style: const TextStyle(fontSize: 17.5),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              homePrice(),
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 18),
-                            ),
-                            const SizedBox(height: 6),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '${property.numberOfBedRooms} ',
-                                    style: const TextStyle(
-                                      fontSize: 16.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 196, 39, 27),
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: 'bedrooms, ',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '${property.numberOfBathRooms} ',
-                                    style: const TextStyle(
-                                      fontSize: 16.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 196, 39, 27),
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: 'bathrooms, ',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: '${property.squareMetersArea} ',
-                                    style: const TextStyle(
-                                      fontSize: 16.5,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 196, 39, 27),
-                                    ),
-                                  ),
-                                  const TextSpan(
-                                    text: 'meters',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              "${property.location!.city}, ${property.location!.country}",
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              property.propertyDescription,
-                              style: const TextStyle(),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ));
-          },
-        );
-      },
-    );
-  }
-}
-
-class homeImageWidget extends StatefulWidget {
+class HomeImageWidget extends StatefulWidget {
   final Property property;
 
-  homeImageWidget({
+  HomeImageWidget({
     required this.property,
   });
 
@@ -561,7 +560,7 @@ class homeImageWidget extends StatefulWidget {
   _MarkerInfoWidgetState createState() => _MarkerInfoWidgetState();
 }
 
-class _MarkerInfoWidgetState extends State<homeImageWidget> {
+class _MarkerInfoWidgetState extends State<HomeImageWidget> {
   late bool _isLoading;
   late Timer _timer;
   late bool isFavorite;

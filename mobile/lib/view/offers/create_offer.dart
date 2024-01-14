@@ -76,14 +76,6 @@ class _CreateOfferState extends State<CreateOffer> {
 
   @override
   Widget build(BuildContext context) {
-    const options = [
-      "House",
-      "Apartment Unit",
-      "Townhouse",
-      "Castel",
-      "Entire Department Community",
-    ];
-
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),

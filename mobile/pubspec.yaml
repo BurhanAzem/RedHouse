@@ -139,11 +139,16 @@ flutter:
     - assets/images/gas-station.png
     - assets/images/gym.png
     - assets/images/atm.png
+    - assets/images/current-location.png
+    - assets/images/flag.png
+    # pay icons
     - assets/images/amazon-pay.png
     - assets/images/visa.png
     - assets/images/mastercard.png
     - assets/images/paypal.png
     - assets/images/google-pay.png
+    - assets/images/accept-request.png
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

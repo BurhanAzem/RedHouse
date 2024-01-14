@@ -56,13 +56,16 @@ class _AllOffersState extends State<AllOffers>
 
     const offerType = [
       "All",
-      "For rent",
+      "For daily rent",
+      "For monthly rent",
       "For sell",
     ];
 
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(), // Show a loading indicator
+      return Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.grey[200],
+        ),
       );
     }
     return VisibilityDetector(
@@ -157,7 +160,10 @@ class _AllOffersState extends State<AllOffers>
                     items: offerType.map((String option) {
                       return DropdownMenuItem<String>(
                         value: option,
-                        child: Text(option),
+                        child: Text(
+                          option,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       );
                     }).toList(),
                   ),
@@ -205,10 +211,42 @@ class _AllOffersState extends State<AllOffers>
                     body: TabBarView(
                       children: [
                         // Content for 'Incoming Offers' tab
-                        contentIncomingOffers(),
+                        // contentIncomingOffers(),
+                        FutureBuilder(
+                          future: Future.delayed(const Duration(seconds: 1)),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.grey[200],
+                                ),
+                              );
+                            } else {
+                              return contentIncomingOffers();
+                            }
+                          },
+                        ),
 
                         // Content for 'Sent Offers' tab
-                        contentSentOffers(),
+                        // contentSentOffers(),
+                        FutureBuilder(
+                          future: Future.delayed(const Duration(seconds: 1)),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.grey[200],
+                                ),
+                              );
+                            } else {
+                              return contentSentOffers();
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -225,7 +263,7 @@ class _AllOffersState extends State<AllOffers>
     if (controller.userOffers.isEmpty) {
       return const Center(
         child: Text(
-          "No any incoming offer",
+          "No Any Incoming Offer",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -237,11 +275,18 @@ class _AllOffersState extends State<AllOffers>
           itemCount: controller.userOffers.length,
           itemBuilder: (context, index) {
             Offer offer = controller.userOffers[index];
-            print(offer);
+            EdgeInsets _margin;
+
+            if (index == controller.userOffers.length - 1) {
+              _margin =
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 30);
+            } else {
+              _margin = const EdgeInsets.only(right: 12, left: 12, top: 30);
+            }
 
             return GestureDetector(
               onTap: () {
-                Get.to(IncomingOffer(offer: offer));
+                Get.to(() => IncomingOffer(offer: offer));
                 setState(() {});
               },
               child: Container(
@@ -250,21 +295,21 @@ class _AllOffersState extends State<AllOffers>
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
+                      color: Colors.grey.withOpacity(0.3),
+                      offset: const Offset(0, 0),
+                      blurRadius: 5,
+                      spreadRadius: 4,
                     ),
                   ],
                 ),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin: _margin,
                 child: ListTile(
                   title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                            horizontal: 10, vertical: 8),
                         decoration: const BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -273,100 +318,160 @@ class _AllOffersState extends State<AllOffers>
                           children: [
                             const Icon(
                               FontAwesomeIcons.chessKing,
-                              size: 25,
+                              size: 26,
                               color: Colors.white,
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 30),
-                              child: const Text(
-                                "Offer",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                              margin: const EdgeInsets.only(left: 50),
+                              child: Text(
+                                "Offer ${index + 1}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17,
                                   color: Colors.white,
                                 ),
                               ),
                             ),
                             Text(
-                              DateFormat('yyyy-MM-dd')
-                                  .format(offer.offerExpires),
+                              DateFormat('yyyy-MM-dd').format(offer.offerDate),
                               style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
                                 color: Colors.white,
+                                fontSize: 14,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Text(
-                        (offer.description.length <= 38)
-                            ? offer.description
-                            : '${offer.description.substring(0, 38)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7),
+                        child: Text(
+                          (offer.description.length <= 60)
+                              ? offer.description
+                              : '${offer.description.substring(0, 60)}...',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
+                      const SizedBox(height: 20),
+                      // Divider(
+                      //   thickness: 1.5,
+                      //   height: 1.5,
+                      //   color: Colors.red[200],
+                      // ),
+                      const SizedBox(height: 15),
                     ],
                   ),
-                  isThreeLine:
-                      true, // This allows the title to take up more horizontal space
-                  subtitle: Column(
-                    children: [
-                      Container(
-                        height: 1,
+                  subtitle: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, bottom: 10),
+                    child: Container(
+                      height: 200,
+                      width: 140,
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      Container(height: 0.5, color: const Color(0xffd92328)),
-                      Container(
-                        height: 1,
-                      ),
-                      Text(
-                        (offer.description.length <= 100)
-                            ? offer.description
-                            : '${offer.description.substring(0, 100)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w400),
-                      ),
-                      Container(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Row(
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
-                                "Price: ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                              ),
+                              SizedBox(height: 20),
+                              // Text(
+                              //   "Property Code",
+                              //   style: TextStyle(
+                              //     color: Colors.white,
+                              //     fontWeight: FontWeight.w700,
+                              //     fontSize: 15,
+                              //   ),
+                              // ),
+                              SizedBox(height: 5),
                               Text(
-                                offer.price.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: Color(0xffd92328)),
+                                "Offer Status",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
                               ),
+                              SizedBox(height: 5),
+                              Text(
+                                "EXP Date",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Landlord",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(height: 25),
                             ],
                           ),
-                          Row(
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
-                                "Offer status: ",
+                              const SizedBox(height: 25),
+                              Text(
+                                offer.property!.propertyCode,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
                               ),
+                              const SizedBox(height: 5),
                               Text(
                                 offer.offerStatus,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: Color(0xffd92328)),
+                                style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
                               ),
+                              const SizedBox(height: 5),
+                              Text(
+                                DateFormat('yyyy-MM-dd')
+                                    .format(offer.offerExpires),
+                                style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                (offer.landlord!.name!.length <= 14)
+                                    ? offer.landlord!.name!
+                                    : '${offer.landlord!.name!.substring(0, 14)}...',
+                                style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
+                              ),
+                              const SizedBox(height: 25),
                             ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                  // Add other widgets here for displaying additional information
                 ),
               ),
             );
@@ -380,7 +485,7 @@ class _AllOffersState extends State<AllOffers>
     if (controller.userOffers.isEmpty) {
       return const Center(
         child: Text(
-          "No any Sent offer",
+          "No any Sent Offer",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -392,6 +497,14 @@ class _AllOffersState extends State<AllOffers>
           itemCount: controller.userOffers.length,
           itemBuilder: (context, index) {
             Offer offer = controller.userOffers[index];
+            EdgeInsets _margin;
+
+            if (index == controller.userOffers.length - 1) {
+              _margin =
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 30);
+            } else {
+              _margin = const EdgeInsets.only(right: 12, left: 12, top: 30);
+            }
 
             return GestureDetector(
               onTap: () {
@@ -404,21 +517,21 @@ class _AllOffersState extends State<AllOffers>
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
+                      color: Colors.grey.withOpacity(0.3),
+                      offset: const Offset(0, 0),
+                      blurRadius: 5,
+                      spreadRadius: 4,
                     ),
                   ],
                 ),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                margin: _margin,
                 child: ListTile(
                   title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
+                            horizontal: 10, vertical: 8),
                         decoration: const BoxDecoration(
                             color: Colors.black,
                             borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -427,100 +540,160 @@ class _AllOffersState extends State<AllOffers>
                           children: [
                             const Icon(
                               FontAwesomeIcons.chessKing,
-                              size: 25,
+                              size: 26,
                               color: Colors.white,
                             ),
                             Container(
-                              margin: const EdgeInsets.only(left: 30),
-                              child: const Text(
-                                "Offer",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                              margin: const EdgeInsets.only(left: 50),
+                              child: Text(
+                                "Offer ${index + 1}",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 17,
                                   color: Colors.white,
                                 ),
                               ),
                             ),
                             Text(
-                              DateFormat('yyyy-MM-dd')
-                                  .format(offer.offerExpires),
+                              DateFormat('yyyy-MM-dd').format(offer.offerDate),
                               style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
+                                fontWeight: FontWeight.w700,
                                 color: Colors.white,
+                                fontSize: 14,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Text(
-                        (offer.description.length <= 38)
-                            ? offer.description
-                            : '${offer.description.substring(0, 38)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 7),
+                        child: Text(
+                          (offer.description.length <= 60)
+                              ? offer.description
+                              : '${offer.description.substring(0, 60)}...',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                          ),
+                          textAlign: TextAlign.start,
+                        ),
                       ),
+                      const SizedBox(height: 20),
+                      Divider(
+                        thickness: 1.5,
+                        height: 1.5,
+                        color: Colors.red[200],
+                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
-                  isThreeLine:
-                      true, // This allows the title to take up more horizontal space
-                  subtitle: Column(
-                    children: [
-                      Container(
-                        height: 1,
+                  subtitle: Padding(
+                    padding:
+                        const EdgeInsets.only(right: 10, left: 10, bottom: 10),
+                    child: Container(
+                      height: 200,
+                      width: 140,
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      Container(height: 0.5, color: const Color(0xffd92328)),
-                      Container(
-                        height: 1,
-                      ),
-                      Text(
-                        (offer.description.length <= 100)
-                            ? offer.description
-                            : '${offer.description.substring(0, 100)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w400),
-                      ),
-                      Container(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Row(
+                          const Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
-                                "Price: ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                              ),
+                              SizedBox(height: 25),
                               Text(
-                                offer.price.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: Color(0xffd92328)),
+                                "Property Code",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
                               ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Offer Status",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "EXP Date",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                "Client",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              SizedBox(height: 25),
                             ],
                           ),
-                          Row(
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              const Text(
-                                "Offer status: ",
+                              const SizedBox(height: 25),
+                              Text(
+                                offer.property!.propertyCode,
                                 style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
                               ),
+                              const SizedBox(height: 5),
                               Text(
                                 offer.offerStatus,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: Color(0xffd92328)),
+                                style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
                               ),
+                              const SizedBox(height: 5),
+                              Text(
+                                DateFormat('yyyy-MM-dd')
+                                    .format(offer.offerExpires),
+                                style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              Text(
+                                (offer.customer!.name!.length <= 14)
+                                    ? offer.customer!.name!
+                                    : '${offer.customer!.name!.substring(0, 14)}...',
+                                style: TextStyle(
+                                  color: Colors.red[200],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14.5,
+                                ),
+                              ),
+                              const SizedBox(height: 25),
                             ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                  // Add other widgets here for displaying additional information
                 ),
               ),
             );

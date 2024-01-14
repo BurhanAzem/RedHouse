@@ -8,5 +8,5 @@
     "emulator.emulatorPathWindows": "C:\\Program Files\\Android\\Sdk\\emulator",
     "emulator.simulatorPath": "C:\\Program Files\\Android\\Sdk\\emulator",
     "dart.projectSearchDepth": 10,
-    "cmake.sourceDirectory": "C:/Users/Engineer/Desktop/RedHouse/client/linux"
+    "cmake.sourceDirectory": "C:/Users/Engineer/Desktop/RedHouse/mobile/linux"
 }
