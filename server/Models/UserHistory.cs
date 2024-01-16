@@ -14,11 +14,11 @@ namespace server.Models
         public int ContractId { get; set; }
         public Contract Contract { get; set; }
 
-        public string FeedbackToLandlord { get; set; }
-        public string FeedbackToCustomer { get; set; }
+        public string? FeedbackToLandlord { get; set; }
+        public string? FeedbackToCustomer { get; set; }
 
-        public int CustomerRating { get; set; }
-        public int LandlordRating { get; set; }
+        public int? CustomerRating { get; set; }
+        public int? LandlordRating { get; set; }
 
     }
 }

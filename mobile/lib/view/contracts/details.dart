@@ -1,6 +1,9 @@
 import 'package:client/model/contract.dart';
 import 'package:client/model/contractActivity.dart';
+import 'package:client/view/contracts/feedback.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:client/view/contracts/feedback.dart' as CustomFeedback;
 
 class Details extends StatefulWidget {
   final Contract contract;
@@ -343,7 +346,11 @@ class _StepperDemoState extends State<Details> {
                     size: 50,
                   )),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => CustomFeedback.Feedback(
+                            contract: widget.contract,
+                          ));
+                    },
                     child: Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 26, vertical: 6),
@@ -362,7 +369,15 @@ class _StepperDemoState extends State<Details> {
                     shape: RoundedRectangleBorder(
                         // border: Border.all(width: 1),
                         borderRadius: BorderRadius.circular(18)),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {});
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        SnackBar snackBar = const SnackBar(
+                          content: Text("Sent Successfully"),
+                          backgroundColor: Colors.blue,
+                        );
+
+                    },
                     child: Container(
                         child: const Text(
                       "Request Feedback",

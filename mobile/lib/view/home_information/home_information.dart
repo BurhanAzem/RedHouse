@@ -228,14 +228,14 @@ class _HomeInformationState extends State<HomeInformation> {
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-        // Customize the highlight color to red
-        colorScheme: const ColorScheme.dark(
-          primary: Color.fromARGB(255, 196, 39, 27),
-        ),
-        buttonTheme: const ButtonThemeData(
-          textTheme: ButtonTextTheme.primary,
-        ),
-      ),
+            // Customize the highlight color to red
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
+          ),
           child: child ?? Container(),
         );
       },
@@ -868,8 +868,58 @@ class _HomeInformationState extends State<HomeInformation> {
                   height: 400,
                   child: LineChart(
                     LineChartData(
-                      // minY: 0,
-                      // maxY: 6,
+                      titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, titleMeta) {
+                          // Example: return a custom widget for Y-axis labels
+                          return Container(
+                            margin: EdgeInsets.only(top: 8),
+                            child: Text(
+                              value.toInt().toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        },
+                      )),
+                      topTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, titleMeta) {
+                          // Example: return a custom widget for Y-axis labels
+                          return Container(
+                            margin: EdgeInsets.only(top: 8),
+                            child: Text(
+                              value.toInt().toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        },
+                      )),
+                      leftTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, titleMeta) {
+                          // Example: return a custom widget for Y-axis labels
+                          return Container(
+                            margin: EdgeInsets.only(top: 8),
+                            child: Text(
+                              value.toInt().toString(),
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        },
+                      ))),
                       gridData: FlGridData(
                         show: false,
                         getDrawingHorizontalLine: (value) {
@@ -899,11 +949,11 @@ class _HomeInformationState extends State<HomeInformation> {
                                   : filterController.flSpotListSell,
                           color: Colors.green,
                           isCurved: false,
-                          // colors: gradientColors,
                           barWidth: 3,
-                          // dotData: FlDotData(show: false),
                           belowBarData: BarAreaData(
-                              show: true, color: Colors.greenAccent[100]),
+                            show: true,
+                            color: Colors.greenAccent[100],
+                          ),
                         ),
                       ],
                     ),

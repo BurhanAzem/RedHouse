@@ -137,5 +137,38 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+        public async Task<ResponsDto<Contract>> GetContractForOffer(int offerId)
+        {
+            var offer = await _redHouseDbContext.Offers.FindAsync(offerId);
+            if (offer == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"Offer Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var contract = await _redHouseDbContext.Contracts.FirstOrDefaultAsync(o => o.OfferId == offerId);
+            if (offer== null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Message = "Not Created",
+                    Dto = null,
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            else
+            {
+                return new ResponsDto<Contract>
+                {
+                    Message = "Created",
+                    Dto = contract,
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+        }
     }
 }

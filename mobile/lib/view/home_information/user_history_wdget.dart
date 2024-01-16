@@ -23,7 +23,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
   @override
   Widget build(BuildContext context) {
     // If this user not has history
-    if (historyController.userHistory.isEmpty) {
+    if (historyController.userHistories.isEmpty) {
       return Container(
         margin:
             const EdgeInsetsDirectional.symmetric(horizontal: 40, vertical: 85),
@@ -58,8 +58,8 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
 
     // If this user has history
     else {
-      checkHistoryController.calAverageRating(historyController.userHistory);
-      checkHistoryController.calHistoryBars(historyController.userHistory);
+      checkHistoryController.calAverageRating(historyController.userHistories);
+      checkHistoryController.calHistoryBars(historyController.userHistories);
 
       return Column(
         children: [
@@ -77,7 +77,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
               children: [
                 LineWithIconText(
                   Icons.numbers,
-                  'This account has ${historyController.userHistory.length} contracts that have been agreed upon',
+                  'This account has ${historyController.userHistories.length} contracts that have been agreed upon',
                 ),
                 const SizedBox(height: 13),
                 LineWithIconText(Icons.switch_account,
@@ -117,15 +117,15 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
               Column(
                 children: [
                   buildRatingRow(5, checkHistoryController.fiveCount,
-                      2 * historyController.userHistory.length),
+                      2 * historyController.userHistories.length),
                   buildRatingRow(4, checkHistoryController.fourCount,
-                      2 * historyController.userHistory.length),
+                      2 * historyController.userHistories.length),
                   buildRatingRow(3, checkHistoryController.threeCount,
-                      2 * historyController.userHistory.length),
+                      2 * historyController.userHistories.length),
                   buildRatingRow(2, checkHistoryController.twoCount,
-                      2 * historyController.userHistory.length),
+                      2 * historyController.userHistories.length),
                   buildRatingRow(1, checkHistoryController.oneCount,
-                      2 * historyController.userHistory.length),
+                      2 * historyController.userHistories.length),
                 ],
               )
             ],
@@ -133,10 +133,10 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: historyController.userHistory.length,
+            itemCount: historyController.userHistories.length,
             itemBuilder: (context, index) {
               UserHistory userHistory =
-                  historyController.userHistory.elementAt(index);
+                  historyController.userHistories.elementAt(index);
 
               return Card(
                   elevation: 1,

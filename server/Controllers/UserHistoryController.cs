@@ -8,6 +8,7 @@ using server.Dtos.PropertyDtos;
 using Microsoft.AspNetCore.Authorization;
 using server.Services;
 using RedHouse_Server.Dtos.ApplicationDtos;
+using server.Dtos.UserHistoryDtos;
 
 namespace RedHouse_Server.Controllers
 {
@@ -25,24 +26,24 @@ namespace RedHouse_Server.Controllers
             _userServices = userServices;
         }
         
-        // // [Authorize]
-        // [HttpPost("/applications")]
-        // public async Task<IActionResult> CreateAppication([FromBody] ApplicationDto applicationDto)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return BadRequest(ModelState);
-        //     }
-        //     var result = await _userHistoryServices.CreateApplication(applicationDto);
-        //     if (result.Exception != null)
-        //     {
-        //         var code = result.StatusCode;
-        //         throw new StatusCodeException(code.Value, result.Exception);
-        //     }
-        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-        //     return Ok(result);
+        // [Authorize]
+        [HttpPost("/userHistories")]
+        public async Task<IActionResult> CreateUserHistory([FromBody] CreateUserHistoryDto createUserHistoryDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userHistoryServices.CreateUserHistory(createUserHistoryDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
 
-        // }
+        }
 
         // [HttpGet("/applications/{id}")]
         // public async Task<IActionResult> GetProperty(int id)

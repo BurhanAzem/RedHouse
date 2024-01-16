@@ -223,8 +223,7 @@ namespace server.Services
                 Message = "Booking Done Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
-        }
-
+        }  
         public async Task EndBookingProcess(int bookingId)
         {
             // Your asynchronous code here
@@ -237,7 +236,6 @@ namespace server.Services
                 _redHouseDbContext.Bookings.Update(booking);
                 _redHouseDbContext.SaveChanges();
             }
-
             // Do something with 'booking' if needed
         }
 

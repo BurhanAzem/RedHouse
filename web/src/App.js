@@ -5,8 +5,11 @@ import Login from "./pages/Login.jsx";
 import Footer from "./components/Footer.jsx";
 import Home from "./components/Home";
 import Navbar from "./components/Navbar/Navbar.jsx";
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import '../node_modules/bootstrap/dist/js/bootstrap.min.js'
+
+// Bootstrap CSS
+import "bootstrap/dist/css/bootstrap.min.css";
+// Bootstrap Bundle JS
+import "bootstrap/dist/js/bootstrap.bundle.min";
 import './styles/Home.css'
 
 import {
