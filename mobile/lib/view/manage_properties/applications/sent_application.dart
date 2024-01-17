@@ -76,7 +76,6 @@ class _SentApplicationState extends State<SentApplication>
         child: CircularProgressIndicator(), // Show a loading indicator
       );
     }
-
     return Scaffold(
       // App bar
       appBar: AppBar(

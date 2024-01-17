@@ -53,7 +53,7 @@ class _MyFeedbackState extends State<MyFeedback> {
   }
 
   Widget bodyMyFeedback() {
-    if (historyController.userHistory.isEmpty) {
+    if (historyController.userHistories.isEmpty) {
       return Container(
         margin: const EdgeInsetsDirectional.symmetric(vertical: 60),
         child: SingleChildScrollView(

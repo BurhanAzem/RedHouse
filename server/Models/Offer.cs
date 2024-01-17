@@ -21,7 +21,7 @@ namespace server.Models
         [ForeignKey(nameof(Property))]
         public int PropertyId { get; set; }
         public Property Property { get; set; }
-
+        public int UserCreatedId { get; set; }
         public DateTime OfferDate { get; set; }
         public DateTime OfferExpires { get; set; }
         public string Description { get; set; }

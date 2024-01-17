@@ -4,6 +4,7 @@ using Cooking_School.Dtos;
 using Microsoft.EntityFrameworkCore;
 using RedHouse_Server.Dtos.UserHistoryDtos;
 using RedHouse_Server.Models;
+using server.Dtos.UserHistoryDtos;
 using server.Models;
 
 namespace server.Services
@@ -15,9 +16,52 @@ namespace server.Services
         {
             _redHouseDbContext = blueHouseDbContext;
         }
-        public Task<ResponsDto<UserHistory>> AddToUserHistory(UserHistoryDto userHistoryDto)
+        public async Task<ResponsDto<UserHistory>> CreateUserHistory(CreateUserHistoryDto createHistoryDto)
         {
-            throw new NotImplementedException();
+            var contract = await _redHouseDbContext.Contracts.Include(c => c.Offer).FirstOrDefaultAsync(c => c.Id == createHistoryDto.ContractId);
+            if (contract == null)
+            {
+                return new ResponsDto<UserHistory>
+                {
+                    Exception = new Exception("You can't send feedback"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var userHistory = await _redHouseDbContext.UserHistoryRecords.FirstOrDefaultAsync(h => h.ContractId == createHistoryDto.ContractId);
+            if (userHistory == null)
+            {
+                UserHistory newUserHistory = new UserHistory
+                {
+                    ContractId = contract.Id,
+                    FeedbackToLandlord = createHistoryDto.userId == contract.Offer.LandlordId ? createHistoryDto.Feedback : null,
+                    FeedbackToCustomer = createHistoryDto.userId == contract.Offer.CustomerId ? createHistoryDto.Feedback : null,
+                    LandlordRating = createHistoryDto.userId == contract.Offer.LandlordId ? createHistoryDto.Rating : null,
+                    CustomerRating = createHistoryDto.userId == contract.Offer.CustomerId ? createHistoryDto.Rating : null,
+                };
+                _redHouseDbContext.UserHistoryRecords.Add(newUserHistory);
+                await _redHouseDbContext.SaveChangesAsync();
+                return new ResponsDto<UserHistory>
+                {
+                    Message = "Done",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            UserHistory updatedUserHistory = new UserHistory
+            {
+                ContractId = contract.Id,
+                FeedbackToLandlord = createHistoryDto.userId == contract.Offer.LandlordId ? createHistoryDto.Feedback : null,
+                FeedbackToCustomer = createHistoryDto.userId == contract.Offer.CustomerId ? createHistoryDto.Feedback : null,
+                LandlordRating = createHistoryDto.userId == contract.Offer.LandlordId ? createHistoryDto.Rating : null,
+                CustomerRating = createHistoryDto.userId == contract.Offer.CustomerId ? createHistoryDto.Rating : null,
+            };
+            var userHistories = _redHouseDbContext.UserHistoryRecords.Update(updatedUserHistory);
+            await _redHouseDbContext.SaveChangesAsync();
+            return new ResponsDto<UserHistory>
+            {
+                Message = "Done",
+                StatusCode = HttpStatusCode.OK,
+            };
         }
 
         public Task<ResponsDto<UserHistory>> DeleteUserHistory(int userId)

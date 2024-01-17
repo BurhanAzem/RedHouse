@@ -143,6 +143,20 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/contracts/offers/{offerId}")]
+        public async Task<IActionResult> GetContractForOffer(int offerId)
+        {
+            
+            var result = await _contractServices.GetContractForOffer(offerId);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // Set the token value in the cookie
+            return Ok(result);
+        }
+
         [HttpGet("/contracts/filter")]
         public async Task<IActionResult> FilterContracts([FromQuery] SearchDto searchDto)
         {

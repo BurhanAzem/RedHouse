@@ -50,7 +50,7 @@ namespace RedHouse_Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _offerServices.GetOffer(id);
+            var result = await _offerServices.GetOfferFor(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -86,7 +86,7 @@ namespace RedHouse_Server.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var result = await _offerServices.IsOfferCreatedFor(propertyId, landlordId, customerId);
+            var result = await _offerServices.GetOffer(propertyId, landlordId, customerId);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

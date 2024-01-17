@@ -13,4 +13,7 @@ class AppLink {
   static const String userIdentities = "$server/userIdentities";
   static const String bookings = "$server/bookings";
   static const String complaints = "$server/complaints";
+  static const String userHistories= "$server/userHistories";
+
+
 }

@@ -7,66 +7,16 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class UserHistoryData {
-  static addToUserHistory(
-      String propertyType,
-      String price,
-      String numberOfBedrooms,
-      String numberOfBathrooms,
-      String squareMeter,
-      String propertyDescription,
-      DateTime builtYear,
-      String view,
-      DateTime availableOn,
-      String propertyStatus,
-      String numberOfUnits,
-      String parkingSpots,
-      String listingType,
-      String isAvailableBasement,
-      String listingBy,
-      int userId,
-      List<String> downloadUrls,
-      String streetAddress,
-      String city,
-      String region,
-      String postalCode,
-      String country,
-      dynamic latitude,
-      dynamic longitude) async {
-    String formattedBuiltYear =
-        DateFormat('yyyy-MM-ddTHH:mm:ss').format(builtYear);
-    String formattedAvailableOn =
-        DateFormat('yyyy-MM-ddTHH:mm:ss').format(availableOn);
-
+  static sendFeedback(
+      int userId, int contractId, String feedback, int rating) async {
     var data = {
-      "propertyType": propertyType,
       "userId": userId,
-      "price": int.tryParse(price) ?? 0,
-      "availableOn": formattedAvailableOn,
-      "numberOfBedrooms": int.tryParse(numberOfBedrooms) ?? 0,
-      "numberOfBathrooms": int.tryParse(numberOfBathrooms) ?? 0,
-      "squareMeter": int.tryParse(squareMeter) ?? 0,
-      "propertyDescription": propertyDescription,
-      "builtYear": formattedBuiltYear,
-      "view": view,
-      "propertyStatus": propertyStatus,
-      "numberOfUnits": int.tryParse(numberOfUnits) ?? 0,
-      "parkingSpots": int.tryParse(parkingSpots) ?? 0,
-      "listingType": listingType,
-      "isAvailableBasement": isAvailableBasement,
-      "listingBy": listingBy,
-      "locationDto": {
-        "streetAddress": streetAddress,
-        "city": city,
-        "region": region,
-        "postalCode": postalCode,
-        "country": country,
-        "latitude": latitude,
-        "longitude": longitude
-      },
-      "propertyFiles": downloadUrls
+      "contractId": contractId,
+      "feedback": feedback,
+      "rating": rating,
     };
     if (await checkInternet()) {
-      var response = await http.post(Uri.parse(AppLink.properties),
+      var response = await http.post(Uri.parse(AppLink.userHistories),
           headers: <String, String>{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $getToken()()'

@@ -9,6 +9,7 @@ class Offer {
   int landlordId;
   int customerId;
   int? propertryId;
+  int userCreatedId;
   DateTime offerDate;
   DateTime offerExpires;
   String description;
@@ -23,6 +24,7 @@ class Offer {
     required this.landlordId,
     required this.customerId,
     required this.propertryId,
+    required this.userCreatedId,
     required this.offerDate,
     required this.offerExpires,
     required this.description,

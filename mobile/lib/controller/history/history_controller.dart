@@ -6,17 +6,20 @@ import 'package:get/get.dart';
 class HistoryController extends GetxController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
-  List<UserHistory> userHistory = [];
+  List<UserHistory> userHistories = [];
   List<UserHistory> propertyHistory = [];
+
+  TextEditingController feedback = TextEditingController();
+  int rating = 1;
 
   getHistoryUser(int userId) async {
     var response = await UserHistoryData.getUserHistory(userId);
 
     if (response['statusCode'] == 200) {
-      userHistory = (response['listDto'] as List<dynamic>)
+      userHistories = (response['listDto'] as List<dynamic>)
           .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(userHistory);
+      print(userHistories);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -34,6 +37,20 @@ class HistoryController extends GetxController {
           .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
           .toList();
       print(propertyHistory);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  sendFeedback(int userId, int contractId) async {
+    var response = await UserHistoryData.sendFeedback(
+        userId, contractId, feedback.text, rating);
+
+    if (response['statusCode'] == 200) {
     } else {
       Get.defaultDialog(
         title: "Error",

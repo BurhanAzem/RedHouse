@@ -145,6 +145,7 @@ namespace server.Services
                 CustomerId = offerDto.CustomerId,
                 LandlordId = offerDto.LandlordId,
                 PropertyId = offerDto.PropertyId,
+                UserCreatedId = offerDto.UserCreatedId,
                 Description = offerDto.Description!,
                 OfferDate = DateTime.Now,
                 OfferExpires = offerDto.OfferExpires,
@@ -253,7 +254,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Offer>> GetOffer(int offerId)
+        public async Task<ResponsDto<Offer>> GetOfferFor(int offerId)
         {
             var offer = await _redHouseDbContext.Offers.FindAsync(offerId);
             if (offer == null)
@@ -272,7 +273,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Offer>> IsOfferCreatedFor(int propertyId, int landlordId, int customerId)
+        public async Task<ResponsDto<Offer>> GetOffer(int propertyId, int landlordId, int customerId)
         {
             var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
             if (property == null)
