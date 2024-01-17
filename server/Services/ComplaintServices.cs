@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using RedHouse_Server.Dtos.ComplainDtos;
 using RedHouse_Server.Dtos.ContractDtos;
 using RedHouse_Server.Models;
+using server.Dtos;
 using server.Models;
 
 namespace server.Services
@@ -100,29 +101,28 @@ namespace server.Services
 
         }
 
-        public async Task<IActionResult> GetNumberOfComplaintsPerDay(int page = 1, int limit = 10)
+        public async Task<IActionResult> GetNumberOfComplaintsPerDay(SearchDto searchDto)
         {
-            page = page < 1 ? 1 : page;
-            limit = limit < 1 ? 10 : limit;
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
 
             var query = _redHouseDbContext.Complaints.Include(c => c.User)
-                .GroupBy(c => c.ComplainDate.Date)  // Group by the date part only
+                .GroupBy(c => c.ComplainDate.Date)
                 .AsQueryable();
 
-            var totalItems = await query.CountAsync();
 
-            // Materialize the results before applying Skip and Take
             var complaintsGroups = query
                 .Select(group => new
                 {
                     ComplainDate = group.Key,
-                    Complaints = group.ToArray()
+                    Complaints = group.ToArray().Length
                 })
-                .Skip((page - 1) * limit)
-                .Take(limit)
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)(searchDto.Limit))
                 .ToArray();
+            var totalItems = await query.CountAsync();
 
-            var totalPages = (int)Math.Ceiling((double)totalItems / limit);
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
 
             if (complaintsGroups == null || !complaintsGroups.Any())
             {
@@ -138,11 +138,14 @@ namespace server.Services
 
             return new ObjectResult(new
             {
-                ListDto = complaintsGroups,
-                PageNumber = page,
-                PageSize = limit,
-                TotalItems = totalItems,
-                TotalPages = totalPages,
+                ListDto = complaintsGroups.Reverse(),
+                Pagination = new Pagination
+                {
+                    PageNumber = searchDto.Page,
+                    PageSize = searchDto.Limit,
+                    TotalRows = totalItems,
+                    TotalPages = totalPages
+                },
                 StatusCode = HttpStatusCode.OK,
             });
         }

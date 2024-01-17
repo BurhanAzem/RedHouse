@@ -168,7 +168,7 @@ class _AccountVerificationState extends State<AccountVerification>
                               animatedText,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 20,
+                                fontSize: 17,
                               ),
                             );
                           },

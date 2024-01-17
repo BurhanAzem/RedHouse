@@ -217,38 +217,43 @@ class _AllPropertiesState extends State<Properties>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Image
                             if (property.propertyFiles != null &&
                                 property.propertyFiles!.isNotEmpty)
-                              Stack(
-                                children: [
-                                  if (_isLoading)
-                                    Shimmer.fromColors(
-                                      baseColor: Colors.grey[300]!,
-                                      highlightColor: Colors.grey[100]!,
-                                      child: ClipRRect(
+                              ClipRRect(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(20)),
+                                child: Image.network(
+                                  property.propertyFiles![0].downloadUrls!,
+                                  width: double.infinity,
+                                  height: 220,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder: (BuildContext context,
+                                      Widget child,
+                                      ImageChunkEvent? loadingProgress) {
+                                    if (loadingProgress == null) {
+                                      return child;
+                                    } else {
+                                      return Shimmer.fromColors(
+                                        baseColor: Colors.black12,
+                                        highlightColor: Colors.black26,
+                                        child: ClipRRect(
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(20)),
-                                          child: Image.network(
-                                            property.propertyFiles![0]
-                                                .downloadUrls!,
+                                          child: Container(
                                             width: double.infinity,
                                             height: 220,
-                                            fit: BoxFit.cover,
-                                          )),
-                                    )
-                                  else
-                                    ClipRRect(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                        child: Image.network(
-                                          property
-                                              .propertyFiles![0].downloadUrls!,
-                                          width: double.infinity,
-                                          height: 220,
-                                          fit: BoxFit.cover,
-                                        )),
-                                ],
-                              ),
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              )
+                            else
+                              Container(),
+
                             Container(
                               padding: const EdgeInsets.only(left: 4, top: 10),
                               child: Column(
@@ -267,16 +272,20 @@ class _AllPropertiesState extends State<Properties>
                                       ),
                                       Text(
                                         " ${property.listingType}",
-                                        style: const TextStyle(fontSize: 17.5),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 17.5,
+                                        ),
                                       ),
                                     ],
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    "\$${NumberFormat.decimalPattern().format(property.price)}${property.listingType == "For rent" ? "/mo" : ""}",
+                                    "\$${NumberFormat.decimalPattern().format(property.price)} ${property.listingType == "For monthly rent" ? "/ monthly" : property.listingType == "For daily rent" ? "/ daily" : ""}",
                                     style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
@@ -402,11 +411,73 @@ class _AllPropertiesState extends State<Properties>
                                       )
                                     ],
                                   ),
+                                  const SizedBox(height: 10),
+                                  if (property.propertyStatus !=
+                                      "Under contract")
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: MaterialButton(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              side: const BorderSide(
+                                                  color: Colors.black,
+                                                  width: 1.4),
+                                            ),
+                                            onPressed: () {
+                                              // Get.to(() => HomeInformation(
+                                              //     property: property));
+                                            },
+                                            height: 37,
+                                            child: const Center(
+                                              child: Text(
+                                                "Delete your property",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14.5,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
+                                  else
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: MaterialButton(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(100),
+                                              side: const BorderSide(
+                                                  color: Colors.black,
+                                                  width: 1.4),
+                                            ),
+                                            onPressed: () {
+                                              // Get.to(() => HomeInformation(
+                                              //     property: property));
+                                            },
+                                            height: 37,
+                                            child: const Center(
+                                              child: Text(
+                                                "Property under contract",
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14.5,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    )
                                 ],
                               ),
                             ),
-
-                            // To add the house to favorites
                           ],
                         ),
                       ),

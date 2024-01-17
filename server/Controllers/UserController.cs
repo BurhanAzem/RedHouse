@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Services;
 using Cooking_School.Dtos;
+using server.Dtos.UserDtos;
 namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
@@ -54,6 +55,22 @@ namespace RedHouse_Server.Controllers
         //     return Ok(result);
 
         // }
+        [HttpPut("/users/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.UpdateUser(userDto, id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
 
         [HttpGet("/users")]
         public async Task<IActionResult> FilterUsers([FromQuery] SearchDto searchDto)

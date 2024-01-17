@@ -139,11 +139,14 @@ namespace server.Services
 
 
             Random random = new Random();
-            // Generate two random 5-digit numbers and concatenate them to form a 10-digit number
-            int firstPart = random.Next(10000, 99999);
-            int secondPart = random.Next(10000, 99999);
-            int thirdPart = random.Next(10000, 99999);
-            string random_number_str = $"{firstPart:D5}{secondPart:D5}{thirdPart:D5}";
+
+            // Generate four random 4-digit numbers and concatenate them to form a 16-digit number
+            int firstPart = random.Next(1000, 9999);
+            int secondPart = random.Next(1000, 9999);
+            int thirdPart = random.Next(1000, 9999);
+            int fourthPart = random.Next(1000, 9999);
+
+            string random_number_str = $"{firstPart:D4}{secondPart:D4}{thirdPart:D4}{fourthPart:D4}";
 
             Booking booking = new Booking
             {
@@ -311,19 +314,47 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId)
+        public async Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId, string bookingsTo)
         {
             var user = await _redHouseDbContext.Users.FindAsync(userId);
             if (user == null)
             {
                 return new ResponsDto<Booking>
                 {
-                    Exception = new Exception($"User with {userId} Id Not Exist"),
+                    Exception = new Exception("User Not Exist"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
 
-            var bookings = await _redHouseDbContext.Bookings.Where(b => b.UserId == userId).Include(b => b.Property).Include(b => b.BookingDays).ToArrayAsync();
+            var query = _redHouseDbContext.Bookings
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(b => b.BookingDays)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable();
+
+
+            if (bookingsTo.Trim() == "Landlord")
+            {
+                query = from p in _redHouseDbContext.Properties
+                        join a in query on p.Id equals a.PropertyId
+                        where p.UserId == userId
+                        select a;
+
+            }
+
+            // Now you can use the 'query' variable for further processing
+
+            if (bookingsTo.Trim() == "Customer")
+            {
+                query = query.Where(a => a.UserId == userId);
+            }
+
+            var bookings = await query.ToArrayAsync();
 
             return new ResponsDto<Booking>
             {
@@ -348,14 +379,14 @@ namespace server.Services
             List<BookingDay> bookingDays = new List<BookingDay>();
             // if (booking != null)
             // {
-                var thirtyDaysAgo = DateTime.Now;
-                var thirtyDaysAfter = DateTime.Now.AddDays(30);
+            var thirtyDaysAgo = DateTime.Now;
+            var thirtyDaysAfter = DateTime.Now.AddDays(30);
 
-                bookingDays = await _redHouseDbContext.BookingDays
-                   .Where(b => b.Booking.PropertyId == propertyId && b.Booking.BookingStatus != "Done")
-                   .ToListAsync();
+            bookingDays = await _redHouseDbContext.BookingDays
+               .Where(b => b.Booking.PropertyId == propertyId && b.Booking.BookingStatus != "Done")
+               .ToListAsync();
 
-                // Rest of your code
+            // Rest of your code
             // }
 
             return new ResponsDto<BookingDay>

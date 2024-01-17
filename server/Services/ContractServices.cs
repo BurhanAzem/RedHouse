@@ -128,10 +128,12 @@ namespace server.Services
             return new ResponsDto<Contract>
             {
                 ListDto = contracts,
-                // PageNumber = pageNumber,
-                // PageSize = pageSize,
-                // TotalItems = totalItems,
-                // TotalPages = totalPages,
+                Pagination = new Dtos.Pagination{ 
+                    PageNumber = searchDto.Page,
+                    PageSize = searchDto.Limit,
+                    TotalRows = totalItems,
+                    TotalPages = totalPages
+                },
                 StatusCode = HttpStatusCode.OK,
             };
         }

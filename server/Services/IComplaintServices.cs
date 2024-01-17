@@ -13,7 +13,7 @@ namespace server.Services
         public Task<ResponsDto<Complaint>> CreateComplain(ComplaintDto complainDto);
         public Task<ResponsDto<Complaint>> GetComplaints(int userId);
         public Task<ResponsDto<Complaint>> GetComplain(int complainId);
-        public Task<IActionResult> GetNumberOfComplaintsPerDay(int page = 1, int limit = 10);
+        public Task<IActionResult> GetNumberOfComplaintsPerDay(SearchDto searchDto);
         public Task<IActionResult> GetComplaintsForDay(DateTime day);
 
 

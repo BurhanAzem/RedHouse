@@ -42,23 +42,4 @@ class HistoryController extends GetxController {
       );
     }
   }
-
-  // Get all users who have an approved application between them and this user, to open messages between them
-  // List<User> usersApprovedApplications = [];
-  // getUsersApprovedApplications(int userId) async {
-  //   var response = await UserHistoryData.getUsersApprovedApplications(userId);
-
-  //   if (response['statusCode'] == 200) {
-  //     usersApprovedApplications = (response['listDto'] as List<dynamic>)
-  //         .map((e) => User.fromJson(e as Map<String, dynamic>))
-  //         .toList();
-  //     print(usersApprovedApplications);
-  //   } else {
-  //     Get.defaultDialog(
-  //       title: "Error",
-  //       middleText:
-  //           "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-  //     );
-  //   }
-  // }
 }

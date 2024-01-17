@@ -43,7 +43,7 @@ namespace server.Services
             {
                 return new ResponsDto<Application>
                 {
-                    Exception = new Exception("You can't send more than one application for the same property"),
+                    Exception = new Exception("You can't send more than one request for the same property"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }

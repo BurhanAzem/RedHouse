@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/home_information/home_information.dart';
@@ -20,7 +21,7 @@ class FavoriteProperties extends StatefulWidget {
 
 class _FavoritePropertiesState extends State<FavoriteProperties>
     with AutomaticKeepAliveClientMixin {
-  MapListController mapListController = Get.put(MapListController());
+  StaticController staticController = Get.put(StaticController());
   late bool _isLoading;
   late Timer _timer;
 
@@ -83,7 +84,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
                     ),
                     child: Center(
                       child: Text(
-                        mapListController.favoriteProperties.length.toString(),
+                        staticController.favoriteProperties.length.toString(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
@@ -108,7 +109,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
   }
 
   Widget _FavoriteProperties() {
-    if (mapListController.favoriteProperties.isEmpty) {
+    if (staticController.favoriteProperties.isEmpty) {
       return Center(
         child: Container(
           margin: const EdgeInsetsDirectional.all(40),
@@ -164,19 +165,13 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
 
     // ListView builder for homes
     return ListView.builder(
-      itemCount: mapListController.favoriteProperties.length,
+      itemCount: staticController.favoriteProperties.length,
       itemBuilder: (context, index) {
         final Property property =
-            mapListController.favoriteProperties.elementAt(index);
+            staticController.favoriteProperties.elementAt(index);
 
         bool isFavorite =
-            mapListController.favoriteProperties.contains(property);
-
-        print(index);
-        print(isFavorite);
-        print(mapListController.favoriteProperties.length);
-        print(
-            "====================================================================================================");
+            staticController.favoriteProperties.contains(property);
 
         return InkWell(
           onTap: () {
@@ -266,7 +261,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
 
                                   // If it is in favourites
                                   if (isFavorite) {
-                                    mapListController.favoriteProperties
+                                    staticController.favoriteProperties
                                         .remove(property);
 
                                     snackBar = const SnackBar(
@@ -276,7 +271,7 @@ class _FavoritePropertiesState extends State<FavoriteProperties>
                                   }
                                   // If it is not in favourites
                                   else {
-                                    mapListController.favoriteProperties
+                                    staticController.favoriteProperties
                                         .add(property);
                                     snackBar = const SnackBar(
                                       content: Text("Added Successfully"),

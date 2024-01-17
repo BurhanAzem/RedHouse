@@ -3,6 +3,7 @@ import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/bottom_bar.dart';
 import 'package:client/main.dart';
+import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/more.dart';
 import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/search/search.dart';
@@ -40,7 +41,7 @@ class _BottomBarState extends State<BottomBar> {
       color: Colors.grey[600],
     ),
     Icon(
-      FontAwesomeIcons.solidBell,
+      FontAwesomeIcons.solidComment,
       color: Colors.grey[600],
     ),
     Icon(
@@ -61,7 +62,7 @@ class _BottomBarState extends State<BottomBar> {
       FontAwesomeIcons.solidHandshake,
     ),
     const Icon(
-      FontAwesomeIcons.solidBell,
+      FontAwesomeIcons.solidComment,
     ),
     const Icon(
       FontAwesomeIcons.house,
@@ -124,8 +125,8 @@ class _BottomBarState extends State<BottomBar> {
               index: bottomBarController.currentIndex,
               children: const [
                 Search(),
-                AllContracts(),
-                Notifications(),
+                // AllContracts(),
+                // Messages(),
                 ManageProperties(),
                 More(),
               ],
@@ -176,7 +177,7 @@ class _BottomBarState extends State<BottomBar> {
       case 1:
         return "Contracts";
       case 2:
-        return "Notifications";
+        return "Messages";
       case 3:
         return "Properties";
       case 4:

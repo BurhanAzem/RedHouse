@@ -18,8 +18,7 @@ class SortOptionsWidget extends StatefulWidget {
 class _SortOptionsWidgetState extends State<SortOptionsWidget> {
   MapListController controller = Get.put(MapListController());
   int _temporaryValue = 1;
-  int _selectedValue = 1;
-  String _selectedText = "Default";
+  String selectedText = "Default";
 
   String getSelectedText(int selectedValue) {
     switch (selectedValue) {
@@ -176,9 +175,13 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                                         ),
                                         onPressed: () {
                                           setState(() {
-                                            _selectedValue = _temporaryValue;
-                                            _selectedText = getSelectedText(
+                                            controller.selectedValue =
+                                                _temporaryValue;
+                                            selectedText = getSelectedText(
                                                 _temporaryValue);
+
+                                            // Rearrange properties based on the selected value
+                                            controller.rearrangeProperties();
                                           });
                                           Navigator.pop(context);
                                         },
@@ -202,14 +205,14 @@ class _SortOptionsWidgetState extends State<SortOptionsWidget> {
                           },
                         ).whenComplete(() {
                           setState(() {
-                            _temporaryValue = _selectedValue;
+                            _temporaryValue = controller.selectedValue;
                           });
                         });
                       },
                       child: Row(
                         children: [
                           Text(
-                            _selectedText,
+                            selectedText,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w500,

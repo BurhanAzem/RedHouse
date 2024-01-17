@@ -11,6 +11,7 @@ using RedHouse_Server.Dtos.ApplicationDtos;
 using RedHouse_Server.Dtos.ContractDtos;
 using RedHouse_Server.Dtos.OfferDtos;
 using RedHouse_Server.Dtos.ComplainDtos;
+using Cooking_School.Dtos;
 
 namespace RedHouse_Server.Controllers
 {
@@ -63,13 +64,13 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpGet("/userIdentities")]
-        public async Task<IActionResult> GetRequestsVerifyUserIdentities()
+        public async Task<IActionResult> GetRequestsVerifyUserIdentities([FromQuery] SearchDto searchDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userIdentityServices.GetRequestsVerifyUserIdentities();
+            var result = await _userIdentityServices.GetRequestsVerifyUserIdentities(searchDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

@@ -62,10 +62,12 @@ class _ApplicationButtonstState extends State<ApplicationButtons> {
               },
               height: 45,
               color: Colors.black87,
-              child: const Center(
+              child: Center(
                 child: Text(
-                  "Request to apply",
-                  style: TextStyle(
+                  widget.property.listingType == "For monthly rent"
+                      ? "Request to rent"
+                      : "Request to buy",
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -145,8 +147,9 @@ class _CustomDialogApplyState extends State<CustomDialogApply> {
                 const TextFieldWithLabel(label: 'Email'),
                 const TextFieldWithLabel(label: 'Message'),
                 TextFieldWithLabel(
-                    label: "The price you pay for this property",
-                    property: widget.property),
+                  label: "The price you pay for this property",
+                  property: widget.property,
+                ),
                 const Padding(
                   padding:
                       EdgeInsets.only(left: 16, right: 37, top: 20, bottom: 12),

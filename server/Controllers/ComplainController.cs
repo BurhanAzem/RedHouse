@@ -11,6 +11,7 @@ using RedHouse_Server.Dtos.ApplicationDtos;
 using RedHouse_Server.Dtos.ContractDtos;
 using RedHouse_Server.Dtos.OfferDtos;
 using RedHouse_Server.Dtos.ComplainDtos;
+using Cooking_School.Dtos;
 
 namespace RedHouse_Server.Controllers
 {
@@ -95,13 +96,13 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpGet("/complaints/number-of-complaints-per-day")]
-        public async Task<IActionResult> GetNumberOfComplaintsPerDay([FromQuery] int page, int limit)
+        public async Task<IActionResult> GetNumberOfComplaintsPerDay([FromQuery] SearchDto searchDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _complainServices.GetNumberOfComplaintsPerDay(page, limit);
+            var result = await _complainServices.GetNumberOfComplaintsPerDay(searchDto);
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
 

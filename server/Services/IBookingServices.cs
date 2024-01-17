@@ -12,7 +12,7 @@ namespace server.Services
     {
         public Task<ResponsDto<Booking>> Book(BookingDto bookingDto);
         public Task<ResponsDto<Booking>> GetAllBookings();
-        public Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId);
+        public Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId, string bookingsTo);
         public Task<ResponsDto<Booking>> GetBooking(int bookingId);
         public Task<ResponsDto<Booking>> DeleteBooking(int bookingId);
         public Task<ResponsDto<Booking>> UpdateBooking(BookingDto bookingDto, int bookingId);

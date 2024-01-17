@@ -29,7 +29,7 @@ class FilterController extends GetxController {
     longitude: 0,
   );
 
-  bool isLoading = false;
+  bool isLoading = false; // new value
 
   // Property type
   bool buyHouse = true;

@@ -8,9 +8,9 @@ class ApplicationsController extends GetxController {
   List<Application> applications = [];
   List<Application> approvedApplicationsForUser = [];
 
-  String? applicationType = "All";
-  String? applicationStatus = "All";
-  String? applicationTo = "Landlord";
+  String applicationType = "All";
+  String applicationStatus = "All";
+  String applicationTo = "Landlord";
 
   int propertyId = 1;
   int userId = 1; // customer id
@@ -87,8 +87,9 @@ class ApplicationsController extends GetxController {
   // Get all approved applications for user, to open messages between customer and landlord
   getApprovedApplicationsForUser(int userId) async {
     var response = await ApplicationData.getApprovedApplicationsForUser(userId);
+    
 
-    if (response['statusCode'] == 200) {
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
       approvedApplicationsForUser = (response['listDto'] as List<dynamic>)
           .map((e) => Application.fromJson(e as Map<String, dynamic>))
           .toList();

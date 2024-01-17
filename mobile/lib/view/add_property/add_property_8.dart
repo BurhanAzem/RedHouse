@@ -117,7 +117,7 @@ class _AddProperty8State extends State<AddProperty8>
                       // button
                       MaterialButton(
                         minWidth: 500,
-                        height: 44,
+                        height: 42,
                         onPressed: () {
                           setState(() {});
                           ScaffoldMessenger.of(context).clearSnackBars();

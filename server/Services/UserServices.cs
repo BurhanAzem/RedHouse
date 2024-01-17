@@ -3,6 +3,7 @@ using System.Net;
 using Cooking_School.Dtos;
 using Microsoft.EntityFrameworkCore;
 using RedHouse_Server.Models;
+using server.Dtos.UserDtos;
 
 namespace server.Services
 {
@@ -78,10 +79,13 @@ namespace server.Services
             return new ResponsDto<User>
             {
                 ListDto = users,
-                // PageNumber = pageNumber,
-                // PageSize = pageSize,
-                // TotalItems = totalItems,
-                // TotalPages = totalPages,
+                Pagination = new Dtos.Pagination
+                {
+                    PageNumber = searchDto.Page,
+                    PageSize = searchDto.Limit,
+                    TotalRows = totalItems,
+                    TotalPages = totalPages
+                },
                 StatusCode = HttpStatusCode.OK,
             };
         }
@@ -121,6 +125,55 @@ namespace server.Services
         //         StatusCode = HttpStatusCode.OK,
         //     };
         // }
+
+        public async Task<ResponsDto<User>> UpdateUser(UserDto userDto, int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<User>
+                {
+                    Exception = new Exception($"User with {userId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            if(userDto.Name != null)
+            {
+                user.Name = userDto.Name;
+            }
+            if(userDto.Email != null)
+            {
+                user.Email = userDto.Email;
+            }
+            if(userDto.CustomerScore != null)
+            {
+                user.CustomerScore = (int)userDto.CustomerScore;
+            }
+            if(userDto.LandlordScore != null)
+            {
+                user.LandlordScore = (int)userDto.LandlordScore;
+            }
+            if(userDto.IsVerified != null)
+            {
+                user.IsVerified = (bool)userDto.IsVerified;
+            }
+            if(userDto.UserRole != null)
+            {
+                user.UserRole = userDto.UserRole;
+            }
+            if(userDto.PhoneNumber != null)
+            {
+                user.PhoneNumber = (int)userDto.PhoneNumber;
+            }
+    
+            _redHouseDbContext.Users.Update(user);
+            _redHouseDbContext.SaveChanges();
+            return new ResponsDto<User>
+            {
+                Message = $"User data with {userId} Id Updated succssfully",
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
 
         public async Task<List<int>> GetNumberOfUsersInLastTenYears()
         {

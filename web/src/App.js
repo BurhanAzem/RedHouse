@@ -81,10 +81,8 @@ const router = createBrowserRouter(
           <Route path="/" element={<Statistics />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<User />} />
-          <Route path="/properties" element={<Properties />} >
-            <Route path="" element={<PropertiesList />} />
-            <Route path=":propertyCode" element={<PropertyDetails />} />
-          </Route>
+            <Route path="/properties" element={<PropertiesList />} />
+            <Route path="/properties/:propertyCode" element={<PropertyDetails />} />
           <Route path="/contracts" element={<Contracts />} >
             <Route path="" element={<ContractsList />} />
             <Route path=":id" element={<ContractDetails />} />

@@ -81,13 +81,13 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpGet("/users/{id}/bookings")]
-        public async Task<IActionResult> GetAllOfferForUser(int id)
+        public async Task<IActionResult> GetAllOfferForUser(int id, [FromQuery] string bookingsTo)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _bookingServices.GetAllBookingsForUser(id);
+            var result = await _bookingServices.GetAllBookingsForUser(id, bookingsTo);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

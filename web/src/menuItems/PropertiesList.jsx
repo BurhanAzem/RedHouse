@@ -12,12 +12,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { GoogleMap, Marker, useJsApiLoader, useLoadScript } from "@react-google-maps/api";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Complaint from "./Complaint";
 import Property from "./Property";
 import SearchBar from "../components/SearchBar/SearchBar";
+
+import Map, { NavigationControl, Marker } from 'react-map-gl';
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
+
 const useStyles = makeStyles((theme) => ({
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -27,10 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PropertiesList = () => {
-  const { isLoaded } = useJsApiLoader({
-    id: process.env.REACT_APP_GOOGLE_API_KEY,
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY
-  })
+
   const containerStyle = {
     width: '600px',
     height: '800px'
@@ -54,7 +55,7 @@ const PropertiesList = () => {
   // }, [])
   // const [map, setMap] = React.useState(null)
 
-  
+
   const classes = useStyles();
   const [complaints, setComplaints] = useState([]);
   const [page, setPage] = useState(1);
@@ -72,16 +73,17 @@ const PropertiesList = () => {
   const [properties, setProperties] = useRecoilState(searchedProperties);
 
 
-  const params = useParams();
-  useEffect(() => {
-    setIsLoadingHome(false)
-  }, [page]);
+  // const params = useParams();
+  // useEffect(() => {
+  //   setIsLoadingHome(false)
+  // }, [page]);
 
   useEffect(() => {
     setCategoryFilter("");
     setLanguageFilter("");
     setKeyword("");
-  }, [params])
+    getProperties();
+  }, [])
 
 
 
@@ -112,6 +114,45 @@ const PropertiesList = () => {
     }
   };
 
+
+  useEffect(() => {
+    getProperties();
+  }, [keyword, page])
+
+
+
+  const getProperties = async () => {
+    try {
+      setProperties([]);
+
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/properties/filter?searchQuery=${keyword}&page=${page}&limit=${limit}`);
+      setProperties(response.data.listDto);
+      console.log(response.data.listDto);
+      console.log(response.data.pagination.pageNumber);
+      setPage(response.data.pagination.pageNumber);
+      setPages(response.data.pagination.totalPages);
+      setRows(response.data.pagination.totalRows);
+    } catch (err) {
+      if (err.message === 'Network Error' && !err.response) {
+        toast.error('Network error - make sure the server is running!', {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (err.response && err.response.status === 401) {
+        navigate('/login');
+      }
+      console.error(err);
+    } finally {
+      setLoading(false); // Set loading to false when the request is completed (success or error)
+    }
+  };
+
   return (
     <>
       <div style={{ paddingRight: "0px" }}>
@@ -128,29 +169,31 @@ const PropertiesList = () => {
           </div>
 
         </div>
+        <div className="container" style={{ width: "90%", height: "calc(100vh - 250px)", zIndex: "100", display: "flex" }}>
+          <Map
+            mapLib={maplibregl}
+            initialViewState={{
+              longitude: 35.2137,
+              latitude: 31.7683,
+              zoom: 8
+            }}
+            mapStyle="https://api.maptiler.com/maps/streets/style.json?key=edydkbpOGIMm1fvtdvS4"
+          >
+            <NavigationControl position="top-left" />
+            {properties.map((property) => (
+              <Marker
+                key={property.id}  // Don't forget to add a unique key for each Marker
+                latitude={property.location.latitude}
+                longitude={property.location.longitude}
+                color="red"
+              />
+            ))}
+          </Map>
+        </div>
+
       </div>
 
-      <div className="container" id='row-items'>
 
-        {/* <APIProvider apiKey={process.env.REACT_APP_GOOGLE_API_KEY}>
-          <div style={{height: "80vh"}}>
-            <Map zoom={9} center={position}> </Map>
-          </div>
-        </APIProvider> */}
-
-        {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-          // onLoad={onLoad}
-          // onUnmount={onUnmount}
-        >
-          { /* Child components, such as markers, info windows, etc. */}
-          <></>
-        </GoogleMap>
-        ) : <>Loading map,   Opps !</>}
-      </div>
 
       <div style={{ paddingRight: "0px" }}>
 
@@ -179,13 +222,13 @@ const PropertiesList = () => {
 
 
       ) : (
-        <div className="post-list" style={{ marginTop: "50px", marginLeft: "20px" }}>
+        <div  style={{ marginTop: "50px", marginLeft: "20px" }}>
           {properties.length !== 0 ? (
             properties.map((property) => <Property key={property.id} propertyData={property} />)
           ) : (
             <h1 className="posts-found">      No Properties Found</h1>
           )}
-          Total Posts: {rows} Page: {page} of {pages}
+          {/* Total Posts: {rows} Page: {page} of {pages} */}
         </div>
       )}
       <p className="text-danger">{msg}</p>

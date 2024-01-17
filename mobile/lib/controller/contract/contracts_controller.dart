@@ -81,7 +81,7 @@ class ContractsControllerImp extends AllContractsController {
     var response = await ContractsData.getContrcats(
         userId, contractStatus, contractType, contractTo);
 
-    if (response['statusCode'] == 200) {
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
       contracts = (response['listDto'] as List<dynamic>)
           .map((e) => Contract.fromJson(e as Map<String, dynamic>))
           .toList();

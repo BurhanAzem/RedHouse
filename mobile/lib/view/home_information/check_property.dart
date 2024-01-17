@@ -42,6 +42,13 @@ class _CheckPropertyState extends State<CheckProperty> {
     });
   }
 
+  String divideCodeIntoGroups(String code) {
+    final RegExp pattern = RegExp(r".{1,3}");
+    Iterable<Match> matches = pattern.allMatches(code);
+    List<String> groups = matches.map((match) => match.group(0)!).toList();
+    return groups.join(" ");
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
@@ -104,7 +111,7 @@ class _CheckPropertyState extends State<CheckProperty> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 19),
             ),
             Text(
-              "ZIP code: ${widget.property.propertyCode}",
+              "ZIP code: ${divideCodeIntoGroups(widget.property.propertyCode)}",
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 7),

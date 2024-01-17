@@ -85,19 +85,39 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<UserIdentity>> GetRequestsVerifyUserIdentities()
+        public async Task<ResponsDto<UserIdentity>> GetRequestsVerifyUserIdentities(SearchDto searchDto)
         {
-            // Define a separate method without optional arguments
+            var totalItems = await _redHouseDbContext.UserIdentities.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
+
 
             var userIdentities = await _redHouseDbContext.UserIdentities
-                .Where(u => u.RequestStatus == "Pending")
-                .Include(u => u.IdentityFiles)
-                .Include(u => u.User)
-                .ToArrayAsync();
+            .Where(u => u.RequestStatus == "Pending")
+            .Include(u => u.IdentityFiles)
+            .Include(u => u.User)
+            .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+            .Take((int)searchDto.Limit)
+            .ToArrayAsync();
+
+            if (userIdentities == null || !userIdentities.Any())
+            {
+                return new ResponsDto<UserIdentity>
+                {
+                    Exception = new Exception("Contracts Not Found"),
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
 
             return new ResponsDto<UserIdentity>
             {
                 ListDto = userIdentities,
+                Pagination = new Dtos.Pagination
+                {
+                    PageNumber = searchDto.Page,
+                    PageSize = searchDto.Limit,
+                    TotalRows = totalItems,
+                    TotalPages = totalPages
+                },
                 StatusCode = HttpStatusCode.OK,
             };
         }

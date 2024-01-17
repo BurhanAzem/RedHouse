@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/controller/propertise/properties_controller.dart';
+import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/home_information.dart';
@@ -37,7 +38,7 @@ class _MapWidgetState extends State<MapWidget>
   late Timer _timer;
 
   bool mapButtonSelected = false;
-  bool locationButtonSelected = false;
+
   bool drawButtonSelected = false;
   MapType currentMapType = MapType.normal;
   late BitmapDescriptor icon;
@@ -125,14 +126,7 @@ class _MapWidgetState extends State<MapWidget>
                 property.location!.latitude <= bounds.northeast.latitude &&
                 property.location!.longitude >= bounds.southwest.longitude &&
                 property.location!.longitude <= bounds.northeast.longitude)
-            .toSet();
-
-        // mapListController.allMarkers = filterControllerr
-        //     .getMarkerLocations(filterControllerr.listProperty.listDto);
-
-        // mapListController.visibleMarkers = mapListController.allMarkers
-        //     .map((marker) => marker.toMarker())
-        //     .toSet();
+            .toList();
 
         mapListController.visibleMarkers = filterController.listProperty.listDto
             .map((property) => Marker(
@@ -171,7 +165,8 @@ class _MapWidgetState extends State<MapWidget>
           mapListController.currentLocationName.value = locality;
           filterController.getProperties();
 
-          print("Area in ${mapListController.currentLocationName.value}");
+          print(
+              "=============================== Area in ${mapListController.currentLocationName.value}");
         }
       }
     } catch (e) {}
@@ -187,13 +182,17 @@ class _MapWidgetState extends State<MapWidget>
 
   void toggleLocationButton() {
     setState(() {
-      locationButtonSelected = !locationButtonSelected;
+      mapListController.locationButtonSelected =
+          !mapListController.locationButtonSelected;
     });
 
     Timer(const Duration(seconds: 20), () {
-      setState(() {
-        locationButtonSelected = !locationButtonSelected;
-      });
+      if (mounted) {
+        setState(() {
+          mapListController.locationButtonSelected =
+              !mapListController.locationButtonSelected;
+        });
+      }
     });
   }
 
@@ -204,17 +203,6 @@ class _MapWidgetState extends State<MapWidget>
   }
 
   void _showMarkerInfo(Property property) {
-    String homePrice() {
-      String price =
-          "\$${NumberFormat.decimalPattern().format(property.price)}";
-      if (property.listingType == "For monthly rent") {
-        price += "/monthly";
-      } else if (property.listingType == "For daily rent") {
-        price += "/daily";
-      }
-      return price;
-    }
-
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
@@ -266,7 +254,7 @@ class _MapWidgetState extends State<MapWidget>
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            homePrice(),
+                            "\$${NumberFormat.decimalPattern().format(property.price)} ${property.listingType == "For monthly rent" ? "/ monthly" : property.listingType == "For daily rent" ? "/ daily" : ""}",
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                           ),
@@ -363,26 +351,20 @@ class _MapWidgetState extends State<MapWidget>
       },
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: locationButtonSelected
+        floatingActionButton: mapListController.locationButtonSelected
             ? SizedBox(
                 height: 40,
                 child: FloatingActionButton.extended(
+                  heroTag: "btn1",
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   onPressed: () async {
-                    Get.to(() => ClosestProperties());
-                    // CameraPosition currentPosition =
-                    //     await mapListController.getCurrentPosition();
-
-                    // await propertiesController.getClosestProperties(
-                    //     currentPosition.target.latitude,
-                    //     currentPosition.target.longitude);
-                    // print(propertiesController.closestProperties);
+                    Get.to(() => const ClosestProperties());
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  label: const Text("Are there properties nearby?"),
+                  label: const Text("Give my closest properties"),
                 ),
               )
             : null,
@@ -461,7 +443,7 @@ class _MapWidgetState extends State<MapWidget>
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
                         onTap: () async {
-                          if (!locationButtonSelected) {
+                          if (!mapListController.locationButtonSelected) {
                             bool isLocationEnabled =
                                 await Geolocator.isLocationServiceEnabled();
 
@@ -490,14 +472,14 @@ class _MapWidgetState extends State<MapWidget>
                           height: 50,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: locationButtonSelected
+                            color: mapListController.locationButtonSelected
                                 ? Colors.black
                                 : Colors.white,
                           ),
                           child: Icon(
                             Icons.my_location,
                             size: 25,
-                            color: locationButtonSelected
+                            color: mapListController.locationButtonSelected
                                 ? Colors.white
                                 : Colors.black,
                           ),
@@ -544,6 +526,8 @@ class _MapWidgetState extends State<MapWidget>
     _timer.cancel();
     super.dispose();
   }
+
+
 }
 
 // HomeImageWidget
@@ -561,129 +545,112 @@ class HomeImageWidget extends StatefulWidget {
 }
 
 class _MarkerInfoWidgetState extends State<HomeImageWidget> {
-  late bool _isLoading;
-  late Timer _timer;
   late bool isFavorite;
-  MapListController mapListController = Get.find<MapListController>();
+  StaticController staticController = Get.put(StaticController());
 
   @override
   void initState() {
     // Check if property with the same ID exists in favoriteProperties
-    isFavorite = mapListController.favoriteProperties
+    isFavorite = staticController.favoriteProperties
         .any((favProperty) => favProperty.id == widget.property.id);
-    print(widget.property);
-    print(isFavorite);
-    print(mapListController.favoriteProperties.length);
 
-    _isLoading = true;
-    _timer = Timer(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    });
     super.initState();
   }
 
   @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        if (_isLoading)
-          Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(30)),
-              child: Image.network(
-                widget.property.propertyFiles![0].downloadUrls!,
-                width: double.infinity,
-                height: 190,
-                fit: BoxFit.cover,
-              ),
-            ),
-          )
-        else
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(30)),
-                child: Image.network(
-                  widget.property.propertyFiles![0].downloadUrls!,
-                  width: double.infinity,
-                  height: 190,
-                  fit: BoxFit.cover,
-                ),
-              ),
-
-              // To add the house to favorites
-              Positioned(
-                bottom: 16,
-                right: 16,
-                child: InkWell(
-                  onTap: () async {
-                    setState(() {});
-                    ScaffoldMessenger.of(context).clearSnackBars();
-                    SnackBar snackBar;
-
-                    // If it is in favourites
-                    if (isFavorite) {
-                      setState(() {
-                        isFavorite = false;
-                      });
-                      // Remove property with the same ID from favoriteProperties
-                      mapListController.favoriteProperties.removeWhere(
-                          (favProperty) =>
-                              favProperty.id == widget.property.id);
-                      snackBar = const SnackBar(
-                        content: Text("Removed Successfully"),
-                        backgroundColor: Colors.red,
-                      );
-                    }
-
-                    // If it is not in favourites
-                    else {
-                      setState(() {
-                        isFavorite = true;
-                      });
-                      mapListController.favoriteProperties.add(widget.property);
-                      snackBar = const SnackBar(
-                        content: Text("Added Successfully"),
-                        backgroundColor: Colors.blue,
-                      );
-                    }
-
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(149, 224, 224, 224),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: Center(
-                      child: Icon(
-                        isFavorite ? Icons.favorite : Icons.favorite_border,
-                        color: const Color.fromARGB(255, 196, 39, 27),
-                        size: 23,
+    // Image
+    if (widget.property.propertyFiles != null &&
+        widget.property.propertyFiles!.isNotEmpty) {
+      return Stack(
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+            child: Image.network(
+              widget.property.propertyFiles![0].downloadUrls!,
+              width: double.infinity,
+              height: 190,
+              fit: BoxFit.cover,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) {
+                  return child;
+                } else {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.black12,
+                    highlightColor: Colors.black26,
+                    child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.vertical(top: Radius.circular(30)),
+                      child: Container(
+                        width: double.infinity,
+                        height: 190,
+                        color: Colors.white,
                       ),
                     ),
+                  );
+                }
+              },
+            ),
+          ),
+
+          // To add the house to favorites
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: InkWell(
+              onTap: () async {
+                setState(() {});
+                ScaffoldMessenger.of(context).clearSnackBars();
+                SnackBar snackBar;
+
+                // If it is in favourites
+                if (isFavorite) {
+                  setState(() {
+                    isFavorite = false;
+                  });
+                  // Remove property with the same ID from favoriteProperties
+                  staticController.favoriteProperties.removeWhere(
+                      (favProperty) => favProperty.id == widget.property.id);
+                  snackBar = const SnackBar(
+                    content: Text("Removed Successfully"),
+                    backgroundColor: Colors.red,
+                  );
+                } else {
+                  // If it is not in favourites
+                  setState(() {
+                    isFavorite = true;
+                  });
+                  staticController.favoriteProperties.add(widget.property);
+                  snackBar = const SnackBar(
+                    content: Text("Added Successfully"),
+                    backgroundColor: Colors.blue,
+                  );
+                }
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              child: Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(149, 224, 224, 224),
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: Center(
+                  child: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: const Color.fromARGB(255, 196, 39, 27),
+                    size: 22,
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-      ],
-    );
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }

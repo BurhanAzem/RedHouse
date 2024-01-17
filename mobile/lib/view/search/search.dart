@@ -23,7 +23,7 @@ class _SearchState extends State<Search> {
     return Scaffold(
       body: Column(
         children: [
-          //
+          // Search Bar
           Container(
             padding: const EdgeInsets.only(top: 40),
             child: Column(
@@ -39,26 +39,24 @@ class _SearchState extends State<Search> {
             ),
           ),
 
-          //
+          // Filter List
           if (controller.isListIcon)
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15),
               child: const FilterListView(),
             ),
 
-          //
+          // Sort Options
           SortOptionsWidget(
             isListIcon: controller.isListIcon,
             resultsCount: resultsCount,
           ),
 
-          //
+          // Map or List
           if (controller.isListIcon)
-            const Expanded(child: MapWidget())   
+            const Expanded(child: MapWidget())
           else
-            Expanded(
-              child: ListWidget(properties: controller.visibleProperties),
-            ),
+            Expanded(child: ListWidget()),
         ],
       ),
     );

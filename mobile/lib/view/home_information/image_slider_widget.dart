@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/model/property_files.dart';
@@ -18,8 +18,8 @@ class ImageSliderWidget extends StatefulWidget {
 }
 
 class _ImageSliderWidgetState extends State<ImageSliderWidget> {
-  MapListController mapListController = Get.find<MapListController>();
   LoginControllerImp loginController = Get.put(LoginControllerImp());
+  StaticController staticController = Get.find<StaticController>();
 
   PageController controller = PageController();
   int slider = 1;
@@ -33,7 +33,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
     super.initState();
 
     // Check if property with the same ID exists in favoriteProperties
-    isFavorite = mapListController.favoriteProperties
+    isFavorite = staticController.favoriteProperties
         .any((favProperty) => favProperty.id == widget.property.id);
 
     timer();
@@ -160,7 +160,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                         isFavorite = false;
                       });
                       // Remove property with the same ID from favoriteProperties
-                      mapListController.favoriteProperties.removeWhere(
+                      staticController.favoriteProperties.removeWhere(
                           (favProperty) =>
                               favProperty.id == widget.property.id);
                       snackBar = const SnackBar(
@@ -173,7 +173,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                       setState(() {
                         isFavorite = true;
                       });
-                      mapListController.favoriteProperties.add(widget.property);
+                      staticController.favoriteProperties.add(widget.property);
                       snackBar = const SnackBar(
                         content: Text("Added Successfully"),
                         backgroundColor: Colors.blue,

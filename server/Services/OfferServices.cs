@@ -59,25 +59,35 @@ namespace server.Services
 
             User customer = await _redHouseDbContext.Users.FindAsync(offer.CustomerId);
             User landlord = await _redHouseDbContext.Users.FindAsync(offer.LandlordId);
-            
+
             customer.CustomerScore++;
             landlord.LandlordScore++;
 
-            if (customer.UserRole != "Agent" && customer.CustomerScore >= 5 && customer.LandlordScore >= 5){
+            if (customer.UserRole != "Agent" && customer.CustomerScore >= 5 && customer.LandlordScore >= 5)
+            {
                 customer.UserRole = "Agent";
-            }else if (customer.UserRole != "Customer" && customer.CustomerScore >= 5 && customer.LandlordScore < 5){
+            }
+            else if (customer.UserRole != "Customer" && customer.CustomerScore >= 5 && customer.LandlordScore < 5)
+            {
                 customer.UserRole = "Customer";
-            }else if (customer.UserRole != "Landlord" && customer.CustomerScore < 5 && customer.LandlordScore >= 5){
+            }
+            else if (customer.UserRole != "Landlord" && customer.CustomerScore < 5 && customer.LandlordScore >= 5)
+            {
                 customer.UserRole = "Landlord";
             }
-             _redHouseDbContext.Users.Update(customer);
+            _redHouseDbContext.Users.Update(customer);
             _redHouseDbContext.SaveChanges();
 
-            if (landlord.UserRole != "Agent" && landlord.CustomerScore >= 5 && landlord.LandlordScore >= 5){
+            if (landlord.UserRole != "Agent" && landlord.CustomerScore >= 5 && landlord.LandlordScore >= 5)
+            {
                 landlord.UserRole = "Agent";
-            }else if (landlord.UserRole != "Customer" && landlord.CustomerScore >= 5 && landlord.LandlordScore < 5){
+            }
+            else if (landlord.UserRole != "Customer" && landlord.CustomerScore >= 5 && landlord.LandlordScore < 5)
+            {
                 landlord.UserRole = "Customer";
-            }else if (landlord.UserRole != "Landlord" && landlord.CustomerScore < 5 && landlord.LandlordScore >= 5){
+            }
+            else if (landlord.UserRole != "Landlord" && landlord.CustomerScore < 5 && landlord.LandlordScore >= 5)
+            {
                 landlord.UserRole = "Landlord";
             }
             _redHouseDbContext.Users.Update(landlord);
@@ -152,10 +162,28 @@ namespace server.Services
             };
         }
 
-        public Task<ResponsDto<Offer>> DeleteOffer(int offerId)
+        public async Task<ResponsDto<Offer>> DeleteOffer(int offerId)
         {
-            throw new NotImplementedException();
+            var offer = await _redHouseDbContext.Offers.FindAsync(offerId);
+            if (offer == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"Offer with {offerId} Does Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            _redHouseDbContext.Offers.Remove(offer);
+            _redHouseDbContext.SaveChanges();
+
+            return new ResponsDto<Offer>
+            {
+                Exception = new Exception($"Offer with {offerId} Deleted successfully"),
+                StatusCode = HttpStatusCode.OK,
+            };
         }
+
 
         public async Task<ResponsDto<Offer>> GetAllOffers()
         {
@@ -242,6 +270,58 @@ namespace server.Services
                 Dto = offer,
                 StatusCode = HttpStatusCode.OK,
             };
+        }
+
+        public async Task<ResponsDto<Offer>> IsOfferCreatedFor(int propertyId, int landlordId, int customerId)
+        {
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"property Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var landlord = await _redHouseDbContext.Users.FindAsync(landlordId);
+            if (landlord == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var customer = await _redHouseDbContext.Users.FindAsync(customerId);
+            if (customer == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Exception = new Exception($"User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var offer = await _redHouseDbContext.Offers.Include(o => o.Customer).Include(o => o.Landlord).Include(o => o.Property).FirstOrDefaultAsync(o => o.PropertyId == propertyId && o.LandlordId == landlordId && o.CustomerId == customerId);
+
+            if (offer == null)
+            {
+                return new ResponsDto<Offer>
+                {
+                    Message = "Not Created",
+                    Dto = null,
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            else
+            {
+                return new ResponsDto<Offer>
+                {
+                    Message = "Created",
+                    Dto = offer,
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
         }
 
         public async Task<int> NumberOfOffers()

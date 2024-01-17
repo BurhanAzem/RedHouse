@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 class PropertyData {
-  static addProperty(
+  static Future<dynamic> addProperty(
     String propertyType,
     String price,
     String numberOfBedrooms,
@@ -78,11 +78,9 @@ class PropertyData {
           },
           body: json.encode(data),
           encoding: Encoding.getByName("utf-8"));
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody);
         return (responsebody);
       } else {
         return (StatusRequest.serverfailure);
@@ -139,26 +137,22 @@ class PropertyData {
     };
 
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
-
       try {
+        final Uri uri = Uri.https("10.0.2.2:7042", "/properties", filters);
+
         var response = await http.get(uri, headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${getToken()}',
         });
 
-        print(response.statusCode);
-
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map<String, dynamic> responseBody = json.decode(response.body);
-          print(responseBody["listDto"]);
 
           return responseBody;
         } else {
           return StatusRequest.serverfailure;
         }
       } catch (e) {
-        print(e.toString());
         return StatusRequest.serverfailure;
       }
     } else {
@@ -166,18 +160,16 @@ class PropertyData {
     }
   }
 
-  static getProperty(int id) async {
+  static Future<dynamic> getProperty(int id) async {
     if (await checkInternet()) {
       var response = await http.get(Uri.parse('${AppLink.properties}/$id'),
           headers: <String, String>{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["dto"]);
 
         return (responsebody);
       } else {
@@ -188,7 +180,7 @@ class PropertyData {
     }
   }
 
-  static getListAutoCompleteLocation(String query) async {
+  static Future<dynamic> getListAutoCompleteLocation(String query) async {
     if (await checkInternet()) {
       var response = await http.get(
           Uri.parse('${AppLink.properties}/auto-complete-location/$query'),
@@ -196,11 +188,9 @@ class PropertyData {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["dto"]);
 
         return (responsebody);
       } else {
@@ -211,7 +201,7 @@ class PropertyData {
     }
   }
 
-  static getPropertyPriceLastTenYearRent(int propertyId) async {
+  static Future<dynamic> getPropertyPriceLastTenYearRent(int propertyId) async {
     if (await checkInternet()) {
       var response = await http.get(
           Uri.parse(
@@ -220,12 +210,9 @@ class PropertyData {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<dynamic> responseList = json.decode(response.body);
-
-        print(responseList);
 
         return (responseList);
       } else {
@@ -236,7 +223,7 @@ class PropertyData {
     }
   }
 
-  static getPropertyPriceLastTenYearSell(int propertyId) async {
+  static Future<dynamic> getPropertyPriceLastTenYearSell(int propertyId) async {
     if (await checkInternet()) {
       var response = await http.get(
           Uri.parse(
@@ -246,12 +233,9 @@ class PropertyData {
             'Authorization': 'Bearer ${getToken()}',
           });
       var responsebody = response.body;
-      print(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         List<dynamic> responseList = json.decode(response.body);
-        print(responseList);
-
         return responseList;
       } else {
         return StatusRequest.serverfailure;
@@ -261,25 +245,78 @@ class PropertyData {
     }
   }
 
-  static getPropertiesForUser(int userId, String propertiesFilter) async {
-    final Map<String, dynamic> filters = {
-      "propertiesFilter": propertiesFilter,
-    };
-
+  static Future<dynamic> getPropertiesForUser(
+      int userId, String propertiesFilter) async {
     if (await checkInternet()) {
-      final Uri uri =
-          Uri.https("10.0.2.2:7042", "/users/$userId/properties", filters);
+      try {
+        final Map<String, dynamic> filters = {
+          "propertiesFilter": propertiesFilter,
+        };
+
+        final Uri uri =
+            Uri.https("10.0.2.2:7042", "/users/$userId/properties", filters);
+
+        var response = await http.get(uri, headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${getToken()}',
+        });
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responsebody = json.decode(response.body);
+          return (responsebody);
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> getClosestProperties(
+      double latitude, double longitude) async {
+    if (await checkInternet()) {
+      try {
+        final Map<String, dynamic> filters = {
+          "latitude": latitude.toString(),
+          "longitude": longitude.toString(),
+        };
+        final Uri uri =
+            Uri.https("10.0.2.2:7042", "properties/closest", filters);
+
+        var response = await http.get(uri, headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${getToken()}',
+        });
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responsebody = json.decode(response.body);
+
+          return (responsebody);
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> getNeighborhoodsForProperty(int propertyId) async {
+    if (await checkInternet()) {
+      final Uri uri = Uri.https("10.0.2.2:7042", "/neighborhoods/$propertyId");
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
 
-      print(response.statusCode);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
 
         return (responsebody);
       } else {
@@ -290,51 +327,56 @@ class PropertyData {
     }
   }
 
-static getClosestProperties(double latitude, double longitude) async {
-  final Map<String, dynamic> filters = {
-    "latitude": latitude.toString(),
-    "longitude": longitude.toString(),
-  };
-
-  if (await checkInternet()) {
-    final Uri uri = Uri.https("10.0.2.2:7042", "properties/closest", filters);
-
-    var response = await http.get(uri, headers: <String, String>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${getToken()}',
-    });
-
-    print(response.statusCode);
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Map responsebody = json.decode(response.body);
-      print(responsebody["listDto"]);
-
-      return (responsebody);
-    } else {
-      return StatusRequest.serverfailure;
-    }
-  } else {
-    return StatusRequest.offlinefailure;
-  }
-}
-  static getNeighborhoodsForProperty(int propertyId) async {
+  static Future<dynamic> updatePropertyStatus(
+      int propertyId, String newStatus) async {
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/neighborhoods/$propertyId");
+      try {
+        var uri = Uri.parse('${AppLink.properties}/$propertyId');
 
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}',
-      });
+        var data = {
+          "propertyStatus": newStatus,
+        };
 
-      print(response.statusCode);
+        var response = await http.put(
+          uri,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          },
+          body: json.encode(data),
+        );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map<String, dynamic> responseBody = json.decode(response.body);
 
-        return (responsebody);
-      } else {
+          return responseBody;
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> deleteProperty(int id) async {
+    if (await checkInternet()) {
+      try {
+        var response = await http.delete(Uri.parse('${AppLink.properties}/$id'),
+            headers: <String, String>{
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ${getToken()}',
+            });
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responsebody = json.decode(response.body);
+          return (responsebody);
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
         return StatusRequest.serverfailure;
       }
     } else {

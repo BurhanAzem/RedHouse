@@ -3,12 +3,11 @@ import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/model/user.dart';
+import 'package:client/view/card/credit_card.dart';
 import 'package:client/view/offers/incoming_offer.dart';
-import 'package:client/view/offers/sent_offer.dart';
+import 'package:client/view/card/style/card_background.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class AllOffers extends StatefulWidget {
@@ -56,7 +55,6 @@ class _AllOffersState extends State<AllOffers>
 
     const offerType = [
       "All",
-      "For daily rent",
       "For monthly rent",
       "For sell",
     ];
@@ -278,10 +276,9 @@ class _AllOffersState extends State<AllOffers>
             EdgeInsets _margin;
 
             if (index == controller.userOffers.length - 1) {
-              _margin =
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 30);
+              _margin = const EdgeInsets.symmetric(vertical: 30);
             } else {
-              _margin = const EdgeInsets.only(right: 12, left: 12, top: 30);
+              _margin = const EdgeInsets.only(top: 30);
             }
 
             return GestureDetector(
@@ -290,188 +287,16 @@ class _AllOffersState extends State<AllOffers>
                 setState(() {});
               },
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      offset: const Offset(0, 0),
-                      blurRadius: 5,
-                      spreadRadius: 4,
-                    ),
-                  ],
-                ),
                 margin: _margin,
-                child: ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.chessKing,
-                              size: 26,
-                              color: Colors.white,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 50),
-                              child: Text(
-                                "Offer ${index + 1}",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              DateFormat('yyyy-MM-dd').format(offer.offerDate),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7),
-                        child: Text(
-                          (offer.description.length <= 60)
-                              ? offer.description
-                              : '${offer.description.substring(0, 60)}...',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      // Divider(
-                      //   thickness: 1.5,
-                      //   height: 1.5,
-                      //   color: Colors.red[200],
-                      // ),
-                      const SizedBox(height: 15),
-                    ],
-                  ),
-                  subtitle: Padding(
-                    padding:
-                        const EdgeInsets.only(right: 10, left: 10, bottom: 10),
-                    child: Container(
-                      height: 200,
-                      width: 140,
-                      decoration: BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: 20),
-                              // Text(
-                              //   "Property Code",
-                              //   style: TextStyle(
-                              //     color: Colors.white,
-                              //     fontWeight: FontWeight.w700,
-                              //     fontSize: 15,
-                              //   ),
-                              // ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Offer Status",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "EXP Date",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Landlord",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 25),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 25),
-                              Text(
-                                offer.property!.propertyCode,
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                offer.offerStatus,
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                DateFormat('yyyy-MM-dd')
-                                    .format(offer.offerExpires),
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                (offer.landlord!.name!.length <= 14)
-                                    ? offer.landlord!.name!
-                                    : '${offer.landlord!.name!.substring(0, 14)}...',
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                child: CreditCard(
+                  type: "offer",
+                  offer: offer,
+                  index: index,
+                  name: offer.landlord!.name!,
+                  showBackSide: true,
+                  frontBackground: CardBackgrounds.black,
+                  backBackground: CardBackgrounds.white,
+                  showShadow: true,
                 ),
               ),
             );
@@ -485,7 +310,7 @@ class _AllOffersState extends State<AllOffers>
     if (controller.userOffers.isEmpty) {
       return const Center(
         child: Text(
-          "No any Sent Offer",
+          "No Any Incoming Offer",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -500,200 +325,27 @@ class _AllOffersState extends State<AllOffers>
             EdgeInsets _margin;
 
             if (index == controller.userOffers.length - 1) {
-              _margin =
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 30);
+              _margin = const EdgeInsets.symmetric(vertical: 30);
             } else {
-              _margin = const EdgeInsets.only(right: 12, left: 12, top: 30);
+              _margin = const EdgeInsets.only(top: 30);
             }
 
             return GestureDetector(
               onTap: () {
-                Get.to(() => SentOffer(offer: offer));
+                Get.to(() => IncomingOffer(offer: offer));
                 setState(() {});
               },
               child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      offset: const Offset(0, 0),
-                      blurRadius: 5,
-                      spreadRadius: 4,
-                    ),
-                  ],
-                ),
                 margin: _margin,
-                child: ListTile(
-                  title: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 8),
-                        decoration: const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(8))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Icon(
-                              FontAwesomeIcons.chessKing,
-                              size: 26,
-                              color: Colors.white,
-                            ),
-                            Container(
-                              margin: const EdgeInsets.only(left: 50),
-                              child: Text(
-                                "Offer ${index + 1}",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 17,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              DateFormat('yyyy-MM-dd').format(offer.offerDate),
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7),
-                        child: Text(
-                          (offer.description.length <= 60)
-                              ? offer.description
-                              : '${offer.description.substring(0, 60)}...',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15,
-                          ),
-                          textAlign: TextAlign.start,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Divider(
-                        thickness: 1.5,
-                        height: 1.5,
-                        color: Colors.red[200],
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                  subtitle: Padding(
-                    padding:
-                        const EdgeInsets.only(right: 10, left: 10, bottom: 10),
-                    child: Container(
-                      height: 200,
-                      width: 140,
-                      decoration: BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: 25),
-                              Text(
-                                "Property Code",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Offer Status",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "EXP Date",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                "Client",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              SizedBox(height: 25),
-                            ],
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(height: 25),
-                              Text(
-                                offer.property!.propertyCode,
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                offer.offerStatus,
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                DateFormat('yyyy-MM-dd')
-                                    .format(offer.offerExpires),
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                (offer.customer!.name!.length <= 14)
-                                    ? offer.customer!.name!
-                                    : '${offer.customer!.name!.substring(0, 14)}...',
-                                style: TextStyle(
-                                  color: Colors.red[200],
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14.5,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                child: CreditCard(
+                  type: "offer",
+                  offer: offer,
+                  index: index,
+                  name: offer.customer!.name!,
+                  showBackSide: true,
+                  frontBackground: CardBackgrounds.black,
+                  backBackground: CardBackgrounds.white,
+                  showShadow: true,
                 ),
               ),
             );

@@ -36,6 +36,13 @@ class _HomeWidgetState extends State<HomeWidget> {
   late final Map<String, BitmapDescriptor> neighborhoodIcons;
   Set<Marker> propertyMarker = {};
 
+  String divideCodeIntoGroups(String code) {
+    final RegExp pattern = RegExp(r".{1,3}");
+    Iterable<Match> matches = pattern.allMatches(code);
+    List<String> groups = matches.map((match) => match.group(0)!).toList();
+    return groups.join(" ");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -276,31 +283,20 @@ class _HomeWidgetState extends State<HomeWidget> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "\$${NumberFormat.decimalPattern().format(widget.property.price)}${widget.property.listingType == "For rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(widget.property.price)} ${widget.property.listingType == "For monthly rent" ? "/ monthly" : widget.property.listingType == "For daily rent" ? "/ daily" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 22),
                       ),
                       const SizedBox(height: 10),
                       RichText(
                         text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'ZIP code: ',
-                              style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 196, 39, 27),
-                              ),
-                            ),
-                            TextSpan(
-                              text: widget.property.propertyCode,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
+                          text: divideCodeIntoGroups(
+                              widget.property.propertyCode),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromARGB(255, 196, 39, 27),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),

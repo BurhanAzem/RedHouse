@@ -2,7 +2,6 @@ import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/properties.dart';
 import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:client/model/property.dart';
-import 'package:client/view/search/closest_properties.dart';
 import 'package:easy_stepper/easy_stepper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -106,7 +105,7 @@ class ManagePropertiesController extends GetxController {
     var response = await PropertyData.getPropertiesForUser(
         propertiesUserId, propertiesFilter);
 
-    if (response['statusCode'] == 200) {
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
       userProperties = (response['listDto'] as List<dynamic>)
           .map((e) => Property.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -145,6 +144,21 @@ class ManagePropertiesController extends GetxController {
           .map((e) => Property.fromJson(e as Map<String, dynamic>))
           .toList();
       print(closestProperties);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  updatePropertyStatus(int propertyId, String newStatus) async {
+    var response =
+        await PropertyData.updatePropertyStatus(propertyId, newStatus);
+
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+      print(response);
     } else {
       Get.defaultDialog(
         title: "Error",

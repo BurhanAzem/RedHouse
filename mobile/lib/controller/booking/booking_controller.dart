@@ -1,5 +1,6 @@
 import 'package:client/data/booking.dart';
 import 'package:flutter/material.dart';
+import 'package:client/model/booking.dart';
 import 'package:get/get.dart';
 
 class BookingController extends GetxController {
@@ -8,6 +9,8 @@ class BookingController extends GetxController {
   int propertyId = 1;
   List<DateTime> bookingDays = [];
   String bookingCode = "";
+  String bookingTo = "Customer";
+  List<Booking> userBookings = [];
 
   TextEditingController cardNumber = TextEditingController();
   TextEditingController cardName = TextEditingController();
@@ -39,6 +42,23 @@ class BookingController extends GetxController {
           .map((e) => DateTime.parse(e['dayDate']))
           .toList();
       print(preBookedDays);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  getBookingsForUser(int userId) async {
+    var response = await BookingData.getUserBookings(userId, bookingTo);
+
+    if (response['statusCode'] == 200) {
+      userBookings = (response['listDto'] as List<dynamic>)
+          .map((e) => Booking.fromJson(e as Map<String, dynamic>))
+          .toList();
+      print(userBookings);
     } else {
       Get.defaultDialog(
         title: "Error",

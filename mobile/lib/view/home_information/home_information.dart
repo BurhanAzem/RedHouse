@@ -1,5 +1,6 @@
 import 'package:client/controller/booking/booking_controller.dart';
 import 'package:client/controller/propertise/properties_controller.dart';
+import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';
@@ -32,16 +33,31 @@ class _HomeInformationState extends State<HomeInformation> {
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   ManagePropertiesController controller = Get.put(ManagePropertiesController());
   BookingController bookingController = Get.put(BookingController());
+  StaticController staticController = Get.put(StaticController());
   GoogleMapController? mapController;
   late CameraPosition propertyPosition;
   int slider = 1;
+  DateTime currentDate = DateTime.now();
 
   late final Map<String, BitmapDescriptor> neighborhoodIcons;
   Set<Marker> propertyMarker = {};
 
+  String divideCodeIntoGroups(String code) {
+    final RegExp pattern = RegExp(r".{1,3}");
+    Iterable<Match> matches = pattern.allMatches(code);
+    List<String> groups = matches.map((match) => match.group(0)!).toList();
+    return groups.join(" ");
+  }
+
   @override
   void initState() {
     super.initState();
+
+    print(widget.property);
+
+    if (!staticController.searchProperties.contains(widget.property)) {
+      staticController.searchProperties.add(widget.property);
+    }
 
     widget.property.listingType == "For daily rent" ||
             widget.property.listingType == "For monthly rent"
@@ -79,6 +95,14 @@ class _HomeInformationState extends State<HomeInformation> {
   }
 
   void loadData() async {
+    if (widget.property.propertyStatus == "Coming soon" &&
+        currentDate.isAfter(widget.property.availableOn)) {
+      // Update the property status to "Accepting offers"
+      await controller.updatePropertyStatus(
+          widget.property.id, "Accepting offers");
+      widget.property.propertyStatus = "Accepting offers";
+    }
+
     await controller.getNeighborhoodsForProperty(widget.property.id);
     print(controller.propertyNeighborhoods);
 
@@ -291,97 +315,112 @@ class _HomeInformationState extends State<HomeInformation> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "\$${NumberFormat.decimalPattern().format(widget.property.price)}${widget.property.listingType == "For rent" ? "/mo" : ""}",
+                        "\$${NumberFormat.decimalPattern().format(widget.property.price)} ${widget.property.listingType == "For monthly rent" ? "/ monthly" : widget.property.listingType == "For daily rent" ? "/ daily" : ""}",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 22),
                       ),
+
+                      // code
                       const SizedBox(height: 10),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            const TextSpan(
-                              text: 'ZIP code: ',
-                              style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w600,
-                                color: Color.fromARGB(255, 196, 39, 27),
+                      const Text(
+                        "ZIP Code",
+                        style: TextStyle(
+                          fontSize: 19,
+                          color: Color.fromARGB(255, 196, 39, 27),
+                          fontWeight: FontWeight.w600,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        divideCodeIntoGroups(widget.property.propertyCode),
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 196, 39, 27),
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      // const SizedBox(height: 40),
+                      const SizedBox(height: 25),
+
+                      // Container
+                      Container(
+                        width: double.infinity,
+                        height: 150,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(50),
+                            bottomLeft: Radius.circular(50),
+                          ),
+                          // color: Color.fromARGB(255, 196, 39, 27),
+                          color: Colors.black,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          '${widget.property.numberOfBedRooms} ',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: 'bedrooms,  ',
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${widget.property.numberOfBathRooms} ',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: 'bathrooms,  ',
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${widget.property.squareMetersArea} ',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: 'meters',
+                                      style: TextStyle(
+                                        fontSize: 19,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: widget.property.propertyCode,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '${widget.property.numberOfBedRooms}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 196, 39, 27),
-                              ),
-                            ),
-                            const TextSpan(
-                              text: ' bedrooms, ',
-                              style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                            TextSpan(
-                              text: '${widget.property.numberOfBathRooms}',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 196, 39, 27),
-                              ),
-                            ),
-                            const TextSpan(
-                              text: ' bathrooms',
-                              style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text:
-                                  '${NumberFormat.decimalPattern().format(widget.property.squareMetersArea)} ',
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromARGB(255, 186, 36, 25),
-                              ),
-                            ),
-                            const TextSpan(
-                              text: 'meters',
-                              style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 30),
+
+                      const SizedBox(height: 35),
                       Row(
                         children: [
                           Row(
@@ -542,100 +581,131 @@ class _HomeInformationState extends State<HomeInformation> {
 
                       const SizedBox(height: 30),
                       // here Parking Spots
-                      if (widget.property.parkingSpots == 0)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              "This property does not have parking",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.black,
-                              ),
+                      if (widget.property.parkingSpots != 0)
+                        Container(
+                          width: double.infinity,
+                          height: 150,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
                             ),
-                            const SizedBox(height: 2),
-                            InkWell(
-                              onTap: () {},
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.black,
-                                      width: 2.0,
+                            color: Color.fromARGB(255, 196, 39, 27),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "This property does not have parking",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                    ),
+                                    child: const Text(
+                                      "Are you looking for parking?",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Are you looking for parking?",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         )
                       else
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                children: [
-                                  const TextSpan(
-                                    text: 'this property has ',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
-                                    ),
-                                  ),
+                        Container(
+                          width: double.infinity,
+                          height: 150,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(50),
+                              bottomLeft: Radius.circular(50),
+                            ),
+                            color: Color.fromARGB(255, 196, 39, 27),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 25),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text.rich(
                                   TextSpan(
-                                    text: '${widget.property.parkingSpots}',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 196, 39, 27),
-                                    ),
+                                    children: [
+                                      const TextSpan(
+                                        text: 'this property has ',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '${widget.property.parkingSpots}',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const TextSpan(
+                                        text: ' Parking Spots',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const TextSpan(
-                                    text: ' Parking Spots',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black,
+                                ),
+                                const SizedBox(height: 2),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(
+                                          color: Colors.white,
+                                          width: 2.0,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            InkWell(
-                              onTap: () {},
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.black,
-                                      width: 2.0,
+                                    child: const Text(
+                                      "Are you looking for more parking?",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ),
-                                child: const Text(
-                                  "Are you looking for more parking?",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
+
                       // here AvailableOn and PropertyStatus
                       const SizedBox(height: 22),
                       const Text(
@@ -652,7 +722,7 @@ class _HomeInformationState extends State<HomeInformation> {
                             children: [
                               const TextSpan(
                                 text:
-                                    " This property accepts requests and offers, but it takes some time to be available. It will be available on date  ",
+                                    " This property accepts requests and offers, but it takes some time to be available. It will be available on \n date  ",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -661,7 +731,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               ),
                               TextSpan(
                                 text:
-                                    '${DateFormat.MMMM().format(widget.property.builtYear)} ${DateFormat.d().format(widget.property.builtYear)}, ${DateFormat.y().format(widget.property.builtYear)}.',
+                                    '${DateFormat.MMM().format(widget.property.availableOn)} ${DateFormat.d().format(widget.property.availableOn)}, ${DateFormat.y().format(widget.property.availableOn)}.',
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
@@ -674,12 +744,23 @@ class _HomeInformationState extends State<HomeInformation> {
                       else if (widget.property.propertyStatus ==
                           "Accepting offers")
                         const Text(
-                            ' This property is available, accepts requests and offers.',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                            )),
+                          ' This property is available, accepts requests and offers.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        )
+                      else if (widget.property.propertyStatus ==
+                          "Under contract")
+                        const Text(
+                          ' This property is under contract, applications and offers are not currently accepted.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
 
                       // When is it available ?
                       if (widget.property.listingType == "For daily rent")
@@ -834,35 +915,7 @@ class _HomeInformationState extends State<HomeInformation> {
                     ],
                   ),
                 ),
-                Container(
-                  padding:
-                      widget.property.userId != loginController.userDto?["id"]
-                          ? const EdgeInsets.only(
-                              left: 25, right: 20, top: 15, bottom: 17)
-                          : const EdgeInsets.only(
-                              left: 25, right: 20, top: 15, bottom: 30),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Property Description:",
-                        style: TextStyle(
-                          fontSize: 19,
-                          fontWeight: FontWeight.w600,
-                          color: Color.fromARGB(255, 196, 39, 27),
-                        ),
-                      ),
-                      Text(
-                        " ${widget.property.propertyDescription}",
-                        style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 30),
                 Container(
                   height: 400,
                   child: LineChart(
@@ -908,17 +961,45 @@ class _HomeInformationState extends State<HomeInformation> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 15),
+                Container(
+                  padding:
+                      widget.property.userId != loginController.userDto?["id"]
+                          ? const EdgeInsets.only(
+                              left: 25, right: 20, top: 15, bottom: 17)
+                          : const EdgeInsets.only(
+                              left: 25, right: 20, top: 15, bottom: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Property Description:",
+                        style: TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.w600,
+                          color: Color.fromARGB(255, 196, 39, 27),
+                        ),
+                      ),
+                      Text(
+                        " ${widget.property.propertyDescription}",
+                        style: const TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
           if (widget.property.userId != loginController.userDto?["id"] &&
               widget.property.propertyStatus != "Under contract")
-            if (widget.property.userId != loginController.userDto?["id"] ||
-                widget.property.propertyStatus != "Under contract")
-              if (widget.property.listingType == "For daily rent")
-                BookingButtons(property: widget.property)
-              else
-                ApplicationButtons(property: widget.property),
+            if (widget.property.listingType == "For daily rent")
+              BookingButtons(property: widget.property)
+            else
+              ApplicationButtons(property: widget.property),
         ],
       ),
     );

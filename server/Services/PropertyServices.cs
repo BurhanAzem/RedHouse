@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using server.Models;
 using Microsoft.IdentityModel.Tokens;
 using RedHouse_Server.Dtos.LocationDtos;
+using server.Dtos;
 
 namespace RedHouse_Server.Services
 {
@@ -43,10 +44,13 @@ namespace RedHouse_Server.Services
             await _redHouseDbContext.SaveChangesAsync();
 
             Random random = new Random();
-            // Generate two random 5-digit numbers and concatenate them to form a 10-digit number
-            int firstPart = random.Next(10000, 99999);
-            int secondPart = random.Next(10000, 99999);
-            string random_number_str = $"{firstPart:D5}{secondPart:D5}";
+            // Generate four random 3-digit numbers and concatenate them to form a 12-digit number
+            int firstPart = random.Next(100, 999);
+            int secondPart = random.Next(100, 999);
+            int thirdPart = random.Next(100, 999);
+            int fourthPart = random.Next(100, 999);
+
+            string random_number_str = $"{firstPart:D4}{secondPart:D4}{thirdPart:D4}{fourthPart:D4}";
 
             Property property = new Property
             {
@@ -439,7 +443,7 @@ namespace RedHouse_Server.Services
             };
         }
 
-        public async Task<ResponsDto<Property>> UpdateProperty(PropertyDto propertyDto, int propertyId)
+        public async Task<ResponsDto<Property>> UpdateProperty(UpdatePropertyDto propertyDto, int propertyId)
         {
             var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
             if (property == null)
@@ -450,28 +454,54 @@ namespace RedHouse_Server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            Property updatedProperty = new Property
+
+            if (propertyDto.AvailableOn != null)
             {
-                AvailableOn = propertyDto.AvailableOn,
-                BuiltYear = propertyDto.BuiltYear,
-                IsAvailableBasement = propertyDto.IsAvailableBasement,
-                ListingBy = propertyDto.ListingBy,
-                ListingType = propertyDto.ListingType,
-                LocationId = 0,
-                // NeighborhoodId = 0,
-                NumberOfBathRooms = propertyDto.NumberOfBathRooms,
-                NumberOfBedRooms = propertyDto.NumberOfBedRooms,
-                NumberOfUnits = propertyDto.NumberOfUnits,
-                ParkingSpots = propertyDto.ParkingSpots,
-                Price = propertyDto.Price,
-                PropertyDescription = propertyDto.PropertyDescription,
-                PropertyStatus = propertyDto.PropertyStatus,
-                PropertyType = propertyDto.PropertyType,
-                SquareMetersArea = propertyDto.SquareMeter,
-                UserId = propertyDto.UserId,
-                View = propertyDto.View,
-            };
-            _redHouseDbContext.Properties.Update(updatedProperty);
+                property.AvailableOn = (DateTime)propertyDto.AvailableOn;
+            }
+            else
+            {
+                property.AvailableOn = property.AvailableOn;
+            }
+
+            if (propertyDto.BuiltYear != null)
+            {
+                property.BuiltYear = (DateTime)propertyDto.BuiltYear;
+            }
+            else
+            {
+                property.BuiltYear = property.BuiltYear;
+            }
+
+            if (propertyDto.SquareMeter != null)
+            {
+                property.SquareMetersArea = (float)propertyDto.SquareMeter;
+            }
+            else
+            {
+                property.SquareMetersArea = property.SquareMetersArea;
+            }
+
+            if (propertyDto.UserId != null)
+            {
+                property.UserId = (int)propertyDto.UserId;
+            }
+            else
+            {
+                property.UserId = property.UserId;
+            }
+
+            if (propertyDto.PropertyStatus != null)
+            {
+                property.PropertyStatus = propertyDto.PropertyStatus;
+            }
+            else
+            {
+                property.PropertyStatus = property.PropertyStatus;
+            }
+
+
+            _redHouseDbContext.Properties.Update(property);
             _redHouseDbContext.SaveChanges();
             return new ResponsDto<Property>
             {
@@ -617,10 +647,13 @@ namespace RedHouse_Server.Services
             return new ResponsDto<Property>
             {
                 ListDto = properties,
-                // PageNumber = pageNumber,
-                // PageSize = pageSize,
-                // TotalItems = totalItems,
-                // TotalPages = totalPages,
+                Pagination = new Pagination
+                {
+                    PageNumber = searchDto.Page,
+                    PageSize = searchDto.Limit,
+                    TotalRows = totalItems,
+                    TotalPages = totalPages
+                },
                 StatusCode = HttpStatusCode.OK,
             };
         }

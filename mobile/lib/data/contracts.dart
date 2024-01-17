@@ -101,23 +101,27 @@ class ContractsData {
     };
 
     if (await checkInternet()) {
-      final Uri uri =
-          Uri.https("10.0.2.2:7042", "/users/$userId/contracts", filters);
+      try {
+        final Uri uri =
+            Uri.https("10.0.2.2:7042", "/users/$userId/contracts", filters);
 
-      var response = await http.get(uri, headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${getToken()}',
-      });
+        var response = await http.get(uri, headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${getToken()}',
+        });
 
-      print(response.statusCode);
-      // print(response.body.listDto);
+        print(response.statusCode);
+        // print(response.body.listDto);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responsebody = json.decode(response.body);
+          print(responsebody["listDto"]);
 
-        return (responsebody);
-      } else {
+          return (responsebody);
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
         return StatusRequest.serverfailure;
       }
     } else {

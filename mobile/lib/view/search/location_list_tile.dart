@@ -1,4 +1,5 @@
 import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/model/location.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class LocationListTile extends StatefulWidget {
 
 class _LocationListTileState extends State<LocationListTile> {
   MapListController mapListController = Get.put(MapListController());
+  StaticController staticController = Get.put(StaticController());
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,10 @@ class _LocationListTileState extends State<LocationListTile> {
       children: [
         ListTile(
           onTap: () {
+            if (!staticController.searchLocation.contains(widget.location)) {
+              staticController.searchLocation.add(widget.location);
+            }
+
             LatLng centerCoordinates =
                 LatLng(widget.location.latitude, widget.location.longitude);
             print(centerCoordinates);

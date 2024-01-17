@@ -47,7 +47,7 @@ class _MessagesState extends State<Messages> {
     setState(() {});
   }
 
-  void loadData() async {
+  Future<void> loadData() async {
     // Check if data is already loaded to avoid duplication
     if (!isLoading) {
       return;
@@ -55,14 +55,14 @@ class _MessagesState extends State<Messages> {
 
     await applicationController
         .getApprovedApplicationsForUser(loginController.userDto?["id"]);
-    // .getUsersApprovedApplications(loginController.userDto?["id"]);
-    // print(historyController.usersApprovedApplications);
     print(applicationController.approvedApplicationsForUser);
 
     // Set isLoading to false only after data is loaded
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   String formatMessageTimestamp(Timestamp timestamp) {
@@ -78,9 +78,13 @@ class _MessagesState extends State<Messages> {
     else if (difference.inHours < 48) {
       return 'Yesterday';
     }
-    // Format: FullMonthName Day
+    // Within the same week
+    else if (difference.inDays < 7 && now.weekday != messageTime.weekday) {
+      return DateFormat('EEEE', 'en_US').format(messageTime);
+    }
+    // Format: ShortMonthName Day
     else {
-      return DateFormat('MMMM dd', 'en_US').format(messageTime);
+      return DateFormat('MMM dd', 'en_US').format(messageTime);
     }
   }
 
@@ -242,7 +246,7 @@ class _MessagesState extends State<Messages> {
             Expanded(
               child: ListTile(
                 title: Text(
-                  data['email'],
+                  data['name'],
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16.5,
@@ -252,13 +256,9 @@ class _MessagesState extends State<Messages> {
                 subtitle: Row(
                   children: [
                     Text(
-                      isUnread
-                          ? lastMessageText.length > 16
-                              ? '${lastMessageText.substring(0, 16)}...'
-                              : lastMessageText
-                          : lastMessageText.length > 16
-                              ? '${lastMessageText.substring(0, 16)}...'
-                              : lastMessageText,
+                      lastMessageText.length > 22
+                          ? lastMessageText.substring(0, 22)
+                          : lastMessageText,
                       style: TextStyle(
                         fontSize: isUnread ? 13 : 14.5,
                         fontWeight:
@@ -266,17 +266,15 @@ class _MessagesState extends State<Messages> {
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      formatMessageTimestamp(lastMessageTime),
-                      style: TextStyle(
-                        fontSize: isUnread ? 13 : 14.5,
-                        fontWeight:
-                            isUnread ? FontWeight.w500 : FontWeight.bold,
-                      ),
-                    ),
                   ],
                 ),
+              ),
+            ),
+            Text(
+              formatMessageTimestamp(lastMessageTime),
+              style: TextStyle(
+                fontSize: isUnread ? 13 : 14.5,
+                fontWeight: isUnread ? FontWeight.w500 : FontWeight.bold,
               ),
             ),
           ],

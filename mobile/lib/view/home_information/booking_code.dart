@@ -9,6 +9,13 @@ class BookingCode extends StatefulWidget {
 }
 
 class _BookingCodeState extends State<BookingCode> {
+  String divideCodeIntoGroups(String code) {
+    final RegExp pattern = RegExp(r".{1,4}");
+    Iterable<Match> matches = pattern.allMatches(code);
+    List<String> groups = matches.map((match) => match.group(0)!).toList();
+    return groups.join(" ");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -25,7 +32,7 @@ class _BookingCodeState extends State<BookingCode> {
           child: Container(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              '#${widget.bookingCode}',
+              '#${divideCodeIntoGroups(widget.bookingCode)}',
               style: TextStyle(
                 fontSize: 55,
                 fontWeight: FontWeight.bold,

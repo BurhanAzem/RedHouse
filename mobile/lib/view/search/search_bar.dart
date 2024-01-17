@@ -1,12 +1,14 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
+import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/model/location.dart';
-import 'package:client/view/bottom_bar/bottom_bar.dart';
+import 'package:client/model/property.dart';
+import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/search/location_list_tile.dart';
+import 'package:client/view/search/property_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SearchBarRow extends StatefulWidget {
   final VoidCallback onToggleView;
@@ -27,89 +29,132 @@ class _SearchBarRowState extends State<SearchBarRow> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            onTap: () {
-              showSearch(
-                context: context,
-                delegate: CustomSearch(),
-              );
-            },
-            child: Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: const Color.fromRGBO(239, 239, 239, 10),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Icon(
-                        Icons.search_outlined,
-                        size: 26,
-                      ),
-                    ),
-                  ),
-                  Container(width: 15),
-                  Container(
-                    width: 210,
-                    child: Obx(() {
-                      return Text(
-                        controller.currentLocationName.value == ""
-                            ? "City, ZIP, School, Address"
-                            : "Area in ${controller.currentLocationName.value}",
-                        style: const TextStyle(
-                          fontSize: 17,
-                          color: Colors.black45,
+      child: Container(
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+              onTap: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearch(),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 10),
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(239, 239, 239, 10),
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(left: 13),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          Icons.search_outlined,
+                          size: 26,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      );
-                    }),
-                  ),
-                  Container(width: 8),
-                ],
+                      ),
+                    ),
+                    Container(width: 12),
+                    Container(
+                      width: 200,
+                      child: Obx(() {
+                        return Text(
+                          controller.currentLocationName.value == ""
+                              ? "City, ZIP, School, Address"
+                              : "Area in ${controller.currentLocationName.value}",
+                          style: const TextStyle(
+                            fontSize: 17,
+                            color: Colors.black45,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        );
+                      }),
+                    ),
+                    Container(width: 8),
+                  ],
+                ),
               ),
             ),
-          ),
-          GestureDetector(
-            onTap: () {
-              widget.onToggleView();
-            },
-            child: Container(
-              width: 82,
-              child: Row(
+            Container(width: 10),
+            InkWell(
+              onTap: () {
+                Get.to(() => const Notifications());
+              },
+              child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Icon(
-                      controller.isListIcon
-                          ? Icons.format_list_bulleted
-                          : Icons.map_outlined,
-                      color: Colors.black,
-                      size: controller.isListIcon ? 27 : 28,
-                    ),
+                  const Icon(
+                    FontAwesomeIcons.solidBell,
+                    size: 27,
+                    color: Colors.black,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 2),
-                    child: Text(
-                      controller.isListIcon ? "List" : "Map",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: controller.isListIcon ? 20 : 18,
-                        fontWeight: FontWeight.w500,
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: 17,
+                      height: 17,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.red,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "2",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            GestureDetector(
+              onTap: () {
+                widget.onToggleView();
+              },
+              child: Container(
+                margin: const EdgeInsets.only(left: 10),
+                width: 82,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: Icon(
+                        controller.isListIcon
+                            ? Icons.format_list_bulleted
+                            : Icons.map_outlined,
+                        color: Colors.black,
+                        size: controller.isListIcon ? 27 : 28,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2),
+                      child: Text(
+                        controller.isListIcon ? "List" : "Map",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: controller.isListIcon ? 20 : 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -117,7 +162,7 @@ class _SearchBarRowState extends State<SearchBarRow> {
 
 class CustomSearch extends SearchDelegate {
   FilterController filterController = Get.put(FilterController());
-  MapListController mapListController = Get.put(MapListController());
+  StaticController staticController = Get.put(StaticController());
 
   Future<void> loadData() async {
     await filterController.getListAutoCompleteLocation(query);
@@ -236,19 +281,16 @@ class CustomSearch extends SearchDelegate {
                         ),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Buy',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                            color: filterController.listingType
-                                ? Colors.black
-                                : Colors.black45,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'Buy',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                        color: filterController.listingType
+                            ? Colors.black
+                            : Colors.black45,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -265,19 +307,16 @@ class CustomSearch extends SearchDelegate {
                         ),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        Text(
-                          'Rent',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 17,
-                            color: !filterController.listingType
-                                ? Colors.black
-                                : Colors.black45,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'Rent',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 17,
+                        color: !filterController.listingType
+                            ? Colors.black
+                            : Colors.black45,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),
@@ -290,6 +329,7 @@ class CustomSearch extends SearchDelegate {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   InkWell(
                     onTap: () {
@@ -343,6 +383,111 @@ class CustomSearch extends SearchDelegate {
                     height: 1.5,
                     color: Colors.grey,
                   ),
+
+                  // Recently Search
+                  const SizedBox(height: 60),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Recently Search",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
+                      if (staticController.searchLocation.isNotEmpty)
+                        InkWell(
+                          onTap: () {
+                            staticController.searchLocation.clear();
+                          },
+                          child: const Text(
+                            "Clear all",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 196, 39, 27),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  if (staticController.searchLocation.isEmpty)
+                    const Text(
+                      "You have not searched for any location",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    )
+                  else
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: staticController.searchLocation.length,
+                      itemBuilder: (context, index) {
+                        Location location =
+                            staticController.searchLocation[index];
+
+                        return LocationListTile(
+                          location: location,
+                        );
+                      },
+                    ),
+
+                  // Recently Viewed
+                  const SizedBox(height: 60),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Recently Viewed",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
+                      if (staticController.searchProperties.isNotEmpty)
+                        InkWell(
+                          onTap: () {
+                            staticController.searchProperties.clear();
+                          },
+                          child: const Text(
+                            "Clear all",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 196, 39, 27),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  if (staticController.searchProperties.isEmpty)
+                    const Text(
+                      "You have not searched for any property",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    )
+                  else
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: staticController.searchProperties.length,
+                      itemBuilder: (context, index) {
+                        Property property =
+                            staticController.searchProperties[index];
+
+                        return PropertyListTile(
+                          property: property,
+                        );
+                      },
+                    ),
+                  const SizedBox(height: 50),
                 ],
               ),
             ),
