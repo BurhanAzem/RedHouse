@@ -29,6 +29,7 @@ const User = () => {
   const params = useParams();
   const [users, setUsers] = useRecoilState(usersRows);
   const [userData, setUserData] = useRecoilState(selectedUser)
+  const [updatedUserData, setupdatedUserData] = useRecoilState(selectedUser);
   const [userId, setUserId] = useState({});
 
 
@@ -92,7 +93,43 @@ const User = () => {
 
 
 
+  const updateUser = async () => {
+    try {
+      console.log(atob(params.id));
+      const res = await axios.put(`${process.env.REACT_APP_BASE_URL}/users/${atob(params.id)}`, updatedUserData);
+      setUserData(updatedUserData)
+      console.log(userData);
+      return
+    } catch (err) {
+      if (err.message == 'Network Error' && !err.response)
+        toast.error('Network error - make sure server is running!', {
+          position: "top-center",
+          autoClose: 10000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      else if (err.response && err.response.status === 401) {
+        if (currentUser) {
+          console.log(err + '---------------------------------------------------------------');
+          navigate('/login');
+        }
 
+      }
+      console.log(err);
+    }
+  };
+
+  const handleChange = (e, field) => {
+    // Update the corresponding field in the state
+    setupdatedUserData({
+      ...updatedUserData,
+      [field]: e.target.value,
+    });
+  };
 
 
   return (
@@ -101,7 +138,7 @@ const User = () => {
         display: "flex",
         justifyContent: "center"
       }}>
-        <div style={{  borderRadius: "60px", padding: "20px", margin: "80px", width: "40%", boxShadow: "0.2px 0.5px 20px 0.1px", justifyContent: "center", justifyItems: "center" }}>
+        <div style={{ borderRadius: "60px", padding: "20px", margin: "80px", width: "40%", boxShadow: "0.2px 0.5px 20px 0.1px", justifyContent: "center", justifyItems: "center" }}>
           <ToastContainer />
           <div className='row' >
             <div className='pic'>
@@ -173,39 +210,107 @@ const User = () => {
               style={{ borderStyle: "solid", backgroundColor: "black", borderColor: "black", color: "white", cursor: "pointer", width: "160px", textAlign: "center", fontWeight: "700", borderRadius: "20px" }}
             >Update
             </span>} modal contentStyle={{ display: "flex", justifyContent: "center", borderRadius: "20px", width: "30%" }} position="top center">
-              <form style={{width: "90%"}} >
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Name</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"></input>
-                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+              <form style={{ width: "90%", margin: "25px" }} onSubmit={updateUser}>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail1">Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail1"
+                    value={updatedUserData && updatedUserData.name}
+                    onChange={(e) => handleChange(e, 'name')}
+                    aria-describedby="emailHelp"
+                  />
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Email</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"></input>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail2">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="exampleInputEmail2"
+                    value={updatedUserData && updatedUserData.email}
+                    onChange={(e) => handleChange(e, 'email')}
+
+                  />
                 </div>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1"></input>
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail3">User Role (level)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail3"
+                    onChange={(e) => handleChange(e, 'userRole')}
+
+                    value={updatedUserData.userRole}
+                  />
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1"></label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"></input>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail4">Customer Score</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="exampleInputEmail4"
+                    onChange={(e) => handleChange(e, 'customerScore')}
+
+                    value={updatedUserData && updatedUserData.customerScore}
+                  />
                 </div>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1"></input>
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail5">Landlord Score</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="exampleInputEmail5"
+                    onChange={(e) => handleChange(e, 'landlordScore')}
+
+                    value={updatedUserData && updatedUserData.landlordScore}
+                  />
                 </div>
-                <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"></input>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail6">Phone Number</label>
+                  <input
+                    type="tel"
+                    className="form-control"
+                    id="exampleInputEmail6"
+                    onChange={(e) => handleChange(e, 'phoneNumber')}
+
+                    value={updatedUserData && updatedUserData.phoneNumber}
+                  />
                 </div>
-                <div class="form-check">
-                  <input type="checkbox" class="form-check-input" id="exampleCheck1"></input>
-                  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail7">IsVerified</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail7"
+                    onChange={(e) => handleChange(e, 'isVerified')}
+
+                    value={updatedUserData && updatedUserData.isVerified ? "Yes" : "No"}
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="exampleInputEmail8">User Location (Postal Code)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail8"
+                    onChange={(e) => handleChange(e, 'postalCode')}
+
+                    value={updatedUserData && updatedUserData.location && updatedUserData.location.postalCode}
+                  />
                 </div>
 
-                <div style={{display: "flex", justifyContent: "center", marginTop: "20px"}}><button type="submit" class="btn" style={{ backgroundColor: "black", color: "white", width: "160px", textAlign: "center", fontWeight: "700", borderRadius: "20px" }}>Save</button></div>
-              </form>
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                  <button
+                    type="submit"
+                    className="btn"
+                    style={{ backgroundColor: "black", color: "white", width: "160px", textAlign: "center", fontWeight: "700", borderRadius: "20px" }}
+                  >
+                    Save
+                  </button>
+                </div>
+              </form>;
+
             </Popup>
 
 

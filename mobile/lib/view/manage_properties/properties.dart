@@ -33,9 +33,6 @@ class _AllPropertiesState extends State<Properties>
   ManagePropertiesController controller = Get.put(ManagePropertiesController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
 
-  late bool _isLoading; // Add a boolean variable for loading images
-  Timer? _timer;
-
   @override
   bool get wantKeepAlive => true; // Keep the state alive
 
@@ -59,15 +56,8 @@ class _AllPropertiesState extends State<Properties>
     controller.propertiesUserId = loginController.userDto?["id"];
     await controller.getPropertiesUser();
 
+    setState(() {
     isLoading = false; // Set isLoading to false when data is loaded
-
-    _isLoading = true;
-    _timer = Timer(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
     });
   }
 
@@ -489,11 +479,5 @@ class _AllPropertiesState extends State<Properties>
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
   }
 }
