@@ -53,7 +53,9 @@ class _AllPropertiesState extends State<Properties>
   }
 
   Future<void> loadData() async {
-    controller.propertiesUserId = loginController.userDto?["id"];
+    var id = loginController.userDto?["id"];
+    if (id == null || id <= 0) return;
+    controller.propertiesUserId = id;
     await controller.getPropertiesUser();
 
     setState(() {

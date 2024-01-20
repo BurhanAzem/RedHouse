@@ -125,8 +125,8 @@ class _BottomBarState extends State<BottomBar> {
               index: bottomBarController.currentIndex,
               children: const [
                 Search(),
-                // AllContracts(),
-                // Messages(),
+                AllContracts(),
+                Messages(),
                 ManageProperties(),
                 More(),
               ],

@@ -42,7 +42,9 @@ class _MessagesState extends State<Messages> {
   void initState() {
     super.initState();
     currentUserId = loginController.userDto!["id"].toString();
-    currentUserEmail = loginController.userDto!["email"];
+    var email = loginController.userDto!["email"];
+    if(email == null) return;
+    currentUserEmail = email;
     loadData();
     setState(() {});
   }

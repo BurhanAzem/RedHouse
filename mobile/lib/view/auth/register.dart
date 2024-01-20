@@ -46,16 +46,16 @@ class _RegisterState extends State<Register> {
         title: RichText(
           text: const TextSpan(
             children: <TextSpan>[
+              // TextSpan(
+              //   text: "Red ",
+              //   style: TextStyle(
+              //     color: Color(0xffd92328),
+              //     fontSize: 35,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               TextSpan(
-                text: "Red ",
-                style: TextStyle(
-                  color: Color(0xffd92328),
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextSpan(
-                text: "House",
+                text: "Sign Up",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 25,

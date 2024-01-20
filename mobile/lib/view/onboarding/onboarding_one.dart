@@ -71,7 +71,7 @@ class OnBoardingOne extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Find the ideal place according to your\nneeds and expectations.",
+                  "Welcome to our Real Estate App! Create your profile to get started.",
                   textAlign: TextAlign.center, // Corrected textAlign
                   style: TextStyle(
                     fontSize: 18,
