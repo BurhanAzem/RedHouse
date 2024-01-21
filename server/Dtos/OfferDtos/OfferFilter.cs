@@ -5,6 +5,7 @@ namespace RedHouse_Server.Dtos.OfferDtos
 {
    public class OfferFilter
     {
+        public string OfferType { get; set; }
         public string OfferStatus { get; set; }
         public string OfferTo { get; set; }
 

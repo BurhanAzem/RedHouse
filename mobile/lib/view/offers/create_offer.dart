@@ -1,4 +1,5 @@
 import 'package:client/controller/contract/offer_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,14 +8,12 @@ import 'package:intl/intl.dart';
 class CreateOffer extends StatefulWidget {
   int landlordId;
   int customerId;
-  int propertyId;
   Property property;
 
   CreateOffer({
     Key? key,
     required this.landlordId,
     required this.customerId,
-    required this.propertyId,
     required this.property,
   }) : super(key: key);
 
@@ -24,12 +23,12 @@ class CreateOffer extends StatefulWidget {
 
 class _CreateOfferState extends State<CreateOffer> {
   OfferController offerController = Get.put(OfferController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
   String message = "";
 
   @override
   void initState() {
     super.initState();
-    print(widget.landlordId + widget.customerId + widget.propertyId);
     offerController.price.text = "";
     offerController.offerExpireDate = DateTime.now();
     offerController.description.text = "";
@@ -221,39 +220,20 @@ class _CreateOfferState extends State<CreateOffer> {
               Container(height: 25),
               MaterialButton(
                 onPressed: () {
-                  // setState(() {});
-                  // ScaffoldMessenger.of(context).clearSnackBars();
-                  // setState(() {
-                  //   controller.activeStep++;
-                  // });
-                  // controller.addMilestone();
-
-                  // applicationsController.propertyId = widget.property.id;
-                  // applicationsController.userId =
-                  //     loginController.userDto?["id"];
-                  // applicationsController.addApplication();
-                  // offerController.createOffer();
-
-                  // SnackBar snackBar = const SnackBar(
-                  //   content: Text("Created successfully"),
-                  //   backgroundColor: Colors.blue,
-                  // );
-                  // ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  // Navigator.of(context).pop();
-
                   setState(() {});
                   ScaffoldMessenger.of(context).clearSnackBars();
 
                   Future<void> addOfferFuture() async {
+                    offerController.userCreatedId =
+                        loginController.userDto?["id"];
                     offerController.landlordId = widget.landlordId;
-                    offerController.propertyId = widget.propertyId;
                     offerController.customerId = widget.customerId;
+                    offerController.propertyId = widget.property.id;
                     await offerController.createOffer();
 
                     setState(() {
                       message = offerController.responseMessage;
                     });
-                    print(message);
 
                     if (message == "Created Successfully") {
                       SnackBar snackBar = SnackBar(

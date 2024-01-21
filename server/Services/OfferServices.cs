@@ -219,6 +219,7 @@ namespace server.Services
             var query = _redHouseDbContext.Offers.Where(o => o.CustomerId == userId || o.LandlordId == userId)
             .Include(o => o.Customer)
             .Include(o => o.Landlord)
+            .Include(o => o.UserCreated)
             .Include(a => a.Property)
             .ThenInclude(p => p.Location)
             .Include(a => a.Property)
@@ -227,24 +228,27 @@ namespace server.Services
             .ThenInclude(p => p.propertyFiles)
             .AsQueryable();
 
-            if (offerFilter.OfferTo.Trim() == "Landlord")
+            if (offerFilter.OfferTo.Trim() == "Sent")
             {
-                query = query.Where(c => c.LandlordId == userId);
+                query = query.Where(c => c.UserCreatedId == userId);
             }
-            if (offerFilter.OfferTo.Trim() == "Customer")
+
+            if (offerFilter.OfferTo.Trim() == "Incoming")
             {
-                query = query.Where(c => c.CustomerId == userId);
+                query = query.Where(c => c.UserCreatedId != userId);
             }
+
+
+            if (offerFilter.OfferType.Trim() != "All")
+            {
+                query = query.Where(a => a.Property.ListingType == offerFilter.OfferType.Trim());
+            }
+
             if (offerFilter.OfferStatus.Trim() != "All")
             {
-                // Extract the result of the method call without optional arguments
-                var offerStatusValue = offerFilter.OfferStatus.Split(' ')[0];
-
-                // Use the variable in the LINQ expression
-                query = query.Where(c => c.OfferStatus == offerStatusValue);
-
-
+                query = query.Where(c => c.OfferStatus == offerFilter.OfferStatus.Trim());
             }
+
             var offers = query.ToArray();
 
             return new ResponsDto<Offer>
@@ -302,7 +306,7 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            var offer = await _redHouseDbContext.Offers.Include(o => o.Customer).Include(o => o.Landlord).Include(o => o.Property).FirstOrDefaultAsync(o => o.PropertyId == propertyId && o.LandlordId == landlordId && o.CustomerId == customerId);
+            var offer = await _redHouseDbContext.Offers.Include(o => o.Customer).Include(o => o.Landlord).Include(o => o.Property).Include(o => o.UserCreated).FirstOrDefaultAsync(o => o.PropertyId == propertyId && o.LandlordId == landlordId && o.CustomerId == customerId);
 
             if (offer == null)
             {
@@ -328,13 +332,13 @@ namespace server.Services
         public async Task<int> NumberOfOffers()
         {
             return await _redHouseDbContext.Offers.CountAsync();
-
         }
 
-        public async Task<ResponsDto<Offer>> UpdateOffer(OfferDto offerDto, int offerId)
+        public async Task<ResponsDto<Offer>> UpdateOffer(UpdateOfferDto offerDto, int offerId)
         {
             var offer = await _redHouseDbContext.Offers
-                 .FirstOrDefaultAsync(c => c.Id == offerId);
+                .FirstOrDefaultAsync(c => c.Id == offerId);
+
             if (offer == null)
             {
                 return new ResponsDto<Offer>
@@ -343,26 +347,56 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            Offer updatedOffer = new Offer
-            {
-                CustomerId = offerDto.CustomerId,
-                LandlordId = offerDto.LandlordId,
-                PropertyId = offerDto.PropertyId,
-                Description = offerDto.Description,
-                OfferDate = DateTime.Now,
-                OfferExpires = offerDto.OfferExpires,
-                OfferStatus = offerDto.OfferStatus,
-                Price = offerDto.Price,
 
-            };
-            _redHouseDbContext.Offers.Update(updatedOffer);
+            // Update only the properties that are not null in the DTO
+            if (offerDto.CustomerId != null)
+            {
+                offer.CustomerId = (int)offerDto.CustomerId;
+            }
+
+            if (offerDto.LandlordId != null)
+            {
+                offer.LandlordId = (int)offerDto.LandlordId;
+            }
+
+            if (offerDto.PropertyId != null)
+            {
+                offer.PropertyId = (int)offerDto.PropertyId;
+            }
+
+            if (offerDto.Description != null)
+            {
+                offer.Description = offerDto.Description;
+            }
+
+            if (offerDto.OfferDate != null)
+            {
+                offer.OfferDate = (DateTime)offerDto.OfferDate;
+            }
+
+            if (offerDto.OfferExpires != null)
+            {
+                offer.OfferExpires = (DateTime)offerDto.OfferExpires;
+            }
+
+            if (offerDto.OfferStatus != null)
+            {
+                offer.OfferStatus = offerDto.OfferStatus;
+            }
+
+            if (offerDto.Price != null)
+            {
+                offer.Price = (double)offerDto.Price;
+            }
+
             _redHouseDbContext.SaveChanges();
+
             return new ResponsDto<Offer>
             {
-                Dto = offer,
-                Message = "Offer updated successfully",
+                Message = "Offer with {applicationId} Id Updated successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
     }
 }

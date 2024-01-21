@@ -17,6 +17,7 @@ class Offer {
   String offerStatus;
   User? landlord;
   User? customer;
+  User? userCreated;
   Property? property;
 
   Offer({
@@ -33,6 +34,7 @@ class Offer {
     this.landlord,
     this.customer,
     this.property,
+    this.userCreated,
   });
 
   factory Offer.fromJson(Map<String, dynamic> json) => _$OfferFromJson(json);

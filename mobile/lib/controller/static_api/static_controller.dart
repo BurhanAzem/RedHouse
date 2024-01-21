@@ -6,4 +6,14 @@ class StaticController extends GetxController {
   List<Property> favoriteProperties = <Property>[];
   List<Property> searchProperties = <Property>[];
   List<Location> searchLocation = <Location>[];
+
+  clearsearchProperties() {
+    searchProperties.clear();
+    update();
+  }
+
+  clearsearchLocation() {
+    searchLocation.clear();
+    update();
+  }
 }

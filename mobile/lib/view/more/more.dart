@@ -1,7 +1,8 @@
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/messages/messages_page.dart';
-import 'package:client/view/more/account_information.dart';
+import 'package:client/view/more/profile/edit_profile.dart';
+import 'package:client/view/more/profile/profile.dart';
 import 'package:client/view/more/account_upgrade.dart';
 import 'package:client/view/more/account_verification.dart';
 import 'package:client/view/more/complaint.dart';
@@ -170,7 +171,9 @@ class _MoreState extends State<More> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Get.to(() => const EditProfile());
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(

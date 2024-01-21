@@ -1,3 +1,5 @@
+import 'package:client/controller/contract/offer_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +14,8 @@ class SentOffer extends StatefulWidget {
 }
 
 class _SentOfferState extends State<SentOffer> {
-  int _currentStep = 0;
-  StepperType stepperType = StepperType.vertical;
-  bool showMoreSummary = false;
-  String summaryString = "Show more";
-
-  @override
-  bool get wantKeepAlive => true;
+  OfferController controller = Get.put(OfferController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
 
   @override
   Widget build(BuildContext context) {
@@ -173,17 +170,22 @@ class _SentOfferState extends State<SentOffer> {
                             child: Column(
                               children: [
                                 Container(
-                                    child: const Text("Expiry date",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600))),
+                                  child: const Text(
+                                    "Expiry date",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                                 Text(
-                                    widget.offer.offerExpires
-                                        .toString()
-                                        .substring(0, 11),
-                                    style: const TextStyle(
-                                        color:
-                                            Color.fromARGB(255, 196, 39, 27))),
+                                  widget.offer.offerExpires
+                                      .toString()
+                                      .substring(0, 11),
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 196, 39, 27),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -226,32 +228,6 @@ class _SentOfferState extends State<SentOffer> {
                   Container(
                     height: 5,
                   ),
-                  showMoreSummary
-                      ? Column(
-                          children: [
-                            Container(
-                              height: 5,
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  MaterialButton(
-                    onPressed: () {
-                      setState(() {
-                        showMoreSummary = !showMoreSummary;
-                      });
-                    },
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 5),
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Text(
-                          !showMoreSummary ? "Show more" : "Show less",
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        )),
-                  )
                 ]),
               ),
               InkWell(
@@ -280,8 +256,11 @@ class _SentOfferState extends State<SentOffer> {
               ),
               Container(height: 20),
 
-              // If this offer have contract, show "See Contract"
-              if (true) seeContract(),
+              // Show "Delete Offer"
+              if (widget.offer.offerStatus == "Pending") deleteButton(),
+
+              // Show "See Contract"
+              if (widget.offer.offerStatus == "Accepted") contractButton(),
             ],
           ),
         ),
@@ -289,9 +268,45 @@ class _SentOfferState extends State<SentOffer> {
     );
   }
 
-  Widget seeContract() {
-    return Container(
-      // width: 300,
+  Widget deleteButton() {
+    return SizedBox(
+      height: 40,
+      child: ElevatedButton(
+        onPressed: () {
+          controller.deleteOffer(widget.offer.id);
+          setState(() {});
+          Navigator.pop(context);
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Colors.black,
+          onPrimary: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              FontAwesomeIcons.trash,
+              size: 16,
+            ),
+            SizedBox(width: 10),
+            Text(
+              "Delete Offer",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget contractButton() {
+    return SizedBox(
       height: 40,
       child: ElevatedButton(
         onPressed: () {},
@@ -307,10 +322,16 @@ class _SentOfferState extends State<SentOffer> {
           children: [
             Icon(
               FontAwesomeIcons.eye,
-              size: 18,
+              size: 17,
             ),
-            SizedBox(width: 8),
-            Text("See Contract"),
+            SizedBox(width: 10),
+            Text(
+              "See Contract",
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),

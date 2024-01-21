@@ -126,16 +126,16 @@ namespace server.Services
 
             }
 
-            // Now you can use the 'query' variable for further processing
-
             if (applicationFilter.ApplicationTo.Trim() == "Customer")
             {
                 query = query.Where(a => a.UserId == userId);
             }
+
             if (applicationFilter.ApplicationType.Trim() != "All")
             {
                 query = query.Where(a => a.Property.ListingType == applicationFilter.ApplicationType.Trim());
             }
+
             if (applicationFilter.ApplicationStatus.Trim() != "All")
             {
                 query = query.Where(c => c.ApplicationStatus == applicationFilter.ApplicationStatus.Trim());
@@ -171,33 +171,53 @@ namespace server.Services
         }
 
 
-        public async Task<ResponsDto<Application>> UpdateApplication(ApplicationDto applicationDto, int applicationId)
+        public async Task<ResponsDto<Application>> UpdateApplication(UpdateApplicationDto applicationDto, int applicationId)
         {
-            var property = await _redHouseDbContext.Applications.FindAsync(applicationId);
-            if (property == null)
+            var application = await _redHouseDbContext.Applications.FindAsync(applicationId);
+
+            if (application == null)
             {
                 return new ResponsDto<Application>
                 {
-                    Exception = new Exception($"Application with {applicationId} Dose Not Exist"),
+                    Exception = new Exception($"Application with {applicationId} Does Not Exist"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            Application updatedApplication = new Application
+
+            if (applicationDto.ApplicationDate != null)
             {
-                ApplicationDate = applicationDto.ApplicationDate,
-                ApplicationStatus = applicationDto.ApplicationStatus,
-                Message = applicationDto.Message,
-                PropertyId = applicationDto.PropertyId,
-                UserId = applicationDto.UserId
-            };
-            _redHouseDbContext.Applications.Update(updatedApplication);
+                application.ApplicationDate = (DateTime)applicationDto.ApplicationDate;
+            }
+
+            if (applicationDto.ApplicationStatus != null)
+            {
+                application.ApplicationStatus = applicationDto.ApplicationStatus;
+            }
+
+            if (applicationDto.Message != null)
+            {
+                application.Message = applicationDto.Message;
+            }
+
+            if (applicationDto.PropertyId != null)
+            {
+                application.PropertyId = (int)applicationDto.PropertyId;
+            }
+
+            if (applicationDto.UserId != null)
+            {
+                application.UserId = (int)applicationDto.UserId;
+            }
+
             _redHouseDbContext.SaveChanges();
+
             return new ResponsDto<Application>
             {
-                Message = $"Application with {applicationId} Id Updated succssfully",
+                Message = $"Application with {applicationId} Id Updated successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
 
         public async Task<ResponsDto<Application>> ApproveApplication(int applicationId)
         {
@@ -334,6 +354,72 @@ namespace server.Services
             }
 
         }
+
+        public async Task<ResponsDto<Application>> IsApplicationCreated(int propertyId, int customerId)
+        {
+            var property = await _redHouseDbContext.Properties.FindAsync(propertyId);
+            if (property == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception($"property Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var customer = await _redHouseDbContext.Users.FindAsync(customerId);
+            if (customer == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Exception = new Exception($"User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            var applications = await _redHouseDbContext.Applications.FirstOrDefaultAsync(a => a.PropertyId == propertyId && a.UserId == customerId);
+
+            var query = _redHouseDbContext.Applications
+                .Include(a => a.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.Location)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                .Include(a => a.Property)
+                .ThenInclude(p => p.propertyFiles)
+                .AsQueryable();
+
+            var application = await _redHouseDbContext.Applications
+            .Include(a => a.User)
+            .Include(a => a.Property)
+            .ThenInclude(p => p.Location)
+            .Include(a => a.Property)
+            .ThenInclude(p => p.User)
+            .Include(a => a.Property)
+           .ThenInclude(p => p.propertyFiles).FirstOrDefaultAsync(o => o.PropertyId == propertyId && o.UserId == customerId);
+
+            if (application == null)
+            {
+                return new ResponsDto<Application>
+                {
+                    Message = "Not Created",
+                    Dto = null,
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+            else
+            {
+                return new ResponsDto<Application>
+                {
+                    Message = "Created",
+                    Dto = application,
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+        }
     }
+
+
 
 }

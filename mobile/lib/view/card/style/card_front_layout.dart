@@ -81,7 +81,7 @@ class CardFrontLayout {
                   children: [
                     const Icon(
                       FontAwesomeIcons.chessKing,
-                      size: 26,
+                      size: 25,
                       color: Colors.white,
                     ),
                     Container(
@@ -134,8 +134,7 @@ class CardFrontLayout {
                             reDays >= 0 ? offerON() : offerOFF(),
                             style: const TextStyle(
                               package: 'awesome_card',
-                              // color: Color.fromARGB(255, 196, 39, 27),
-                              color: Color.fromARGB(255, 233, 178, 11),
+                              color: Color.fromARGB(255, 94, 88, 58),
                               fontWeight: FontWeight.w500,
                               fontFamily: 'MavenPro',
                               fontSize: 17,
@@ -214,8 +213,8 @@ class CardFrontLayout {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Icon(
-                  FontAwesomeIcons.file,
-                  size: 26,
+                  FontAwesomeIcons.fileCode,
+                  size: 25,
                   color: Colors.white,
                 ),
                 Container(
@@ -266,9 +265,9 @@ class CardFrontLayout {
                       const SizedBox(height: 15),
                       Text(
                         applicationType(),
-                        style: const TextStyle(
+                        style: TextStyle(
                           package: 'awesome_card',
-                          color: Colors.white,
+                          color: textColor,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'MavenPro',
                           fontSize: 17,
@@ -314,7 +313,7 @@ class CardFrontLayout {
 
   Widget layout3() {
     String divideCodeIntoGroups(String code) {
-      final RegExp pattern = RegExp(r".{1,4}");
+      final RegExp pattern = RegExp(r".{1,3}");
       Iterable<Match> matches = pattern.allMatches(code);
       List<String> groups = matches.map((match) => match.group(0)!).toList();
       return groups.join(" ");
@@ -326,9 +325,9 @@ class CardFrontLayout {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.black,
             Colors.black12,
-            Colors.white54,
+            Colors.black12,
+            Colors.white60,
           ],
         ),
       ),
@@ -343,8 +342,8 @@ class CardFrontLayout {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Icon(
-                  FontAwesomeIcons.chessKing,
-                  size: 26,
+                  FontAwesomeIcons.penToSquare,
+                  size: 25,
                   color: Colors.white,
                 ),
                 Container(
@@ -376,18 +375,30 @@ class CardFrontLayout {
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        divideCodeIntoGroups(booking!.bookingCode),
+                        "Property Code",
                         style: TextStyle(
                           package: 'awesome_card',
                           color: textColor,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'MavenPro',
-                          fontSize: 16,
+                          fontSize: 17,
                         ),
-                        textAlign: TextAlign.start,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        divideCodeIntoGroups(booking!.property!.propertyCode),
+                        style: TextStyle(
+                          package: 'awesome_card',
+                          color: textColor,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'MavenPro',
+                          fontSize: 17.5,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 15),
                       Row(

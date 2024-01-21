@@ -276,7 +276,7 @@ class _ClosestPropertiesState extends State<ClosestProperties>
                                 TextSpan(
                                   text:
                                       'Brokered by the ${property.listingBy} ',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 12.5,
                                   ),

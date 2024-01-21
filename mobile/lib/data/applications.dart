@@ -35,18 +35,7 @@ class ApplicationData {
           },
           body: json.encode(data),
           encoding: Encoding.getByName("utf-8"));
-      print(response);
       return (response);
-
-      // if (response.statusCode == 200 || response.statusCode == 201) {
-      //   Map responsebody = json.decode(response.body);
-      //   print(responsebody);
-      //   return (responsebody);
-      // } else {
-      //   Map responsebody = json.decode(response.body);
-      //   print(responsebody);
-      //   return (StatusRequest.serverfailure);
-      // }
     } else {
       return (StatusRequest.offlinefailure);
     }
@@ -68,11 +57,9 @@ class ApplicationData {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;
@@ -89,11 +76,9 @@ class ApplicationData {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["dto"]);
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;
@@ -111,7 +96,6 @@ class ApplicationData {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
@@ -132,7 +116,6 @@ class ApplicationData {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
@@ -152,7 +135,6 @@ class ApplicationData {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
           });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
@@ -176,16 +158,74 @@ class ApplicationData {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ${getToken()}',
         });
-        print(response.statusCode);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map responsebody = json.decode(response.body);
-          print(responsebody["listDto"]);
           return (responsebody);
         } else {
           return StatusRequest.serverfailure;
         }
       } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> updateApplicationStatus(
+      int applicationId, String newStatus) async {
+    if (await checkInternet()) {
+      try {
+        var uri = Uri.parse('${AppLink.applications}/$applicationId');
+
+        var data = {
+          "applicationStatus": newStatus,
+        };
+
+        var response = await http.put(
+          uri,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          },
+          body: json.encode(data),
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map<String, dynamic> responseBody = json.decode(response.body);
+
+          return responseBody;
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+    static getApplicationForUser(int propertyId, int customerId) async {
+    final Map<String, dynamic> filters = {
+      "propertyId": propertyId.toString(),
+      "customerId": customerId.toString(),
+    };
+
+    if (await checkInternet()) {
+      final Uri uri = Uri.https("10.0.2.2:7042", "/applications/is-created", filters);
+
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+
+        return (responsebody);
+      } else {
         return StatusRequest.serverfailure;
       }
     } else {

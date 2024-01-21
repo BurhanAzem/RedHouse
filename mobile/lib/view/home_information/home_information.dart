@@ -1,3 +1,4 @@
+import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/controller/booking/booking_controller.dart';
 import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/static_api/static_controller.dart';
@@ -9,6 +10,7 @@ import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/home_information/application_buttons.dart';
 import 'package:client/view/home_information/image_slider_widget.dart';
 import 'package:client/view/home_information/check_property.dart';
+import 'package:client/view/manage_properties/applications/sent_application.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,6 +36,8 @@ class _HomeInformationState extends State<HomeInformation> {
   ManagePropertiesController controller = Get.put(ManagePropertiesController());
   BookingController bookingController = Get.put(BookingController());
   StaticController staticController = Get.put(StaticController());
+  ApplicationsController applicationsController =
+      Get.put(ApplicationsController());
   GoogleMapController? mapController;
   late CameraPosition propertyPosition;
   int slider = 1;
@@ -52,8 +56,6 @@ class _HomeInformationState extends State<HomeInformation> {
   @override
   void initState() {
     super.initState();
-
-    print(widget.property);
 
     if (!staticController.searchProperties.contains(widget.property)) {
       staticController.searchProperties.add(widget.property);
@@ -95,6 +97,11 @@ class _HomeInformationState extends State<HomeInformation> {
   }
 
   void loadData() async {
+    await applicationsController.getApplicationForUser(
+      widget.property.id,
+      loginController.userDto?["id"],
+    );
+
     if (widget.property.propertyStatus == "Coming soon" &&
         currentDate.isAfter(widget.property.availableOn)) {
       // Update the property status to "Accepting offers"
@@ -104,10 +111,8 @@ class _HomeInformationState extends State<HomeInformation> {
     }
 
     await controller.getNeighborhoodsForProperty(widget.property.id);
-    print(controller.propertyNeighborhoods);
 
     await bookingController.getBookingDaysForProperty(widget.property.id);
-    print(bookingController.preBookedDays);
 
     // Now you can use neighborhoodIcons in your loop
     for (var neighborhood in controller.propertyNeighborhoods) {
@@ -323,17 +328,8 @@ class _HomeInformationState extends State<HomeInformation> {
 
                       // code
                       const SizedBox(height: 10),
-                      const Text(
-                        "ZIP Code",
-                        style: TextStyle(
-                          fontSize: 19,
-                          color: Color.fromARGB(255, 196, 39, 27),
-                          fontWeight: FontWeight.w600,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
                       Text(
-                        divideCodeIntoGroups(widget.property.propertyCode),
+                        "ZIP / ${divideCodeIntoGroups(widget.property.propertyCode)}",
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
@@ -341,7 +337,6 @@ class _HomeInformationState extends State<HomeInformation> {
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      // const SizedBox(height: 40),
                       const SizedBox(height: 25),
 
                       // Container
@@ -428,62 +423,58 @@ class _HomeInformationState extends State<HomeInformation> {
                             children: [
                               const Icon(FontAwesomeIcons.hammer, size: 31),
                               const SizedBox(width: 12),
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        children: [
-                                          const TextSpan(
-                                            text: 'Built in ',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.black,
-                                            ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text.rich(
+                                    TextSpan(
+                                      children: [
+                                        const TextSpan(
+                                          text: 'Built in ',
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600,
+                                            color: Colors.black,
                                           ),
-                                          TextSpan(
-                                            text:
-                                                '${widget.property.builtYear.year}',
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color.fromARGB(
-                                                  255, 196, 39, 27),
-                                            ),
+                                        ),
+                                        TextSpan(
+                                          text:
+                                              '${widget.property.builtYear.year}',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(
+                                                255, 196, 39, 27),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                    Text('Year built',
-                                        style: TextStyle(
-                                            color: Colors.grey[500],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500)),
-                                  ],
-                                ),
+                                  ),
+                                  Text('Year built',
+                                      style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500)),
+                                ],
                               ),
                               const SizedBox(width: 45),
                               const Icon(Icons.home_work, size: 35),
                               const SizedBox(width: 12),
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(widget.property.view,
-                                        style: const TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 196, 39, 27),
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                    Text('Property view',
-                                        style: TextStyle(
-                                            color: Colors.grey[500],
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500)),
-                                  ],
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(widget.property.view,
+                                      style: const TextStyle(
+                                          color:
+                                              Color.fromARGB(255, 196, 39, 27),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                  Text('Property view',
+                                      style: TextStyle(
+                                          color: Colors.grey[500],
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500)),
+                                ],
                               ),
                             ],
                           ),
@@ -916,65 +907,43 @@ class _HomeInformationState extends State<HomeInformation> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 35),
+
+                // Chart
                 Container(
-                  height: 400,
+                  margin: const EdgeInsets.only(right: 20),
+                  height: 350,
                   child: LineChart(
                     LineChartData(
+                      minY: 0,
                       titlesData: FlTitlesData(
-                          bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, titleMeta) {
-                          // Example: return a custom widget for Y-axis labels
-                          return Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Text(
-                              value.toInt().toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 10,
+                        bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, titleMeta) {
+                            return Container(
+                              margin: const EdgeInsets.only(top: 8),
+                              child: Text(
+                                value.toInt().toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 11.5,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      )),
-                      topTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, titleMeta) {
-                          // Example: return a custom widget for Y-axis labels
-                          return Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Text(
-                              value.toInt().toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        },
-                      )),
-                      leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, titleMeta) {
-                          // Example: return a custom widget for Y-axis labels
-                          return Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Text(
-                              value.toInt().toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        },
-                      ))),
+                            );
+                          },
+                        )),
+                        topTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                          showTitles: false,
+                        )),
+                        rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                          showTitles: false,
+                        )),
+                      ),
                       gridData: FlGridData(
-                        show: false,
+                        show: true,
                         getDrawingHorizontalLine: (value) {
                           return const FlLine(
                             color: Color(0xff37434d),
@@ -990,7 +959,8 @@ class _HomeInformationState extends State<HomeInformation> {
                         },
                       ),
                       borderData: FlBorderData(
-                        show: false,
+                        show: true,
+                        border: Border.all(color: const Color(0xff37434d)),
                       ),
                       lineBarsData: [
                         LineChartBarData(
@@ -1000,13 +970,19 @@ class _HomeInformationState extends State<HomeInformation> {
                                           "For monthly rent"
                                   ? filterController.flSpotListRent
                                   : filterController.flSpotListSell,
-                          color: Colors.green,
-                          isCurved: false,
+                          color: const Color.fromARGB(255, 148, 104, 101),
+                          isCurved: true,
                           barWidth: 3,
+                          isStrokeCapRound: true,
+                          dotData: const FlDotData(show: false),
                           belowBarData: BarAreaData(
-                            show: true,
-                            color: Colors.greenAccent[100],
-                          ),
+                              show: true,
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Colors.black87,
+                                  Color.fromARGB(238, 21, 101, 192),
+                                ],
+                              )),
                         ),
                       ],
                     ),
@@ -1014,12 +990,8 @@ class _HomeInformationState extends State<HomeInformation> {
                 ),
                 const SizedBox(height: 15),
                 Container(
-                  padding:
-                      widget.property.userId != loginController.userDto?["id"]
-                          ? const EdgeInsets.only(
-                              left: 25, right: 20, top: 15, bottom: 17)
-                          : const EdgeInsets.only(
-                              left: 25, right: 20, top: 15, bottom: 30),
+                  padding: const EdgeInsets.only(
+                      left: 25, right: 20, top: 15, bottom: 30),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -1045,14 +1017,64 @@ class _HomeInformationState extends State<HomeInformation> {
               ],
             ),
           ),
-          if (widget.property.userId != loginController.userDto?["id"] &&
-              widget.property.propertyStatus != "Under contract")
-            if (widget.property.listingType == "For daily rent")
-              BookingButtons(property: widget.property)
-            else
-              ApplicationButtons(property: widget.property),
+
+          // Button
+          homeButton(),
         ],
       ),
     );
+  }
+
+  Widget homeButton() {
+    if (widget.property.userId == loginController.userDto?["id"]) {
+      // If My property
+      return Container();
+    } else {
+      if (applicationsController.responseMessage == "Created") {
+        // If their previous application
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: MaterialButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  onPressed: () {
+                    Get.to(const SentApplication(),
+                        arguments: applicationsController.applicationIsCreated);
+                  },
+                  height: 45,
+                  color: Colors.black87,
+                  child: const Center(
+                    child: Text(
+                      "See Application",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        if (widget.property.listingType == "For daily rent") {
+          return BookingButtons(property: widget.property);
+        } else {
+          if (widget.property.propertyStatus == "Under contract") {
+            // If property under contract
+            return Text("Under contract");
+          } else {
+            return ApplicationButtons(property: widget.property);
+          }
+        }
+      }
+    }
   }
 }

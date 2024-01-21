@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 class ApplicationsController extends GetxController {
   List<Application> applications = [];
   List<Application> approvedApplicationsForUser = [];
+  Application? applicationIsCreated;
+  String responseMessage = "";
 
   String applicationType = "All";
   String applicationStatus = "All";
@@ -19,8 +21,6 @@ class ApplicationsController extends GetxController {
   String _applicationStatus = "Pendding";
   TextEditingController suggestedPrice = TextEditingController();
 
-  String responseMessage = "";
-
   addApplication() async {
     var response = await ApplicationData.addApplication(
       propertyId,
@@ -31,16 +31,11 @@ class ApplicationsController extends GetxController {
       int.tryParse(suggestedPrice.text) ?? 0,
     );
 
-    print(response);
     Map responsebody = json.decode(response.body);
-    print(responsebody);
     responseMessage = responsebody["message"];
-    print(responseMessage);
 
     if (responsebody.length != 1) {
       if (responsebody['statusCode'] == 200) {
-        print(responsebody['listDto']);
-        print(responseMessage);
       } else {
         Get.defaultDialog(
           title: "Error",
@@ -59,7 +54,6 @@ class ApplicationsController extends GetxController {
       applications = (response['listDto'] as List<dynamic>)
           .map((e) => Application.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(applications);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -71,29 +65,59 @@ class ApplicationsController extends GetxController {
 
   approvedApplication(int id) async {
     var response = await ApplicationData.approvedApplication(id);
-    print(response['message']);
   }
 
   ignoreApplication(int id) async {
     var response = await ApplicationData.ignoreApplication(id);
-    print(response['message']);
   }
 
   deleteApplication(int id) async {
     var response = await ApplicationData.deleteApplication(id);
-    print(response['message']);
   }
 
   // Get all approved applications for user, to open messages between customer and landlord
   getApprovedApplicationsForUser(int userId) async {
     var response = await ApplicationData.getApprovedApplicationsForUser(userId);
-    
 
     if (response is Map<String, dynamic> && response['statusCode'] == 200) {
       approvedApplicationsForUser = (response['listDto'] as List<dynamic>)
           .map((e) => Application.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(approvedApplicationsForUser);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  updateApplicationStatus(int applicationId, String newStatus) async {
+    var response =
+        await ApplicationData.updateApplicationStatus(applicationId, newStatus);
+
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+      print(response);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  getApplicationForUser(int propertyId, int customerId) async {
+    var response =
+        await ApplicationData.getApplicationForUser(propertyId, customerId);
+
+    if (response['statusCode'] == 200) {
+      if (response['dto'] != null) {
+        applicationIsCreated =
+            Application.fromJson(response['dto'] as Map<String, dynamic>);
+      }
+      responseMessage = response['message'];
+      print(responseMessage);
     } else {
       Get.defaultDialog(
         title: "Error",

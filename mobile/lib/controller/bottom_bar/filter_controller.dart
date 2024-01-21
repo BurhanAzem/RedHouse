@@ -1,8 +1,6 @@
 import 'package:client/data/properties.dart';
 import 'package:client/model/list_property.dart';
 import 'package:client/model/location.dart';
-import 'package:client/model/property.dart';
-import 'package:client/view/search/map_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -237,6 +235,40 @@ class FilterController extends GetxController {
     update();
   }
 
+  void setBedButtonTemp(String label) {
+    bedButtonTemp.value = label;
+  }
+
+  void setBathButtonTemp(String label) {
+    bathButtonTemp.value = label;
+  }
+
+  bool isBedButtonTemp(String label) {
+    return bedButtonTemp.value == label;
+  }
+
+  bool isBathButtonTemp(String label) {
+    return bathButtonTemp.value == label;
+  }
+
+  void copyBedButton() {
+    bedButton.value = bedButtonTemp.value;
+  }
+
+  void copyBathButton() {
+    bathButton.value = bathButtonTemp.value;
+  }
+
+  void copyBedButtonTemp() {
+    bedButtonTemp.value = bedButton.value;
+  }
+
+  void copyBathButtonTemp() {
+    bathButtonTemp.value = bathButton.value;
+  }
+
+  // Apis
+  // Apis
   getProperties() async {
     isLoading = true;
 
@@ -394,7 +426,6 @@ class FilterController extends GetxController {
       // Your existing code
       if (response['statusCode'] == 200) {
         listProperty = ListProperty.fromJson(response);
-        print(listProperty.listDto);
       } else {
         // Your error handling code
         Get.defaultDialog(
@@ -421,9 +452,6 @@ class FilterController extends GetxController {
       listAutoCompleteLocation = (response['listDto'] as List<dynamic>)
           .map((e) => Location.fromJson(e as Map<String, dynamic>))
           .toList();
-
-      print(listAutoCompleteLocation);
-      print(listProperty.listDto);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -445,8 +473,6 @@ class FilterController extends GetxController {
 
       flSpotListRent.add(flSpot);
     }
-
-    print(flSpotListRent);
   }
 
   getPropertyPriceLastTenYearSell(int propertyId) async {
@@ -461,41 +487,5 @@ class FilterController extends GetxController {
           FlSpot((curYear - i).toDouble(), priceLastTenYears[i].toDouble());
       flSpotListSell.add(flSpot);
     }
-
-    print(flSpotListSell);
-  }
-
-
-
-  void setBedButtonTemp(String label) {
-    bedButtonTemp.value = label;
-  }
-
-  void setBathButtonTemp(String label) {
-    bathButtonTemp.value = label;
-  }
-
-  bool isBedButtonTemp(String label) {
-    return bedButtonTemp.value == label;
-  }
-
-  bool isBathButtonTemp(String label) {
-    return bathButtonTemp.value == label;
-  }
-
-  void copyBedButton() {
-    bedButton.value = bedButtonTemp.value;
-  }
-
-  void copyBathButton() {
-    bathButton.value = bathButtonTemp.value;
-  }
-
-  void copyBedButtonTemp() {
-    bedButtonTemp.value = bedButton.value;
-  }
-
-  void copyBathButtonTemp() {
-    bathButtonTemp.value = bathButton.value;
   }
 }

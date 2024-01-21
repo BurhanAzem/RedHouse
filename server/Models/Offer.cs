@@ -22,6 +22,7 @@ namespace server.Models
         public int PropertyId { get; set; }
         public Property Property { get; set; }
         public int UserCreatedId { get; set; }
+        public User UserCreated { get; set; }
         public DateTime OfferDate { get; set; }
         public DateTime OfferExpires { get; set; }
         public string Description { get; set; }

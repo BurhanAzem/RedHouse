@@ -128,11 +128,8 @@ class _ChatPageState extends State<ChatPage> {
                   case "Create offer":
                     Get.to(
                       () => CreateOffer(
-                        // This user ID is the ID of who received the application
                         landlordId: widget.application.property.userId,
-                        // This user ID is the ID of who sent the application
                         customerId: widget.application.userId,
-                        propertyId: widget.application.propertyId,
                         property: widget.application.property,
                       ),
                     );

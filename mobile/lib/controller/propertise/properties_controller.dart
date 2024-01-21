@@ -105,7 +105,9 @@ class ManagePropertiesController extends GetxController {
     var response = await PropertyData.getPropertiesForUser(
         propertiesUserId, propertiesFilter);
 
-    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+
+    if(response is Map<String, dynamic>) {
+    if ( response['statusCode'] == 200) {
       userProperties = (response['listDto'] as List<dynamic>)
           .map((e) => Property.fromJson(e as Map<String, dynamic>))
           .toList();
@@ -117,6 +119,8 @@ class ManagePropertiesController extends GetxController {
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
     }
+    }
+
   }
 
   getNeighborhoodsForProperty(int propertyId) async {

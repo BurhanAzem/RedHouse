@@ -1,14 +1,14 @@
-import 'dart:convert';
+import 'dart:async';
 import 'package:client/controller/application/applications_controller.dart';
-import 'package:client/main.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/application.dart';
-import 'package:client/model/user.dart';
 import 'package:client/view/manage_properties/applications/incoming_application.dart';
 import 'package:client/view/manage_properties/applications/sent_application.dart';
 import 'package:client/view/card/credit_card.dart';
 import 'package:client/view/card/style/card_background.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class AllApplications extends StatefulWidget {
   const AllApplications({Key? key});
@@ -17,10 +17,14 @@ class AllApplications extends StatefulWidget {
   _AllApplicationsState createState() => _AllApplicationsState();
 }
 
-class _AllApplicationsState extends State<AllApplications> {
-  bool isLoading = true; // Add a boolean variable for loading state
+class _AllApplicationsState extends State<AllApplications>
+    with AutomaticKeepAliveClientMixin {
   ApplicationsController controller =
       Get.put(ApplicationsController(), permanent: true);
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
+  @override
+  bool get wantKeepAlive => true; // Keep the state alive
 
   @override
   void initState() {
@@ -30,28 +34,12 @@ class _AllApplicationsState extends State<AllApplications> {
   }
 
   void loadData() async {
-    String? userDtoJson = sharepref.getString("user");
-    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
-    User user = User.fromJson(userDto);
-    await controller.getApplications(user.id!);
-
-    if (mounted) {
-      setState(() {
-        isLoading = false; // Set isLoading to false when data is loaded
-      });
-    }
+    await controller.getApplications(loginController.userDto?["id"]);
   }
 
   @override
   Widget build(BuildContext context) {
-    // Check if data is still loading
-    if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.grey[200],
-        ),
-      );
-    }
+    super.build(context);
 
     const applicationStatus = [
       "All",
@@ -59,15 +47,15 @@ class _AllApplicationsState extends State<AllApplications> {
       "Approved",
     ];
 
-    // Front-end display values for the application type dropdown
+    // Front-end display values
     final List<String> frontEndApplicationType = [
       "All",
-      "Application to book",
-      "Application to rent",
-      "Application to buy",
+      "Applications to book",
+      "Applications to rent",
+      "Applications to buy",
     ];
 
-    // Back-end values for the application type
+    // Back-end values
     final List<String> backEndApplicationType = [
       "All",
       "For daily rent",
@@ -75,111 +63,104 @@ class _AllApplicationsState extends State<AllApplications> {
       "For sell",
     ];
 
-    return Scaffold(
-      body: Column(
-        children: [
-          Container(height: 8),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-            child: TextFormField(
-              // Use your controller here if needed
-              style: const TextStyle(height: 1.2),
-              decoration: InputDecoration(
-                hintText: "Search by property code, customer, landlord name",
-                suffixIcon: const Icon(Icons.search),
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                contentPadding: const EdgeInsets.all(10),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+    return VisibilityDetector(
+      key: const Key('allApplications'),
+      onVisibilityChanged: (info) {
+        if (info.visibleFraction == 1) {
+          loadData();
+          setState(() {});
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            Container(height: 8),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              child: TextFormField(
+                style: const TextStyle(height: 1.2),
+                decoration: InputDecoration(
+                  hintText: "Search by property code, customer, landlord name",
+                  suffixIcon: const Icon(Icons.search),
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  contentPadding: const EdgeInsets.all(10),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               ),
             ),
-          ),
-          const SizedBox(width: 10),
+            const SizedBox(width: 10),
 
-          // Filters
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 180,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1.0),
-                  borderRadius: BorderRadius.circular(10.0),
+            // Filters
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 180,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: DropdownButton<String>(
+                    alignment: Alignment.centerLeft,
+                    isExpanded: true,
+                    value: controller.applicationStatus,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        controller.applicationStatus = newValue!;
+                        loadData();
+                      });
+                    },
+                    items: applicationStatus.map((String option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList(),
+                  ),
                 ),
-                child: DropdownButton<String>(
-                  alignment: Alignment.centerLeft,
-                  isExpanded: true,
-                  value: controller.applicationStatus,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      controller.applicationStatus = newValue!;
-                      loadData();
-                    });
-                  },
-                  items: applicationStatus.map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(option),
-                    );
-                  }).toList(),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  width: 180,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: DropdownButton<String>(
+                    alignment: Alignment.centerLeft,
+                    isExpanded: true,
+                    value: frontEndApplicationType[backEndApplicationType
+                        .indexOf(controller.applicationType)],
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        controller.applicationType = backEndApplicationType[
+                            frontEndApplicationType.indexOf(newValue!)];
+                        loadData();
+                      });
+                    },
+                    items: frontEndApplicationType.map((String option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Text(
+                          option,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                width: 180,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1.0),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: DropdownButton<String>(
-                  alignment: Alignment.centerLeft,
-                  isExpanded: true,
-                  value: frontEndApplicationType[backEndApplicationType
-                      .indexOf(controller.applicationType)],
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      controller.applicationType = backEndApplicationType[
-                          frontEndApplicationType.indexOf(newValue!)];
-                      loadData();
-                    });
-                  },
-                  items: frontEndApplicationType.map((String option) {
-                    return DropdownMenuItem<String>(
-                      value: option,
-                      child: Text(
-                        option,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ],
-          ),
-          Container(height: 12),
-          Expanded(
-            child: Container(
+              ],
+            ),
+            Container(height: 12),
+            Expanded(
               child: DefaultTabController(
                 length: 2,
                 initialIndex: 0,
                 child: Scaffold(
                   appBar: TabBar(
-                    onTap: (value) {
-                      if (value == 0) {
-                        setState(() {
-                          controller.applicationTo = "Landlord";
-                        });
-                        loadData();
-                      } else {
-                        setState(() {
-                          controller.applicationTo = "Customer";
-                        });
-                        loadData();
-                      }
-                    },
                     tabs: const [
                       Tab(text: 'Incoming Applications'),
                       Tab(text: 'Sent Applications'),
@@ -200,49 +181,67 @@ class _AllApplicationsState extends State<AllApplications> {
                   body: TabBarView(
                     children: [
                       // Content for 'Incoming Applications' tab
-                      // contentIncomingApplications(),
-                      FutureBuilder(
-                        future: Future.delayed(const Duration(seconds: 1)),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<void> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.grey[200],
-                              ),
-                            );
-                          } else {
-                            return contentIncomingApplications();
+                      VisibilityDetector(
+                        key: const Key("IncomingApplications"),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction == 1) {
+                            controller.applicationTo = "Landlord";
+                            loadData();
+                            setState(() {});
                           }
                         },
+                        child: FutureBuilder(
+                          future: Future.delayed(const Duration(seconds: 1)),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.grey[200],
+                                ),
+                              );
+                            } else {
+                              return contentIncomingApplications();
+                            }
+                          },
+                        ),
                       ),
 
                       // Content for 'Sent Applications' tab
-                      // contentSentApplications(),
-                      FutureBuilder(
-                        future: Future.delayed(const Duration(seconds: 1)),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<void> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Colors.grey[200],
-                              ),
-                            );
-                          } else {
-                            return contentSentApplications();
+                      VisibilityDetector(
+                        key: const Key("SentApplications"),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction == 1) {
+                            controller.applicationTo = "Customer";
+                            loadData();
+                            setState(() {});
                           }
                         },
+                        child: FutureBuilder(
+                          future: Future.delayed(const Duration(seconds: 1)),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<void> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  backgroundColor: Colors.grey[200],
+                                ),
+                              );
+                            } else {
+                              return contentSentApplications();
+                            }
+                          },
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -251,7 +250,7 @@ class _AllApplicationsState extends State<AllApplications> {
     if (controller.applications.isEmpty) {
       return const Center(
         child: Text(
-          "No Any Incoming Request",
+          "No any incoming application",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -263,6 +262,10 @@ class _AllApplicationsState extends State<AllApplications> {
         body: ListView.builder(
           itemCount: controller.applications.length,
           itemBuilder: (context, index) {
+            if (index >= controller.applications.length) {
+              return null; // Return null if index is out of range
+            }
+
             Application application = controller.applications[index];
             EdgeInsets _margin;
 
@@ -302,7 +305,7 @@ class _AllApplicationsState extends State<AllApplications> {
     if (controller.applications.isEmpty) {
       return const Center(
         child: Text(
-          "No Any Sent Request",
+          "No any sent application",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -314,6 +317,10 @@ class _AllApplicationsState extends State<AllApplications> {
         body: ListView.builder(
           itemCount: controller.applications.length,
           itemBuilder: (context, index) {
+            if (index >= controller.applications.length) {
+              return null; // Return null if index is out of range
+            }
+
             Application application = controller.applications[index];
             EdgeInsets _margin;
 

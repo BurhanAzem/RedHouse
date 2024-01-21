@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/view/add_property/add_property_2.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -93,7 +94,7 @@ class _AddProperty1State extends State<AddProperty1>
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(
-                Icons.arrow_back,
+                FontAwesomeIcons.angleLeft,
                 color: Colors.white,
               ),
               onPressed: () {

@@ -75,6 +75,7 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
         }
+
         [HttpDelete("/applications/{id}")]
         public async Task<IActionResult> DeleteApplication(int id)
         {
@@ -95,7 +96,7 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpPut("/applications/{id}")]
-        public async Task<IActionResult> UpdateApplication([FromBody] ApplicationDto applicationDto, int id)
+        public async Task<IActionResult> UpdateApplication([FromBody] UpdateApplicationDto applicationDto, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -175,7 +176,7 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        [HttpGet("/applications/is-application-approved")]
+        [HttpGet("//is-application-approved")]
         public async Task<IActionResult> IsApplicationApproved([FromQuery] int propertyId, int userId)
         {
             if (!ModelState.IsValid)
@@ -192,6 +193,23 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
 
 
+        }
+
+        [HttpGet("/applications/is-created")]
+        public async Task<IActionResult> IsApplicationCreatedFor([FromQuery] int propertyId, int customerId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _applicationServices.IsApplicationCreated(propertyId, customerId);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
         }
     }
 }

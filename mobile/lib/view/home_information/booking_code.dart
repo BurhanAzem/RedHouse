@@ -34,7 +34,7 @@ class _BookingCodeState extends State<BookingCode> {
             child: Text(
               '#${divideCodeIntoGroups(widget.bookingCode)}',
               style: TextStyle(
-                fontSize: 55,
+                fontSize: 50,
                 fontWeight: FontWeight.bold,
                 color: Colors.red[700],
               ),
