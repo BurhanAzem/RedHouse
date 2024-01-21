@@ -78,7 +78,7 @@ class OnBoardingTwo extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Find the ideal place according to your\nneeds and expectations.",
+                  "Easily find your dream home with our comprehensive system.",
                   textAlign: TextAlign.center, // Corrected textAlign
                   style: TextStyle(
                     fontSize: 18,

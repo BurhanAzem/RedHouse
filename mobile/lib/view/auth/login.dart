@@ -39,16 +39,16 @@ class _LoginState extends State<Login> {
         title: RichText(
           text: const TextSpan(
             children: <TextSpan>[
+              // TextSpan(
+              //   text: "Red ",
+              //   style: TextStyle(
+              //     color: Color(0xffd92328),
+              //     fontSize: 35,
+              //     fontWeight: FontWeight.bold,
+              //   ),
+              // ),
               TextSpan(
-                text: "Red ",
-                style: TextStyle(
-                  color: Color(0xffd92328),
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              TextSpan(
-                text: "House",
+                text: "Login",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 25,
@@ -207,7 +207,7 @@ class _LoginState extends State<Login> {
                       Text(
                         "Login as visitor",
                         style: TextStyle(
-                          color: Color(0xffd92328),
+                          color: Color.fromARGB(255, 0, 0, 0),
                           fontWeight: FontWeight.w700,
                         ),
                       ),

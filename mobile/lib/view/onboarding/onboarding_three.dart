@@ -74,7 +74,7 @@ class OnBoardingThree extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Find the ideal place according to your\nneeds and expectations.",
+                  "Optimize the presentation of your property for maximum impact and to covver more features.",
                   textAlign: TextAlign.center, // Corrected textAlign
                   style: TextStyle(
                     fontSize: 18,

@@ -153,67 +153,96 @@ namespace server.Services
                 UserId = bookingDto.UserId,
                 PropertyId = bookingDto.PropertyId,
                 BookingCode = random_number_str,
-                BookingStatus = "InProcess"
+                BookingStatus = "Paused"
             };
 
-
             var bookingRes = await _redHouseDbContext.Bookings.AddAsync(booking);
-            _redHouseDbContext.SaveChanges();
+            await _redHouseDbContext.SaveChangesAsync(); // Use async SaveChanges
 
             List<DateTime> EndingOfBookingDayIntervals = new List<DateTime>();
 
-            for (int i = 0; i < bookingDto.BookingDays.Count; i++)
+            foreach (var day in bookingDto.BookingDays)
             {
                 BookingDay bookingDay = new BookingDay
                 {
                     BookingId = bookingRes.Entity.Id,
-                    DayDate = bookingDto.BookingDays[i]
+                    DayDate = day
                 };
                 await _redHouseDbContext.BookingDays.AddAsync(bookingDay);
-                _redHouseDbContext.SaveChanges();
-            }
 
-            if (!bookingDto.BookingDays.IsNullOrEmpty())
-            {
-                if (bookingDto.BookingDays.Count == 1)
+
+                await _redHouseDbContext.SaveChangesAsync(); // Move SaveChanges outside the loop
+
+                if (!bookingDto.BookingDays.IsNullOrEmpty())
                 {
-                    var jobId = $"RecurringJob_{bookingDto.BookingDays[0]}";
-
-                    // Assuming bookingDto.BookingDays[0] contains the exact DateTime you want the job to run
-                    var cronExpression = $"{59} {11} {bookingDto.BookingDays[0].Day} {bookingDto.BookingDays[0].Month} ?";
-
-                    // Remove the existing recurring job if it exists
-                    RecurringJob.RemoveIfExists(jobId);
-
-                    // Schedule the new recurring job
-                    RecurringJob.AddOrUpdate(jobId, () => EndBookingProcess(bookingRes.Entity.Id), cronExpression);
-                }
-                for (int i = 0; i < bookingDto.BookingDays.Count - 1; i++)
-                {
-                    if (i + 1 == bookingDto.BookingDays.Count - 1)
+                    for (int i = 0; i < bookingDto.BookingDays.Count - 1; i++)
                     {
-                        ScheduleRecurringJob(bookingDto.BookingDays[i + 1], "11:59", EndBookingProcess); // Pause
-                    }
-                    else if ((bookingDto.BookingDays[i + 1].Day - bookingDto.BookingDays[i].Day) > 1)
-                    {
-                        ScheduleRecurringJob(bookingDto.BookingDays[i + 1], "11:59", ResumeBookingProcess); // Resume
-                        ScheduleRecurringJob(bookingDto.BookingDays[i], "12:01", PauseBookingProcess); // Pause
+                        if (i == 0)
+                        {
+                            // await ScheduleRecurringJob(bookingDto.BookingDays[i + 1], "11:59", EndBookingProcess); // Pause
+                            var jobId = $"RecurringJob0_{bookingDto.BookingDays[i]}";
+
+                            var cronExpression = $"{"12:01".Split(':')[1]} {"12:01".Split(':')[0]} {bookingDto.BookingDays[i].Day} {bookingDto.BookingDays[i].Month} ?";
+
+                            RecurringJob.RemoveIfExists(jobId);
+
+                            // Use AddOrUpdate overload for async methods
+                            RecurringJob.AddOrUpdate(jobId, () => ResumeBookingProcess(bookingRes.Entity.Id), cronExpression);
+                        }
+
+                        if (i + 1 == bookingDto.BookingDays.Count - 1)
+                        {
+                            // await ScheduleRecurringJob(bookingDto.BookingDays[i + 1], "11:59", EndBookingProcess); // Pause
+                            var jobId = $"RecurringJob1_{bookingDto.BookingDays[i + 1]}";
+
+                            var cronExpression = $"{"11:59".Split(':')[1]} {"11:59".Split(':')[0]} {bookingDto.BookingDays[i + 1].Day} {bookingDto.BookingDays[i + 1].Month} ?";
+
+                            RecurringJob.RemoveIfExists(jobId);
+
+                            // Use AddOrUpdate overload for async methods
+                            RecurringJob.AddOrUpdate(jobId, () => EndBookingProcess(bookingRes.Entity.Id), cronExpression);
+                        }
+                         if ((bookingDto.BookingDays[i + 1].Day - bookingDto.BookingDays[i].Day) > 1)
+                        {
+                            // await ScheduleRecurringJob(bookingDto.BookingDays[i + 1], "11:59", ResumeBookingProcess); // Resume
+                            // await ScheduleRecurringJob(bookingDto.BookingDays[i], "12:01", PauseBookingProcess); // Pause
+                            var jobId = $"RecurringJob0_{bookingDto.BookingDays[i + 1]}";
+
+                            var cronExpression = $"{"12:01".Split(':')[1]} {"12:01".Split(':')[0]} {bookingDto.BookingDays[i + 1].Day} {bookingDto.BookingDays[i + 1].Month} ?";
+
+                            RecurringJob.RemoveIfExists(jobId);
+
+                            // Use AddOrUpdate overload for async methods
+                            RecurringJob.AddOrUpdate(jobId, () => ResumeBookingProcess(bookingRes.Entity.Id), cronExpression);
+
+
+
+                            var jobId1 = $"RecurringJob2_{bookingDto.BookingDays[i]}";
+
+                            var cronExpression1 = $"{"11:59".Split(':')[1]} {"11:59".Split(':')[0]} {bookingDto.BookingDays[i].Day} {bookingDto.BookingDays[i].Month} ?";
+
+                            RecurringJob.RemoveIfExists(jobId1);
+
+                            // Use AddOrUpdate overload for async methods
+                            RecurringJob.AddOrUpdate(jobId1, () => PauseBookingProcess(bookingRes.Entity.Id), cronExpression1);
+                        }
                     }
                 }
-                async Task ScheduleRecurringJob(DateTime date, string time, Func<int, Task> myAsyncAction)
-                {
-                    var jobId = $"RecurringJob_{date}";
 
-                    var cronExpression = $"{time.Split(':')[1]} {time.Split(':')[0]} {date.Day} {date.Month} ?";
+                //  async Task ScheduleRecurringJob(DateTime date, string time, Func<int, Task> myAsyncAction)
+                // {
+                //     var jobId = $"RecurringJob_{date}";
 
-                    RecurringJob.RemoveIfExists(jobId);
+                //     var cronExpression = $"{time.Split(':')[1]} {time.Split(':')[0]} {date.Day} {date.Month} ?";
 
-                    RecurringJob.AddOrUpdate(jobId, () => myAsyncAction(bookingRes.Entity.Id), cronExpression);
-                }
+                //     RecurringJob.RemoveIfExists(jobId);
+
+                //     // Use AddOrUpdate overload for async methods
+                //     RecurringJob.AddOrUpdate(jobId, () => myAsyncAction(bookingRes.Entity.Id), cronExpression);
+                // }
 
 
             }
-
 
             // Rest of your code
 
@@ -226,7 +255,7 @@ namespace server.Services
                 Message = "Booking Done Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
-        }  
+        }
         public async Task EndBookingProcess(int bookingId)
         {
             // Your asynchronous code here
@@ -250,7 +279,7 @@ namespace server.Services
             var booking = bookings.FirstOrDefault();
             if (booking != null)
             {
-                booking.BookingStatus = "Pause";
+                booking.BookingStatus = "Paused";
                 _redHouseDbContext.Bookings.Update(booking);
                 _redHouseDbContext.SaveChanges();
             }

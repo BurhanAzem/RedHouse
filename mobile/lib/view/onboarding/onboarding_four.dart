@@ -70,7 +70,7 @@ class OnBoardingFour extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Find the ideal place according to your\nneeds and expectations.",
+                  "Check user history so you can improve decision-making",
                   textAlign: TextAlign.center, // Corrected textAlign
                   style: TextStyle(
                     fontSize: 18,
