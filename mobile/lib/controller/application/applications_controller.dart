@@ -10,7 +10,7 @@ class ApplicationsController extends GetxController {
 
   String applicationType = "All";
   String applicationStatus = "All";
-  String applicationTo = "Landlord";
+  String applicationTo = "Customer";
 
   int propertyId = 1;
   int userId = 1; // customer id

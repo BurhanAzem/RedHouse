@@ -131,7 +131,7 @@ class _AddPropertyNeighbourState extends State<AddPropertyNeighbour>
   Widget build(BuildContext context) {
     const options = [
       "Select Neighborhood Type",
-      "Parking",
+      "Park",
       "School",
       "Hospital",
       "Mosque",

@@ -324,7 +324,7 @@ class _HomeInformationState extends State<HomeInformation> {
                       // code
                       const SizedBox(height: 10),
                       const Text(
-                        "ZIP Code",
+                        "Property Code",
                         style: TextStyle(
                           fontSize: 19,
                           color: Color.fromARGB(255, 196, 39, 27),
@@ -333,11 +333,11 @@ class _HomeInformationState extends State<HomeInformation> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        divideCodeIntoGroups(widget.property.propertyCode),
+                        divideCodeIntoGroups(widget.property.propertyCode!),
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 196, 39, 27),
+                          color: Color.fromARGB(255, 0, 0, 0),
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -345,79 +345,77 @@ class _HomeInformationState extends State<HomeInformation> {
                       const SizedBox(height: 25),
 
                       // Container
-                      Container(
-                        width: double.infinity,
-                        height: 150,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(50),
-                            bottomLeft: Radius.circular(50),
-                          ),
-                          // color: Color.fromARGB(255, 196, 39, 27),
-                          color: Colors.black,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 30),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text:
-                                          '${widget.property.numberOfBedRooms} ',
-                                      style: const TextStyle(
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text:
+                                        '${widget.property.numberOfBedRooms} ',
+                                    style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w700,
+                                        // color: Colors.white,
+                                        color:
+                                            Color.fromARGB(255, 8, 8, 8)),
+                                  ),
+                                  const TextSpan(
+                                    text: 'bedrooms,  ',
+                                    style: TextStyle(
+                                        fontSize: 19,
+                                        // color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        color:
+                                            Color.fromARGB(255, 196, 39, 27)),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${widget.property.numberOfBathRooms} ',
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const TextSpan(
-                                      text: 'bedrooms,  ',
-                                      style: TextStyle(
+                                        // color: Colors.white,
+                                        color:
+                                            Color.fromARGB(255, 0, 0, 0)),
+                                  ),
+                                  const TextSpan(
+                                    text: 'bathrooms,  ',
+                                    style: TextStyle(
                                         fontSize: 19,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          '${widget.property.numberOfBathRooms} ',
-                                      style: const TextStyle(
+                                        // color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                        color:
+                                            Color.fromARGB(255, 196, 39, 27)),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${widget.property.squareMetersArea} ',
+                                    style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const TextSpan(
-                                      text: 'bathrooms,  ',
-                                      style: TextStyle(
+                                        // color: Colors.white,
+                                        color:
+                                            Color.fromARGB(255, 0, 0, 0)),
+                                  ),
+                                  const TextSpan(
+                                    text: 'meters',
+                                    style: TextStyle(
                                         fontSize: 19,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          '${widget.property.squareMetersArea} ',
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const TextSpan(
-                                      text: 'meters',
-                                      style: TextStyle(
-                                        fontSize: 19,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                        fontWeight: FontWeight.w700,
+                                        // color: Colors.white,
+                                        color:
+                                            Color.fromARGB(255, 196, 39, 27)),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
 
@@ -559,7 +557,7 @@ class _HomeInformationState extends State<HomeInformation> {
                           leading: const Icon(
                             Icons.location_on_sharp,
                             size: 33,
-                            color: Color.fromARGB(255, 196, 39, 27),
+                            color: Color.fromARGB(255, 0, 0, 0),
                           ),
                           title: Text(
                             "${widget.property.location?.streetAddress}, ${widget.property.location?.city}",
@@ -585,13 +583,12 @@ class _HomeInformationState extends State<HomeInformation> {
                       if (widget.property.parkingSpots != 0)
                         Container(
                           width: double.infinity,
-                          height: 150,
-                          decoration: const BoxDecoration(
+                          height: 80,
+                          decoration: BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(50),
                               bottomLeft: Radius.circular(50),
                             ),
-                            color: Color.fromARGB(255, 196, 39, 27),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -602,10 +599,10 @@ class _HomeInformationState extends State<HomeInformation> {
                                 const Text(
                                   "This property does not have parking",
                                   style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white,
-                                  ),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      // color: Colors.white,
+                                      color: Color.fromARGB(255, 0, 0, 0)),
                                 ),
                                 const SizedBox(height: 2),
                                 InkWell(
@@ -614,7 +611,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                     decoration: const BoxDecoration(
                                       border: Border(
                                         bottom: BorderSide(
-                                          color: Colors.white,
+                                          color: Color.fromARGB(255, 2, 2, 2),
                                           width: 2.0,
                                         ),
                                       ),
@@ -622,10 +619,11 @@ class _HomeInformationState extends State<HomeInformation> {
                                     child: const Text(
                                       "Are you looking for parking?",
                                       style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white,
-                                      ),
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                          // color: Colors.white,
+                                          color:
+                                              Color.fromARGB(255, 0, 0, 0)),
                                     ),
                                   ),
                                 ),
@@ -924,55 +922,55 @@ class _HomeInformationState extends State<HomeInformation> {
                       titlesData: FlTitlesData(
                           bottomTitles: AxisTitles(
                               sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, titleMeta) {
-                          // Example: return a custom widget for Y-axis labels
-                          return Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Text(
-                              value.toInt().toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        },
-                      )),
-                      topTitles: AxisTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, titleMeta) {
+                              // Example: return a custom widget for Y-axis labels
+                              return Container(
+                                margin: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  value.toInt().toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              );
+                            },
+                          )),
+                          topTitles: AxisTitles(
                               sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, titleMeta) {
-                          // Example: return a custom widget for Y-axis labels
-                          return Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Text(
-                              value.toInt().toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        },
-                      )),
-                      leftTitles: AxisTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, titleMeta) {
+                              // Example: return a custom widget for Y-axis labels
+                              return Container(
+                                margin: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  value.toInt().toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              );
+                            },
+                          )),
+                          leftTitles: AxisTitles(
                               sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, titleMeta) {
-                          // Example: return a custom widget for Y-axis labels
-                          return Container(
-                            margin: EdgeInsets.only(top: 8),
-                            child: Text(
-                              value.toInt().toString(),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 10,
-                              ),
-                            ),
-                          );
-                        },
-                      ))),
+                            showTitles: true,
+                            getTitlesWidget: (value, titleMeta) {
+                              // Example: return a custom widget for Y-axis labels
+                              return Container(
+                                margin: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  value.toInt().toString(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              );
+                            },
+                          ))),
                       gridData: FlGridData(
                         show: false,
                         getDrawingHorizontalLine: (value) {

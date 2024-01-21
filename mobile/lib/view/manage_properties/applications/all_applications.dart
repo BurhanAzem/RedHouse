@@ -164,7 +164,7 @@ class _AllApplicationsState extends State<AllApplications> {
             child: Container(
               child: DefaultTabController(
                 length: 2,
-                initialIndex: 0,
+                initialIndex: 1,
                 child: Scaffold(
                   appBar: TabBar(
                     onTap: (value) {
