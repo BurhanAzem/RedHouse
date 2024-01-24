@@ -23,7 +23,7 @@ namespace RedHouse_Server.Controllers
         {
             _contractServices = contractServices;
         }
-        
+
         // [Authorize]
         [HttpPost("/contracts")]
         public async Task<IActionResult> CreateAppication([FromBody] ContractDto contractDto)
@@ -97,6 +97,23 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/lawyers/{id}/contracts")]
+        public async Task<IActionResult> GetAllContractsForLawer(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _contractServices.GetAllContractsForLawer(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
 
         [HttpDelete("/contracts/{id}")]
         public async Task<IActionResult> DeleteContract(int id)
@@ -113,9 +130,26 @@ namespace RedHouse_Server.Controllers
             }
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
-
         }
 
+
+        [HttpPut("/contracts/{contractId}/lawyers/{lawerId}")]
+        public async Task<IActionResult> AddLawerToContract(int contractId, int lawerId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _contractServices.AddLawerToContract(contractId, lawerId);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+
+        }
 
         [HttpPut("/contracts/{id}")]
         public async Task<IActionResult> UpdateContract([FromBody] ContractDto contractDto, int id)
@@ -146,7 +180,7 @@ namespace RedHouse_Server.Controllers
         [HttpGet("/contracts/offers/{offerId}")]
         public async Task<IActionResult> GetContractForOffer(int offerId)
         {
-            
+
             var result = await _contractServices.GetContractForOffer(offerId);
             if (result.Exception != null)
             {

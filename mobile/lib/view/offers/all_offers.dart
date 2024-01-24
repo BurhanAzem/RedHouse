@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'package:client/controller/contract/offer_controller.dart';
-import 'package:client/main.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/offer.dart';
-import 'package:client/model/user.dart';
 import 'package:client/view/card/credit_card.dart';
 import 'package:client/view/offers/incoming_offer.dart';
 import 'package:client/view/card/style/card_background.dart';
+import 'package:client/view/offers/sent_offer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -19,8 +18,11 @@ class AllOffers extends StatefulWidget {
 
 class _AllOffersState extends State<AllOffers>
     with AutomaticKeepAliveClientMixin {
-  bool isLoading = true; // Add a boolean variable for loading state
   OfferController controller = Get.put(OfferController());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
+  @override
+  bool get wantKeepAlive => true; // Keep the state alive
 
   @override
   void initState() {
@@ -30,27 +32,33 @@ class _AllOffersState extends State<AllOffers>
   }
 
   void loadData() async {
-    OfferController controller = Get.put(OfferController(), permanent: true);
-    String? userDtoJson = sharepref.getString("user");
-    Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
-    User user = User.fromJson(userDto);
-    await controller.getAllOffersForUser(user.id!);
-
-    setState(() {
-      isLoading = false; // Set isLoading to false when data is loaded
-    });
+    await controller.getAllOffersForUser(loginController.userDto?["id"]);
   }
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
     const offerStatus = [
       "All",
       "Pending",
       "Accepted",
+    ];
+
+    // Front-end display values
+    final List<String> frontEndOfferType = [
+      "All",
+      "Purchase offers",
+      "Rent offers",
+      "Properties for sell",
+      "Properties for rent",
+    ];
+
+    // Back-end values
+    final List<String> backEndOfferType = [
+      "All",
+      "For monthly rent",
+      "For sell",
     ];
 
     const offerType = [
@@ -59,18 +67,12 @@ class _AllOffersState extends State<AllOffers>
       "For sell",
     ];
 
-    if (isLoading) {
-      return Center(
-        child: CircularProgressIndicator(
-          backgroundColor: Colors.grey[200],
-        ),
-      );
-    }
     return VisibilityDetector(
-      key: const Key('widget1'),
+      key: const Key('allOffers'),
       onVisibilityChanged: (info) {
         if (info.visibleFraction == 1) {
           loadData();
+          setState(() {});
         }
       },
       child: Scaffold(
@@ -90,10 +92,10 @@ class _AllOffersState extends State<AllOffers>
         // Body
         body: Column(
           children: [
+            Container(height: 8),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               child: TextFormField(
-                // Use your controller here if needed
                 style: const TextStyle(height: 1.2),
                 decoration: InputDecoration(
                   hintText: "Search by offer, customer, landlord name",
@@ -170,47 +172,41 @@ class _AllOffersState extends State<AllOffers>
             ),
             Container(height: 12),
             Expanded(
-              child: Container(
-                child: DefaultTabController(
-                  length: 2,
-                  initialIndex: 0,
-                  child: Scaffold(
-                    appBar: TabBar(
-                      onTap: (value) {
-                        if (value == 0) {
-                          setState(() {
-                            controller.offerToSelect = "Customer";
-                          });
-                          loadData();
-                        } else {
-                          setState(() {
-                            controller.offerToSelect = "Landlord";
-                          });
-                          loadData();
-                        }
-                      },
-                      tabs: const [
-                        Tab(text: 'Incoming Offers'),
-                        Tab(text: 'Sent Offers'),
-                      ],
-                      overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
-                      indicatorColor: Colors.black,
-                      labelColor: Colors.black,
-                      labelStyle: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                      unselectedLabelColor: Colors.grey[700],
-                      unselectedLabelStyle: const TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                      ),
+              child: DefaultTabController(
+                length: 2,
+                initialIndex: 0,
+                child: Scaffold(
+                  appBar: TabBar(
+                    tabs: const [
+                      Tab(text: 'Incoming Offers'),
+                      Tab(text: 'Sent Offers'),
+                    ],
+                    overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
+                    indicatorColor: Colors.black,
+                    labelColor: Colors.black,
+                    labelStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
                     ),
-                    body: TabBarView(
-                      children: [
-                        // Content for 'Incoming Offers' tab
-                        // contentIncomingOffers(),
-                        FutureBuilder(
+                    unselectedLabelColor: Colors.grey[700],
+                    unselectedLabelStyle: const TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                    ),
+                  ),
+                  body: TabBarView(
+                    children: [
+                      // Content for 'Incoming Offers' tab
+                      VisibilityDetector(
+                        key: const Key("IncomingOffers"),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction == 1) {
+                            controller.offerToSelect = "Incoming";
+                            loadData();
+                            setState(() {});
+                          }
+                        },
+                        child: FutureBuilder(
                           future: Future.delayed(const Duration(seconds: 1)),
                           builder: (BuildContext context,
                               AsyncSnapshot<void> snapshot) {
@@ -226,10 +222,19 @@ class _AllOffersState extends State<AllOffers>
                             }
                           },
                         ),
+                      ),
 
-                        // Content for 'Sent Offers' tab
-                        // contentSentOffers(),
-                        FutureBuilder(
+                      // Content for 'Sent Offers' tab
+                      VisibilityDetector(
+                        key: const Key("SentOffers"),
+                        onVisibilityChanged: (info) {
+                          if (info.visibleFraction == 1) {
+                            controller.offerToSelect = "Sent";
+                            loadData();
+                            setState(() {});
+                          }
+                        },
+                        child: FutureBuilder(
                           future: Future.delayed(const Duration(seconds: 1)),
                           builder: (BuildContext context,
                               AsyncSnapshot<void> snapshot) {
@@ -245,8 +250,8 @@ class _AllOffersState extends State<AllOffers>
                             }
                           },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -261,7 +266,7 @@ class _AllOffersState extends State<AllOffers>
     if (controller.userOffers.isEmpty) {
       return const Center(
         child: Text(
-          "No Any Incoming Offer",
+          "No any incoming offer",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -281,6 +286,14 @@ class _AllOffersState extends State<AllOffers>
               _margin = const EdgeInsets.only(top: 30);
             }
 
+            String getName() {
+              if (offer.landlordId == offer.userCreatedId) {
+                return offer.landlord!.name!;
+              } else {
+                return offer.customer!.name!;
+              }
+            }
+
             return GestureDetector(
               onTap: () {
                 Get.to(() => IncomingOffer(offer: offer));
@@ -292,7 +305,7 @@ class _AllOffersState extends State<AllOffers>
                   type: "offer",
                   offer: offer,
                   index: index,
-                  name: offer.landlord!.name!,
+                  name: getName(),
                   showBackSide: true,
                   frontBackground: CardBackgrounds.black,
                   backBackground: CardBackgrounds.white,
@@ -310,7 +323,7 @@ class _AllOffersState extends State<AllOffers>
     if (controller.userOffers.isEmpty) {
       return const Center(
         child: Text(
-          "No Any Incoming Offer",
+          "No any sent offer",
           style: TextStyle(
             fontSize: 16,
           ),
@@ -330,9 +343,17 @@ class _AllOffersState extends State<AllOffers>
               _margin = const EdgeInsets.only(top: 30);
             }
 
+            String getName() {
+              if (offer.landlordId != offer.userCreatedId) {
+                return offer.landlord!.name!;
+              } else {
+                return offer.customer!.name!;
+              }
+            }
+
             return GestureDetector(
               onTap: () {
-                Get.to(() => IncomingOffer(offer: offer));
+                Get.to(() => SentOffer(offer: offer));
                 setState(() {});
               },
               child: Container(
@@ -341,7 +362,7 @@ class _AllOffersState extends State<AllOffers>
                   type: "offer",
                   offer: offer,
                   index: index,
-                  name: offer.customer!.name!,
+                  name: getName(),
                   showBackSide: true,
                   frontBackground: CardBackgrounds.black,
                   backBackground: CardBackgrounds.white,

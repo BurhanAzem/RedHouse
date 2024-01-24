@@ -9,6 +9,8 @@ namespace server.Services
     {
         public Task<ResponsDto<Contract>> CreateContract(ContractDto contractDto);
         public Task<ResponsDto<Contract>> GetAllContracts();
+        public Task<ResponsDto<Contract>> GetAllContractsForLawer(int userId);
+        public Task<ResponsDto<Contract>> AddLawerToContract(int contractId, int lawerId);
         public Task<ResponsDto<Contract>> GetAllContractsForUser(int userId, ContractFilter contractFilter);
         public Task<ResponsDto<Contract>> GetContractForOffer(int offerId);
         public Task<ResponsDto<Contract>> GetContract(int contractId);

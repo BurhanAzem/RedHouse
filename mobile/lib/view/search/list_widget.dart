@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
@@ -13,7 +12,6 @@ import 'package:visibility_detector/visibility_detector.dart';
 import '../filter/filter_page.dart';
 
 class ListWidget extends StatefulWidget {
-  // List<Property> properties;
   ListWidget({Key? key}) : super(key: key);
 
   @override

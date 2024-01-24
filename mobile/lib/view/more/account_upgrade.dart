@@ -1,3 +1,4 @@
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/view/more/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,17 +13,38 @@ class AccountUpgrade extends StatefulWidget {
 
 class _AccountUpgradeState extends State<AccountUpgrade> {
   int selectedCardIndex = 0; // Track the index of the selected card
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
+  @override
+  void initState() {
+    if (loginController.userDto?["userRole"] == "Customer") {
+      selectedCardIndex = 1;
+    } else if (loginController.userDto?["userRole"] == "Landlord") {
+      selectedCardIndex = 2;
+    } else if (loginController.userDto?["userRole"] == "Agent") {
+      selectedCardIndex = 3;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            color: Colors.white,
+            FontAwesomeIcons.angleLeft,
+          ),
+        ),
         title: const Text(
           "Account Upgrade",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 19,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -35,25 +57,36 @@ class _AccountUpgradeState extends State<AccountUpgrade> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: CardWidget(
                     index: 0,
+                    selectedCardIndex: selectedCardIndex,
                     isSelected: selectedCardIndex == 0,
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: CardWidget(
                     index: 1,
+                    selectedCardIndex: selectedCardIndex,
                     isSelected: selectedCardIndex == 1,
                   ),
                 ),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: CardWidget(
                     index: 2,
+                    selectedCardIndex: selectedCardIndex,
                     isSelected: selectedCardIndex == 2,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: CardWidget(
+                    index: 3,
+                    selectedCardIndex: selectedCardIndex,
+                    isSelected: selectedCardIndex == 3,
                   ),
                 ),
               ],
@@ -67,10 +100,12 @@ class _AccountUpgradeState extends State<AccountUpgrade> {
 
 class CardWidget extends StatelessWidget {
   final int index;
+  final int selectedCardIndex;
   final bool isSelected;
 
   const CardWidget({
     required this.index,
+    required this.selectedCardIndex,
     required this.isSelected,
   });
 
@@ -83,7 +118,7 @@ class CardWidget extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         border: Border.all(
           color: isSelected ? Colors.red : Colors.grey,
@@ -96,20 +131,20 @@ class CardWidget extends StatelessWidget {
           Text(
             cardType,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Text(
             price,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               color: Colors.blue,
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: features
@@ -120,12 +155,12 @@ class CardWidget extends StatelessWidget {
                       const Icon(
                         FontAwesomeIcons.check,
                         color: Colors.green,
-                        size: 17,
+                        size: 18,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: 15),
                       Text(
                         feature,
-                        style: const TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 17),
                       ),
                     ],
                   ),
@@ -134,13 +169,13 @@ class CardWidget extends StatelessWidget {
           ),
           if (showPaymentButton)
             Padding(
-              padding: const EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.only(top: 20),
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(50),
                 ),
                 onPressed: () {
-                  Get.to(()=> Payment());
+                  Get.to(() => const Payment());
                 },
                 minWidth: 200,
                 height: 40,
@@ -149,7 +184,7 @@ class CardWidget extends StatelessWidget {
                   "Payment",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -165,9 +200,11 @@ class CardWidget extends StatelessWidget {
       case 0:
         return 'Free';
       case 1:
-        return 'Monthly Subscription';
+        return 'Customer Sub';
       case 2:
-        return 'Annual Subscription';
+        return 'Landlord Sub';
+      case 3:
+        return 'Agent Sub';
       default:
         return '';
     }
@@ -178,9 +215,11 @@ class CardWidget extends StatelessWidget {
       case 0:
         return 'Included';
       case 1:
-        return '\$10/month';
+        return '\$200';
       case 2:
-        return '\$100/year';
+        return '\$500';
+      case 3:
+        return '\$1000';
       default:
         return '';
     }
@@ -208,7 +247,13 @@ class CardWidget extends StatelessWidget {
           '50 GB storage',
           'Priority support',
           'Priority support',
-          'Priority support'
+        ];
+      case 3:
+        return [
+          'All features',
+          '50 GB storage',
+          'Priority support',
+          'Priority support',
         ];
       default:
         return [];
@@ -216,6 +261,26 @@ class CardWidget extends StatelessWidget {
   }
 
   bool _shouldShowPaymentButton(int index) {
-    return index == 1 || index == 2;
+    if (index == 0) {
+      return false;
+    }
+
+    if (selectedCardIndex == 3) {
+      return false;
+    } else if (selectedCardIndex == 2) {
+      if (index == 3) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (selectedCardIndex == 1) {
+      if (index == 1) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 }

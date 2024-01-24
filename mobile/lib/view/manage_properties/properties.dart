@@ -58,9 +58,11 @@ class _AllPropertiesState extends State<Properties>
     controller.propertiesUserId = id;
     await controller.getPropertiesUser();
 
-    setState(() {
-    isLoading = false; // Set isLoading to false when data is loaded
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false; // Set isLoading to false when data is loaded
+      });
+    }
   }
 
   @override
@@ -404,8 +406,8 @@ class _AllPropertiesState extends State<Properties>
                                     ],
                                   ),
                                   const SizedBox(height: 10),
-                                  if (property.propertyStatus !=
-                                      "Under contract")
+                                  // if (property.propertyStatus !=
+                                  //     "Under contract")
                                     Row(
                                       children: [
                                         Expanded(
@@ -418,8 +420,7 @@ class _AllPropertiesState extends State<Properties>
                                                   width: 1.4),
                                             ),
                                             onPressed: () {
-                                              // Get.to(() => HomeInformation(
-                                              //     property: property));
+                                              
                                             },
                                             height: 37,
                                             child: const Center(
@@ -435,38 +436,38 @@ class _AllPropertiesState extends State<Properties>
                                           ),
                                         )
                                       ],
-                                    )
-                                  else
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: MaterialButton(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                              side: const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.4),
-                                            ),
-                                            onPressed: () {
-                                              // Get.to(() => HomeInformation(
-                                              //     property: property));
-                                            },
-                                            height: 37,
-                                            child: const Center(
-                                              child: Text(
-                                                "Property under contract",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.5,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
+                                    ),
+                                  // else
+                                  //   Row(
+                                  //     children: [
+                                  //       Expanded(
+                                  //         child: MaterialButton(
+                                  //           shape: RoundedRectangleBorder(
+                                  //             borderRadius:
+                                  //                 BorderRadius.circular(100),
+                                  //             side: const BorderSide(
+                                  //                 color: Colors.black,
+                                  //                 width: 1.4),
+                                  //           ),
+                                  //           onPressed: () {
+                                  //             // Get.to(() => HomeInformation(
+                                  //             //     property: property));
+                                  //           },
+                                  //           height: 37,
+                                  //           child: const Center(
+                                  //             child: Text(
+                                  //               "Property under contract",
+                                  //               style: TextStyle(
+                                  //                 color: Colors.black,
+                                  //                 fontSize: 14.5,
+                                  //                 fontWeight: FontWeight.w600,
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       )
+                                  //     ],
+                                  //   )
                                 ],
                               ),
                             ),

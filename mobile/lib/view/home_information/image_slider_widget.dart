@@ -19,7 +19,7 @@ class ImageSliderWidget extends StatefulWidget {
 
 class _ImageSliderWidgetState extends State<ImageSliderWidget> {
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  StaticController staticController = Get.find<StaticController>();
+  StaticController staticController = Get.put(StaticController());
 
   PageController controller = PageController();
   int slider = 1;

@@ -63,7 +63,7 @@ class _BookingButtonsState extends State<BookingButtons> {
               color: Colors.black87,
               child: const Center(
                 child: Text(
-                  "Request to book",
+                  "Request to Book",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 15,

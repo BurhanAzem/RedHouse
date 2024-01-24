@@ -506,7 +506,7 @@ class _PaymentState extends State<Payment> {
                 height: 40,
                 color: Colors.black,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 onPressed: () {
                   // Remove any non-digit characters

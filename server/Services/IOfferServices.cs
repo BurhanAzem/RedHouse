@@ -14,7 +14,7 @@ namespace server.Services
         public Task<ResponsDto<Offer>> GetAllOffersForUser(int userId, OfferFilter offerFilter);
         public Task<ResponsDto<Offer>> GetOfferFor(int offerId);
         public Task<ResponsDto<Offer>> DeleteOffer(int offerId);
-        public Task<ResponsDto<Offer>> UpdateOffer(OfferDto offerDto, int offerId);
+        public Task<ResponsDto<Offer>> UpdateOffer(UpdateOfferDto offerDto, int offerId);
         public Task<ResponsDto<Offer>> GetOffer(int propertyId, int landlordId, int customerId);
         public Task<ResponsDto<Contract>> AcceptOffer(int offerId);
         public Task<int> NumberOfOffers();

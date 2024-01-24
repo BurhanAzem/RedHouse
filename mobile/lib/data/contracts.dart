@@ -133,7 +133,7 @@ class ContractsData {
     if (await checkInternet()) {
       // final Uri uri = Uri.https("10.0.2.2:7042", "/properties",);
 
-      var response = await http.get(Uri.parse(AppLink.properties + '/$id'),
+      var response = await http.get(Uri.parse('${AppLink.properties}/$id'),
           headers: <String, String>{
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ${getToken()}',
@@ -144,6 +144,27 @@ class ContractsData {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
         print(responsebody["dto"]);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static getContractForOffer(int offerId) async {
+    if (await checkInternet()) {
+      final Uri uri = Uri.https("10.0.2.2:7042", "/contracts/offers/$offerId");
+
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
 
         return (responsebody);
       } else {

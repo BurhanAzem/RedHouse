@@ -75,7 +75,6 @@ class _BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     super.initState();
-    // checkPermission();
     loginController.userDto = json.decode(sharepref.getString("user") ?? "{}");
     print(loginController.userDto);
     print(loginController.userDto);

@@ -89,6 +89,40 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/users/{id}/contacts")]
+        public async Task<IActionResult> GetAllContactsForUser(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.GetAllContactsForUser(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+        [HttpGet("/lawyers/{id}/contacts")]
+        public async Task<IActionResult> GetAllContactsForLawer(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.GetAllContactsForLawer(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
         [HttpGet("/agents")]
         public async Task<IActionResult> FilterAgents([FromQuery] SearchDto searchDto)
         {
@@ -97,6 +131,23 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userServices.FilterAgents(searchDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+        [HttpGet("/lawyers")]
+        public async Task<IActionResult> FilterLawyers([FromQuery] SearchDto searchDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.FilterLawyers(searchDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

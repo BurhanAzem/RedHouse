@@ -128,7 +128,8 @@ namespace server.Services
             return new ResponsDto<Contract>
             {
                 ListDto = contracts,
-                Pagination = new Dtos.Pagination{ 
+                Pagination = new Dtos.Pagination
+                {
                     PageNumber = searchDto.Page,
                     PageSize = searchDto.Limit,
                     TotalRows = totalItems,
@@ -140,7 +141,17 @@ namespace server.Services
 
         public async Task<ResponsDto<Contract>> GetContractForOffer(int offerId)
         {
-            var offer = await _redHouseDbContext.Offers.FindAsync(offerId);
+            var offer = await _redHouseDbContext.Offers.Include(o => o.Customer)
+                                            .Include(o => o.Landlord)
+                                            .Include(o => o.UserCreated)
+                                            .Include(a => a.Property)
+                                            .ThenInclude(p => p.Location)
+                                            .Include(a => a.Property)
+                                            .ThenInclude(p => p.User)
+                                            .Include(a => a.Property)
+                                            .ThenInclude(p => p.propertyFiles)
+                                           .FirstOrDefaultAsync(o => o.Id == offerId);
+
             if (offer == null)
             {
                 return new ResponsDto<Contract>
@@ -150,8 +161,9 @@ namespace server.Services
                 };
             }
 
-            var contract = await _redHouseDbContext.Contracts.FirstOrDefaultAsync(o => o.OfferId == offerId);
-            if (offer== null)
+            var contract = await _redHouseDbContext.Contracts.Include(o => o.Milestones).Include(o => o.ContractActivities).FirstOrDefaultAsync(o => o.OfferId == offerId);
+
+            if (contract == null)
             {
                 return new ResponsDto<Contract>
                 {
@@ -169,6 +181,57 @@ namespace server.Services
                     StatusCode = HttpStatusCode.OK,
                 };
             }
+        }
+
+        public async Task<ResponsDto<Contract>> GetAllContractsForLawer(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"User with {userId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var contracts = await _redHouseDbContext.Contracts.Include(o => o.Milestones).Include(o => o.ContractActivities).Where(c => c.LawerId == userId).ToArrayAsync();
+
+
+            return new ResponsDto<Contract>
+            {
+                ListDto = contracts,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ResponsDto<Contract>> AddLawerToContract(int contractId, int lawerId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(lawerId);
+            if (user == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"User with {lawerId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var contract = await _redHouseDbContext.Contracts.FindAsync(contractId);
+            if (contract == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"Contract with {contractId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            contract.LawerId = lawerId;
+            _redHouseDbContext.Contracts.Update(contract);
+            await _redHouseDbContext.SaveChangesAsync();
+            return new ResponsDto<Contract>
+            {
+                Message = "Lawer added successfully",
+                StatusCode = HttpStatusCode.OK,
+            };
         }
     }
 }

@@ -9,11 +9,14 @@ class OfferController extends GetxController {
 
   String offerTypeSelect = "All";
   String offerStatusSelect = "All";
-  String offerToSelect = "Customer";
+  String offerToSelect = "Incoming";
 
   late List<Offer> userOffers;
+  Offer? offerIsCreated;
+  String responseMessage = "";
 
   int landlordId = 1;
+  int userCreatedId = 1;
   int customerId = 1;
   int propertyId = 1;
   late TextEditingController description;
@@ -21,8 +24,6 @@ class OfferController extends GetxController {
   DateTime offerDate = DateTime.now();
   late TextEditingController price;
   late String offerStatus = "Pendding";
-
-  String responseMessage = "";
 
   @override
   void onInit() {
@@ -34,6 +35,7 @@ class OfferController extends GetxController {
 
   createOffer() async {
     var response = await OfferData.createOffer(
+      userCreatedId,
       landlordId,
       customerId,
       propertyId,
@@ -44,16 +46,11 @@ class OfferController extends GetxController {
       offerDate,
     );
 
-    print(response);
     Map responsebody = json.decode(response.body);
-    print(responsebody);
     responseMessage = responsebody["message"];
-    print(responseMessage);
 
     if (responsebody.length != 1) {
       if (responsebody['statusCode'] == 200) {
-        print(responsebody['listDto']);
-        print(responseMessage);
       } else {
         Get.defaultDialog(
           title: "Error",
@@ -62,27 +59,18 @@ class OfferController extends GetxController {
         );
       }
     }
-
-    // if (response['statusCode'] == 200) {
-    //   print(response['listDto']);
-    // } else {
-    //   Get.defaultDialog(
-    //     title: "Error",
-    //     middleText:
-    //         "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-    //   );
-    // }
   }
 
   getAllOffersForUser(int userId) async {
     var response = await OfferData.getAllOffersForUser(
-        userId, offerStatusSelect, offerToSelect);
+        userId, offerStatusSelect, offerTypeSelect, offerToSelect);
+
+    print(response);
 
     if (response['statusCode'] == 200) {
       userOffers = (response['listDto'] as List<dynamic>)
           .map((e) => Offer.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(userOffers);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -94,11 +82,28 @@ class OfferController extends GetxController {
 
   acceptOffer(int offerId) async {
     var response = await OfferData.acceptOffer(offerId);
-    print(response);
   }
 
   deleteOffer(int id) async {
     var response = await OfferData.deleteOffer(id);
-    print(response['message']);
+  }
+
+  getOfferForApplication(int propertyId, int landlordId, int customerId) async {
+    var response =
+        await OfferData.getOfferForApplication(propertyId, landlordId, customerId);
+
+    if (response['statusCode'] == 200) {
+      if (response['dto'] != null) {
+        offerIsCreated = Offer.fromJson(response['dto'] as Map<String, dynamic>);
+      }
+      responseMessage = response['message'];
+      print(responseMessage);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
   }
 }

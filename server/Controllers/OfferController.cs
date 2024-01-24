@@ -135,9 +135,8 @@ namespace RedHouse_Server.Controllers
 
         }
 
-
         [HttpPut("/offers/{id}")]
-        public async Task<IActionResult> UpdateOffer([FromBody] OfferDto offerDto, int id)
+        public async Task<IActionResult> UpdateOffer([FromBody] UpdateOfferDto offerDto, int id)
         {
             if (!ModelState.IsValid)
             {

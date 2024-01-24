@@ -41,6 +41,8 @@ namespace server.Services
                 };
             }
 
+
+
             return new ResponsDto<User>
             {
                 ListDto = users,
@@ -51,6 +53,48 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+
+
+        public async Task<ResponsDto<User>> FilterLawyers(SearchDto searchDto)
+        {
+            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
+            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
+
+            var query = _redHouseDbContext.Users.Where(u => u.UserRole == "Lawer").Include(u => u.Location).AsQueryable();
+            if (searchDto.SearchQuery != null)
+                query = query.Where(u => u.Name.Contains(searchDto.SearchQuery));
+            var totalItems = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
+
+            var users = await query
+                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
+                .Take((int)searchDto.Limit)
+                .ToArrayAsync();
+
+            if (users == null || !users.Any())
+            {
+                return new ResponsDto<User>
+                {
+                    Exception = new Exception("Users Not Found"),
+                    StatusCode = HttpStatusCode.NotFound,
+                };
+            }
+
+
+
+            return new ResponsDto<User>
+            {
+                ListDto = users,
+                // PageNumber = pageNumber,
+                // PageSize = pageSize,
+                // TotalItems = totalItems,
+                // TotalPages = totalPages,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+
 
         public async Task<ResponsDto<User>> FilterUsers(SearchDto searchDto)
         {
@@ -137,35 +181,35 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            if(userDto.Name != null)
+            if (userDto.Name != null)
             {
                 user.Name = userDto.Name;
             }
-            if(userDto.Email != null)
+            if (userDto.Email != null)
             {
                 user.Email = userDto.Email;
             }
-            if(userDto.CustomerScore != null)
+            if (userDto.CustomerScore != null)
             {
                 user.CustomerScore = (int)userDto.CustomerScore;
             }
-            if(userDto.LandlordScore != null)
+            if (userDto.LandlordScore != null)
             {
                 user.LandlordScore = (int)userDto.LandlordScore;
             }
-            if(userDto.IsVerified != null)
+            if (userDto.IsVerified != null)
             {
                 user.IsVerified = (bool)userDto.IsVerified;
             }
-            if(userDto.UserRole != null)
+            if (userDto.UserRole != null)
             {
                 user.UserRole = userDto.UserRole;
             }
-            if(userDto.PhoneNumber != null)
+            if (userDto.PhoneNumber != null)
             {
                 user.PhoneNumber = (int)userDto.PhoneNumber;
             }
-    
+
             _redHouseDbContext.Users.Update(user);
             _redHouseDbContext.SaveChanges();
             return new ResponsDto<User>
@@ -249,6 +293,124 @@ namespace server.Services
         public async Task<int> NumberOfUsers()
         {
             return await _redHouseDbContext.Users.CountAsync();
+        }
+
+        public async Task<ResponsDto<User>> GetAllContactsForUser(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<User>
+                {
+                    Exception = new Exception("User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            // var customerApplications = await _redHouseDbContext.Applications
+            //     .Include(a => a.User)
+            //     .Include(a => a.Property)
+            //     .ThenInclude(p => p.Location)
+            //     .Include(a => a.Property)
+            //     .ThenInclude(p => p.User)
+            //     .Include(a => a.Property)
+            //     .ThenInclude(p => p.propertyFiles)
+            //     .AsQueryable()
+            //     .Where(a => a.Property.UserId == userId && a.ApplicationStatus == "Approved")
+            //     .ToArrayAsync();
+
+            var customers = from application in _redHouseDbContext.Applications
+                .Include(a => a.Property)
+                .ThenInclude(p => p.User)
+                            where application.Property.UserId == userId
+                            select application.Property.User;
+
+            // var landlords = await _redHouseDbContext.Applications
+            //     .Include(a => a.User)
+            //     .Include(a => a.Property)
+            //     .ThenInclude(p => p.Location)
+            //     .Include(a => a.Property)
+            //     .ThenInclude(p => p.User)
+            //     .Include(a => a.Property)
+            //     .ThenInclude(p => p.propertyFiles)
+            //     .AsQueryable()
+            //     .Where(a => a.ApplicationStatus == "Approved" && a.UserId == userId)
+            //     .ToArrayAsync();
+
+            var landlords = from application in _redHouseDbContext.Applications
+                            .Include(a => a.User)
+                            where application.UserId == userId
+                            select application.User;
+
+            var lawyers = from contract in _redHouseDbContext.Contracts
+             .Include(c => c.Lawer)
+                         where (contract.Offer != null &&
+                                (contract.Offer.CustomerId == userId || contract.Offer.LandlordId == userId)) &&
+                                contract.Lawer != null
+                         select contract.Lawer;
+
+
+
+            List<User> users = new List<User>();
+            users.AddRange(customers);
+            users.AddRange(landlords);
+            users.AddRange(lawyers);
+
+
+            return new ResponsDto<User>
+            {
+                ListDto = users.Distinct().ToList(),
+                StatusCode = HttpStatusCode.OK,
+            };
+
+        }
+
+        public async Task<ResponsDto<User>> GetAllContactsForLawer(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<User>
+                {
+                    Exception = new Exception("User Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+
+
+            var landlords = from contract in _redHouseDbContext.Contracts
+             .Include(c => c.Lawer)
+                            where (contract.Offer != null) &&
+                                   contract.LawerId == userId
+                            select contract.Offer.Landlord;
+
+            var customers = from contract in _redHouseDbContext.Contracts
+            .Include(c => c.Lawer)
+                            where (contract.Offer != null) &&
+                                   contract.LawerId == userId
+                            select contract.Offer.Customer;
+
+            // var lawers = from contract in _redHouseDbContext.Contracts
+            //  .Include(c => c.Lawer)
+            //  where (contract.Offer != null &&
+            //         (contract.Offer.CustomerId == userId || contract.Offer.LandlordId == userId)) &&
+            //         contract.Lawer != null
+            //  select contract.Lawer;
+
+
+
+            List<User> users = new List<User>();
+            users.AddRange(customers);
+            users.AddRange(landlords);
+
+
+            return new ResponsDto<User>
+            {
+                ListDto = users.Distinct().ToList(),
+                StatusCode = HttpStatusCode.OK,
+            };
+
         }
     }
 }

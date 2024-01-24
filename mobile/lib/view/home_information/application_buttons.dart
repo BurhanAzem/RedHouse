@@ -65,8 +65,8 @@ class _ApplicationButtonstState extends State<ApplicationButtons> {
               child: Center(
                 child: Text(
                   widget.property.listingType == "For monthly rent"
-                      ? "Request to rent"
-                      : "Request to buy",
+                      ? "Request to Rent"
+                      : "Request to Buy",
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -90,7 +90,7 @@ class _ApplicationButtonstState extends State<ApplicationButtons> {
               height: 45,
               child: const Center(
                 child: Text(
-                  "Request a tour",
+                  "Request a Tour",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 15,

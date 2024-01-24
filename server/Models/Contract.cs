@@ -13,15 +13,15 @@ namespace RedHouse_Server.Models
         [ForeignKey(nameof(Offer))]
         public int OfferId { get; set; }
         public Offer? Offer { get; set; }
+        public int? LawerId { get; set; }
+        public User? Lawer { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string ContractType { get; set; }
         public string ContractStatus { get; set; }
         public double Earnings { get; set; }
         public int IsShouldPay { get; set; }
-
         public List<Milestone>? Milestones { get; set; }
-
         public List<ContractActivity>? ContractActivities { get; set; }
 
 

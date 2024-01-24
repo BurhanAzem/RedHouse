@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:client/controller/contract/contracts_controller.dart';
 import 'package:client/controller/contract/milestone_controller.dart';
 import 'package:client/model/contract.dart';

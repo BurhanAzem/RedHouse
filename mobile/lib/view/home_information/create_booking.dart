@@ -70,24 +70,24 @@ class _CreateBookingState extends State<CreateBooking>
   }
 
   nextStep1() {
-    continueStep();
+    // continueStep();
     // Remove any non-digit characters
-    // String sanitizedValue =
-    //     bookingController.cardNumber.text.replaceAll(RegExp(r'\D'), '');
+    String sanitizedValue =
+        bookingController.cardNumber.text.replaceAll(RegExp(r'\D'), '');
 
-    // if (sanitizedValue.length != 16 ||
-    //     bookingController.cardCCV.text.length != 4 ||
-    //     bookingController.cardDate.text.length != 5 ||
-    //     bookingController.cardName.text.isEmpty) {
-    //   setState(() {
-    //     checkStep1 = true;
-    //   });
-    // } else {
-    //   setState(() {
-    //     checkStep1 = false;
-    //   });
-    //   continueStep();
-    // }
+    if (sanitizedValue.length != 16 ||
+        bookingController.cardCCV.text.length != 4 ||
+        bookingController.cardDate.text.length != 5 ||
+        bookingController.cardName.text.isEmpty) {
+      setState(() {
+        checkStep1 = true;
+      });
+    } else {
+      setState(() {
+        checkStep1 = false;
+      });
+      continueStep();
+    }
   }
 
   void nextStep2() async {

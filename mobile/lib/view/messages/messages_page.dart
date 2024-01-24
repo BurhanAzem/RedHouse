@@ -308,7 +308,7 @@ class _MessagesState extends State<Messages> {
           senderId: currentUserId,
           senderEmail: currentUserEmail,
           receiverId: receiverUserId,
-          message: "Now you can communicate with each other.",
+          message: "Now you can communicate",
           timestamp: Timestamp.now(),
         );
 

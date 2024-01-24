@@ -162,7 +162,7 @@ class _SearchBarRowState extends State<SearchBarRow> {
 
 class CustomSearch extends SearchDelegate {
   FilterController filterController = Get.put(FilterController());
-  StaticController staticController = Get.put(StaticController());
+  // StaticController staticController = Get.put(StaticController());
 
   Future<void> loadData() async {
     await filterController.getListAutoCompleteLocation(query);
@@ -260,239 +260,246 @@ class CustomSearch extends SearchDelegate {
       );
     } else {
       return Scaffold(
-        body: ListView(
-          children: [
-            const Divider(
-              height: 1.5,
-              color: Colors.grey,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: filterController.listingType
-                              ? Colors.black
-                              : Colors.transparent,
-                          width: 3.0,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Buy',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 17,
-                        color: filterController.listingType
-                            ? Colors.black
-                            : Colors.black45,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: !filterController.listingType
-                              ? Colors.black
-                              : Colors.transparent,
-                          width: 3.0,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Rent',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 17,
-                        color: !filterController.listingType
-                            ? Colors.black
-                            : Colors.black45,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Divider(
-              height: 1.5,
-              color: Colors.grey,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        body: GetBuilder<StaticController>(
+            init: StaticController(),
+            builder: (StaticController staticController) {
+              return ListView(
                 children: [
-                  InkWell(
-                    onTap: () {
-                      // Add your logic here for handling the tap event
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.my_location,
-                            size: 22,
+                  const Divider(
+                    height: 1.5,
+                    color: Colors.grey,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: filterController.listingType
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 3.0,
+                              ),
+                            ),
                           ),
-                          SizedBox(width: 10),
-                          Text(
-                            "Use current location",
+                          child: Text(
+                            'Buy',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 17),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 17,
+                              color: filterController.listingType
+                                  ? Colors.black
+                                  : Colors.black45,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: !filterController.listingType
+                                    ? Colors.black
+                                    : Colors.transparent,
+                                width: 3.0,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            'Rent',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 17,
+                              color: !filterController.listingType
+                                  ? Colors.black
+                                  : Colors.black45,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const Divider(
                     height: 1.5,
                     color: Colors.grey,
                   ),
-                  InkWell(
-                    onTap: () {
-                      // Add your logic here for handling the tap event
-                    },
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      child: Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.car,
-                            size: 20,
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            "Search by commute time",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 17),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Divider(
-                    height: 1.5,
-                    color: Colors.grey,
-                  ),
-
-                  // Recently Search
-                  const SizedBox(height: 60),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Recently Search",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                        ),
-                      ),
-                      if (staticController.searchLocation.isNotEmpty)
+                  Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         InkWell(
                           onTap: () {
-                            staticController.searchLocation.clear();
+                            // Add your logic here for handling the tap event
                           },
-                          child: const Text(
-                            "Clear all",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 196, 39, 27),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.my_location,
+                                  size: 22,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Use current location",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  if (staticController.searchLocation.isEmpty)
-                    const Text(
-                      "You have not searched for any location",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    )
-                  else
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: staticController.searchLocation.length,
-                      itemBuilder: (context, index) {
-                        Location location =
-                            staticController.searchLocation[index];
-
-                        return LocationListTile(
-                          location: location,
-                        );
-                      },
-                    ),
-
-                  // Recently Viewed
-                  const SizedBox(height: 60),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        "Recently Viewed",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
+                        const Divider(
+                          height: 1.5,
+                          color: Colors.grey,
                         ),
-                      ),
-                      if (staticController.searchProperties.isNotEmpty)
                         InkWell(
                           onTap: () {
-                            staticController.searchProperties.clear();
+                            // Add your logic here for handling the tap event
                           },
-                          child: const Text(
-                            "Clear all",
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 196, 39, 27),
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.car,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  "Search by commute time",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 17),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  if (staticController.searchProperties.isEmpty)
-                    const Text(
-                      "You have not searched for any property",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    )
-                  else
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: staticController.searchProperties.length,
-                      itemBuilder: (context, index) {
-                        Property property =
-                            staticController.searchProperties[index];
+                        const Divider(
+                          height: 1.5,
+                          color: Colors.grey,
+                        ),
 
-                        return PropertyListTile(
-                          property: property,
-                        );
-                      },
+                        // Recently Search
+                        const SizedBox(height: 60),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Recently Search",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                              ),
+                            ),
+                            if (staticController.searchLocation.isNotEmpty)
+                              InkWell(
+                                onTap: () {
+                                  staticController.clearsearchLocation();
+                                },
+                                child: const Text(
+                                  "Clear all",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 196, 39, 27),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        if (staticController.searchLocation.isEmpty)
+                          const Text(
+                            "You have not searched for any location",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          )
+                        else
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: staticController.searchLocation.length,
+                            itemBuilder: (context, index) {
+                              Location location =
+                                  staticController.searchLocation[index];
+
+                              return LocationListTile(
+                                location: location,
+                              );
+                            },
+                          ),
+
+                        // Recently Viewed
+                        const SizedBox(height: 60),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Recently Viewed",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                              ),
+                            ),
+                            if (staticController.searchProperties.isNotEmpty)
+                              InkWell(
+                                onTap: () {
+                                  staticController.clearsearchProperties();
+                                },
+                                child: const Text(
+                                  "Clear all",
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 196, 39, 27),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        if (staticController.searchProperties.isEmpty)
+                          const Text(
+                            "You have not searched for any property",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          )
+                        else
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: staticController.searchProperties.length,
+                            itemBuilder: (context, index) {
+                              Property property =
+                                  staticController.searchProperties[index];
+
+                              return PropertyListTile(
+                                property: property,
+                              );
+                            },
+                          ),
+                        const SizedBox(height: 50),
+                      ],
                     ),
-                  const SizedBox(height: 50),
+                  ),
                 ],
-              ),
-            ),
-          ],
-        ),
+              );
+            }),
       );
     }
   }

@@ -58,7 +58,6 @@ class _AllContractsState extends State<AllContracts>
     ];
     const contractType = [
       "All",
-      "For daily rent",
       "For monthly rent",
       "For sell",
     ];
@@ -192,24 +191,24 @@ class _AllContractsState extends State<AllContracts>
                       },
                       tabs: const [
                         Tab(text: 'Landlord Contracts'),
-                        Tab(text: 'Client Contracts'),
+                        Tab(text: 'Customer Contracts'),
                       ],
                       overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
                       indicatorColor: Colors.black,
                       labelColor: Colors.black,
                       labelStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                       unselectedLabelColor: Colors.grey[700],
                       unselectedLabelStyle: const TextStyle(
                         fontWeight: FontWeight.normal,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                     ),
                     body: TabBarView(
                       children: [
-                        // Content for 'Buy' tab
+                        // Content for 'Landlord Contracts' tab
                         Expanded(
                           child: ListView.builder(
                             itemCount: controller.contracts.length,
@@ -356,7 +355,9 @@ class _AllContractsState extends State<AllContracts>
                             },
                           ),
                         ),
-                        // Content for 'Rent' tab
+
+
+                        // Content for 'Customer Contracts' tab
                         Expanded(
                           child: ListView.builder(
                             itemCount: controller.contracts.length,
