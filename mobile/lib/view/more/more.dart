@@ -1,16 +1,19 @@
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
+import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/messages/messages_page.dart';
+import 'package:client/view/more/my_applications.dart';
+import 'package:client/view/more/my_bookings.dart';
+import 'package:client/view/more/my_offers.dart';
+import 'package:client/view/more/my_properties.dart';
 import 'package:client/view/more/profile/edit_profile.dart';
 import 'package:client/view/more/profile/profile.dart';
-import 'package:client/view/more/account_upgrade.dart';
+import 'package:client/view/more/upgrade/account_upgrade.dart';
 import 'package:client/view/more/account_verification.dart';
 import 'package:client/view/more/complaint.dart';
 import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';
-import 'package:client/view/more/my_properties.dart';
 import 'package:client/view/notification/notifications_settings.dart';
-import 'package:client/view/offers/all_offers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -84,7 +87,7 @@ class _MoreState extends State<More> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 30),
                       child: const Text(
-                        "Sign up or log in to save listings and get updates on your home search.",
+                        "Login or sign up to save listings and get updates on your home search.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
@@ -103,11 +106,12 @@ class _MoreState extends State<More> {
                       height: 45,
                       color: Colors.black,
                       child: const Text(
-                        "Log in",
+                        "Login",
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -159,6 +163,9 @@ class _MoreState extends State<More> {
           ),
 
           // Here settings list
+          // Here settings list
+          // Here settings list
+          // Here settings list
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: const Text(
@@ -166,7 +173,7 @@ class _MoreState extends State<More> {
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 27,
+                fontSize: 25,
               ),
             ),
           ),
@@ -200,29 +207,31 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-          const SizedBox(height: 15),
 
-          // Here home list
+          const SizedBox(height: 15),
+          // Here account list
+          // Here account list
+          // Here account list
+          // Here account list
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: const Text(
-              "My home",
+              "Account",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 27,
+                fontSize: 25,
               ),
             ),
           ),
-
           InkWell(
             onTap: () {
-              Get.to(() => const Messages());
+              Get.to(() => const Complaint());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "Messages",
+                "My account",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -230,15 +239,14 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-
           InkWell(
             onTap: () {
-              Get.to(() => const MyProperties());
+              Get.to(() => const Complaint());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "Properties",
+                "Level",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -246,7 +254,36 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-
+          InkWell(
+            onTap: () {
+              Get.to(() => AccountVerification());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Verification",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const AccountUpgrade());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Upgrade",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
           InkWell(
             onTap: () {
               Get.to(() => const MyFeedback());
@@ -263,9 +300,55 @@ class _MoreState extends State<More> {
             ),
           ),
 
+          const SizedBox(height: 15),
+          // Here Manange Properties list
+          // Here Manange Properties list
+          // Here Manange Properties list
+          // Here Manange Properties list
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: const Text(
+              "Manange Properties",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
+          ),
           InkWell(
             onTap: () {
-              Get.to(() => const AllOffers());
+              Get.to(() => const MyApplications());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Applications",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const MyBookings());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Bookings",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const MyOffers());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -278,10 +361,71 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-
           InkWell(
             onTap: () {
-              Get.to(() => FavoriteProperties());
+              Get.to(() => const AllContracts());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Contracts",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 15),
+          // Here home list
+          // Here home list
+          // Here home list
+          // Here home list
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: const Text(
+              "My home",
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const Messages());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Messages",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const MyProperties());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Properties",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const FavoriteProperties());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -294,10 +438,9 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-
           InkWell(
             onTap: () {
-              Get.to(() => Complaint());
+              Get.to(() => const Complaint());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -310,23 +453,6 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-
-          InkWell(
-            onTap: () {
-              Get.to(() => AccountVerification());
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-              child: const Text(
-                "Account verification",
-                style: TextStyle(
-                  color: Color.fromARGB(174, 0, 0, 0),
-                  fontSize: 19,
-                ),
-              ),
-            ),
-          ),
-
           InkWell(
             onTap: () {},
             child: Container(
@@ -341,24 +467,10 @@ class _MoreState extends State<More> {
             ),
           ),
 
-          InkWell(
-            onTap: () {
-              Get.to(() => AccountUpgrade());
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
-              child: const Text(
-                "Account upgrade",
-                style: TextStyle(
-                  color: Color.fromARGB(174, 0, 0, 0),
-                  fontSize: 19,
-                ),
-              ),
-            ),
-          ),
-
           const SizedBox(height: 15),
-
+          // here buying a home list
+          // here buying a home list
+          // here buying a home list
           // here buying a home list
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),

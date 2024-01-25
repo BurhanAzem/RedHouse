@@ -145,7 +145,7 @@ class EditProfile extends StatelessWidget {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(() => const EditProfile());
+                    // Get.to(() => const EditProfile());
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFEE400),
@@ -190,10 +190,11 @@ class EditProfile extends StatelessWidget {
                     height: 40,
                     child: ElevatedButton(
                       onPressed: () {
-                        Get.to(() => const EditProfile());
+                        // Get.to(() => const EditProfile());
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFEE400),
+                        backgroundColor:
+                            const Color.fromARGB(255, 245, 244, 244),
                         side: BorderSide.none,
                         shape: const StadiumBorder(),
                       ),

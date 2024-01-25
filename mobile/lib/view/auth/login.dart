@@ -1,5 +1,6 @@
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/core/functions/validInput.dart';
+import 'package:client/view/auth/register_type.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,28 +37,15 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-        title: RichText(
-          text: const TextSpan(
-            children: <TextSpan>[
-              // TextSpan(
-              //   text: "Red ",
-              //   style: TextStyle(
-              //     color: Color(0xffd92328),
-              //     fontSize: 35,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              TextSpan(
-                text: "Login",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+        title: const Text(
+          "Login",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        centerTitle: true,
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())
@@ -79,6 +67,7 @@ class _LoginState extends State<Login> {
                   "Login with your email and password\n or continue with social media",
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
+                    fontSize: 15,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -145,7 +134,8 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           onTap: () {
-                            Get.offNamed("/register");
+                            // Get.offNamed("/register");
+                            Get.off(()=> RegisterType());
                           },
                         ),
                         const InkWell(
@@ -207,7 +197,7 @@ class _LoginState extends State<Login> {
                       Text(
                         "Login as visitor",
                         style: TextStyle(
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Color.fromARGB(255, 196, 39, 27),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -215,11 +205,9 @@ class _LoginState extends State<Login> {
                   ),
                 ),
                 Container(height: 15),
-                Container(
-                  child: const Text(
-                    "or",
-                    textAlign: TextAlign.center,
-                  ),
+                const Text(
+                  "or",
+                  textAlign: TextAlign.center,
                 ),
                 Container(height: 15),
                 MaterialButton(

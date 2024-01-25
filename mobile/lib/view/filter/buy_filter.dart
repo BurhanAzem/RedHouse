@@ -523,7 +523,7 @@ class _BuyFilterState extends State<BuyFilter> {
                           controller.formatBedBath();
                           controller.checkFiltersON();
                           controller.getProperties();
-                          // mapListController.isLoading = true;
+                          mapListController.isLoading = true;
                           Navigator.pop(context);
                         }
                       },

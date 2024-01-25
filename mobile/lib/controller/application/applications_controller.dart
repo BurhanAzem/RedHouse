@@ -79,16 +79,18 @@ class ApplicationsController extends GetxController {
   getApprovedApplicationsForUser(int userId) async {
     var response = await ApplicationData.getApprovedApplicationsForUser(userId);
 
-    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
-      approvedApplicationsForUser = (response['listDto'] as List<dynamic>)
-          .map((e) => Application.fromJson(e as Map<String, dynamic>))
-          .toList();
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+        approvedApplicationsForUser = (response['listDto'] as List<dynamic>)
+            .map((e) => Application.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
   }
 

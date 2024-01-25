@@ -7,6 +7,7 @@ import 'package:client/view/messages/chat_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -43,7 +44,7 @@ class _MessagesState extends State<Messages> {
     super.initState();
     currentUserId = loginController.userDto!["id"].toString();
     var email = loginController.userDto!["email"];
-    if(email == null) return;
+    if (email == null) return;
     currentUserEmail = email;
     loadData();
     setState(() {});
@@ -134,7 +135,9 @@ class _MessagesState extends State<Messages> {
           : _buildUserList(onMessageSent: () {
               // Callback function to be called when a new message is sent
               // This will trigger a rebuild of the Messages widget
-              setState(() {});
+              if (mounted) {
+                setState(() {});
+              }
             }),
     );
   }
@@ -258,8 +261,8 @@ class _MessagesState extends State<Messages> {
                 subtitle: Row(
                   children: [
                     Text(
-                      lastMessageText.length > 22
-                          ? lastMessageText.substring(0, 22)
+                      lastMessageText.length > 20
+                          ? "${lastMessageText.substring(0, 20)}..."
                           : lastMessageText,
                       style: TextStyle(
                         fontSize: isUnread ? 13 : 14.5,
@@ -283,7 +286,7 @@ class _MessagesState extends State<Messages> {
         ),
         onTap: () {
           Get.to(() => ChatPage(
-                receiverUserEmail: data['email'],
+                receiverUserEmail: data['name'],
                 receiverUserID: data['uid'],
                 onMessageSent: onMessageSent,
                 application: application,

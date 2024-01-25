@@ -145,7 +145,7 @@ class _ComplineState extends State<Complaint> {
                     width: 400,
                     child: MaterialButton(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                       onPressed: () {
                         setState(() {});
@@ -171,7 +171,7 @@ class _ComplineState extends State<Complaint> {
                         }
                       },
                       minWidth: 400,
-                      height: 40,
+                      height: 45,
                       color: Colors.black87,
                       child: const Center(
                         child: Text(

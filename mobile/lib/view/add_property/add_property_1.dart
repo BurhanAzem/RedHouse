@@ -105,6 +105,7 @@ class _AddProperty1State extends State<AddProperty1>
                 });
               },
             ),
+            iconTheme: const IconThemeData(color: Colors.white),
             title: const Text(
               "Add Property",
               style: TextStyle(

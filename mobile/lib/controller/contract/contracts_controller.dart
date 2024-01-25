@@ -3,11 +3,7 @@ import 'package:client/model/contract.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class AllContractsController extends GetxController {
-  AllContractsController();
-}
-
-class ContractsControllerImp extends AllContractsController {
+class ContractsController extends GetxController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
   int activeStep = 0;
 
@@ -22,18 +18,18 @@ class ContractsControllerImp extends AllContractsController {
   getAllContrcats() async {
     var response = await ContractsData.getContrcats(
         userId, contractStatus, contractType, contractTo);
-
-    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
-      contracts = (response['listDto'] as List<dynamic>)
-          .map((e) => Contract.fromJson(e as Map<String, dynamic>))
-          .toList();
-      print(contracts);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+        contracts = (response['listDto'] as List<dynamic>)
+            .map((e) => Contract.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
   }
 
@@ -46,7 +42,6 @@ class ContractsControllerImp extends AllContractsController {
             Contract.fromJson(response['dto'] as Map<String, dynamic>);
       }
       responseMessage = response['message'];
-      print(responseMessage);
     } else {
       Get.defaultDialog(
         title: "Error",

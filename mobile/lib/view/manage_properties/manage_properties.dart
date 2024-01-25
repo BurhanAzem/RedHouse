@@ -1,5 +1,6 @@
 import 'package:client/view/manage_properties/applications/all_applications.dart';
 import 'package:client/view/manage_properties/bookings/all_bookings.dart';
+import 'package:client/view/manage_properties/offers/all_offers.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,7 @@ class _TopNavigationBar extends State<ManageProperties>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -35,16 +36,12 @@ class _TopNavigationBar extends State<ManageProperties>
         ),
         bottom: TabBar(
           controller: _tabController,
+          isScrollable: true,
           tabs: const <Widget>[
-            Tab(
-              child: Text("Properties"),
-            ),
-            Tab(
-              child: Text("Applications"),
-            ),
-            Tab(
-              child: Text("Bookings"),
-            ),
+            Tab(child: Text("Properties")),
+            Tab(child: Text("Applications")),
+            Tab(child: Text("Offers")),
+            Tab(child: Text("Bookings")),
           ],
           overlayColor: MaterialStatePropertyAll(Colors.grey[700]),
           indicatorColor: Colors.white,
@@ -64,12 +61,9 @@ class _TopNavigationBar extends State<ManageProperties>
         controller: _tabController,
         children: const <Widget>[
           Center(child: Properties()),
-          Center(
-            child: AllApplications(),
-          ),
-          Center(
-            child: AllBookings(),
-          ),
+          Center(child: AllApplications()),
+          Center(child: AllOffers()),
+          Center(child: AllBookings()),
         ],
       ),
     );

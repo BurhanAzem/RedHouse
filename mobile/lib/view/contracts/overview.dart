@@ -1,8 +1,5 @@
-import 'dart:developer';
-import 'package:client/controller/contract/contracts_controller.dart';
 import 'package:client/controller/contract/milestone_controller.dart';
 import 'package:client/model/contract.dart';
-import 'package:client/routes.dart';
 import 'package:client/view/contracts/add_milestone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,6 +17,8 @@ class _StepperDemoState extends State<OverView> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
   bool isLoading = true; // Add a boolean variable for loading state
+  MilestoneControllerImp milestonesController =
+      Get.put(MilestoneControllerImp());
 
   @override
   void initState() {
@@ -29,9 +28,6 @@ class _StepperDemoState extends State<OverView> {
   }
 
   void loadData() async {
-    MilestoneControllerImp milestonesController =
-        Get.put(MilestoneControllerImp());
-
     await milestonesController.getAllMilestonesForContract(widget.contract.id);
 
     setState(() {
@@ -44,16 +40,6 @@ class _StepperDemoState extends State<OverView> {
 
   @override
   Widget build(BuildContext context) {
-    ContractsControllerImp controller = Get.put(ContractsControllerImp());
-    MilestoneControllerImp milestonesController =
-        Get.put(MilestoneControllerImp());
-
-    // if (isLoading) {
-    //   return Center(
-    //     child: CircularProgressIndicator(), // Show a loading indicator
-    //   );
-    // }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -155,26 +141,27 @@ class _StepperDemoState extends State<OverView> {
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: milestonesController.milestones!.length + 1,
+                  itemCount: milestonesController.milestones.length + 1,
                   itemBuilder: (context, index) {
                     return GestureDetector(
                         onTap: () {
                           // controller.getProperty();
                           setState(() {});
                         },
-                        child: milestonesController.milestones!.length != index
+                        child: milestonesController.milestones.length != index
                             ? Container(
                                 // height: 180, // Adjust the height as needed
-                                margin: const EdgeInsets.only(right: 25, left: 5),
+                                margin:
+                                    const EdgeInsets.only(right: 25, left: 5),
                                 child: TimelineTile(
                                   isFirst: index == 0,
                                   isLast: index ==
-                                      milestonesController.milestones!.length -
+                                      milestonesController.milestones.length -
                                           1,
                                   beforeLineStyle: LineStyle(
                                     color: milestonesController
-                                                .milestones![index]
-                                                .milestoneStatus! ==
+                                                .milestones[index]
+                                                .milestoneStatus==
                                             'Paid'
                                         ? const Color(0xffd92328)
                                         : Color.fromARGB(118, 60, 58, 58),
@@ -186,21 +173,22 @@ class _StepperDemoState extends State<OverView> {
                                         vertical: 16.0),
                                     indicatorXY: 0,
                                     color: milestonesController
-                                                .milestones![index]
-                                                .milestoneStatus! ==
+                                                .milestones[index]
+                                                .milestoneStatus==
                                             'Paid'
                                         ? const Color(0xffd92328)
-                                        : const Color.fromARGB(255, 211, 211, 211),
+                                        : const Color.fromARGB(
+                                            255, 211, 211, 211),
                                     width: 28,
                                     iconStyle: IconStyle(
                                       iconData: milestonesController
-                                                  .milestones![index]
+                                                  .milestones[index]
                                                   .milestoneStatus ==
                                               'Paid'
                                           ? Icons.done
                                           : Icons.question_mark,
                                       color: milestonesController
-                                                  .milestones![index]
+                                                  .milestones[index]
                                                   .milestoneStatus ==
                                               'Paid'
                                           ? Colors.white
@@ -211,13 +199,14 @@ class _StepperDemoState extends State<OverView> {
                                     padding: const EdgeInsets.only(top: 20),
                                     alignment: const Alignment(0.0, 0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Container(
                                           // margin: EdgeInsets.only(left: 10),
                                           child: Text(
                                             milestonesController
-                                                .milestones![index]
+                                                .milestones[index]
                                                 .milestoneName,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w500),
@@ -225,45 +214,44 @@ class _StepperDemoState extends State<OverView> {
                                         ),
                                         const SizedBox(height: 10),
                                         Text(milestonesController
-                                            .milestones![index].description),
+                                            .milestones[index].description),
                                         Container(
                                           height: 8,
                                         ),
                                         Row(
                                           children: [
                                             Container(
-                                              margin:
-                                                  const EdgeInsets.only(right: 10),
+                                              margin: const EdgeInsets.only(
+                                                  right: 10),
                                               child: Text(
-                                                "\$" +
-                                                    milestonesController
-                                                        .milestones![index]
-                                                        .amount
-                                                        .toString(),
+                                                "\$${milestonesController
+                                                        .milestones[index]
+                                                        .amount}",
                                                 style: const TextStyle(
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 16),
                                               ),
                                             ),
                                             Chip(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 10),
-                                              shadowColor: const Color(0xffd92328),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                              shadowColor:
+                                                  const Color(0xffd92328),
                                               label: Text(
                                                 milestonesController
-                                                    .milestones![index]
+                                                    .milestones[index]
                                                     .milestoneStatus,
-                                                style: const TextStyle(fontSize: 12),
+                                                style: const TextStyle(
+                                                    fontSize: 12),
                                               ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(12.0),
                                                 // Adjust the border radius as needed
                                               ),
-                                              backgroundColor: const Color.fromARGB(
-                                                  255,
-                                                  255,
-                                                  255,
+                                              backgroundColor: const Color
+                                                  .fromARGB(255, 255, 255,
                                                   255), // Set your desired background color
                                               labelStyle: const TextStyle(
                                                 color: Color(

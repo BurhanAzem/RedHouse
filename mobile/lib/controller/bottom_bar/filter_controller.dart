@@ -4,15 +4,11 @@ import 'package:client/model/location.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
-  String currentCity = "";
   ListProperty listProperty = ListProperty(listDto: []);
   List<Location> listAutoCompleteLocation = [];
-  CameraPosition currentPosition =
-      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
   List<FlSpot> flSpotListRent = [];
   List<FlSpot> flSpotListSell = [];
 
@@ -26,8 +22,6 @@ class FilterController extends GetxController {
     latitude: 0,
     longitude: 0,
   );
-
-  bool isLoading = false; // new value
 
   // Property type
   bool buyHouse = true;
@@ -269,9 +263,9 @@ class FilterController extends GetxController {
 
   // Apis
   // Apis
+  // Apis
+  // Apis
   getProperties() async {
-    isLoading = true;
-
     List<String>? propertyTypes = [];
     String? minPrice;
     String? maxPrice;
@@ -435,13 +429,11 @@ class FilterController extends GetxController {
         );
       }
     } else {
-      // Handle the case where response is not of the expected type.
       Get.defaultDialog(
         title: "Error",
         middleText: "statusCode: 500, Internal server error}",
       );
     }
-    isLoading = false;
   }
 
   getListAutoCompleteLocation(String query) async {

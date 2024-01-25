@@ -11,11 +11,7 @@ class BookingData {
     int userId,
     int propertyId,
     List<DateTime> bookingDays,
-    // DateTime builtYear,
   ) async {
-    // String formattedBuiltYear = DateFormat('yyyy-MM-ddTHH:mm:ss').format(builtYear);
-
-    // Convert List<DateTime> to List<String>
     List<String> formattedBookingDays = bookingDays
         .map((dateTime) => DateFormat('yyyy-MM-ddTHH:mm:ss').format(dateTime))
         .toList();
@@ -24,7 +20,6 @@ class BookingData {
       "userId": userId,
       "propertyId": propertyId,
       "bookingDays": formattedBookingDays,
-      // "builtYear": formattedBuiltYear,
     };
 
     if (await checkInternet()) {
@@ -38,11 +33,8 @@ class BookingData {
         encoding: Encoding.getByName("utf-8"),
       );
 
-      print(response.statusCode);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody);
         return (responsebody);
       } else {
         return (StatusRequest.serverfailure);
@@ -62,11 +54,8 @@ class BookingData {
         'Authorization': 'Bearer ${getToken()}',
       });
 
-      print(response.statusCode);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
 
         return (responsebody);
       } else {
@@ -77,9 +66,11 @@ class BookingData {
     }
   }
 
-  static getUserBookings(int userId, String? bookingTo) async {
+  static getBookingsForUser(
+      int userId, String? bookingTo, String? bookingStatus) async {
     final Map<String, dynamic> filters = {
       "bookingsTo": bookingTo,
+      "bookingStatus": bookingStatus,
     };
 
     if (await checkInternet()) {
@@ -90,11 +81,9 @@ class BookingData {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ${getToken()}',
       });
-      print(response.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Map responsebody = json.decode(response.body);
-        print(responsebody["listDto"]);
         return (responsebody);
       } else {
         return StatusRequest.serverfailure;
@@ -104,4 +93,22 @@ class BookingData {
     }
   }
 
+  static deleteBooking(int id) async {
+    if (await checkInternet()) {
+      var response = await http.delete(Uri.parse('${AppLink.bookings}/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
 }

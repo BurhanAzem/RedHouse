@@ -5,7 +5,6 @@ import 'package:client/main.dart';
 import 'package:client/model/user.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -123,17 +122,7 @@ class _AccountVerificationState extends State<AccountVerification>
       builder: (AccountVerificationController controller) {
         return Scaffold(
           appBar: AppBar(
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                setState(() {
-                  Get.to(() => const BottomBar());
-                });
-              },
-            ),
+            iconTheme: const IconThemeData(color: Colors.white),
             title: const Text(
               "Account verification",
               style: TextStyle(

@@ -47,16 +47,7 @@ class _AllApplicationsState extends State<AllApplications>
       "Approved",
     ];
 
-    // Front-end display values
-    final List<String> frontEndApplicationType = [
-      "All",
-      "Applications to book",
-      "Applications to rent",
-      "Applications to buy",
-    ];
-
-    // Back-end values
-    final List<String> backEndApplicationType = [
+    final List<String> applicationType = [
       "All",
       "For daily rent",
       "For monthly rent",
@@ -74,9 +65,10 @@ class _AllApplicationsState extends State<AllApplications>
       child: Scaffold(
         body: Column(
           children: [
-            Container(height: 8),
+            // Search
+            const SizedBox(height: 15),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: TextFormField(
                 style: const TextStyle(height: 1.2),
                 decoration: InputDecoration(
@@ -90,9 +82,9 @@ class _AllApplicationsState extends State<AllApplications>
                 ),
               ),
             ),
-            const SizedBox(width: 10),
 
             // Filters
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -121,7 +113,7 @@ class _AllApplicationsState extends State<AllApplications>
                     }).toList(),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: 180,
@@ -132,16 +124,14 @@ class _AllApplicationsState extends State<AllApplications>
                   child: DropdownButton<String>(
                     alignment: Alignment.centerLeft,
                     isExpanded: true,
-                    value: frontEndApplicationType[backEndApplicationType
-                        .indexOf(controller.applicationType)],
+                    value: controller.applicationType,
                     onChanged: (String? newValue) {
                       setState(() {
-                        controller.applicationType = backEndApplicationType[
-                            frontEndApplicationType.indexOf(newValue!)];
+                        controller.applicationType = newValue!;
                         loadData();
                       });
                     },
-                    items: frontEndApplicationType.map((String option) {
+                    items: applicationType.map((String option) {
                       return DropdownMenuItem<String>(
                         value: option,
                         child: Text(
@@ -154,7 +144,9 @@ class _AllApplicationsState extends State<AllApplications>
                 ),
               ],
             ),
-            Container(height: 12),
+
+            // TabBar
+            const SizedBox(height: 10),
             Expanded(
               child: DefaultTabController(
                 length: 2,

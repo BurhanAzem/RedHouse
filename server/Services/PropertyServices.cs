@@ -386,6 +386,7 @@ namespace RedHouse_Server.Services
                                 join contract in _redHouseDbContext.Contracts
                                     on offer.Id equals contract.OfferId
                                 where offer.CustomerId == userId
+                                || offer.LandlordId == userId
                                 select property);
                 }
                 else

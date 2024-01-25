@@ -6,15 +6,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapListController extends GetxController {
   CameraPosition currentPosition =
-      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 8);
+      const CameraPosition(target: LatLng(31.776752, 35.224851), zoom: 0);
   RxString currentLocationName = "".obs;
-  double newZoom = 0.0;
-  BuildContext? mapContext;
-
   Set<Marker> visibleMarkers = <Marker>{};
   List<Property> visibleProperties = <Property>[];
 
   bool isLoading = true;
+  bool firstload = true;
   bool isListIcon = true;
   int selectedValue = 1;
   bool locationButtonSelected = false;
@@ -41,15 +39,14 @@ class MapListController extends GetxController {
     update();
   }
 
-  Future<CameraPosition> getCurrentPosition() async {
+  Future<void> getCurrentPosition() async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     LatLng centerCoordinates = LatLng(position.latitude, position.longitude);
 
     currentPosition = CameraPosition(
       target: centerCoordinates,
-      zoom: 10,
+      zoom: 14,
     );
-    return currentPosition;
   }
 }

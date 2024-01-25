@@ -1,5 +1,5 @@
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/view/more/payment.dart';
+import 'package:client/view/more/upgrade/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -31,15 +31,7 @@ class _AccountUpgradeState extends State<AccountUpgrade> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            color: Colors.white,
-            FontAwesomeIcons.angleLeft,
-          ),
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Account Upgrade",
           style: TextStyle(
@@ -172,7 +164,7 @@ class CardWidget extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20),
               child: MaterialButton(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 onPressed: () {
                   Get.to(() => const Payment());
@@ -184,8 +176,8 @@ class CardWidget extends StatelessWidget {
                   "Payment",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

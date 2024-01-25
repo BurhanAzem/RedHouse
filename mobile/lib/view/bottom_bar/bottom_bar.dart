@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/bottom_bar.dart';
 import 'package:client/main.dart';
+import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/more.dart';
-import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
-import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -27,9 +25,6 @@ class _BottomBarState extends State<BottomBar> {
 
   LoginControllerImp loginController =
       Get.put(LoginControllerImp(), permanent: true);
-
-  MapListController mapListController =
-      Get.put(MapListController(), permanent: true);
 
   final List<Icon> _unselectedIcons = [
     Icon(
@@ -116,10 +111,8 @@ class _BottomBarState extends State<BottomBar> {
         future: checkPermission(),
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show a loading indicator while waiting for the future to complete
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else {
-            // Build the UI once the future completes
             return IndexedStack(
               index: bottomBarController.currentIndex,
               children: const [
@@ -141,9 +134,9 @@ class _BottomBarState extends State<BottomBar> {
         selectedItemColor: const Color.fromARGB(255, 253, 45, 30),
         unselectedItemColor: Colors.grey[800],
         unselectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.w500, fontSize: 10),
+            const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
         selectedLabelStyle:
-            const TextStyle(fontWeight: FontWeight.w600, fontSize: 10),
+            const TextStyle(fontWeight: FontWeight.w600, fontSize: 11),
         items: [
           _buildBottomNavigationBarItem(0),
           _buildBottomNavigationBarItem(1),

@@ -1,6 +1,7 @@
 import 'package:client/controller/booking/booking_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/booking.dart';
+import 'package:client/view/manage_properties/bookings/incoming_booking.dart';
 import 'package:client/view/card/credit_card.dart';
 import 'package:client/view/card/style/card_background.dart';
 import 'package:client/view/manage_properties/bookings/my_booking.dart';
@@ -39,6 +40,13 @@ class _AllBookingsState extends State<AllBookings>
   Widget build(BuildContext context) {
     super.build(context);
 
+    const applicationStatus = [
+      "All",
+      "Paused",
+      "InProcess",
+      "Done",
+    ];
+
     return VisibilityDetector(
       key: const Key('allBookings'),
       onVisibilityChanged: (info) {
@@ -50,9 +58,10 @@ class _AllBookingsState extends State<AllBookings>
       child: Scaffold(
         body: Column(
           children: [
-            Container(height: 8),
+            // Search
+            const SizedBox(height: 15),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: TextFormField(
                 style: const TextStyle(height: 1.2),
                 decoration: InputDecoration(
@@ -66,7 +75,37 @@ class _AllBookingsState extends State<AllBookings>
                 ),
               ),
             ),
-            const SizedBox(width: 10),
+
+            // Filters
+            const SizedBox(height: 10),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black, width: 1.0),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: DropdownButton<String>(
+                alignment: Alignment.centerLeft,
+                isExpanded: true,
+                value: bookingController.bookingStatus,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    bookingController.bookingStatus = newValue!;
+                    loadData();
+                  });
+                },
+                items: applicationStatus.map((String option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(option),
+                  );
+                }).toList(),
+              ),
+            ),
+
+            // TabBar
+            const SizedBox(height: 10),
             Expanded(
               child: DefaultTabController(
                 length: 2,
@@ -82,12 +121,12 @@ class _AllBookingsState extends State<AllBookings>
                     labelColor: Colors.black,
                     labelStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                      fontSize: 16.5,
                     ),
                     unselectedLabelColor: Colors.grey[700],
                     unselectedLabelStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
-                      fontSize: 16,
+                      fontSize: 16.5,
                     ),
                   ),
                   body: TabBarView(
@@ -125,7 +164,7 @@ class _AllBookingsState extends State<AllBookings>
                         key: const Key("IncomingBookings"),
                         onVisibilityChanged: (info) {
                           if (info.visibleFraction == 1) {
-                            bookingController.bookingTo = "LandLord";
+                            bookingController.bookingTo = "Landlord";
                             loadData();
                             setState(() {});
                           }
@@ -238,7 +277,7 @@ class _AllBookingsState extends State<AllBookings>
             return GestureDetector(
               onTap: () {
                 setState(() {
-                  // Get.to(const IncomingBooking(), arguments: booking);
+                  Get.to(const IncomingBooking(), arguments: booking);
                 });
               },
               child: Container(

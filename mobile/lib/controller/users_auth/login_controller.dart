@@ -73,7 +73,11 @@ class LoginControllerImp extends LoginController {
 
         bottomBarController.currentIndex = 0;
         mapListController.isListIcon = true;
-        Get.offAllNamed("/bottom-bar");
+        if (userDto?["userRole"] != "lawyer") {
+          Get.offAllNamed("/lawyer-bottom-bar");
+        } else {
+          Get.offAllNamed("/bottom-bar");
+        }
       } else {
         Get.defaultDialog(
           title: "ُWarning",

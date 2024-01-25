@@ -1,7 +1,7 @@
 import 'package:client/controller/bottom_bar/bottom_bar.dart';
 import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
-import 'package:client/view/more/my_properties.dart';
+import 'package:client/view/manage_properties/properties.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -148,7 +148,7 @@ class _AddProperty8State extends State<AddProperty8>
                               Get.offAll(() => const BottomBar());
                             } else if (bottomBarController.currentIndex == 4) {
                               Get.offAll(() => const BottomBar());
-                              Get.to(() => const MyProperties());
+                              Get.to(() => const Properties());
                             }
 
                             ScaffoldMessenger.of(context)

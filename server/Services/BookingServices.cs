@@ -26,57 +26,6 @@ namespace server.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ResponsDto<Contract>> AcceptOffer(int offerId)
-        {
-            var offer = await _redHouseDbContext.Offers.FindAsync(offerId);
-            if (offer == null)
-            {
-                return new ResponsDto<Contract>
-                {
-                    Exception = new Exception("Offer Not Exist"),
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
-            }
-            offer.OfferStatus = "Accepted";
-            var property = await _redHouseDbContext.Properties.FindAsync(offer.PropertyId);
-
-            _redHouseDbContext.Offers.Update(offer);
-            _redHouseDbContext.SaveChanges();
-            Contract contract = new Contract
-            {
-                OfferId = offer.Id,
-                ContractStatus = "Active",
-                ContractType = property.ListingType,
-                Earnings = 0,
-                IsShouldPay = 1,
-                StartDate = DateTime.Now,
-            };
-
-            var contractRes = await _redHouseDbContext.Contracts.AddAsync(contract);
-            _redHouseDbContext.SaveChanges();
-
-            Milestone milestone = new Milestone
-            {
-                ContractId = contractRes.Entity.Id,
-                Description = contract.Offer.Description,
-                Amount = contract.Offer.Price,
-                MilestoneDate = contract.StartDate,
-                MilestoneName = contract.ContractType == "For rent" ? "Monthly Bills" : "Total Price",
-                MilestoneStatus = "Pending"
-            };
-
-
-            var milestoneRes = await _redHouseDbContext.Milestones.AddAsync(milestone);
-            _redHouseDbContext.SaveChanges();
-
-            return new ResponsDto<Contract>
-            {
-                Dto = contractRes.Entity,
-                StatusCode = HttpStatusCode.OK,
-            };
-        }
-
-
         public async Task<ResponsDto<Booking>> Book(BookingDto bookingDto)
         {
             var user = await _redHouseDbContext.Users.FindAsync(bookingDto.UserId);
@@ -92,17 +41,6 @@ namespace server.Services
             var property = await _redHouseDbContext.Properties.FindAsync(bookingDto.PropertyId);
 
 
-            // var bookings = await _redHouseDbContext.Bookings.Where(o => o.UserId == bookingDto.UserId
-            //                                                                     && o.PropertyId == bookingDto.PropertyId).ToArrayAsync();
-            // var searchedBooking = bookings.FirstOrDefault();
-            // if (searchedBooking != null)
-            // {
-            //     return new ResponsDto<Booking>
-            //     {
-            //         Exception = new Exception("You can't create more than one book to the same property"),
-            //         StatusCode = HttpStatusCode.BadRequest,
-            //     };
-            // }
             DateTime dateNow = DateTime.Now;
             dateNow = dateNow.AddMinutes(-dateNow.Minute);
             dateNow = dateNow.AddHours(-dateNow.Hour);
@@ -202,7 +140,8 @@ namespace server.Services
                             // Use AddOrUpdate overload for async methods
                             RecurringJob.AddOrUpdate(jobId, () => EndBookingProcess(bookingRes.Entity.Id), cronExpression);
                         }
-                         if ((bookingDto.BookingDays[i + 1].Day - bookingDto.BookingDays[i].Day) > 1)
+
+                        if ((bookingDto.BookingDays[i + 1].Day - bookingDto.BookingDays[i].Day) > 1)
                         {
                             // await ScheduleRecurringJob(bookingDto.BookingDays[i + 1], "11:59", ResumeBookingProcess); // Resume
                             // await ScheduleRecurringJob(bookingDto.BookingDays[i], "12:01", PauseBookingProcess); // Pause
@@ -229,25 +168,7 @@ namespace server.Services
                     }
                 }
 
-                //  async Task ScheduleRecurringJob(DateTime date, string time, Func<int, Task> myAsyncAction)
-                // {
-                //     var jobId = $"RecurringJob_{date}";
-
-                //     var cronExpression = $"{time.Split(':')[1]} {time.Split(':')[0]} {date.Day} {date.Month} ?";
-
-                //     RecurringJob.RemoveIfExists(jobId);
-
-                //     // Use AddOrUpdate overload for async methods
-                //     RecurringJob.AddOrUpdate(jobId, () => myAsyncAction(bookingRes.Entity.Id), cronExpression);
-                // }
-
-
             }
-
-            // Rest of your code
-
-
-            // Rest of your code
 
             return new ResponsDto<Booking>
             {
@@ -301,10 +222,6 @@ namespace server.Services
 
             // Do something with 'booking' if needed
         }
-
-
-
-
         public async Task<ResponsDto<Booking>> DeleteBooking(int bookingId)
         {
             var booking = await _redHouseDbContext.Bookings.FindAsync(bookingId);
@@ -341,7 +258,7 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId, string bookingsTo)
+        public async Task<ResponsDto<Booking>> GetAllBookingsForUser(int userId, string bookingsTo, string bookingStatus)
         {
             var user = await _redHouseDbContext.Users.FindAsync(userId);
             if (user == null)
@@ -355,11 +272,11 @@ namespace server.Services
 
             var query = _redHouseDbContext.Bookings
                 .Include(a => a.User)
+                .Include(b => b.BookingDays)
                 .Include(a => a.Property)
                 .ThenInclude(p => p.Location)
                 .Include(a => a.Property)
                 .ThenInclude(p => p.User)
-                .Include(b => b.BookingDays)
                 .Include(a => a.Property)
                 .ThenInclude(p => p.propertyFiles)
                 .AsQueryable();
@@ -371,14 +288,16 @@ namespace server.Services
                         join a in query on p.Id equals a.PropertyId
                         where p.UserId == userId
                         select a;
-
             }
-
-            // Now you can use the 'query' variable for further processing
 
             if (bookingsTo.Trim() == "Customer")
             {
                 query = query.Where(a => a.UserId == userId);
+            }
+
+            if (bookingStatus.Trim() != "All")
+            {
+                query = query.Where(c => c.BookingStatus == bookingStatus.Trim());
             }
 
             var bookings = await query.ToArrayAsync();

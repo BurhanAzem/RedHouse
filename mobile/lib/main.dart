@@ -1,12 +1,13 @@
 import 'package:client/core/services/network_controller.dart';
+import 'package:client/lawyer%20view/lawyer_bottom_bar.dart';
 import 'package:client/middleware.dart';
 import 'package:client/routes.dart';
 import 'package:client/view/auth/login.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/manage_properties/applications/all_applications.dart';
-import 'package:client/view/more/account_upgrade.dart';
-import 'package:client/view/more/payment.dart';
-import 'package:client/view/offers/all_offers.dart';
+import 'package:client/view/more/upgrade/account_upgrade.dart';
+import 'package:client/view/more/upgrade/payment.dart';
+import 'package:client/view/manage_properties/offers/all_offers.dart';
 import 'package:client/view/onboarding/welcoming.dart';
 import 'package:client/view/search/closest_properties.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -66,7 +67,8 @@ class MyApp extends StatelessWidget {
             name: "/welcoming",
             page: () => const Welcoming(),
             middlewares: [AuthMiddleWare()]),
-        GetPage(name: "/bottom-bar", page: () => BottomBar())
+        GetPage(name: "/bottom-bar", page: () => const BottomBar()),
+        GetPage(name: "/lawyer-bottom-bar", page: () => const LawyerBottomBar()),
       ],
     );
   }

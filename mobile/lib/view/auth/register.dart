@@ -11,7 +11,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  SignUpControllerImp controller = Get.put(SignUpControllerImp());
+  SignUpControllerImp controller = Get.put(SignUpControllerImp(),permanent: true);
   bool loading = false;
   String passwordError = "";
   String emailError = "";
@@ -35,7 +35,8 @@ class _RegisterState extends State<Register> {
     controller.lastName.text = "";
     controller.postalCode.text = "";
     controller.phoneNumber.text = "";
-    controller.userRole = "Customer";
+    print(controller.userRole);
+    // controller.userRole = "Customer";
   }
 
   @override
@@ -43,28 +44,15 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-        title: RichText(
-          text: const TextSpan(
-            children: <TextSpan>[
-              // TextSpan(
-              //   text: "Red ",
-              //   style: TextStyle(
-              //     color: Color(0xffd92328),
-              //     fontSize: 35,
-              //     fontWeight: FontWeight.bold,
-              //   ),
-              // ),
-              TextSpan(
-                text: "Sign Up",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 25,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+        title: const Text(
+          "Sign UP",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.w600,
           ),
         ),
+        centerTitle: true,
       ),
       body: loading
           ? const Center(child: CircularProgressIndicator())

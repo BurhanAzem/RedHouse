@@ -19,6 +19,8 @@ class AllContracts extends StatefulWidget {
 class _AllContractsState extends State<AllContracts>
     with AutomaticKeepAliveClientMixin {
   bool isLoading = true; // Add a boolean variable for loading state
+  ContractsController controller =
+      Get.put(ContractsController(), permanent: true);
 
   @override
   void initState() {
@@ -28,8 +30,6 @@ class _AllContractsState extends State<AllContracts>
   }
 
   Future<void> loadData() async {
-    ContractsControllerImp controller =
-        Get.put(ContractsControllerImp(), permanent: true);
     String? userDtoJson = sharepref.getString("user");
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     User user = User.fromJson(userDto);
@@ -50,7 +50,6 @@ class _AllContractsState extends State<AllContracts>
   Widget build(BuildContext context) {
     super.build(context);
 
-    ContractsControllerImp controller = Get.put(ContractsControllerImp());
     const contractStatus = [
       "All",
       "Closed",
@@ -76,8 +75,9 @@ class _AllContractsState extends State<AllContracts>
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
           title: const Text(
-            "All Contracts",
+            "Contracts",
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -355,7 +355,6 @@ class _AllContractsState extends State<AllContracts>
                             },
                           ),
                         ),
-
 
                         // Content for 'Customer Contracts' tab
                         Expanded(

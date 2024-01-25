@@ -8,9 +8,10 @@ class BookingController extends GetxController {
   int userId = 1;
   int propertyId = 1;
   List<DateTime> bookingDays = [];
-  String bookingCode = "";
-  String bookingTo = "Customer";
   List<Booking> userBookings = [];
+
+  String bookingTo = "Customer";
+  String bookingStatus = "All";
 
   TextEditingController cardNumber = TextEditingController();
   TextEditingController cardName = TextEditingController();
@@ -21,16 +22,15 @@ class BookingController extends GetxController {
     var response =
         await BookingData.createBooking(userId, propertyId, bookingDays);
 
-    if (response['statusCode'] == 200) {
-      print(response['listDto']);
-      bookingCode = response['dto']['bookingCode'];
-      print(bookingCode);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
   }
 
@@ -41,7 +41,6 @@ class BookingController extends GetxController {
       preBookedDays = (response['listDto'] as List<dynamic>)
           .map((e) => DateTime.parse(e['dayDate']))
           .toList();
-      print(preBookedDays);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -52,13 +51,13 @@ class BookingController extends GetxController {
   }
 
   getBookingsForUser(int userId) async {
-    var response = await BookingData.getUserBookings(userId, bookingTo);
+    var response =
+        await BookingData.getBookingsForUser(userId, bookingTo, bookingStatus);
 
     if (response['statusCode'] == 200) {
       userBookings = (response['listDto'] as List<dynamic>)
           .map((e) => Booking.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(userBookings);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -66,5 +65,9 @@ class BookingController extends GetxController {
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
     }
+  }
+
+  deleteBooking(int id) async {
+    var response = await BookingData.deleteBooking(id);
   }
 }

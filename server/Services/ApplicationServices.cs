@@ -123,7 +123,6 @@ namespace server.Services
                         join a in query on p.Id equals a.PropertyId
                         where p.UserId == userId
                         select a;
-
             }
 
             if (applicationFilter.ApplicationTo.Trim() == "Customer")

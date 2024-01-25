@@ -4,9 +4,9 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/application.dart';
 import 'package:client/view/home_information/check_account.dart';
 import 'package:client/view/manage_properties/home_widget.dart';
-import 'package:client/view/offers/create_offer.dart';
-import 'package:client/view/offers/incoming_offer.dart';
-import 'package:client/view/offers/sent_offer.dart';
+import 'package:client/view/manage_properties/offers/create_offer.dart';
+import 'package:client/view/manage_properties/offers/incoming_offer.dart';
+import 'package:client/view/manage_properties/offers/sent_offer.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -29,7 +29,8 @@ class _IncomingApplicationState extends State<IncomingApplication>
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   OfferController offerController = Get.put(OfferController());
 
-  late IconData currentIcon;
+  IconData? iconPending;
+  IconData? iconApproved;
   late Timer timer;
 
   double width = 0;
@@ -46,11 +47,8 @@ class _IncomingApplicationState extends State<IncomingApplication>
     loadData();
 
     // Status Icons
-    if (application.applicationStatus == "Pending") {
-      currentIcon = FontAwesomeIcons.hourglassStart;
-    } else {
-      currentIcon = FontAwesomeIcons.circleCheck;
-    }
+    iconPending = FontAwesomeIcons.hourglassStart;
+    iconApproved = FontAwesomeIcons.circleCheck;
     startTimer();
 
     // Initialize a new controller
@@ -131,33 +129,31 @@ class _IncomingApplicationState extends State<IncomingApplication>
     const Duration duration1 = Duration(seconds: 1);
     const Duration duration2 = Duration(seconds: 2);
 
-    if (application.applicationStatus == "Pending") {
-      timer = Timer.periodic(duration1, (Timer timer) {
-        if (mounted) {
-          setState(() {
-            if (currentIcon == FontAwesomeIcons.hourglassStart) {
-              currentIcon = FontAwesomeIcons.hourglassHalf;
-            } else if (currentIcon == FontAwesomeIcons.hourglassHalf) {
-              currentIcon = FontAwesomeIcons.hourglassEnd;
-            } else {
-              currentIcon = FontAwesomeIcons.hourglassStart;
-            }
-          });
-        }
-      });
-    } else {
-      timer = Timer.periodic(duration2, (Timer timer) {
-        if (mounted) {
-          setState(() {
-            if (currentIcon == FontAwesomeIcons.circleCheck) {
-              currentIcon = FontAwesomeIcons.circleQuestion;
-            } else {
-              currentIcon = FontAwesomeIcons.circleCheck;
-            }
-          });
-        }
-      });
-    }
+    timer = Timer.periodic(duration1, (Timer timer) {
+      if (mounted) {
+        setState(() {
+          if (iconPending == FontAwesomeIcons.hourglassStart) {
+            iconPending = FontAwesomeIcons.hourglassHalf;
+          } else if (iconPending == FontAwesomeIcons.hourglassHalf) {
+            iconPending = FontAwesomeIcons.hourglassEnd;
+          } else {
+            iconPending = FontAwesomeIcons.hourglassStart;
+          }
+        });
+      }
+    });
+
+    timer = Timer.periodic(duration2, (Timer timer) {
+      if (mounted) {
+        setState(() {
+          if (iconApproved == FontAwesomeIcons.circleCheck) {
+            iconApproved = null;
+          } else {
+            iconApproved ??= FontAwesomeIcons.circleCheck;
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -284,8 +280,10 @@ class _IncomingApplicationState extends State<IncomingApplication>
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 500),
                             child: Icon(
-                              currentIcon,
-                              key: ValueKey<IconData>(currentIcon),
+                              iconPending,
+                              key: iconPending == null
+                                  ? null
+                                  : ValueKey<IconData>(iconPending!),
                               size: 22,
                               color: Colors.white,
                             ),
@@ -294,8 +292,10 @@ class _IncomingApplicationState extends State<IncomingApplication>
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 500),
                             child: Icon(
-                              currentIcon,
-                              key: ValueKey<IconData>(currentIcon),
+                              iconApproved,
+                              key: iconApproved == null
+                                  ? null
+                                  : ValueKey<IconData>(iconApproved!),
                               size: 22,
                               color: Colors.white,
                             ),

@@ -1,7 +1,6 @@
 import 'package:client/controller/booking/booking_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
-import 'package:client/view/home_information/booking_code.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -70,7 +69,6 @@ class _CreateBookingState extends State<CreateBooking>
   }
 
   nextStep1() {
-    // continueStep();
     // Remove any non-digit characters
     String sanitizedValue =
         bookingController.cardNumber.text.replaceAll(RegExp(r'\D'), '');
@@ -97,11 +95,8 @@ class _CreateBookingState extends State<CreateBooking>
       bookingController.propertyId = widget.property.id;
       bookingController.userId = loginController.userDto?["id"];
       await bookingController.createBooking();
-      print(bookingController.bookingCode);
 
-      // Navigator.of(context).pop();
-
-      Get.off(() => BookingCode(bookingCode: bookingController.bookingCode));
+      Navigator.of(context).pop();
 
       SnackBar snackBar = const SnackBar(
         content: Text("Booking Done Successfully"),
@@ -133,7 +128,7 @@ class _CreateBookingState extends State<CreateBooking>
     _textAnimation2 = IntTween(
             begin: 0,
             end:
-                "Now you can confirm the previous steps, after that the code for the property will appear that you can use"
+                "You can now confirm the previous steps, and later you can use your booking code to guarantee your booking when it comes"
                     .length)
         .animate(_animationController);
 
@@ -1081,7 +1076,7 @@ class _CreateBookingState extends State<CreateBooking>
               animation: _textAnimation2,
               builder: (context, child) {
                 String animatedText =
-                    "Now you can confirm the previous steps, after that the code for the property will appear that you can use"
+                    "You can now confirm the previous steps, and later you can use your booking code to guarantee your booking when it comes"
                         .substring(0, _textAnimation2.value);
                 return Text(
                   animatedText,

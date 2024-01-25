@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
-import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:client/view/search/closest_properties.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -28,8 +28,6 @@ class _MapWidgetState extends State<MapWidget>
   MapListController mapListController = Get.put(MapListController());
   FilterController filterController = Get.put(FilterController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  ManagePropertiesController propertiesController =
-      Get.put(ManagePropertiesController());
   GoogleMapController? mapController;
 
   bool userNotified = false;
@@ -38,7 +36,6 @@ class _MapWidgetState extends State<MapWidget>
   late Timer _timer;
 
   bool mapButtonSelected = false;
-
   bool drawButtonSelected = false;
   MapType currentMapType = MapType.normal;
   late BitmapDescriptor icon;
@@ -51,38 +48,16 @@ class _MapWidgetState extends State<MapWidget>
     super.initState();
     loadIcon();
     _timer = Timer(const Duration(seconds: 1), () {});
-    WidgetsBinding.instance.addObserver(this);
-    mapController?.animateCamera(
-      CameraUpdate.newLatLngZoom(mapListController.currentPosition.target, 15),
-    );
-    print(mapListController.currentPosition.target);
-    setState(() {});
   }
 
-  Future<void> loadIcon() async {
+  void loadIcon() async {
     icon = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(),
       "assets/images/flag.png",
     );
   }
 
-  void loadData() async {
-    mapListController.currentPosition =
-        await mapListController.getCurrentPosition();
-    mapListController.isLoading = true;
-    _timer = Timer(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          mapListController.isLoading = false;
-        });
-      }
-    });
-  }
-
   Future<void> whenCameraMove(CameraPosition position) async {
-    filterController.currentPosition = position;
-    print(
-        "============================================================ whenCameraMove");
     if (mapController == null) {
       return;
     }
@@ -92,7 +67,7 @@ class _MapWidgetState extends State<MapWidget>
       return;
     }
 
-    if (mapListController.newZoom < 10) {
+    if (position.zoom < 10) {
       if (!userNotified) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(snackBarMessage),
@@ -107,54 +82,43 @@ class _MapWidgetState extends State<MapWidget>
       userNotified = false;
     }
 
-    LatLng centerCoordinates = position.target;
+    setState(() {
+      if (position.zoom >= 10) {
+        reciveGeocode(position.target);
+        mapListController.visibleProperties = filterController
+            .listProperty.listDto
+            .where((property) =>
+                property.location!.latitude >= bounds.southwest.latitude &&
+                property.location!.latitude <= bounds.northeast.latitude &&
+                property.location!.longitude >= bounds.southwest.longitude &&
+                property.location!.longitude <= bounds.northeast.longitude)
+            .toList();
 
-    mapListController.currentPosition = CameraPosition(
-      target: position.target,
-      zoom: mapListController.newZoom,
-    );
+        mapListController.visibleMarkers = filterController.listProperty.listDto
+            .map((property) => Marker(
+                  markerId: MarkerId(property.id.toString()),
+                  position: LatLng(
+                    property.location?.latitude ?? 0.0,
+                    property.location?.longitude ?? 0.0,
+                  ),
+                  icon: property.userId == loginController.userDto?["id"]
+                      ? icon
+                      : filterController.listingType
+                          ? BitmapDescriptor.defaultMarker
+                          : BitmapDescriptor.defaultMarkerWithHue(
+                              BitmapDescriptor.hueBlue),
+                  onTap: () {
+                    _showMarkerInfo(property);
+                  },
+                ))
+            .toSet();
 
-    // mapListController.visibleMarkers.clear();
-    // mapListController.visibleProperties.clear();
-
-    if (mapListController.newZoom >= 10) {
-      mapListController.visibleProperties = filterController
-          .listProperty.listDto
-          .where((property) =>
-              property.location!.latitude >= bounds.southwest.latitude &&
-              property.location!.latitude <= bounds.northeast.latitude &&
-              property.location!.longitude >= bounds.southwest.longitude &&
-              property.location!.longitude <= bounds.northeast.longitude)
-          .toList();
-
-      mapListController.visibleMarkers = filterController.listProperty.listDto
-          .map((property) => Marker(
-                markerId: MarkerId(property.id.toString()),
-                position: LatLng(
-                  property.location?.latitude ?? 0.0,
-                  property.location?.longitude ?? 0.0,
-                ),
-                icon: property.userId == loginController.userDto?["id"]
-                    ? icon
-                    : filterController.listingType
-                        ? BitmapDescriptor.defaultMarker
-                        : BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueBlue),
-                onTap: () {
-                  _showMarkerInfo(property);
-                },
-              ))
-          .toSet();
-
-      reciveGeocode(centerCoordinates);
-    }
-    
-    if (mounted) {
-      setState(() {});
-    }
+        reciveGeocode(position.target);
+      }
+    });
   }
 
-  Future<void> reciveGeocode(LatLng coordinates) async {
+  void reciveGeocode(LatLng coordinates) async {
     try {
       List<Placemark> placemarks = await placemarkFromCoordinates(
         coordinates.latitude,
@@ -165,10 +129,8 @@ class _MapWidgetState extends State<MapWidget>
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
           mapListController.currentLocationName.value = locality;
-          filterController.getProperties();
-
-          print(
-              "=============================== Area in ${mapListController.currentLocationName.value}");
+          await filterController.getProperties();
+          print(mapListController.currentLocationName.value);
         }
       }
     } catch (e) {}
@@ -188,7 +150,7 @@ class _MapWidgetState extends State<MapWidget>
           !mapListController.locationButtonSelected;
     });
 
-    Timer(const Duration(seconds: 20), () {
+    Timer(const Duration(seconds: 5), () {
       if (mounted) {
         setState(() {
           mapListController.locationButtonSelected =
@@ -340,17 +302,31 @@ class _MapWidgetState extends State<MapWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    mapListController.mapContext = context;
 
     return VisibilityDetector(
       key: const Key('Map'),
-      onVisibilityChanged: (VisibilityInfo info) {
-        if (mapListController.isLoading) {
-          if (mounted) {
-            setState(() {});
+      onVisibilityChanged: (VisibilityInfo info) async {
+        if (info.visibleFraction == 1) {
+          if (mapListController.firstload) {
+            await mapListController.getCurrentPosition();
+            mapListController.firstload = false;
           }
-          loadData();
-          // whenCameraMove();
+
+          if (mapListController.isLoading) {
+            if (mounted) {
+              setState(() {});
+            }
+
+            _timer = Timer(const Duration(seconds: 1), () {
+              if (mounted) {
+                setState(() {
+                  mapListController.isLoading = false;
+                });
+              }
+            });
+
+            whenCameraMove(mapListController.currentPosition);
+          }
         }
       },
       child: Scaffold(
@@ -377,27 +353,29 @@ class _MapWidgetState extends State<MapWidget>
         body: Stack(
           children: [
             Visibility(
-              visible:
-                  mapListController.isLoading || filterController.isLoading,
+              visible: mapListController.isLoading,
               child: const LinearProgressIndicator(
                   backgroundColor: Colors.black,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   minHeight: 2),
             ),
             Visibility(
-              visible:
-                  !mapListController.isLoading || filterController.isLoading,
+              visible: !mapListController.isLoading,
               child: GoogleMap(
                 zoomControlsEnabled: true,
                 mapType: currentMapType,
                 initialCameraPosition: mapListController.currentPosition,
                 onMapCreated: (controller) {
-                  mapController = controller;
+                  if (mounted) {
+                    setState(() {
+                      mapController = controller;
+                    });
+                  }
 
                   mapController?.animateCamera(
                     CameraUpdate.newLatLngZoom(
                       mapListController.currentPosition.target,
-                      13,
+                      mapListController.currentPosition.zoom,
                     ),
                   );
                 },
@@ -405,7 +383,8 @@ class _MapWidgetState extends State<MapWidget>
                 markers: mapListController.visibleMarkers,
                 onCameraMove: (CameraPosition position) {
                   setState(() {
-                    mapListController.newZoom = position.zoom;
+                    // mapListController.newZoom = position.zoom;
+                    mapListController.currentPosition = position;
                     whenCameraMove(position);
                   });
                 },
@@ -460,13 +439,12 @@ class _MapWidgetState extends State<MapWidget>
                               toggleLocationButton();
                             });
 
-                            CameraPosition currentPosition =
-                                await mapListController.getCurrentPosition();
+                            await mapListController.getCurrentPosition();
 
                             mapController!.animateCamera(
                               CameraUpdate.newLatLngZoom(
-                                currentPosition.target,
-                                15.0,
+                                mapListController.currentPosition.target,
+                                15,
                               ),
                             );
                           }
@@ -506,11 +484,13 @@ class _MapWidgetState extends State<MapWidget>
                                 ? Colors.black
                                 : Colors.white,
                           ),
-                          child: Icon(Icons.layers,
-                              size: 25,
-                              color: drawButtonSelected
-                                  ? Colors.white
-                                  : Colors.black),
+                          child: Icon(
+                            FontAwesomeIcons.car,
+                            size: 20,
+                            color: drawButtonSelected
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
                     ),

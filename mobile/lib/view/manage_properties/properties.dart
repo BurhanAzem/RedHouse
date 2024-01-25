@@ -3,6 +3,7 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/propertise/properties_controller.dart';
 import 'package:client/view/add_property/add_property_1.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -202,277 +203,284 @@ class _AllPropertiesState extends State<Properties>
                       onTap: () {
                         Get.to(() => HomeInformation(property: property));
                       },
-                      child: Container(
-                        margin: index == (controller.userProperties.length - 1)
-                            ? const EdgeInsets.only(
-                                top: 25, bottom: 65, left: 15, right: 15)
-                            : const EdgeInsets.only(
-                                top: 10, bottom: 20, left: 15, right: 15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Image
-                            if (property.propertyFiles != null &&
-                                property.propertyFiles!.isNotEmpty)
-                              ClipRRect(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20)),
-                                child: Image.network(
-                                  property.propertyFiles![0].downloadUrls!,
-                                  width: double.infinity,
-                                  height: 220,
-                                  fit: BoxFit.cover,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return Shimmer.fromColors(
-                                        baseColor: Colors.black12,
-                                        highlightColor: Colors.black26,
-                                        child: ClipRRect(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(20)),
-                                          child: Container(
-                                            width: double.infinity,
-                                            height: 220,
-                                            color: Colors.white,
+                      child: Column(
+                        children: [
+                          Container(
+                            margin:
+                                index == (controller.userProperties.length - 1)
+                                    ? const EdgeInsets.only(
+                                        top: 25,
+                                        bottom: 65,
+                                        left: 15,
+                                        right: 15)
+                                    : const EdgeInsets.only(
+                                        top: 10,
+                                        bottom: 20,
+                                        left: 15,
+                                        right: 15),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (property.userId ==
+                                    loginController.userDto?["id"])
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {},
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 10),
+                                          child: Icon(
+                                            FontAwesomeIcons.share,
+                                            size: 17,
+                                            color:
+                                                Color.fromARGB(255, 25, 23, 23),
                                           ),
                                         ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              )
-                            else
-                              Container(),
-
-                            Container(
-                              padding: const EdgeInsets.only(left: 4, top: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 12,
-                                        height: 12,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color:
-                                              Color.fromARGB(255, 196, 39, 27),
+                                      ),
+                                      InkWell(
+                                        onTap: () {},
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 10),
+                                          child: Icon(
+                                            FontAwesomeIcons.pencil,
+                                            size: 17,
+                                            color:
+                                                Color.fromARGB(255, 25, 23, 23),
+                                          ),
                                         ),
                                       ),
-                                      Text(
-                                        " ${property.listingType}",
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 17.5,
+                                      InkWell(
+                                        onTap: () {
+                                          // // if (property.propertyStatus !=
+                                          // //     "Under contract")
+                                        },
+                                        child: const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 10),
+                                          child: Icon(
+                                            FontAwesomeIcons.trash,
+                                            size: 17,
+                                            color:
+                                                Color.fromARGB(255, 25, 23, 23),
+                                          ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    "\$${NumberFormat.decimalPattern().format(property.price)} ${property.listingType == "For monthly rent" ? "/ monthly" : property.listingType == "For daily rent" ? "/ daily" : ""}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
+
+                                // Image
+                                if (property.propertyFiles != null &&
+                                    property.propertyFiles!.isNotEmpty)
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20)),
+                                    child: Image.network(
+                                      property.propertyFiles![0].downloadUrls!,
+                                      width: double.infinity,
+                                      height: 220,
+                                      fit: BoxFit.cover,
+                                      loadingBuilder: (BuildContext context,
+                                          Widget child,
+                                          ImageChunkEvent? loadingProgress) {
+                                        if (loadingProgress == null) {
+                                          return child;
+                                        } else {
+                                          return Shimmer.fromColors(
+                                            baseColor: Colors.black12,
+                                            highlightColor: Colors.black26,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20)),
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: 220,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  Text(
-                                    property.propertyType,
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 196, 39, 27),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 2),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: '${property.numberOfBedRooms} ',
-                                          style: const TextStyle(
-                                            fontSize: 16.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(
-                                                255, 196, 39, 27),
-                                          ),
-                                        ),
-                                        const TextSpan(
-                                          text: 'bedrooms, ',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text:
-                                              '${property.numberOfBathRooms} ',
-                                          style: const TextStyle(
-                                            fontSize: 16.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(
-                                                255, 196, 39, 27),
-                                          ),
-                                        ),
-                                        const TextSpan(
-                                          text: 'bathrooms, ',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: '${property.squareMetersArea} ',
-                                          style: const TextStyle(
-                                            fontSize: 16.5,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(
-                                                255, 196, 39, 27),
-                                          ),
-                                        ),
-                                        const TextSpan(
-                                          text: 'meters',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                  )
+                                else
+                                  Container(),
+
+                                Container(
+                                  padding:
+                                      const EdgeInsets.only(left: 4, top: 10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                      Row(
                                         children: [
-                                          SizedBox(
-                                            width: 170,
-                                            child: Text(
-                                              property.location!.streetAddress,
-                                              style: const TextStyle(
-                                                  fontSize: 14.5),
-                                              overflow: TextOverflow.ellipsis,
+                                          Container(
+                                            width: 12,
+                                            height: 12,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color.fromARGB(
+                                                  255, 196, 39, 27),
                                             ),
                                           ),
-                                          const SizedBox(height: 1),
-                                          SizedBox(
-                                            width: 170,
-                                            child: Text(
-                                              "${property.location!.city}, ${property.location!.country}",
-                                              style: const TextStyle(
-                                                  fontSize: 14.5),
-                                              overflow: TextOverflow.ellipsis,
+                                          Text(
+                                            " ${property.listingType}",
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17.5,
                                             ),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
-                                        width: 180,
-                                        child: MaterialButton(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
-                                            side: const BorderSide(
-                                                color: Colors.black,
-                                                width: 1.4),
-                                          ),
-                                          onPressed: () {
-                                            Get.to(() => HomeInformation(
-                                                property: property));
-                                          },
-                                          height: 37,
-                                          child: const Center(
-                                            child: Text(
-                                              "Show details",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 14.5,
-                                                fontWeight: FontWeight.w600,
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        "\$${NumberFormat.decimalPattern().format(property.price)} ${property.listingType == "For monthly rent" ? "/ monthly" : property.listingType == "For daily rent" ? "/ daily" : ""}",
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        property.propertyType,
+                                        style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Color.fromARGB(255, 196, 39, 27),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2),
+                                      RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            TextSpan(
+                                              text:
+                                                  '${property.numberOfBedRooms} ',
+                                              style: const TextStyle(
+                                                fontSize: 16.5,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 196, 39, 27),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(height: 10),
-                                  // if (property.propertyStatus !=
-                                  //     "Under contract")
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: MaterialButton(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(100),
-                                              side: const BorderSide(
-                                                  color: Colors.black,
-                                                  width: 1.4),
+                                            const TextSpan(
+                                              text: 'bedrooms, ',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                            onPressed: () {
-                                              
-                                            },
-                                            height: 37,
-                                            child: const Center(
-                                              child: Text(
-                                                "Delete your property",
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.5,
-                                                  fontWeight: FontWeight.w600,
+                                            TextSpan(
+                                              text:
+                                                  '${property.numberOfBathRooms} ',
+                                              style: const TextStyle(
+                                                fontSize: 16.5,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 196, 39, 27),
+                                              ),
+                                            ),
+                                            const TextSpan(
+                                              text: 'bathrooms, ',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text:
+                                                  '${property.squareMetersArea} ',
+                                              style: const TextStyle(
+                                                fontSize: 16.5,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 196, 39, 27),
+                                              ),
+                                            ),
+                                            const TextSpan(
+                                              text: 'meters',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 170,
+                                                child: Text(
+                                                  property
+                                                      .location!.streetAddress,
+                                                  style: const TextStyle(
+                                                      fontSize: 14.5),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 1),
+                                              SizedBox(
+                                                width: 170,
+                                                child: Text(
+                                                  "${property.location!.city}, ${property.location!.country}",
+                                                  style: const TextStyle(
+                                                      fontSize: 14.5),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            width: 180,
+                                            child: MaterialButton(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(100),
+                                                side: const BorderSide(
+                                                    color: Colors.black,
+                                                    width: 1.4),
+                                              ),
+                                              onPressed: () {
+                                                Get.to(() => HomeInformation(
+                                                    property: property));
+                                              },
+                                              height: 37,
+                                              child: const Center(
+                                                child: Text(
+                                                  "Show details",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14.5,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  // else
-                                  //   Row(
-                                  //     children: [
-                                  //       Expanded(
-                                  //         child: MaterialButton(
-                                  //           shape: RoundedRectangleBorder(
-                                  //             borderRadius:
-                                  //                 BorderRadius.circular(100),
-                                  //             side: const BorderSide(
-                                  //                 color: Colors.black,
-                                  //                 width: 1.4),
-                                  //           ),
-                                  //           onPressed: () {
-                                  //             // Get.to(() => HomeInformation(
-                                  //             //     property: property));
-                                  //           },
-                                  //           height: 37,
-                                  //           child: const Center(
-                                  //             child: Text(
-                                  //               "Property under contract",
-                                  //               style: TextStyle(
-                                  //                 color: Colors.black,
-                                  //                 fontSize: 14.5,
-                                  //                 fontWeight: FontWeight.w600,
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //         ),
-                                  //       )
-                                  //     ],
-                                  //   )
-                                ],
-                              ),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },

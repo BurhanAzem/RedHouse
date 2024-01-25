@@ -2,9 +2,9 @@ import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/view/card/credit_card.dart';
-import 'package:client/view/offers/incoming_offer.dart';
+import 'package:client/view/manage_properties/offers/incoming_offer.dart';
 import 'package:client/view/card/style/card_background.dart';
-import 'package:client/view/offers/sent_offer.dart';
+import 'package:client/view/manage_properties/offers/sent_offer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -76,25 +76,12 @@ class _AllOffersState extends State<AllOffers>
         }
       },
       child: Scaffold(
-        // App bar
-        appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
-          title: const Text(
-            "All Offers",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-
-        // Body
         body: Column(
           children: [
-            Container(height: 8),
+            // Search
+            const SizedBox(height: 15),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
               child: TextFormField(
                 style: const TextStyle(height: 1.2),
                 decoration: InputDecoration(
@@ -108,9 +95,9 @@ class _AllOffersState extends State<AllOffers>
                 ),
               ),
             ),
-            const SizedBox(width: 10),
 
             // Filters
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -139,7 +126,7 @@ class _AllOffersState extends State<AllOffers>
                     }).toList(),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   width: 180,
@@ -170,7 +157,9 @@ class _AllOffersState extends State<AllOffers>
                 ),
               ],
             ),
-            Container(height: 12),
+
+            // TabBar
+            const SizedBox(height: 10),
             Expanded(
               child: DefaultTabController(
                 length: 2,
@@ -186,12 +175,12 @@ class _AllOffersState extends State<AllOffers>
                     labelColor: Colors.black,
                     labelStyle: const TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 16,
+                      fontSize: 16.5,
                     ),
                     unselectedLabelColor: Colors.grey[700],
                     unselectedLabelStyle: const TextStyle(
                       fontWeight: FontWeight.normal,
-                      fontSize: 16,
+                      fontSize: 16.5,
                     ),
                   ),
                   body: TabBarView(

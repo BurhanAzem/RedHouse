@@ -64,8 +64,9 @@ class CardFrontLayout {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF846AFF),
-                Color.fromARGB(255, 218, 188, 100),
+                Color.fromARGB(255, 106, 85, 207),
+                Color.fromARGB(255, 131, 120, 191),
+                Color.fromARGB(255, 219, 194, 122),
               ],
             ),
           ),
@@ -132,9 +133,10 @@ class CardFrontLayout {
                           // here i want count down the days, hours, minutes, and seconds
                           Text(
                             reDays >= 0 ? offerON() : offerOFF(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               package: 'awesome_card',
-                              color: Color.fromARGB(255, 94, 88, 58),
+                              // color: Color.fromARGB(255, 94, 88, 58),
+                              color: textColor,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'MavenPro',
                               fontSize: 17,
@@ -325,9 +327,9 @@ class CardFrontLayout {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.black12,
-            Colors.black12,
-            Colors.white60,
+            Color.fromARGB(255, 73, 71, 71),
+            Color.fromARGB(255, 61, 59, 59),
+            Colors.white10,
           ],
         ),
       ),

@@ -5,13 +5,11 @@ import 'package:client/view/add_property/add_property_5.dart';
 import 'package:client/view/add_property/add_property_6.dart';
 import 'package:client/view/add_property/add_property_7.dart';
 import 'package:client/view/add_property/add_property_8.dart';
-import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/notification/notifications_settings.dart';
 import 'package:client/view/search/search.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/auth/login.dart';
-import 'package:client/view/manage_properties/manage_properties.dart';
 import 'package:client/view/manage_properties/properties.dart';
 import 'package:client/view/onboarding/onBoarding.dart';
 import 'package:client/view/onboarding/onboarding_four.dart';
@@ -55,16 +53,14 @@ Map<String, Widget Function(BuildContext)> routes = {
   AppRoute.addProperty6: (context) => AddProperty6(),
   AppRoute.addProperty7: (context) => AddProperty7(),
   AppRoute.addProperty8: (context) => AddProperty8(),
-  AppRoute.allContracts: (context) => AllContracts(),
+  AppRoute.allContracts: (context) => const AllContracts(),
   AppRoute.login: (context) => Login(),
   AppRoute.properties: (context) => const Properties(),
-  AppRoute.manageProperties: (context) => const ManageProperties(),
 
   //________________________________________________________
   "/search": (context) => const Search(),
-  "/bottom-bar": (context) => BottomBar(),
   "/notificatins": (context) => const Notifications(),
   "/notificatins-settings": (context) => const NotificationsSettings(),
   "/login": (context) => Login(),
-  "/register": (context) => Register(),
+  "/register": (context) => const Register(),
 };

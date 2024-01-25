@@ -30,6 +30,7 @@ class _ListWidgetState extends State<ListWidget>
 
   @override
   void initState() {
+    mapListController.isLoading = true;
     super.initState();
   }
 

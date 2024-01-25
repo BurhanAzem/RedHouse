@@ -23,7 +23,7 @@ namespace RedHouse_Server.Controllers
         {
             _bookingServices = bookingServices;
         }
-        
+
         // [Authorize]
         [HttpPost("/bookings")]
         public async Task<IActionResult> Book([FromBody] BookingDto bookingDto)
@@ -81,13 +81,13 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpGet("/users/{id}/bookings")]
-        public async Task<IActionResult> GetAllOfferForUser(int id, [FromQuery] string bookingsTo)
+        public async Task<IActionResult> GetAllOfferForUser(int id, [FromQuery] string bookingsTo, [FromQuery] string bookingStatus)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _bookingServices.GetAllBookingsForUser(id, bookingsTo);
+            var result = await _bookingServices.GetAllBookingsForUser(id, bookingsTo, bookingStatus);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -96,7 +96,7 @@ namespace RedHouse_Server.Controllers
             // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
             return Ok(result);
         }
-        
+
 
         [HttpGet("/properties/{id}/booking-days")]
         public async Task<IActionResult> GetBookingDaysForProperty(int id)
