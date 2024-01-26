@@ -374,19 +374,25 @@ namespace RedHouse_Server.Services
 
             query = query.Where(p => p.UserId == userId);
             query = query.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location);
-            // var properties = query.ToArray();
+            var postedProperties = query.ToArray();
 
             if (myPropertiesFilterDto.PropertiesFilter != "Posted properties")
             {
                 if (myPropertiesFilterDto.PropertiesFilter == "All properties")
                 {
-                    query.Union(from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
-                                join offer in _redHouseDbContext.Offers
-                                    on property.Id equals offer.PropertyId
-                                join contract in _redHouseDbContext.Contracts
-                                    on offer.Id equals contract.OfferId
-                                where offer.CustomerId == userId
-                                select property);
+                    var unionQuery = from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                     join offer in _redHouseDbContext.Offers on property.Id equals offer.PropertyId
+                                     join contract in _redHouseDbContext.Contracts on offer.Id equals contract.OfferId
+                                     where offer.CustomerId == userId || offer.LandlordId == userId
+                                     select property;
+
+                    var allProperties = unionQuery.ToList();
+                    allProperties.AddRange(postedProperties);
+                    return new ResponsDto<Property>
+                    {
+                        ListDto = allProperties.Distinct().ToList(),
+                        StatusCode = HttpStatusCode.OK,
+                    };
                 }
                 else
                 {
@@ -399,19 +405,59 @@ namespace RedHouse_Server.Services
                              select property);
                     if (myPropertiesFilterDto.PropertiesFilter == "Rented properties")
                     {
-                        query = (from property in query
+                        query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                 join offer in _redHouseDbContext.Offers
+                                     on property.Id equals offer.PropertyId
+                                 join contract in _redHouseDbContext.Contracts
+                                     on offer.Id equals contract.OfferId
+                                 where offer.CustomerId == userId
                                  where property.ListingType == "For monthly rent" || property.ListingType == "For daily rent"
                                  select property);
 
                     }
                     else if (myPropertiesFilterDto.PropertiesFilter == "Purchased properties")
                     {
-                        query = (from property in query
+                        query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                 join offer in _redHouseDbContext.Offers
+                                     on property.Id equals offer.PropertyId
+                                 join contract in _redHouseDbContext.Contracts
+                                     on offer.Id equals contract.OfferId
+                                 where offer.CustomerId == userId
                                  where property.ListingType == "For sell"
+                                 select property);
+                    }
+                    else if (myPropertiesFilterDto.PropertiesFilter == "Properties that have been sold")
+                    {
+                        query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                 join offer in _redHouseDbContext.Offers
+                                     on property.Id equals offer.PropertyId
+                                 join contract in _redHouseDbContext.Contracts
+                                     on offer.Id equals contract.OfferId
+                                 where offer.LandlordId == userId
+                                 where property.ListingType == "For sell"
+                                 select property);
+                    }
+                    else if (myPropertiesFilterDto.PropertiesFilter == "Properties that have been rented")
+                    {
+                        query = (from property in _redHouseDbContext.Properties.Include(p => p.propertyFiles).Include(p => p.User).Include(p => p.Location)
+                                 join offer in _redHouseDbContext.Offers
+                                     on property.Id equals offer.PropertyId
+                                 join contract in _redHouseDbContext.Contracts
+                                     on offer.Id equals contract.OfferId
+                                 where offer.LandlordId == userId
+                                 where property.ListingType == "For monthly rent" || property.ListingType == "For daily rent"
                                  select property);
                     }
                 }
 
+            }
+            else
+            {
+                return new ResponsDto<Property>
+                {
+                    ListDto = postedProperties,
+                    StatusCode = HttpStatusCode.OK,
+                };
             }
 
             var properties = query.ToArray();

@@ -194,7 +194,7 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            var contracts = await _redHouseDbContext.Contracts.Include(o => o.Milestones).Include(o => o.ContractActivities).Where(c => c.LawerId == userId).ToArrayAsync();
+            var contracts = await _redHouseDbContext.Contracts.Include(o => o.Milestones).Include(o => o.ContractActivities).Where(c => c.LawyerId == userId).ToArrayAsync();
 
 
             return new ResponsDto<Contract>
@@ -224,7 +224,7 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            contract.LawerId = lawerId;
+            contract.LawyerId = lawerId;
             _redHouseDbContext.Contracts.Update(contract);
             await _redHouseDbContext.SaveChangesAsync();
             return new ResponsDto<Contract>

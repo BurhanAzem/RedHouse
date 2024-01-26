@@ -119,7 +119,6 @@ namespace RedHouse_Server.Services
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, lockoutOnFailure: false);
-
             if (result.Succeeded)
             {
                 var token = GenerateJwtToken(user);

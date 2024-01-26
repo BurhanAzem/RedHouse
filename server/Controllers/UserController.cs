@@ -89,14 +89,14 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/users/{id}/contacts")]
-        public async Task<IActionResult> GetAllContactsForUser(int id)
+        [HttpGet("/users/{id}/lawyer-contacts")]
+        public async Task<IActionResult> GetAllLawyersForUser(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAllContactsForUser(id);
+            var result = await _userServices.GetAllLawyersForUser(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
@@ -106,14 +106,14 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/lawyers/{id}/contacts")]
+        [HttpGet("/lawyers/{id}/basic-contacts")]
         public async Task<IActionResult> GetAllContactsForLawer(int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _userServices.GetAllContactsForLawer(id);
+            var result = await _userServices.GetAllUsersForLawyer(id);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;
