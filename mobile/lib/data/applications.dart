@@ -108,26 +108,6 @@ class ApplicationData {
     }
   }
 
-  static ignoreApplication(int id) async {
-    if (await checkInternet()) {
-      var response = await http.post(
-          Uri.parse('${AppLink.applications}/$id/ignore'),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${getToken()}',
-          });
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Map responsebody = json.decode(response.body);
-        return (responsebody);
-      } else {
-        return StatusRequest.serverfailure;
-      }
-    } else {
-      return StatusRequest.offlinefailure;
-    }
-  }
-
   static deleteApplication(int id) async {
     if (await checkInternet()) {
       var response = await http.delete(Uri.parse('${AppLink.applications}/$id'),
@@ -207,14 +187,15 @@ class ApplicationData {
     }
   }
 
-    static getApplicationForUser(int propertyId, int customerId) async {
+  static getApplicationForUser(int propertyId, int customerId) async {
     final Map<String, dynamic> filters = {
       "propertyId": propertyId.toString(),
       "customerId": customerId.toString(),
     };
 
     if (await checkInternet()) {
-      final Uri uri = Uri.https("10.0.2.2:7042", "/applications/is-created", filters);
+      final Uri uri =
+          Uri.https("10.0.2.2:7042", "/applications/is-created", filters);
 
       var response = await http.get(uri, headers: <String, String>{
         'Content-Type': 'application/json',

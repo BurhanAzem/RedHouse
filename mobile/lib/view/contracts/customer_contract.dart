@@ -88,47 +88,35 @@ class _TopNavigationBar extends State<ContractReview>
             ],
           ),
           Expanded(
-            child: Container(
-              child: DefaultTabController(
-                length: 3,
-                initialIndex: 0,
-                child: Scaffold(
-                  appBar: TabBar(
-                    tabs: const [
-                      Tab(
-                        child: Text("Overview"),
-                      ),
-                      Tab(
-                        child: Text("Messages"),
-                      ),
-                      Tab(
-                        child: Text("Details"),
-                      ),
-                    ],
-                    overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
-                    indicatorColor: Colors.black,
-                    labelColor: Colors.black,
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 17,
-                    ),
-                    unselectedLabelColor: Colors.grey[700],
-                    unselectedLabelStyle: const TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 17,
-                    ),
+            child: DefaultTabController(
+              length: 3,
+              initialIndex: 0,
+              child: Scaffold(
+                appBar: TabBar(
+                  tabs: const [
+                    Tab(child: Text("Overview")),
+                    Tab(child: Text("Messages")),
+                    Tab(child: Text("Details")),
+                  ],
+                  overlayColor: MaterialStatePropertyAll(Colors.grey[350]),
+                  indicatorColor: Colors.black,
+                  labelColor: Colors.black,
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
                   ),
-                  body: TabBarView(
-                    children: [
-                      Center(child: OverView(contract: widget.contract)),
-                      const Center(
-                        child: Text("It's rainy here"),
-                      ),
-                      Center(
-                        child: Details(contract: widget.contract),
-                      ),
-                    ],
+                  unselectedLabelColor: Colors.grey[700],
+                  unselectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 17,
                   ),
+                ),
+                body: TabBarView(
+                  children: [
+                    Center(child: Overview(contract: widget.contract)),
+                    const Center(child: Text("It's rainy here")),
+                    Center(child: Details(contract: widget.contract)),
+                  ],
                 ),
               ),
             ),

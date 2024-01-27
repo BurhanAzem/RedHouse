@@ -12,7 +12,7 @@ class ApplicationsController extends GetxController {
 
   String applicationType = "All";
   String applicationStatus = "All";
-  String applicationTo = "Landlord";
+  String applicationTo = "Customer";
 
   int propertyId = 1;
   int userId = 1; // customer id
@@ -67,10 +67,6 @@ class ApplicationsController extends GetxController {
     var response = await ApplicationData.approvedApplication(id);
   }
 
-  ignoreApplication(int id) async {
-    var response = await ApplicationData.ignoreApplication(id);
-  }
-
   deleteApplication(int id) async {
     var response = await ApplicationData.deleteApplication(id);
   }
@@ -99,7 +95,6 @@ class ApplicationsController extends GetxController {
         await ApplicationData.updateApplicationStatus(applicationId, newStatus);
 
     if (response is Map<String, dynamic> && response['statusCode'] == 200) {
-      print(response);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -119,7 +114,6 @@ class ApplicationsController extends GetxController {
             Application.fromJson(response['dto'] as Map<String, dynamic>);
       }
       responseMessage = response['message'];
-      print(responseMessage);
     } else {
       Get.defaultDialog(
         title: "Error",

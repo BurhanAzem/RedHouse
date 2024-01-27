@@ -370,8 +370,11 @@ class PropertyData {
               'Authorization': 'Bearer ${getToken()}',
             });
 
+        print(response);
+
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map responsebody = json.decode(response.body);
+          print(responsebody);
           return (responsebody);
         } else {
           return StatusRequest.serverfailure;

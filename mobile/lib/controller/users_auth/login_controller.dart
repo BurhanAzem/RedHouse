@@ -10,17 +10,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-abstract class LoginController extends GetxController {
-  login();
-}
-
-class LoginControllerImp extends LoginController {
+class LoginControllerImp extends GetxController {
   BottomBarController bottomBarController =
       Get.put(BottomBarController(), permanent: true);
-
   MapListController mapListController =
       Get.put(MapListController(), permanent: true);
-
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
   late TextEditingController email;
@@ -29,7 +23,6 @@ class LoginControllerImp extends LoginController {
   List data = [];
 
   Map<String, dynamic>? userDto;
-
   // instance of fireStore
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
@@ -40,27 +33,15 @@ class LoginControllerImp extends LoginController {
     super.onInit();
   }
 
-  @override
   login() async {
     if (formstate.currentState!.validate()) {
-      var response = await UserData.Login(password.text, email.text);
-      print("=============================== Controller $response ");
+      var response = await UserData.login(password.text, email.text);
       statusRequest = handlingData(response);
       if (response['statusCode'] == 200) {
         setToken(response['message']);
-
-        print(
-            "========================================================= response['dto']");
-        print(response['dto']);
-
         sharepref.setString("user", jsonEncode(response['dto']));
-        print(
-            "========================================================= sharepref");
-        print(sharepref.getString("user"));
-
         userDto = json.decode(sharepref.getString("user") ?? "{}");
-        print(
-            "========================================================= userDto");
+        print(sharepref.getString("user"));
         print(userDto);
 
         // add new document for ths user in users collection if it doesn't already exists
@@ -73,10 +54,15 @@ class LoginControllerImp extends LoginController {
 
         bottomBarController.currentIndex = 0;
         mapListController.isListIcon = true;
-        if (userDto?["userRole"] != "lawyer") {
-          Get.offAllNamed("/lawyer-bottom-bar");
+
+        if (userDto?["isVerified"] == true) {
+          if (userDto?["userRole"] == "Lawyer") {
+            Get.offAllNamed("/lawyer-bottom-bar");
+          } else {
+            Get.offAllNamed("/bottom-bar");
+          }
         } else {
-          Get.offAllNamed("/bottom-bar");
+          Get.toNamed("/verification");
         }
       } else {
         Get.defaultDialog(
@@ -86,10 +72,7 @@ class LoginControllerImp extends LoginController {
         statusRequest = StatusRequest.failure;
       }
       return;
-    }
-
-    // update();
-    else {
+    } else {
       Get.defaultDialog(
         title: "ُWarning",
         middleText: 'There is something wronge!',

@@ -40,14 +40,23 @@ class AccountInformation extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  SizedBox(
-                    width: 125,
-                    height: 125,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.asset(
-                        "assets/images/redhouse2.png",
-                        fit: BoxFit.cover,
+                  Container(
+                    width: 110,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      // color: Color.fromRGBO(0, 153, 115, 1),
+                      color: const Color(0xFF001BFF).withOpacity(0.65),
+                    ),
+                    child: Center(
+                      child: Text(
+                        loginController.getShortenedName(
+                            loginController.userDto?["name"] ?? ""),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
@@ -55,8 +64,8 @@ class AccountInformation extends StatelessWidget {
                     bottom: 0,
                     right: 0,
                     child: Container(
-                      width: 36,
-                      height: 36,
+                      width: 35,
+                      height: 35,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         color: const Color(0xFFFEE400),
@@ -64,8 +73,6 @@ class AccountInformation extends StatelessWidget {
                       child: const Icon(
                         FontAwesomeIcons.pencil,
                         size: 18,
-                        // Icons.photo_camera,
-                        // size: 21,
                         color: Color.fromARGB(221, 54, 52, 52),
                       ),
                     ),

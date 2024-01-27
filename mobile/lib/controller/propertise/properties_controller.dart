@@ -87,8 +87,6 @@ class ManagePropertiesController extends GetxController {
           propertyNeighborhoods);
 
       if (response['statusCode'] == 200) {
-        print("================================================== LsitDto");
-        print(response['listDto']);
       } else {
         Get.defaultDialog(
           title: "Error",
@@ -105,22 +103,19 @@ class ManagePropertiesController extends GetxController {
     var response = await PropertyData.getPropertiesForUser(
         propertiesUserId, propertiesFilter);
 
-
-    if(response is Map<String, dynamic>) {
-    if ( response['statusCode'] == 200) {
-      userProperties = (response['listDto'] as List<dynamic>)
-          .map((e) => Property.fromJson(e as Map<String, dynamic>))
-          .toList();
-      print(userProperties);
-    } else {
-      Get.defaultDialog(
-        title: "Error",
-        middleText:
-            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-      );
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+        userProperties = (response['listDto'] as List<dynamic>)
+            .map((e) => Property.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
-    }
-
   }
 
   getNeighborhoodsForProperty(int propertyId) async {
@@ -130,7 +125,6 @@ class ManagePropertiesController extends GetxController {
       propertyNeighborhoods = (response['listDto'] as List<dynamic>)
           .map((e) => NeighborhoodDto.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(propertyNeighborhoods);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -147,7 +141,6 @@ class ManagePropertiesController extends GetxController {
       closestProperties = (response['listDto'] as List<dynamic>)
           .map((e) => Property.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(closestProperties);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -162,7 +155,6 @@ class ManagePropertiesController extends GetxController {
         await PropertyData.updatePropertyStatus(propertyId, newStatus);
 
     if (response is Map<String, dynamic> && response['statusCode'] == 200) {
-      print(response);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -170,6 +162,11 @@ class ManagePropertiesController extends GetxController {
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
     }
+  }
+
+  deleteProperty(int id) async {
+    var response = await PropertyData.deleteProperty(id);
+    print(response);
   }
 
   // ALL this for front end

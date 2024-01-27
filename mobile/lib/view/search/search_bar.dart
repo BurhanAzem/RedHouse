@@ -376,7 +376,6 @@ class CustomSearch extends SearchDelegate {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  // "Search by commute time",
                                   "Move to the property",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,

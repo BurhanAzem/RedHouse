@@ -1,20 +1,40 @@
+import 'dart:convert';
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/controller/users_auth/signup_controller.dart';
 import 'package:client/main.dart';
-import 'package:client/view/more/my_feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    LoginControllerImp loginController = Get.put(LoginControllerImp());
-    String createdDateString = loginController.userDto?["created"];
-    DateTime createdDate = DateTime.parse(createdDateString);
+  State<EditProfile> createState() => _EditProfileState();
+}
 
+class _EditProfileState extends State<EditProfile> {
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+  SignUpControllerImp controller =
+      Get.put(SignUpControllerImp(), permanent: true);
+  Map<String, dynamic> userDto = json.decode(sharepref.getString("user")!);
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   loadData();
+  //   setState(() {});
+  // }
+
+  // Future<void> loadData() async {
+  //   userDto = json.decode(sharepref.getString("user")!);
+  //   await controller.getUser(userDto["id"]);
+  //   userDto = json.decode(sharepref.getString("user")!);
+  // }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -42,14 +62,22 @@ class EditProfile extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  SizedBox(
-                    width: 125,
-                    height: 125,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.asset(
-                        "assets/images/redhouse2.png",
-                        fit: BoxFit.cover,
+                  Container(
+                    width: 110,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      // color: Color.fromRGBO(0, 153, 115, 1),
+                      color: const Color(0xFF001BFF).withOpacity(0.65),
+                    ),
+                    child: Center(
+                      child: Text(
+                        loginController.getShortenedName(userDto["name"]),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 38,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
@@ -57,8 +85,8 @@ class EditProfile extends StatelessWidget {
                     bottom: 0,
                     right: 0,
                     child: Container(
-                      width: 36,
-                      height: 36,
+                      width: 35,
+                      height: 35,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
                         color: const Color(0xFFFEE400),
@@ -76,6 +104,7 @@ class EditProfile extends StatelessWidget {
 
               // FIELDS
               TextFormField(
+                
                 decoration: InputDecoration(
                   label: const Text(
                     "Full Name",
@@ -84,13 +113,15 @@ class EditProfile extends StatelessWidget {
                       fontSize: 17,
                     ),
                   ),
-                  prefixIcon: const Icon(FontAwesomeIcons.solidUser),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.solidUser,
+                    color: const Color(0xFF001BFF).withOpacity(0.6),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),
                 ),
               ),
-
               const SizedBox(height: 15),
               TextFormField(
                 decoration: InputDecoration(
@@ -101,23 +132,10 @@ class EditProfile extends StatelessWidget {
                       fontSize: 17,
                     ),
                   ),
-                  prefixIcon: const Icon(FontAwesomeIcons.solidEnvelope),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.solidEnvelope,
+                    color: const Color(0xFF001BFF).withOpacity(0.6),
                   ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              TextFormField(
-                decoration: InputDecoration(
-                  label: const Text(
-                    "Phone No",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 17,
-                    ),
-                  ),
-                  prefixIcon: const Icon(FontAwesomeIcons.phone),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),
@@ -133,7 +151,49 @@ class EditProfile extends StatelessWidget {
                       fontSize: 17,
                     ),
                   ),
-                  prefixIcon: const Icon(FontAwesomeIcons.fingerprint),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.fingerprint,
+                    color: const Color(0xFF001BFF).withOpacity(0.7),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
+                decoration: InputDecoration(
+                  label: const Text(
+                    "Phone No",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
+                    ),
+                  ),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.phone,
+                    color: const Color(0xFF001BFF).withOpacity(0.6),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 15),
+              TextFormField(
+                decoration: InputDecoration(
+                  label: const Text(
+                    "Postal Code",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 17,
+                    ),
+                  ),
+                  prefixIcon: Icon(
+                    FontAwesomeIcons.solidMap,
+                    size: 22,
+                    color: const Color(0xFF001BFF).withOpacity(0.6),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),
@@ -176,7 +236,8 @@ class EditProfile extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: DateFormat('MMM d, y').format(createdDate),
+                            text: DateFormat('MMM d, y')
+                                .format(DateTime.parse(userDto["created"])),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,

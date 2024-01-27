@@ -20,6 +20,7 @@ class Welcoming extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(height: 100),
             Image.asset("assets/images/logo.png", scale: 3),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,

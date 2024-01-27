@@ -103,9 +103,6 @@ class OnBoardingFour extends StatelessWidget {
                   child: MaterialButton(
                     onPressed: () {
                       sharepref.setString("first", "no");
-                      print(
-                          "========================================================= sharepref");
-                      print(sharepref.getString("first"));
                       Get.offAllNamed("/bottom-bar");
                     },
                     color: Colors.black,

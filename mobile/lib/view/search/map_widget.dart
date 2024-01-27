@@ -82,40 +82,43 @@ class _MapWidgetState extends State<MapWidget>
       userNotified = false;
     }
 
-    setState(() {
-      if (position.zoom >= 10) {
-        reciveGeocode(position.target);
-        mapListController.visibleProperties = filterController
-            .listProperty.listDto
-            .where((property) =>
-                property.location!.latitude >= bounds.southwest.latitude &&
-                property.location!.latitude <= bounds.northeast.latitude &&
-                property.location!.longitude >= bounds.southwest.longitude &&
-                property.location!.longitude <= bounds.northeast.longitude)
-            .toList();
+    if (mounted) {
+      setState(() {
+        if (position.zoom >= 10) {
+          reciveGeocode(position.target);
+          mapListController.visibleProperties = filterController
+              .listProperty.listDto
+              .where((property) =>
+                  property.location!.latitude >= bounds.southwest.latitude &&
+                  property.location!.latitude <= bounds.northeast.latitude &&
+                  property.location!.longitude >= bounds.southwest.longitude &&
+                  property.location!.longitude <= bounds.northeast.longitude)
+              .toList();
 
-        mapListController.visibleMarkers = filterController.listProperty.listDto
-            .map((property) => Marker(
-                  markerId: MarkerId(property.id.toString()),
-                  position: LatLng(
-                    property.location?.latitude ?? 0.0,
-                    property.location?.longitude ?? 0.0,
-                  ),
-                  icon: property.userId == loginController.userDto?["id"]
-                      ? icon
-                      : filterController.listingType
-                          ? BitmapDescriptor.defaultMarker
-                          : BitmapDescriptor.defaultMarkerWithHue(
-                              BitmapDescriptor.hueBlue),
-                  onTap: () {
-                    _showMarkerInfo(property);
-                  },
-                ))
-            .toSet();
+          mapListController.visibleMarkers =
+              filterController.listProperty.listDto
+                  .map((property) => Marker(
+                        markerId: MarkerId(property.id.toString()),
+                        position: LatLng(
+                          property.location?.latitude ?? 0.0,
+                          property.location?.longitude ?? 0.0,
+                        ),
+                        icon: property.userId == loginController.userDto?["id"]
+                            ? icon
+                            : filterController.listingType
+                                ? BitmapDescriptor.defaultMarker
+                                : BitmapDescriptor.defaultMarkerWithHue(
+                                    BitmapDescriptor.hueBlue),
+                        onTap: () {
+                          _showMarkerInfo(property);
+                        },
+                      ))
+                  .toSet();
 
-        reciveGeocode(position.target);
-      }
-    });
+          reciveGeocode(position.target);
+        }
+      });
+    }
   }
 
   void reciveGeocode(LatLng coordinates) async {

@@ -1,5 +1,6 @@
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
+import 'package:client/view/auth/register.dart';
 import 'package:client/view/contracts/all_contracts.dart';
 import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/my_applications.dart';
@@ -117,7 +118,7 @@ class _MoreState extends State<More> {
                     const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed("/register");
+                        Get.to(() => const Register());
                       },
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -154,12 +155,13 @@ class _MoreState extends State<More> {
           const SizedBox(height: 20),
 
           Padding(
-            padding: const EdgeInsets.only(bottom: 10),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Container(
-                alignment: Alignment.centerLeft,
-                height: 130,
-                width: 130,
-                child: Image.asset("assets/images/red-tree.png")),
+              alignment: Alignment.centerLeft,
+              height: 150,
+              width: 150,
+              child: Image.asset("assets/images/red-tree.png"),
+            ),
           ),
 
           // Here settings list
@@ -256,7 +258,7 @@ class _MoreState extends State<More> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => AccountVerification());
+              Get.to(() => const AccountVerification());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),

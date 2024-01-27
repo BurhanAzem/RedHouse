@@ -74,7 +74,7 @@ class OnBoardingThree extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Optimize the presentation of your property for maximum impact and to covver more features.",
+                  "Optimize the presentation of your property for maximum impact",
                   textAlign: TextAlign.center, // Corrected textAlign
                   style: TextStyle(
                     fontSize: 18,

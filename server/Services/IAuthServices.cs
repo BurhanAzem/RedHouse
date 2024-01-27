@@ -11,7 +11,6 @@ namespace RedHouse_Server.Services
         public Task<ResponsDto<User>> LoginUser(LoginDto loginDto);
         public Task<ResponsDto<User>> Logout();
         public string GenerateJwtToken(IdentityUser user);
-
         public Task<int> NumberOfVisits();
 
     }

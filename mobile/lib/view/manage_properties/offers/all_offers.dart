@@ -45,22 +45,6 @@ class _AllOffersState extends State<AllOffers>
       "Accepted",
     ];
 
-    // Front-end display values
-    final List<String> frontEndOfferType = [
-      "All",
-      "Purchase offers",
-      "Rent offers",
-      "Properties for sell",
-      "Properties for rent",
-    ];
-
-    // Back-end values
-    final List<String> backEndOfferType = [
-      "All",
-      "For monthly rent",
-      "For sell",
-    ];
-
     const offerType = [
       "All",
       "For monthly rent",

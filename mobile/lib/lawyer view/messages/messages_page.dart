@@ -26,7 +26,8 @@ class _LawyerMessgesState extends State<LawyerMessges> {
       Get.put(HistoryController(), permanent: true);
   ApplicationsController applicationController =
       Get.put(ApplicationsController(), permanent: true);
-  Color primaryColor = Color.fromARGB(255, 26, 85, 154);
+  // Color primaryColor = Color.fromARGB(255, 26, 85, 154);
+  Color primaryColor = Color.fromARGB(255, 11, 27, 169);
 
   // instance of fireStore
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;

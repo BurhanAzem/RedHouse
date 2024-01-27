@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using server.Services;
 using Cooking_School.Dtos;
-using server.Dtos.UserDtos;
+using server.Dtos.UpdateUserDto;
 namespace RedHouse_Server.Controllers
 {
     [Route("api/[controller]")]
@@ -38,25 +38,8 @@ namespace RedHouse_Server.Controllers
 
         }
 
-        // [HttpGet("/users")]
-        // public async Task<IActionResult> GetAllUsers()
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return BadRequest(ModelState);
-        //     }
-        //     var result = await _userServices.GetAllUsers();
-        //     if (result.Exception != null)
-        //     {
-        //         var code = result.StatusCode;
-        //         throw new StatusCodeException(code.Value, result.Exception);
-        //     }
-        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-        //     return Ok(result);
-
-        // }
         [HttpPut("/users/{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto userDto)
         {
             if (!ModelState.IsValid)
             {
@@ -89,6 +72,40 @@ namespace RedHouse_Server.Controllers
             return Ok(result);
         }
 
+        [HttpGet("/users/{id}/contacts")]
+        public async Task<IActionResult> GetAllContactsForUser(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.GetAllContactsForUser(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+        [HttpGet("/lawyers/{id}/contacts")]
+        public async Task<IActionResult> GetAllContactsForLawer(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.GetAllContactsForLawer(id);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
         [HttpGet("/agents")]
         public async Task<IActionResult> FilterAgents([FromQuery] SearchDto searchDto)
         {
@@ -97,6 +114,23 @@ namespace RedHouse_Server.Controllers
                 return BadRequest(ModelState);
             }
             var result = await _userServices.FilterAgents(searchDto);
+            if (result.Exception != null)
+            {
+                var code = result.StatusCode;
+                throw new StatusCodeException(code.Value, result.Exception);
+            }
+            // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
+            return Ok(result);
+        }
+
+        [HttpGet("/lawyers")]
+        public async Task<IActionResult> FilterLawyers([FromQuery] SearchDto searchDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = await _userServices.FilterLawyers(searchDto);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

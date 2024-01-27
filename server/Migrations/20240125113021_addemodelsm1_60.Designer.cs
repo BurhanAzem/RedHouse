@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedHouse_Server.Models;
 
@@ -11,9 +12,11 @@ using RedHouse_Server.Models;
 namespace RedHouse_Server.Migrations
 {
     [DbContext(typeof(RedHouseDbContext))]
-    partial class RedHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240125113021_addemodelsm1_60")]
+    partial class addemodelsm1_60
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

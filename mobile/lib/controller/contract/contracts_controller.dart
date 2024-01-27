@@ -5,22 +5,46 @@ import 'package:get/get.dart';
 
 class ContractsController extends GetxController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
-  int activeStep = 0;
-
   String contractStatus = "All";
   String contractType = "All";
   String contractTo = "Landlord";
   int userId = 1;
-  List<Contract> contracts = [];
+  List<Contract> userContracts = [];
+  List<Contract> lawyerContracts = [];
   Contract? contractIsCreated;
   String responseMessage = "";
 
-  getAllContrcats() async {
-    var response = await ContractsData.getContrcats(
-        userId, contractStatus, contractType, contractTo);
+  getContrcatsForUser() async {
+    var response = await ContractsData.getContrcatsForUser(
+      userId,
+      contractStatus,
+      contractType,
+      contractTo,
+    );
     if (response is Map<String, dynamic>) {
       if (response['statusCode'] == 200) {
-        contracts = (response['listDto'] as List<dynamic>)
+        userContracts = (response['listDto'] as List<dynamic>)
+            .map((e) => Contract.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
+    }
+  }
+
+  getContrcatsForLawyer() async {
+    var response = await ContractsData.getContrcatsForLawyer(
+      userId,
+      contractStatus,
+      contractType,
+    );
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+        lawyerContracts = (response['listDto'] as List<dynamic>)
             .map((e) => Contract.fromJson(e as Map<String, dynamic>))
             .toList();
       } else {

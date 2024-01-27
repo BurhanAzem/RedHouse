@@ -68,7 +68,7 @@ class _AddProperty1State extends State<AddProperty1>
 
     // Create a Tween for the animation
     _textAnimation =
-        IntTween(begin: 0, end: "Locate your property on the map".length)
+        IntTween(begin: 0, end: "Locate your property location".length)
             .animate(_animationController);
 
     // Start the animation
@@ -94,7 +94,7 @@ class _AddProperty1State extends State<AddProperty1>
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(
-                FontAwesomeIcons.angleLeft,
+                Icons.arrow_back,
                 color: Colors.white,
               ),
               onPressed: () {
@@ -164,7 +164,7 @@ class _AddProperty1State extends State<AddProperty1>
                         animation: _textAnimation,
                         builder: (context, child) {
                           String animatedText =
-                              "Locate your property on the map"
+                              "Locate your property location"
                                   .substring(0, _textAnimation.value);
                           return Text(
                             animatedText,

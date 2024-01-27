@@ -11,24 +11,12 @@ class MilestoneControllerImp extends MilestoneController {
   GlobalKey<FormState> formstate = GlobalKey<FormState>();
 
   List<Milestone> milestones = [];
-
-  late TextEditingController milestoneName;
-  late TextEditingController description;
-  late DateTime milestoneDate;
-  late TextEditingController amount;
-  late TextEditingController milestoneStatus;
-  late int contractId;
-
-  @override
-  void onInit() {
-    milestoneName = TextEditingController();
-    description = TextEditingController();
-    milestoneDate = DateTime(2024);
-    amount = TextEditingController();
-    milestoneStatus = TextEditingController();
-    contractId = 1;
-    super.onInit();
-  }
+  TextEditingController milestoneName = TextEditingController();
+  TextEditingController description = TextEditingController();
+  DateTime milestoneDate = DateTime(2024);
+  TextEditingController amount = TextEditingController();
+  TextEditingController milestoneStatus = TextEditingController();
+  int contractId = 1;
 
   addMilestone(int contractId) async {
     var response = await MilestoneData.addMilestone(
@@ -41,8 +29,6 @@ class MilestoneControllerImp extends MilestoneController {
     );
 
     if (response['statusCode'] == 200) {
-      print("================================================== LsitDto");
-      print(response['listDto']);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -59,7 +45,6 @@ class MilestoneControllerImp extends MilestoneController {
       milestones = (response['listDto'] as List<dynamic>)
           .map((e) => Milestone.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(milestones);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -67,5 +52,13 @@ class MilestoneControllerImp extends MilestoneController {
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
     }
+  }
+
+  double getSubAmountForContract() {
+    double totalAmount = 0.0;
+    for (Milestone milestone in milestones) {
+      totalAmount += milestone.amount;
+    }
+    return totalAmount;
   }
 }

@@ -32,6 +32,7 @@ namespace server.Services
         public async Task<ResponsDto<Contract>> GetAllContractsForUser(int userId, ContractFilter contractFilter)
         {
             var query = _redHouseDbContext.Contracts.Include(c => c.Offer.Landlord).Include(c => c.Offer.Customer).Include(c => c.Offer.Property).AsQueryable();
+            
             if (contractFilter.ContractTo.Trim() == "Landlord")
             {
                 query = query.Where(c => c.Offer.LandlordId == userId);
@@ -101,12 +102,6 @@ namespace server.Services
                 query = query.Where(p => p.Offer.PropertyId == int.Parse(searchDto.SearchQuery)
                                     || p.Offer.LandlordId == int.Parse(searchDto.SearchQuery)
                                     || p.Offer.CustomerId == int.Parse(searchDto.SearchQuery));
-            // if (query == null)
-            //     query = query.Where(p => p.Location.City == searchDto.SearchQuery 
-            //     || p.Location.City == searchDto.SearchQuery
-            //     || p.Location.Country == searchDto.SearchQuery
-            //     || p.Location.Region == searchDto.SearchQuery
-            //     || p.Location.PostalCode == searchDto.SearchQuery);
 
             var totalItems = await query.CountAsync();
             var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
@@ -181,6 +176,57 @@ namespace server.Services
                     StatusCode = HttpStatusCode.OK,
                 };
             }
+        }
+
+        public async Task<ResponsDto<Contract>> GetAllContractsForLawer(int userId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"User with {userId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var contracts = await _redHouseDbContext.Contracts.Include(o => o.Milestones).Include(o => o.ContractActivities).Where(c => c.LawerId == userId).ToArrayAsync();
+
+
+            return new ResponsDto<Contract>
+            {
+                ListDto = contracts,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+        public async Task<ResponsDto<Contract>> AddLawerToContract(int contractId, int lawerId)
+        {
+            var user = await _redHouseDbContext.Users.FindAsync(lawerId);
+            if (user == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"User with {lawerId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            var contract = await _redHouseDbContext.Contracts.FindAsync(contractId);
+            if (contract == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"Contract with {contractId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+            contract.LawerId = lawerId;
+            _redHouseDbContext.Contracts.Update(contract);
+            await _redHouseDbContext.SaveChangesAsync();
+            return new ResponsDto<Contract>
+            {
+                Message = "Lawer added successfully",
+                StatusCode = HttpStatusCode.OK,
+            };
         }
     }
 }

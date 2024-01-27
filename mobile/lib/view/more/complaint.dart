@@ -90,7 +90,6 @@ class _ComplineState extends State<Complaint> {
                       return emailError.isNotEmpty ? emailError : null;
                     },
                     controller: controller.email,
-                    // obscureText: true,
                     style: const TextStyle(),
                     decoration: InputDecoration(
                       suffixIcon: const Icon(Icons.email),
@@ -171,7 +170,7 @@ class _ComplineState extends State<Complaint> {
                         }
                       },
                       minWidth: 400,
-                      height: 45,
+                      height: 40,
                       color: Colors.black87,
                       child: const Center(
                         child: Text(

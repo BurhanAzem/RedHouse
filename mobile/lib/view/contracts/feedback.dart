@@ -3,7 +3,7 @@ import 'package:client/controller/history/history_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/model/user.dart';
-import 'package:client/view/contracts/contract.dart';
+import 'package:client/view/contracts/landlord_contract.dart';
 import 'package:client/view/contracts/details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -141,12 +141,10 @@ class _FeedbackState extends State<Feedback> {
                           },
                         );
 
-                        Get.offAll(() => ContractReview(contract: widget.contract));
-
+                        Get.offAll(() => LandlordContract(contract: widget.contract));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
                         sendFeedback();
-                        // Execute the addPropertyFuture asynchronously and navigate when done
                       },
                       minWidth: 300,
                       height: 45,

@@ -117,7 +117,7 @@ class _AddProperty8State extends State<AddProperty8>
                       // button
                       MaterialButton(
                         minWidth: 500,
-                        height: 42,
+                        height: 41,
                         onPressed: () {
                           setState(() {});
                           ScaffoldMessenger.of(context).clearSnackBars();
@@ -167,7 +167,7 @@ class _AddProperty8State extends State<AddProperty8>
                           style: TextStyle(
                             fontSize: 17,
                             color: Colors.white,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),

@@ -1,6 +1,6 @@
 import 'package:client/controller/contract/milestone_controller.dart';
+import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/contract.dart';
-import 'package:client/view/contracts/contract.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,39 +13,33 @@ class AddMilestone extends StatefulWidget {
 }
 
 class _AddMilestoneState extends State<AddMilestone> {
-  MilestoneControllerImp controller =
-      Get.put(MilestoneControllerImp(), permanent: true);
+  MilestoneControllerImp controller = Get.put(MilestoneControllerImp());
+  LoginControllerImp loginController = Get.put(LoginControllerImp());
+
+  String nameError = "";
+  String amountError = "";
+  String descriptionError = "";
 
   Future<void> _selectDateAvialableOn() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.utc(1800, 7, 20),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: const Color(0xffd92328), // Change the color of the header
-            // accentColor: Color(0xffd92328), // Change the color of the selected date
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
           ),
           child: child ?? Container(),
         );
       },
-      // Define the theme for the date picker buttons here
-      // To change the button color, you can define your custom DatePickerTheme
-      // and set the button color within it.
-      // Example:
-      // theme: DatePickerTheme(
-      //   doneStyle: TextStyle(color: Color(0xffd92328)),
-      //   cancelStyle: TextStyle(color: Color(0xffd92328)),
-      // ),
     );
-
-    void loadData() async {
-
-    await controller.getAllMilestonesForContract(widget.contract.id);
-
-  }
 
     if (pickedDate != null) {
       setState(() {
@@ -54,23 +48,15 @@ class _AddMilestoneState extends State<AddMilestone> {
     }
   }
 
-  // final PageController pageController;
   @override
   Widget build(BuildContext context) {
-    const options = [
-      "House",
-      "Apartment Unit",
-      "Townhouse",
-      "Castel",
-      "Entire Department Community",
-    ];
-
     return Scaffold(
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
-          "Add milestone",
+          "Add Milestone",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -144,17 +130,21 @@ class _AddMilestoneState extends State<AddMilestone> {
                   ),
                   Container(height: 5),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 0.5,),
-                      borderRadius: const BorderRadius.all(Radius.circular(8))
-                    ),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.5,
+                          ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(controller.milestoneDate.toString()),
-                          IconButton(onPressed: _selectDateAvialableOn, icon: const Icon(Icons.date_range_outlined))
+                          IconButton(
+                              onPressed: _selectDateAvialableOn,
+                              icon: const Icon(Icons.date_range_outlined))
                         ],
                       )),
                   Container(height: 5),
@@ -186,30 +176,40 @@ class _AddMilestoneState extends State<AddMilestone> {
                     ),
                   ),
                   Container(height: 5),
-                  // Container(
-                  //     alignment: Alignment.center,
-                  //     child:
-                  //         Image.asset("assets/images/red-tree.png", scale: 3)),
                 ],
               ),
               Container(height: 25),
               MaterialButton(
                 onPressed: () async {
-                  // setState(() {
-                  //   controller.activeStep++;
-                  // });
+                  setState(() {});
+                  // if (controller.formstate.currentState!.validate() &&
+                  //     controller.name.text.isNotEmpty &&
+                  //     controller.email.text.isNotEmpty &&
+                  //     controller.description.text.isNotEmpty) {
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  SnackBar snackBar = const SnackBar(
+                    content: Text("Added Successfully"),
+                    backgroundColor: Colors.blue,
+                  );
+                  // controller.userId = loginController.userDto?["id"];
+
                   await controller.addMilestone(widget.contract.id);
-                  Get.to(ContractReview(contract: widget.contract));
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                  // }
                 },
+                height: 40,
                 color: const Color.fromARGB(255, 0, 0, 0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Text(
-                  "Save",
+                  "Add",
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),

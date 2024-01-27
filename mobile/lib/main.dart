@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:client/controller/users_auth/signup_controller.dart';
 import 'package:client/core/services/network_controller.dart';
 import 'package:client/lawyer%20view/lawyer_bottom_bar.dart';
 import 'package:client/middleware.dart';
@@ -5,6 +7,7 @@ import 'package:client/routes.dart';
 import 'package:client/view/auth/login.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/manage_properties/applications/all_applications.dart';
+import 'package:client/view/more/account_verification.dart';
 import 'package:client/view/more/upgrade/account_upgrade.dart';
 import 'package:client/view/more/upgrade/payment.dart';
 import 'package:client/view/manage_properties/offers/all_offers.dart';
@@ -36,9 +39,17 @@ void main() async {
   );
 
   sharepref = await SharedPreferences.getInstance();
-  // sharepref.clear();
-  print("========================================================= sharepref");
-  print(sharepref.getString("first"));
+  // update user
+  SignUpControllerImp controller =
+      Get.put(SignUpControllerImp(), permanent: true);
+  String? userJson = sharepref.getString("user");
+  Map<String, dynamic>? userDto;
+  userDto = userJson != null ? json.decode(userJson) : null;
+  if (userDto != null) {
+    int? id = userDto["id"] as int?;
+    await controller.getUser(id!);
+  }
+
   runApp(const MyApp());
   Get.put<NetworkController>(NetworkController(), permanent: true);
 }
@@ -68,7 +79,9 @@ class MyApp extends StatelessWidget {
             page: () => const Welcoming(),
             middlewares: [AuthMiddleWare()]),
         GetPage(name: "/bottom-bar", page: () => const BottomBar()),
-        GetPage(name: "/lawyer-bottom-bar", page: () => const LawyerBottomBar()),
+        GetPage(
+            name: "/lawyer-bottom-bar", page: () => const LawyerBottomBar()),
+        GetPage(name: "/verification", page: () => const AccountVerification()),
       ],
     );
   }

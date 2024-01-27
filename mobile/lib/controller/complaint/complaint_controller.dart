@@ -11,11 +11,7 @@ class ComplaintController extends GetxController {
 
   sendComplaint() async {
     var response = await ComplaintData.sendComplaint(userId, description.text);
-
-    print(response['listDto']);
-
     if (response['statusCode'] == 200) {
-      print(response['listDto']);
     } else {
       Get.defaultDialog(
         title: "Error",

@@ -7,10 +7,13 @@ class User {
   int? id;
   String? name;
   String? email;
-  bool isVerified;
-  int phoneNumber;
-  int locationId;
+  bool? isVerified;
+  int? phoneNumber;
+  int? locationId;
   String? userRole;
+  int? landlordScore;
+  int? customerScore;
+  String? created;
 
   User({
     required this.id,
@@ -20,6 +23,9 @@ class User {
     required this.name,
     required this.phoneNumber,
     required this.userRole,
+    required this.landlordScore,
+    required this.customerScore,
+    required this.created,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

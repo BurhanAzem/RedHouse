@@ -49,7 +49,6 @@ namespace RedHouse_Server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            // var user = _mapper.Map<User>(registerDto);
 
 
             var identityUser = new IdentityUser
@@ -60,22 +59,19 @@ namespace RedHouse_Server.Services
             };
 
 
-
-
             var result = await _userManager.CreateAsync(identityUser, registerDto.Password!);
             if (result.Succeeded)
             {
                 var location = new Location();
                 location.PostalCode = registerDto.ZipCode;
 
-                // Assuming _context is your DbContext
                 var resLocation = await _redHouseDbContext.Locations.AddAsync(location);
                 await _redHouseDbContext.SaveChangesAsync(); // Persist changes to the database
 
                 User user = new User
                 {
                     Email = registerDto.Email,
-                    IsVerified = true,
+                    IsVerified = false,
                     Created = DateTime.Now,
                     LocationId = resLocation.Entity.Id,
                     Name = registerDto.Name,

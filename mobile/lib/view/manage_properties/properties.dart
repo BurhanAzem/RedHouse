@@ -165,7 +165,7 @@ class _AllPropertiesState extends State<Properties>
                     style: TextStyle(fontSize: 17),
                   ),
                   const SizedBox(height: 15),
-                  Container(
+                  SizedBox(
                     width: 200,
                     child: MaterialButton(
                       shape: RoundedRectangleBorder(
@@ -233,7 +233,7 @@ class _AllPropertiesState extends State<Properties>
                                               horizontal: 5, vertical: 10),
                                           child: Icon(
                                             FontAwesomeIcons.share,
-                                            size: 17,
+                                            size: 16,
                                             color:
                                                 Color.fromARGB(255, 25, 23, 23),
                                           ),
@@ -246,7 +246,7 @@ class _AllPropertiesState extends State<Properties>
                                               horizontal: 5, vertical: 10),
                                           child: Icon(
                                             FontAwesomeIcons.pencil,
-                                            size: 17,
+                                            size: 16,
                                             color:
                                                 Color.fromARGB(255, 25, 23, 23),
                                           ),
@@ -254,15 +254,183 @@ class _AllPropertiesState extends State<Properties>
                                       ),
                                       InkWell(
                                         onTap: () {
-                                          // // if (property.propertyStatus !=
-                                          // //     "Under contract")
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Theme(
+                                                data: ThemeData(
+                                                  dialogBackgroundColor:
+                                                      Colors.white,
+                                                ),
+                                                child: Dialog(
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            0),
+                                                  ),
+                                                  child: ConstrainedBox(
+                                                    constraints:
+                                                        const BoxConstraints(
+                                                            maxHeight: 450),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: <Widget>[
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(18),
+                                                          child: Text(
+                                                            property.propertyStatus !=
+                                                                    "Under contract"
+                                                                ? "Are you sure you want to delete the property?"
+                                                                : "This property is under contract and you cannot delete it now",
+                                                            style:
+                                                                const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                              fontSize: 19,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 10),
+                                                          child: ButtonBar(
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  if (property
+                                                                          .propertyStatus !=
+                                                                      "Under contract")
+                                                                    Container(
+                                                                      width:
+                                                                          210,
+                                                                      height:
+                                                                          40,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      child:
+                                                                          MaterialButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          ScaffoldMessenger.of(context)
+                                                                              .clearSnackBars();
+
+                                                                          await controller
+                                                                              .deleteProperty(property.id);
+
+                                                                          setState(
+                                                                              () {});
+
+                                                                          SnackBar
+                                                                              snackBar =
+                                                                              const SnackBar(
+                                                                            content:
+                                                                                Text("Deleted Successfully"),
+                                                                            backgroundColor:
+                                                                                Colors.red,
+                                                                          );
+                                                                          ScaffoldMessenger.of(context)
+                                                                              .showSnackBar(snackBar);
+
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          "Delete Property",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontSize:
+                                                                                18,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  else
+                                                                    Container(
+                                                                      width:
+                                                                          210,
+                                                                      height:
+                                                                          40,
+                                                                      color: Colors
+                                                                          .blue,
+                                                                      child:
+                                                                          MaterialButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          "OK",
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontWeight:
+                                                                                FontWeight.w600,
+                                                                            fontSize:
+                                                                                18,
+                                                                            color:
+                                                                                Colors.white,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  const SizedBox(
+                                                                      width: 5),
+                                                                  SizedBox(
+                                                                    height: 40,
+                                                                    child:
+                                                                        MaterialButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      child:
+                                                                          const Text(
+                                                                        "Close",
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          fontSize:
+                                                                              17.5,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
                                         },
                                         child: const Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 5, vertical: 10),
                                           child: Icon(
                                             FontAwesomeIcons.trash,
-                                            size: 17,
+                                            size: 16,
                                             color:
                                                 Color.fromARGB(255, 25, 23, 23),
                                           ),

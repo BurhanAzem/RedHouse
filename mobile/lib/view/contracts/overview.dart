@@ -6,14 +6,14 @@ import 'package:get/get.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
-class OverView extends StatefulWidget {
+class Overview extends StatefulWidget {
   final Contract contract;
-  const OverView({Key? key, required this.contract}) : super(key: key);
+  const Overview({Key? key, required this.contract}) : super(key: key);
   @override
   _StepperDemoState createState() => _StepperDemoState();
 }
 
-class _StepperDemoState extends State<OverView> {
+class _StepperDemoState extends State<Overview> {
   int _currentStep = 0;
   StepperType stepperType = StepperType.vertical;
   bool isLoading = true; // Add a boolean variable for loading state
