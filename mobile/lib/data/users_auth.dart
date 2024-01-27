@@ -130,6 +130,7 @@ class UserData {
     String lastName,
     String email,
     String phoneNumber,
+    String password,
   ) async {
     if (await checkInternet()) {
       try {
@@ -139,6 +140,7 @@ class UserData {
           "name": "$firstName $lastName",
           "email": email,
           "phoneNumber": phoneNumber,
+          "password": password,
         };
 
         var response = await http.put(
@@ -149,6 +151,8 @@ class UserData {
           },
           body: json.encode(data),
         );
+
+        print(response);
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map<String, dynamic> responseBody = json.decode(response.body);

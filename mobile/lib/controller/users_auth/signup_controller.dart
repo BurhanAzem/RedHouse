@@ -19,6 +19,7 @@ class SignUpControllerImp extends GetxController {
   late StatusRequest statusRequest;
 
   GlobalKey<FormState> formstateRegister = GlobalKey<FormState>();
+  GlobalKey<FormState> formstateUpdate = GlobalKey<FormState>();
 
   @override
   void onInit() {
@@ -66,7 +67,10 @@ class SignUpControllerImp extends GetxController {
       lastName.text,
       email.text,
       phoneNumber.text,
+      password.text,
     );
+
+    print(response);
 
     if (response is Map<String, dynamic> && response['statusCode'] == 200) {
     } else {

@@ -22,10 +22,12 @@ class Properties extends StatefulWidget {
 }
 
 const propertiesFilterList = [
+  "All properties",
   "Rented properties",
   "Purchased properties",
   "Posted properties",
-  "All properties"
+  "Properties that have been rented",
+  "Properties that have been sold"
 ];
 
 class _AllPropertiesState extends State<Properties>

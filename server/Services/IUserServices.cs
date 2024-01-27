@@ -6,8 +6,8 @@ namespace server.Services
 {
     public interface IUserServices
     {
-        public Task<ResponsDto<User>> GetAllContactsForUser(int userId);
-        public Task<ResponsDto<User>> GetAllContactsForLawer(int userId);
+        public Task<ResponsDto<User>> GetAllLawyersForUser(int userId);
+        public Task<ResponsDto<User>> GetAllUsersForLawyer(int userId);
         public Task<ResponsDto<User>> GetUsersOfApprovedApplications(int userId);
         public Task<int> NumberOfUsers();
         public Task<ResponsDto<User>> FilterAgents(SearchDto searchDto);
