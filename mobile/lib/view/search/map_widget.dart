@@ -132,6 +132,7 @@ class _MapWidgetState extends State<MapWidget>
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
           mapListController.currentLocationName.value = locality;
+          // filterController.location.region = locality;
           await filterController.getProperties();
           print(mapListController.currentLocationName.value);
         }

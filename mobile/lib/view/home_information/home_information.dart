@@ -6,10 +6,10 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/booking_buttons.dart';
-import 'package:client/view/home_information/check_account.dart';
+import 'package:client/view/history/check_account.dart';
 import 'package:client/view/home_information/application_buttons.dart';
 import 'package:client/view/home_information/image_slider_widget.dart';
-import 'package:client/view/home_information/check_property.dart';
+import 'package:client/view/history/check_property.dart';
 import 'package:client/view/manage_properties/applications/sent_application.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -575,7 +575,7 @@ class _HomeInformationState extends State<HomeInformation> {
                         Container(
                           width: double.infinity,
                           height: 80,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(50),
                               bottomLeft: Radius.circular(50),
@@ -1067,7 +1067,7 @@ class _HomeInformationState extends State<HomeInformation> {
         } else {
           if (widget.property.propertyStatus == "Under contract") {
             // If property under contract
-            return Text("Under contract");
+            return const Text("Under contract");
           } else {
             return ApplicationButtons(property: widget.property);
           }

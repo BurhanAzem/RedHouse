@@ -63,28 +63,28 @@ class _CreditCardState extends State<CreditCard>
     _controller = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
 
-    // _moveToBack = TweenSequence<double>([
-    //   TweenSequenceItem<double>(
-    //       tween: Tween<double>(begin: 0.0, end: pi / 2)
-    //           .chain(CurveTween(curve: Curves.easeInBack)),
-    //       weight: 50.0),
-    //   TweenSequenceItem<double>(
-    //       tween: ConstantTween<double>(pi / 2), weight: 50.0)
-    // ]).animate(_controller);
+    _moveToBack = TweenSequence<double>([
+      TweenSequenceItem<double>(
+          tween: Tween<double>(begin: 0.0, end: pi / 2)
+              .chain(CurveTween(curve: Curves.easeInBack)),
+          weight: 50.0),
+      TweenSequenceItem<double>(
+          tween: ConstantTween<double>(pi / 2), weight: 50.0)
+    ]).animate(_controller);
 
-    // _moveToFront = TweenSequence<double>(
-    //   [
-    //     TweenSequenceItem<double>(
-    //       tween: ConstantTween<double>(pi / 2),
-    //       weight: 50.0,
-    //     ),
-    //     TweenSequenceItem<double>(
-    //       tween: Tween<double>(begin: -pi / 2, end: 0.0)
-    //           .chain(CurveTween(curve: Curves.easeOutBack)),
-    //       weight: 50.0,
-    //     ),
-    //   ],
-    // ).animate(_controller);
+    _moveToFront = TweenSequence<double>(
+      [
+        TweenSequenceItem<double>(
+          tween: ConstantTween<double>(pi / 2),
+          weight: 50.0,
+        ),
+        TweenSequenceItem<double>(
+          tween: Tween<double>(begin: -pi / 2, end: 0.0)
+              .chain(CurveTween(curve: Curves.easeOutBack)),
+          weight: 50.0,
+        ),
+      ],
+    ).animate(_controller);
 
     super.initState();
   }

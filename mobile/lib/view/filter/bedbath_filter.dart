@@ -67,7 +67,7 @@ class _BedBathState extends State<BedBath> {
                                   ),
                                 ),
                                 Container(height: 10),
-                                const BedBathRow(),
+                                const ReuseBedBathRow(),
                               ],
                             ),
                             Container(height: 20),
@@ -80,13 +80,10 @@ class _BedBathState extends State<BedBath> {
                                 onPressed: () {
                                   controller.copyBathButton();
                                   controller.copyBedButton();
-
                                   controller.formatBedBath();
-
                                   controller.checkFiltersON();
-
                                   controller.getProperties();
-                                  // mapListController.isLoading = true;
+                                  mapListController.isLoading = true;
                                   Navigator.pop(context);
                                 },
                                 minWidth: 300,
@@ -131,8 +128,8 @@ class _BedBathState extends State<BedBath> {
   }
 }
 
-class BedBathRow extends StatelessWidget {
-  const BedBathRow({super.key});
+class ReuseBedBathRow extends StatelessWidget {
+  const ReuseBedBathRow({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -142,11 +139,10 @@ class BedBathRow extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("    Bedrooms",
+          const Text("    Bedrooms",
               style: TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w500,
-                // color: Colors.grey[700],
               )),
           Container(
             height: 72,
@@ -160,11 +156,10 @@ class BedBathRow extends StatelessWidget {
             }),
           ),
           Container(height: 25),
-          Text("    Bathrooms",
+          const Text("    Bathrooms",
               style: TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w500,
-                // color: Colors.grey[700],
               )),
           Container(
             height: 72,

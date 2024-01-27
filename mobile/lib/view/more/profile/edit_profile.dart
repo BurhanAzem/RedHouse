@@ -35,7 +35,6 @@ class _EditProfileState extends State<EditProfile> {
     controller.postalCode.text =
         userDto["locationId"].toString().padLeft(4, "${userDto["locationId"]}");
     controller.phoneNumber.text = userDto["phoneNumber"].toString();
-    print(userDto);
   }
 
   // loadData() {
@@ -266,7 +265,6 @@ class _EditProfileState extends State<EditProfile> {
                         controller.firstName.text = userDto["name"];
                         controller.phoneNumber.text =
                             userDto["phoneNumber"].toString();
-                            print(userDto);
                         setState(() {});
                       }
                     },

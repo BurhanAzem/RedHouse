@@ -3,7 +3,7 @@ import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/application.dart';
-import 'package:client/view/home_information/check_account.dart';
+import 'package:client/view/history/check_account.dart';
 import 'package:client/view/home_information/create_booking.dart';
 import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:client/view/manage_properties/offers/create_offer.dart';

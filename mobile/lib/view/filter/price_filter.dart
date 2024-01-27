@@ -1,7 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
-import 'package:client/view/filter/buy_filter.dart';
-import 'package:client/view/filter/rent_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,21 +12,15 @@ class Price extends StatefulWidget {
 
 class _PriceState extends State<Price> {
   MapListController mapListController = Get.put(MapListController());
-  
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<FilterController>(
       init: FilterController(),
       builder: (controller) => MaterialButton(
         onPressed: () {
-          controller.buyMaxControllerTemp.text =
-              controller.buyMaxController.text;
-          controller.buyMinControllerTemp.text =
-              controller.buyMinController.text;
-          controller.rentMaxControllerTemp.text =
-              controller.rentMaxController.text;
-          controller.rentMinControllerTemp.text =
-              controller.rentMinController.text;
+          controller.maxControllerTemp.text = controller.maxController.text;
+          controller.minControllerTemp.text = controller.minController.text;
 
           showModalBottomSheet(
             shape: const RoundedRectangleBorder(
@@ -72,10 +64,7 @@ class _PriceState extends State<Price> {
                               ],
                             ),
                             Container(height: 15),
-                            if (controller.listingType)
-                              RowBuyPrice()
-                            else
-                              const RowRentPrice(),
+                            const ReuseRowPrice()
                           ],
                         ),
                         Container(height: 20),
@@ -86,96 +75,46 @@ class _PriceState extends State<Price> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             onPressed: () {
-                              if (controller.listingType) {
-                                if (controller.buyMinControllerTemp.text != "" &&
-                                    controller.buyMaxControllerTemp.text !=
-                                        "" &&
-                                    int.parse(controller
-                                            .buyMinControllerTemp.text) >
-                                        int.parse(controller
-                                            .buyMaxControllerTemp.text)) {
-                                  Get.rawSnackbar(
-                                    snackPosition: SnackPosition.TOP,
-                                    messageText: const Text(
-                                      'The Min limit cannot be greater than the Max limit',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    isDismissible: false,
-                                    duration: const Duration(seconds: 3),
-                                    backgroundColor: Colors.red[400]!,
-                                    icon: const Icon(
-                                      Icons.warning,
+                              if (controller.minControllerTemp.text != "" &&
+                                  controller.maxControllerTemp.text != "" &&
+                                  int.parse(controller.minControllerTemp.text) >
+                                      int.parse(
+                                          controller.maxControllerTemp.text)) {
+                                Get.rawSnackbar(
+                                  snackPosition: SnackPosition.TOP,
+                                  messageText: const Text(
+                                    'The Min limit cannot be greater than the Max limit',
+                                    style: TextStyle(
                                       color: Colors.white,
-                                      size: 35,
+                                      fontSize: 14,
                                     ),
-                                    margin: EdgeInsets.zero,
-                                    snackStyle: SnackStyle.GROUNDED,
-                                  );
-                                } else {
-                                  controller.rentMaxController.text = "";
-                                  controller.rentMinController.text = "";
-                                  controller.buyMaxController.text =
-                                      controller.buyMaxControllerTemp.text;
-                                  controller.buyMinController.text =
-                                      controller.buyMinControllerTemp.text;
-
-                                  controller.formatPriceRange(
-                                      controller.buyMinController,
-                                      controller.buyMaxController);
-
-                                  controller.getProperties();
-
-                                  Navigator.pop(context);
-                                }
+                                  ),
+                                  isDismissible: false,
+                                  duration: const Duration(seconds: 3),
+                                  backgroundColor: Colors.red[400]!,
+                                  icon: const Icon(
+                                    Icons.warning,
+                                    color: Colors.white,
+                                    size: 35,
+                                  ),
+                                  margin: EdgeInsets.zero,
+                                  snackStyle: SnackStyle.GROUNDED,
+                                );
                               } else {
-                                if (controller.rentMinControllerTemp.text != "" &&
-                                    controller.rentMaxControllerTemp.text !=
-                                        "" &&
-                                    int.parse(controller
-                                            .rentMinControllerTemp.text) >
-                                        int.parse(controller
-                                            .rentMaxControllerTemp.text)) {
-                                  Get.rawSnackbar(
-                                    snackPosition: SnackPosition.TOP,
-                                    messageText: const Text(
-                                      'The Min limit cannot be greater than the Max limit',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    isDismissible: false,
-                                    duration: const Duration(seconds: 3),
-                                    backgroundColor: Colors.red[400]!,
-                                    icon: const Icon(
-                                      Icons.warning,
-                                      color: Colors.white,
-                                      size: 35,
-                                    ),
-                                    margin: EdgeInsets.zero,
-                                    snackStyle: SnackStyle.GROUNDED,
-                                  );
-                                } else {
-                                  controller.buyMaxController.text = "";
-                                  controller.buyMinController.text = "";
-                                  controller.rentMaxController.text =
-                                      controller.rentMaxControllerTemp.text;
-                                  controller.rentMinController.text =
-                                      controller.rentMinControllerTemp.text;
+                                controller.maxController.text =
+                                    controller.maxControllerTemp.text;
+                                controller.minController.text =
+                                    controller.minControllerTemp.text;
 
-                                  controller.formatPriceRange(
-                                      controller.rentMinController,
-                                      controller.rentMaxController);
+                                controller.formatPriceRange(
+                                    controller.minController,
+                                    controller.maxController);
 
-                                  controller.checkFiltersON();
+                                controller.checkFiltersON();
 
-                                  controller.getProperties();
-                                  // mapListController.isLoading = true;
-                                  Navigator.pop(context);
-                                }
+                                controller.getProperties();
+                                mapListController.isLoading = true;
+                                Navigator.pop(context);
                               }
                             },
                             minWidth: 300,
@@ -219,6 +158,135 @@ class _PriceState extends State<Price> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ReuseRowPrice extends StatefulWidget {
+  const ReuseRowPrice({Key? key}) : super(key: key);
+
+  @override
+  _RowRentPriceState createState() => _RowRentPriceState();
+}
+
+class _RowRentPriceState extends State<ReuseRowPrice> {
+  FilterController controller = Get.put(FilterController());
+
+  final FocusNode _focusMinNode = FocusNode();
+  final FocusNode _focusMAxNode = FocusNode();
+  bool clearMin = false;
+  bool clearMax = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusMinNode.addListener(() {
+      setState(() {
+        clearMin = _focusMinNode.hasFocus;
+      });
+    });
+    _focusMAxNode.addListener(() {
+      setState(() {
+        clearMax = _focusMAxNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusMinNode.dispose();
+    _focusMAxNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(width: 16),
+        Expanded(
+          child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+            controller: controller.minControllerTemp,
+            focusNode: _focusMinNode,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "No min",
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              suffix: clearMin
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          controller.minControllerTemp.clear();
+                        });
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 15,
+                            color: Colors.white,
+                          )),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+        Container(width: 15),
+        Expanded(
+          child: TextField(
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[700],
+            ),
+            controller: controller.maxControllerTemp,
+            focusNode: _focusMAxNode,
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              hintText: "No max",
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              suffix: clearMax
+                  ? GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          controller.maxControllerTemp.clear();
+                        });
+                      },
+                      child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: const Icon(
+                            Icons.close,
+                            size: 15,
+                            color: Colors.white,
+                          )),
+                    )
+                  : null,
+            ),
+          ),
+        ),
+        Container(width: 16),
+      ],
     );
   }
 }

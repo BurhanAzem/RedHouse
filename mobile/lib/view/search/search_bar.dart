@@ -162,7 +162,6 @@ class _SearchBarRowState extends State<SearchBarRow> {
 
 class CustomSearch extends SearchDelegate {
   FilterController filterController = Get.put(FilterController());
-  // StaticController staticController = Get.put(StaticController());
 
   Future<void> loadData() async {
     await filterController.getListAutoCompleteLocation(query);

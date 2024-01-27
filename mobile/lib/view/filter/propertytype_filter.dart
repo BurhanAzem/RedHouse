@@ -1,4 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,22 +12,17 @@ class PropertyType extends StatefulWidget {
 
 class _PropertyTypeState extends State<PropertyType> {
   FilterController controller = Get.put(FilterController());
+  MapListController mapListController = Get.put(MapListController());
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       onPressed: () {
-        controller.buyHouseTemp = controller.buyHouse;
-        controller.buyApartmentTemp = controller.buyApartment;
-        controller.buyTownhouseTemp = controller.buyTownhouse;
-        controller.buyCastleTemp = controller.buyCastle;
-        controller.buyDepartmentTemp = controller.buyDepartment;
-
-        controller.rentHouseTemp = controller.rentHouse;
-        controller.rentApartmentTemp = controller.rentApartment;
-        controller.rentTownhouseTemp = controller.rentTownhouse;
-        controller.rentCastleTemp = controller.rentCastle;
-        controller.rentDepartmentTemp = controller.rentDepartment;
+        controller.houseTemp = controller.house;
+        controller.apartmentTemp = controller.apartment;
+        controller.townhouseTemp = controller.townhouse;
+        controller.castleTemp = controller.castle;
+        controller.departmentTemp = controller.department;
 
         showModalBottomSheet(
           shape: const RoundedRectangleBorder(
@@ -46,10 +42,7 @@ class _PropertyTypeState extends State<PropertyType> {
                   height: MediaQuery.of(context).size.height / 1.76,
                   child: Column(
                     children: [
-                      if (controller.listingType)
-                        const BuyPropertType()
-                      else
-                        const RentPropertyType(),
+                      const ReusePropertType(),
                       Container(
                         width: 340,
                         child: MaterialButton(
@@ -58,45 +51,17 @@ class _PropertyTypeState extends State<PropertyType> {
                           ),
                           onPressed: () {
                             setState(() {
-                              if (controller.listingType) {
-                                controller.buyHouse = controller.buyHouseTemp;
-                                controller.buyApartment =
-                                    controller.buyApartmentTemp;
-                                controller.buyTownhouse =
-                                    controller.buyTownhouseTemp;
-                                controller.buyCastle = controller.buyCastleTemp;
-                                controller.buyDepartment =
-                                    controller.buyDepartmentTemp;
-
-                                controller.rentHouse = true;
-                                controller.rentApartment = true;
-                                controller.rentTownhouse = true;
-                                controller.rentCastle = true;
-                                controller.rentDepartment = true;
-                              } else {
-                                controller.rentHouse = controller.rentHouseTemp;
-                                controller.rentApartment =
-                                    controller.rentApartmentTemp;
-                                controller.rentTownhouse =
-                                    controller.rentTownhouseTemp;
-                                controller.rentCastle =
-                                    controller.rentCastleTemp;
-                                controller.rentDepartment =
-                                    controller.rentDepartmentTemp;
-
-                                controller.buyHouse = true;
-                                controller.buyApartment = true;
-                                controller.buyTownhouse = true;
-                                controller.buyCastle = true;
-                                controller.buyDepartment = true;
-                              }
+                              controller.house = controller.houseTemp;
+                              controller.apartment = controller.apartmentTemp;
+                              controller.townhouse = controller.townhouseTemp;
+                              controller.castle = controller.castleTemp;
+                              controller.department = controller.departmentTemp;
                             });
 
                             // controller.propertyTypeText = controller.rentPropertyTypes();
 
                             controller.getProperties();
-                            // mapListController.isLoading = true;
-
+                            mapListController.isLoading = true;
                             Navigator.pop(context);
                           },
                           minWidth: 300,
@@ -149,14 +114,14 @@ class _PropertyTypeState extends State<PropertyType> {
   }
 }
 
-class BuyPropertType extends StatefulWidget {
-  const BuyPropertType({Key? key}) : super(key: key);
+class ReusePropertType extends StatefulWidget {
+  const ReusePropertType({Key? key}) : super(key: key);
 
   @override
-  State<BuyPropertType> createState() => _BuyPropertTypeState();
+  State<ReusePropertType> createState() => _BuyPropertTypeState();
 }
 
-class _BuyPropertTypeState extends State<BuyPropertType> {
+class _BuyPropertTypeState extends State<ReusePropertType> {
   FilterController controller = Get.put(FilterController());
 
   @override
@@ -175,10 +140,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               color: Colors.grey[700],
             ),
           ),
-          value: controller.buyHouseTemp,
+          value: controller.houseTemp,
           onChanged: (value) {
             setState(() {
-              controller.buyHouseTemp = value!;
+              controller.houseTemp = value!;
             });
           },
           activeColor: const Color.fromARGB(255, 11, 93, 161),
@@ -192,10 +157,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               color: Colors.grey[700],
             ),
           ),
-          value: controller.buyApartmentTemp,
+          value: controller.apartmentTemp,
           onChanged: (value) {
             setState(() {
-              controller.buyApartmentTemp = value!;
+              controller.apartmentTemp = value!;
             });
           },
           activeColor: const Color.fromARGB(255, 11, 93, 161),
@@ -209,10 +174,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               color: Colors.grey[700],
             ),
           ),
-          value: controller.buyTownhouseTemp,
+          value: controller.townhouseTemp,
           onChanged: (value) {
             setState(() {
-              controller.buyTownhouseTemp = value!;
+              controller.townhouseTemp = value!;
             });
           },
           activeColor: const Color.fromARGB(255, 11, 93, 161),
@@ -226,10 +191,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               color: Colors.grey[700],
             ),
           ),
-          value: controller.buyCastleTemp,
+          value: controller.castleTemp,
           onChanged: (value) {
             setState(() {
-              controller.buyCastleTemp = value!;
+              controller.castleTemp = value!;
             });
           },
           activeColor: const Color.fromARGB(255, 11, 93, 161),
@@ -243,118 +208,10 @@ class _BuyPropertTypeState extends State<BuyPropertType> {
               color: Colors.grey[700],
             ),
           ),
-          value: controller.buyDepartmentTemp,
+          value: controller.departmentTemp,
           onChanged: (value) {
             setState(() {
-              controller.buyDepartmentTemp = value!;
-            });
-          },
-          activeColor: const Color.fromARGB(255, 11, 93, 161),
-        ),
-        Container(height: 15),
-      ],
-    );
-  }
-}
-
-class RentPropertyType extends StatefulWidget {
-  const RentPropertyType({Key? key}) : super(key: key);
-
-  @override
-  State<RentPropertyType> createState() => _RentPropertyTypeState();
-}
-
-class _RentPropertyTypeState extends State<RentPropertyType> {
-  FilterController controller = Get.put(FilterController());
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const PropertyTypeSheetHeading(),
-        Container(height: 5),
-        CheckboxListTile(
-          title: Text(
-            "House",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-          ),
-          value: controller.rentHouseTemp,
-          onChanged: (value) {
-            setState(() {
-              controller.rentHouseTemp = value!;
-            });
-          },
-          activeColor: const Color.fromARGB(255, 11, 93, 161),
-        ),
-        CheckboxListTile(
-          title: Text(
-            "Apartment Unit",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-          ),
-          value: controller.rentApartmentTemp,
-          onChanged: (value) {
-            setState(() {
-              controller.rentApartmentTemp = value!;
-            });
-          },
-          activeColor: const Color.fromARGB(255, 11, 93, 161),
-        ),
-        CheckboxListTile(
-          title: Text(
-            "Townhouse",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-          ),
-          value: controller.rentTownhouseTemp,
-          onChanged: (value) {
-            setState(() {
-              controller.rentTownhouseTemp = value!;
-            });
-          },
-          activeColor: const Color.fromARGB(255, 11, 93, 161),
-        ),
-        CheckboxListTile(
-          title: Text(
-            "Castle",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-          ),
-          value: controller.rentCastleTemp,
-          onChanged: (value) {
-            setState(() {
-              controller.rentCastleTemp = value!;
-            });
-          },
-          activeColor: const Color.fromARGB(255, 11, 93, 161),
-        ),
-        CheckboxListTile(
-          title: Text(
-            "Entire Department",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-          ),
-          value: controller.rentDepartmentTemp,
-          onChanged: (value) {
-            setState(() {
-              controller.rentDepartmentTemp = value!;
+              controller.departmentTemp = value!;
             });
           },
           activeColor: const Color.fromARGB(255, 11, 93, 161),

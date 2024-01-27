@@ -268,7 +268,7 @@ class _AllPropertiesState extends State<Properties>
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            0),
+                                                            5),
                                                   ),
                                                   child: ConstrainedBox(
                                                     constraints:
@@ -281,26 +281,50 @@ class _AllPropertiesState extends State<Properties>
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(18),
-                                                          child: Text(
-                                                            property.propertyStatus !=
-                                                                    "Under contract"
-                                                                ? "Are you sure you want to delete the property?"
-                                                                : "This property is under contract and you cannot delete it now",
-                                                            style:
-                                                                const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                              fontSize: 19,
-                                                            ),
+                                                                  .only(
+                                                                  top: 30,
+                                                                  left: 20,
+                                                                  right: 20),
+                                                          child: Column(
+                                                            children: [
+                                                              Text(
+                                                                property.propertyStatus !=
+                                                                        "Under contract"
+                                                                    ? "Are you sure you want to delete the property?"
+                                                                    : "This property is under contract and you cannot delete it now",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 19,
+                                                                ),
+                                                              ),
+                                                              if (property
+                                                                      .propertyStatus !=
+                                                                  "Under contract")
+                                                                Text(
+                                                                  "\nIf you delete the property, everything related to it, such as contracts and booking, will also be deleted",
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
+                                                                    fontSize:
+                                                                        16,
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        600],
+                                                                  ),
+                                                                ),
+                                                            ],
                                                           ),
                                                         ),
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .symmetric(
-                                                                  vertical: 10),
+                                                                  vertical: 15),
                                                           child: ButtonBar(
                                                             children: [
                                                               Row(

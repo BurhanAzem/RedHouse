@@ -6,7 +6,7 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/booking.dart';
 import 'package:client/model/bookingDay.dart';
 import 'package:client/view/home_information/booking_code.dart';
-import 'package:client/view/home_information/check_account.dart';
+import 'package:client/view/history/check_account.dart';
 import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

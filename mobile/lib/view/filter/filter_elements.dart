@@ -1,24 +1,32 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/view/filter/bedbath_filter.dart';
+import 'package:client/view/filter/price_filter.dart';
 import 'package:client/view/filter/propertytype_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class BuyFilter extends StatefulWidget {
-  BuyFilter({Key? key}) : super(key: key);
+class FilterElements extends StatefulWidget {
+  const FilterElements({Key? key}) : super(key: key);
 
   @override
-  State<BuyFilter> createState() => _BuyFilterState();
+  State<FilterElements> createState() => _RentFilterState();
 }
 
-class _BuyFilterState extends State<BuyFilter> {
+class _RentFilterState extends State<FilterElements> {
   MapListController mapListController = Get.put(MapListController());
+  FilterController controller = Get.put(FilterController());
   late bool house;
   late bool apartment;
   late bool townhouse;
   late bool castle;
   late bool department;
+
+  @override
+  void initState() {
+    super.initState();
+    print(controller.listingType);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +45,12 @@ class _BuyFilterState extends State<BuyFilter> {
       "Landlord",
     ];
 
+    const rentType = [
+      "All",
+      "For daily",
+      "For monthly",
+    ];
+
     return GetBuilder<FilterController>(
         init: FilterController(),
         builder: (controller) => Container(
@@ -49,11 +63,11 @@ class _BuyFilterState extends State<BuyFilter> {
                         // Property Type
                         MaterialButton(
                           onPressed: () {
-                            house = controller.buyHouseTemp;
-                            apartment = controller.buyApartmentTemp;
-                            townhouse = controller.buyTownhouseTemp;
-                            castle = controller.buyCastleTemp;
-                            department = controller.buyDepartmentTemp;
+                            house = controller.houseTemp;
+                            apartment = controller.apartmentTemp;
+                            townhouse = controller.townhouseTemp;
+                            castle = controller.castleTemp;
+                            department = controller.departmentTemp;
                             showModalBottomSheet(
                               shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
@@ -76,7 +90,7 @@ class _BuyFilterState extends State<BuyFilter> {
                                               1.8,
                                       child: Column(
                                         children: [
-                                          const BuyPropertType(),
+                                          const ReusePropertType(),
                                           Container(
                                             width: 340,
                                             child: MaterialButton(
@@ -86,16 +100,15 @@ class _BuyFilterState extends State<BuyFilter> {
                                               ),
                                               onPressed: () {
                                                 setState(() {
-                                                  house =
-                                                      controller.buyHouseTemp;
-                                                  apartment = controller
-                                                      .buyApartmentTemp;
-                                                  townhouse = controller
-                                                      .buyTownhouseTemp;
+                                                  house = controller.houseTemp;
+                                                  apartment =
+                                                      controller.apartmentTemp;
+                                                  townhouse =
+                                                      controller.townhouseTemp;
                                                   castle =
-                                                      controller.buyCastleTemp;
-                                                  department = controller
-                                                      .buyDepartmentTemp;
+                                                      controller.castleTemp;
+                                                  department =
+                                                      controller.departmentTemp;
                                                 });
 
                                                 Navigator.pop(context);
@@ -123,11 +136,11 @@ class _BuyFilterState extends State<BuyFilter> {
                               },
                             ).whenComplete(() {
                               setState(() {
-                                controller.buyHouseTemp = house;
-                                controller.buyApartmentTemp = apartment;
-                                controller.buyTownhouseTemp = townhouse;
-                                controller.buyCastleTemp = castle;
-                                controller.buyDepartmentTemp = department;
+                                controller.houseTemp = house;
+                                controller.apartmentTemp = apartment;
+                                controller.townhouseTemp = townhouse;
+                                controller.castleTemp = castle;
+                                controller.departmentTemp = department;
                               });
                             });
                           },
@@ -159,11 +172,11 @@ class _BuyFilterState extends State<BuyFilter> {
                               fontWeight: FontWeight.w500,
                             )),
                         Container(height: 10),
-                        RowBuyPrice(),
+                        const ReuseRowPrice(),
 
                         // BedBathRow
                         Container(height: 30),
-                        const BedBathRow(),
+                        const ReuseBedBathRow(),
 
                         // Property View
                         Container(height: 30),
@@ -190,7 +203,7 @@ class _BuyFilterState extends State<BuyFilter> {
                               fontWeight: FontWeight.w500,
                               color: Colors.grey[700],
                             ),
-                            value: controller.buyViewTemp,
+                            value: controller.viewTemp,
                             items: options.map((String option) {
                               return DropdownMenuItem<String>(
                                 value: option,
@@ -200,7 +213,7 @@ class _BuyFilterState extends State<BuyFilter> {
                             onChanged: (String? newValue) {
                               if (newValue != null) {
                                 setState(() {
-                                  controller.buyViewTemp = newValue;
+                                  controller.viewTemp = newValue;
                                 });
                               }
                             },
@@ -234,7 +247,7 @@ class _BuyFilterState extends State<BuyFilter> {
                               fontWeight: FontWeight.w500,
                               color: Colors.grey[700],
                             ),
-                            value: controller.buyListingByTemp,
+                            value: controller.listingByTemp,
                             items: listingBy.map((String option) {
                               return DropdownMenuItem<String>(
                                 value: option,
@@ -244,7 +257,7 @@ class _BuyFilterState extends State<BuyFilter> {
                             onChanged: (String? newValue) {
                               if (newValue != null) {
                                 setState(() {
-                                  controller.buyListingByTemp = newValue;
+                                  controller.listingByTemp = newValue;
                                 });
                               }
                             },
@@ -261,7 +274,59 @@ class _BuyFilterState extends State<BuyFilter> {
                               fontWeight: FontWeight.w500,
                             )),
                         Container(height: 10),
-                        const BuyHomeSize(),
+                        const HomeSize(),
+
+                        // Rent Type
+                        if (controller.listingType == false)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(height: 30),
+                              const Text("    Rent Type",
+                                  style: TextStyle(
+                                    fontSize: 21,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              Container(height: 10),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 13),
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey[700]!,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: DropdownButton<String>(
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[700],
+                                  ),
+                                  value: controller.rentTypeTemp,
+                                  items: rentType.map((String option) {
+                                    return DropdownMenuItem<String>(
+                                      value: option,
+                                      child: Text(option),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    if (newValue != null) {
+                                      setState(() {
+                                        controller.rentTypeTemp = newValue;
+                                      });
+                                    }
+                                  },
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                ),
+                              ),
+                            ],
+                          ),
 
                         // Property Status
                         Container(height: 30),
@@ -284,10 +349,10 @@ class _BuyFilterState extends State<BuyFilter> {
                                     color: Colors.grey[700],
                                   ),
                                 ),
-                                value: controller.buyComingSoonTemp,
+                                value: controller.comingSoonTemp,
                                 onChanged: (value) {
                                   setState(() {
-                                    controller.buyComingSoonTemp = value!;
+                                    controller.comingSoonTemp = value!;
                                   });
                                 },
                                 activeColor:
@@ -302,10 +367,10 @@ class _BuyFilterState extends State<BuyFilter> {
                                     color: Colors.grey[700],
                                   ),
                                 ),
-                                value: controller.buyAcceptingOffersTemp,
+                                value: controller.acceptingOffersTemp,
                                 onChanged: (value) {
                                   setState(() {
-                                    controller.buyAcceptingOffersTemp = value!;
+                                    controller.acceptingOffersTemp = value!;
                                   });
                                 },
                                 activeColor:
@@ -320,10 +385,10 @@ class _BuyFilterState extends State<BuyFilter> {
                                     color: Colors.grey[700],
                                   ),
                                 ),
-                                value: controller.buyUnderContractTemp,
+                                value: controller.underContractTemp,
                                 onChanged: (value) {
                                   setState(() {
-                                    controller.buyUnderContractTemp = value!;
+                                    controller.underContractTemp = value!;
                                   });
                                 },
                                 activeColor:
@@ -349,7 +414,7 @@ class _BuyFilterState extends State<BuyFilter> {
                               fontWeight: FontWeight.w500,
                               color: Colors.grey[700],
                             ),
-                            controller: controller.buyParkingSpotsTemp,
+                            controller: controller.parkingSpotsTemp,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               suffixIcon: const Icon(Icons.numbers),
@@ -381,10 +446,10 @@ class _BuyFilterState extends State<BuyFilter> {
                                 color: Colors.grey[700],
                               ),
                             ),
-                            value: controller.buyHouseTemp,
+                            value: controller.basementTemp,
                             onChanged: (value) {
                               setState(() {
-                                controller.buyHouseTemp = value!;
+                                controller.basementTemp = value!;
                               });
                             },
                             activeColor: const Color.fromARGB(255, 11, 93, 161),
@@ -399,34 +464,34 @@ class _BuyFilterState extends State<BuyFilter> {
                               fontWeight: FontWeight.w500,
                             )),
                         Container(height: 10),
-                        const BuyYearBuilt(),
+                        const YearBuilt(),
 
                         // End
                         Container(height: 20),
                       ],
                     ),
                   ),
+
+                  // Button
                   Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 13, horizontal: 16),
                     child: MaterialButton(
                       onPressed: () {
-                        if ((controller.buyMinControllerTemp.text != "" &&
-                                controller.buyMaxControllerTemp.text != "" &&
-                                int.parse(
-                                        controller.buyMinControllerTemp.text) >
-                                    int.parse(controller
-                                        .buyMaxControllerTemp.text)) ||
-                            (controller.buySizeMinTemp.text != "" &&
-                                controller.buySizeMaxTemp.text != "" &&
-                                int.parse(controller.buySizeMinTemp.text) >
+                        if ((controller.minControllerTemp.text != "" &&
+                                controller.maxControllerTemp.text != "" &&
+                                int.parse(controller.minControllerTemp.text) >
                                     int.parse(
-                                        controller.buySizeMaxTemp.text)) ||
-                            (controller.buyYearBuiltMinTemp.text != "" &&
-                                controller.buyYearBuiltMaxTemp.text != "" &&
-                                int.parse(controller.buyYearBuiltMinTemp.text) >
+                                        controller.maxControllerTemp.text)) ||
+                            (controller.sizeMinTemp.text != "" &&
+                                controller.sizeMaxTemp.text != "" &&
+                                int.parse(controller.sizeMinTemp.text) >
+                                    int.parse(controller.sizeMaxTemp.text)) ||
+                            (controller.yearBuiltMinTemp.text != "" &&
+                                controller.yearBuiltMaxTemp.text != "" &&
+                                int.parse(controller.yearBuiltMinTemp.text) >
                                     int.parse(
-                                        controller.buyYearBuiltMaxTemp.text))) {
+                                        controller.yearBuiltMaxTemp.text))) {
                           Get.rawSnackbar(
                             snackPosition: SnackPosition.TOP,
                             messageText: const Text(
@@ -448,82 +513,68 @@ class _BuyFilterState extends State<BuyFilter> {
                             snackStyle: SnackStyle.GROUNDED,
                           );
                         } else {
-                          controller.listingType = true;
+                          controller.listingType = false;
 
                           // Property type
-                          controller.buyHouse = controller.buyHouseTemp;
-                          controller.buyApartment = controller.buyApartmentTemp;
-                          controller.buyTownhouse = controller.buyTownhouseTemp;
-                          controller.buyCastle = controller.buyCastleTemp;
-                          controller.buyDepartment =
-                              controller.buyDepartmentTemp;
-
-                          controller.rentHouse = true;
-                          controller.rentApartment = true;
-                          controller.rentTownhouse = true;
-                          controller.rentCastle = true;
-                          controller.rentDepartment = true;
+                          controller.house = controller.houseTemp;
+                          controller.apartment = controller.apartmentTemp;
+                          controller.townhouse = controller.townhouseTemp;
+                          controller.castle = controller.castleTemp;
+                          controller.department = controller.departmentTemp;
 
                           // Price
-                          controller.rentMaxController.text = "";
-                          controller.rentMinController.text = "";
-                          controller.buyMaxController.text =
-                              controller.buyMaxControllerTemp.text;
-                          controller.buyMinController.text =
-                              controller.buyMinControllerTemp.text;
+                          controller.maxController.text =
+                              controller.maxControllerTemp.text;
+                          controller.minController.text =
+                              controller.minControllerTemp.text;
 
                           // Bed Bath
                           controller.copyBathButton();
                           controller.copyBedButton();
 
                           // Property view
-                          controller.buyView = controller.buyViewTemp;
-                          controller.rentView = "Any";
+                          controller.view = controller.viewTemp;
 
                           // Listing by
-                          controller.rentListingBy = "Any";
-                          controller.buyListingBy = controller.buyListingByTemp;
+                          controller.listingBy = controller.listingByTemp;
 
                           // Property size
-                          controller.rentSizeMax.text = "";
-                          controller.rentSizeMin.text = "";
-                          controller.buySizeMax.text =
-                              controller.buySizeMaxTemp.text;
-                          controller.buySizeMin.text =
-                              controller.buySizeMinTemp.text;
+                          controller.sizeMax.text = controller.sizeMaxTemp.text;
+                          controller.sizeMin.text = controller.sizeMinTemp.text;
 
                           // Rent type
-                          controller.rentType = "All";
+                          controller.rentType = controller.rentTypeTemp;
 
                           // Property status
-                          controller.rentComingSoon = true;
-                          controller.rentAcceptingOffers = true;
-                          controller.rentUnderContract = true;
-                          controller.buyComingSoon =
-                              controller.buyComingSoonTemp;
-                          controller.buyAcceptingOffers =
-                              controller.buyAcceptingOffersTemp;
-                          controller.buyUnderContract =
-                              controller.buyUnderContractTemp;
+                          controller.comingSoon = controller.comingSoonTemp;
+                          controller.acceptingOffers =
+                              controller.acceptingOffersTemp;
+                          controller.underContract =
+                              controller.underContractTemp;
 
                           // Parking spots
-                          controller.buyParkingSpots.text =
-                              controller.buyParkingSpotsTemp.text;
-                          controller.rentParkingSpots.text = "";
+                          controller.parkingSpots.text =
+                              controller.parkingSpotsTemp.text;
 
                           // Basement
-                          controller.rentBasement = true;
-                          controller.buyBasement = controller.buyBasementTemp;
+                          controller.basement = controller.basementTemp;
 
-                          //
+                          // Year built
+                          controller.yearBuiltMax.text =
+                              controller.yearBuiltMaxTemp.text;
+                          controller.yearBuiltMin.text =
+                              controller.yearBuiltMinTemp.text;
+
+                          // // //
                           controller.formatPriceRange(
-                            controller.buyMinController,
-                            controller.buyMaxController,
+                            controller.minController,
+                            controller.maxController,
                           );
                           controller.formatBedBath();
                           controller.checkFiltersON();
                           controller.getProperties();
                           mapListController.isLoading = true;
+
                           Navigator.pop(context);
                         }
                       },
@@ -552,143 +603,18 @@ class _BuyFilterState extends State<BuyFilter> {
 }
 
 // Others widgets
+// Others widgets
+// Others widgets
+// Others widgets
 
-class RowBuyPrice extends StatefulWidget {
-  RowBuyPrice({Key? key}) : super(key: key);
+class HomeSize extends StatefulWidget {
+  const HomeSize({Key? key}) : super(key: key);
 
   @override
-  _RowBuyPriceState createState() => _RowBuyPriceState();
+  _RentHomeSizeState createState() => _RentHomeSizeState();
 }
 
-class _RowBuyPriceState extends State<RowBuyPrice> {
-  FilterController controller = Get.put(FilterController());
-  final FocusNode _focusMinNode = FocusNode();
-  final FocusNode _focusMAxNode = FocusNode();
-  bool ClearMin = false;
-  bool ClearMax = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusMinNode.addListener(() {
-      setState(() {
-        ClearMin = _focusMinNode.hasFocus;
-      });
-    });
-    _focusMAxNode.addListener(() {
-      setState(() {
-        ClearMax = _focusMAxNode.hasFocus;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _focusMinNode.dispose();
-    _focusMAxNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(width: 16),
-        Expanded(
-          child: TextField(
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-            controller: controller.buyMinControllerTemp,
-            focusNode: _focusMinNode,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: "No min",
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              suffix: ClearMin
-                  ? GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          controller.buyMinControllerTemp.clear();
-                        });
-                      },
-                      child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.black54,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: const Icon(
-                            Icons.close,
-                            size: 15,
-                            color: Colors.white,
-                          )),
-                    )
-                  : null,
-            ),
-          ),
-        ),
-        Container(width: 15),
-        Expanded(
-          child: TextField(
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-              color: Colors.grey[700],
-            ),
-            controller: controller.buyMaxControllerTemp,
-            focusNode: _focusMAxNode,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: "No max",
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              suffix: ClearMax
-                  ? GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          controller.buyMaxControllerTemp.clear();
-                        });
-                      },
-                      child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.black54,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: const Icon(
-                            Icons.close,
-                            size: 15,
-                            color: Colors.white,
-                          )),
-                    )
-                  : null,
-            ),
-          ),
-        ),
-        Container(width: 16),
-      ],
-    );
-  }
-}
-
-class BuyHomeSize extends StatefulWidget {
-  const BuyHomeSize({Key? key}) : super(key: key);
-
-  @override
-  _BuyHomeSizeState createState() => _BuyHomeSizeState();
-}
-
-class _BuyHomeSizeState extends State<BuyHomeSize> {
+class _RentHomeSizeState extends State<HomeSize> {
   FilterController controller = Get.put(FilterController());
 
   final FocusNode _focusMinNode = FocusNode();
@@ -730,7 +656,7 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
-            controller: controller.buySizeMinTemp,
+            controller: controller.sizeMinTemp,
             focusNode: _focusMinNode,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -744,7 +670,7 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
                   ? GestureDetector(
                       onTap: () {
                         setState(() {
-                          controller.buySizeMinTemp.clear();
+                          controller.sizeMinTemp.clear();
                         });
                       },
                       child: Container(
@@ -771,7 +697,7 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
-            controller: controller.buySizeMaxTemp,
+            controller: controller.sizeMaxTemp,
             focusNode: _focusMAxNode,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -785,7 +711,7 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
                   ? GestureDetector(
                       onTap: () {
                         setState(() {
-                          controller.buySizeMaxTemp.clear();
+                          controller.sizeMaxTemp.clear();
                         });
                       },
                       child: Container(
@@ -810,14 +736,14 @@ class _BuyHomeSizeState extends State<BuyHomeSize> {
   }
 }
 
-class BuyYearBuilt extends StatefulWidget {
-  const BuyYearBuilt({Key? key}) : super(key: key);
+class YearBuilt extends StatefulWidget {
+  const YearBuilt({Key? key}) : super(key: key);
 
   @override
-  _BuyYearBuiltState createState() => _BuyYearBuiltState();
+  _RentYearBuiltState createState() => _RentYearBuiltState();
 }
 
-class _BuyYearBuiltState extends State<BuyYearBuilt> {
+class _RentYearBuiltState extends State<YearBuilt> {
   FilterController controller = Get.put(FilterController());
 
   final FocusNode _focusMinNode = FocusNode();
@@ -859,7 +785,7 @@ class _BuyYearBuiltState extends State<BuyYearBuilt> {
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
-            controller: controller.buyYearBuiltMinTemp,
+            controller: controller.yearBuiltMinTemp,
             focusNode: _focusMinNode,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -873,7 +799,7 @@ class _BuyYearBuiltState extends State<BuyYearBuilt> {
                   ? GestureDetector(
                       onTap: () {
                         setState(() {
-                          controller.buyYearBuiltMinTemp.clear();
+                          controller.yearBuiltMinTemp.clear();
                         });
                       },
                       child: Container(
@@ -900,7 +826,7 @@ class _BuyYearBuiltState extends State<BuyYearBuilt> {
               fontWeight: FontWeight.w500,
               color: Colors.grey[700],
             ),
-            controller: controller.buyYearBuiltMaxTemp,
+            controller: controller.yearBuiltMaxTemp,
             focusNode: _focusMAxNode,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -914,7 +840,7 @@ class _BuyYearBuiltState extends State<BuyYearBuilt> {
                   ? GestureDetector(
                       onTap: () {
                         setState(() {
-                          controller.buyYearBuiltMaxTemp.clear();
+                          controller.yearBuiltMax.clear();
                         });
                       },
                       child: Container(

@@ -24,38 +24,22 @@ class FilterController extends GetxController {
   );
 
   // Property type
-  bool buyHouse = true;
-  bool buyHouseTemp = true;
-  bool buyApartment = true;
-  bool buyApartmentTemp = true;
-  bool buyTownhouse = true;
-  bool buyTownhouseTemp = true;
-  bool buyCastle = true;
-  bool buyCastleTemp = true;
-  bool buyDepartment = true;
-  bool buyDepartmentTemp = true;
-
-  bool rentHouse = true;
-  bool rentHouseTemp = true;
-  bool rentApartment = true;
-  bool rentApartmentTemp = true;
-  bool rentTownhouse = true;
-  bool rentTownhouseTemp = true;
-  bool rentCastle = true;
-  bool rentCastleTemp = true;
-  bool rentDepartment = true;
-  bool rentDepartmentTemp = true;
+  bool house = true;
+  bool houseTemp = true;
+  bool apartment = true;
+  bool apartmentTemp = true;
+  bool townhouse = true;
+  bool townhouseTemp = true;
+  bool castle = true;
+  bool castleTemp = true;
+  bool department = true;
+  bool departmentTemp = true;
 
   // Price
-  final buyMaxController = TextEditingController();
-  final buyMinController = TextEditingController();
-  final buyMaxControllerTemp = TextEditingController();
-  final buyMinControllerTemp = TextEditingController();
-
-  final rentMaxController = TextEditingController();
-  final rentMinController = TextEditingController();
-  final rentMaxControllerTemp = TextEditingController();
-  final rentMinControllerTemp = TextEditingController();
+  final maxController = TextEditingController();
+  final minController = TextEditingController();
+  final maxControllerTemp = TextEditingController();
+  final minControllerTemp = TextEditingController();
 
   // Bed Bath
   RxString bedButtonTemp = "Any".obs;
@@ -83,69 +67,44 @@ class FilterController extends GetxController {
   ];
 
   // Property view
-  String buyView = "Any";
-  String buyViewTemp = "Any";
-  String rentView = "Any";
-  String rentViewTemp = "Any";
+  String view = "Any";
+  String viewTemp = "Any";
 
   // Listing by
-  String buyListingBy = "Any";
-  String buyListingByTemp = "Any";
-  String rentListingBy = "Any";
-  String rentListingByTemp = "Any";
+  String listingBy = "Any";
+  String listingByTemp = "Any";
 
   // Property size
-  final buySizeMax = TextEditingController();
-  final buySizeMin = TextEditingController();
-  final buySizeMaxTemp = TextEditingController();
-  final buySizeMinTemp = TextEditingController();
-
-  final rentSizeMax = TextEditingController();
-  final rentSizeMin = TextEditingController();
-  final rentSizeMaxTemp = TextEditingController();
-  final rentSizeMinTemp = TextEditingController();
+  final sizeMax = TextEditingController();
+  final sizeMin = TextEditingController();
+  final sizeMaxTemp = TextEditingController();
+  final sizeMinTemp = TextEditingController();
 
   // Rent type
   String rentType = "All";
   String rentTypeTemp = "All";
 
   // Property status
-  bool buyComingSoon = true;
-  bool buyComingSoonTemp = true;
-  bool buyAcceptingOffers = true;
-  bool buyAcceptingOffersTemp = true;
-  bool buyUnderContract = true;
-  bool buyUnderContractTemp = true;
-
-  bool rentComingSoon = true;
-  bool rentComingSoonTemp = true;
-  bool rentAcceptingOffers = true;
-  bool rentAcceptingOffersTemp = true;
-  bool rentUnderContract = true;
-  bool rentUnderContractTemp = true;
+  bool comingSoon = true;
+  bool comingSoonTemp = true;
+  bool acceptingOffers = true;
+  bool acceptingOffersTemp = true;
+  bool underContract = true;
+  bool underContractTemp = true;
 
   // Parking spots
-  final buyParkingSpots = TextEditingController();
-  final buyParkingSpotsTemp = TextEditingController();
-  final rentParkingSpots = TextEditingController();
-  final rentParkingSpotsTemp = TextEditingController();
+  final parkingSpots = TextEditingController();
+  final parkingSpotsTemp = TextEditingController();
 
   // Basement
-  bool buyBasement = true;
-  bool buyBasementTemp = true;
-  bool rentBasement = true;
-  bool rentBasementTemp = true;
+  bool basement = true;
+  bool basementTemp = true;
 
   // Year built
-  final buyYearBuiltMax = TextEditingController();
-  final buyYearBuiltMin = TextEditingController();
-  final buyYearBuiltMaxTemp = TextEditingController();
-  final buyYearBuiltMinTemp = TextEditingController();
-
-  final rentYearBuiltMax = TextEditingController();
-  final rentYearBuiltMin = TextEditingController();
-  final rentYearBuiltMaxTemp = TextEditingController();
-  final rentYearBuiltMinTemp = TextEditingController();
+  final yearBuiltMax = TextEditingController();
+  final yearBuiltMin = TextEditingController();
+  final yearBuiltMaxTemp = TextEditingController();
+  final yearBuiltMinTemp = TextEditingController();
 
   // For style when filter on
   bool filtersON = false;
@@ -156,24 +115,22 @@ class FilterController extends GetxController {
   String priceText = "Price";
   String bedBathText = "Bed / Bath";
   String propertyTypeText = "Property type";
-  String propertyTypeTextBuy = "Any";
-  String propertyTypeTextRent = "Any";
 
   void checkFiltersON() {
-    if (priceText != 'Price' ||
-        bedBathText != "Bed / Bath" ||
-        buyListingBy != "Any" ||
-        rentListingBy != "Any" ||
-        buyView != "Any" ||
-        rentView != "Any" ||
-        buySizeMax.text.isNotEmpty ||
-        buySizeMin.text.isNotEmpty ||
-        rentSizeMax.text.isNotEmpty ||
-        rentSizeMin.text.isNotEmpty) {
-      filtersON = true;
-    } else {
-      filtersON = false;
-    }
+    // if (priceText != 'Price' ||
+    //     bedBathText != "Bed / Bath" ||
+    //     buyListingBy != "Any" ||
+    //     rentListingBy != "Any" ||
+    //     buyView != "Any" ||
+    //     rentView != "Any" ||
+    //     buySizeMax.text.isNotEmpty ||
+    //     buySizeMin.text.isNotEmpty ||
+    //     rentSizeMax.text.isNotEmpty ||
+    //     rentSizeMin.text.isNotEmpty) {
+    //   filtersON = true;
+    // } else {
+    //   filtersON = false;
+    // }
     update();
   }
 
@@ -271,7 +228,7 @@ class FilterController extends GetxController {
     String? maxPrice;
     String? numberOfBathrooms;
     String? numberOfBedrooms;
-    String? view;
+    String? _view;
     String? listingPropertyType;
     List<String>? propertyStatus = [];
 
@@ -281,104 +238,50 @@ class FilterController extends GetxController {
     String? minBuiltYear;
     String? maxBuiltYear;
 
-    String? parkingSpots;
+    String? _parkingSpots;
     bool? hasBassmentUnit;
 
-    if (listingType) {
-      if (buyHouse) {
-        propertyTypes.add("House");
-      }
-
-      if (buyApartment) {
-        propertyTypes.add("Apartment Unit");
-      }
-
-      if (buyTownhouse) {
-        propertyTypes.add("Townhouse");
-      }
-
-      if (buyCastle) {
-        propertyTypes.add("Castle");
-      }
-
-      if (buyDepartment) {
-        propertyTypes.add("Entire Department Community");
-      }
-
-      if (buyComingSoon) {
-        propertyStatus.add("Coming soon");
-      }
-
-      if (buyAcceptingOffers) {
-        propertyStatus.add("Accepting offers");
-      }
-
-      if (buyUnderContract) {
-        propertyStatus.add("Under contract");
-      }
-
-      minPrice = buyMinController.text;
-      maxPrice = buyMaxController.text;
-
-      minBuiltYear = buyYearBuiltMin.text;
-      maxBuiltYear = buyYearBuiltMax.text;
-
-      maxPropertySize = buySizeMax.text;
-      minPropertySize = buySizeMin.text;
-
-      parkingSpots = buyParkingSpots.text;
-
-      hasBassmentUnit = buyBasement;
-
-      view = buyView;
-    } else {
-      if (rentHouse) {
-        propertyTypes.add("House");
-      }
-
-      if (rentApartment) {
-        propertyTypes.add("Apartment Unit");
-      }
-
-      if (rentTownhouse) {
-        propertyTypes.add("Townhouse");
-      }
-
-      if (rentCastle) {
-        propertyTypes.add("Castle");
-      }
-
-      if (rentDepartment) {
-        propertyTypes.add("Entire Department Community");
-      }
-
-      if (rentComingSoon) {
-        propertyStatus.add("Coming soon");
-      }
-
-      if (rentAcceptingOffers) {
-        propertyStatus.add("Accepting offers");
-      }
-
-      if (rentUnderContract) {
-        propertyStatus.add("Under contract");
-      }
-
-      minPrice = rentMinController.text;
-      maxPrice = rentMaxController.text;
-
-      minBuiltYear = rentYearBuiltMin.text;
-      maxBuiltYear = rentYearBuiltMax.text;
-
-      maxPropertySize = rentSizeMax.text;
-      minPropertySize = rentSizeMin.text;
-
-      parkingSpots = rentParkingSpots.text;
-
-      hasBassmentUnit = rentBasement;
-
-      view = rentView;
+    if (house) {
+      propertyTypes.add("House");
     }
+
+    if (apartment) {
+      propertyTypes.add("Apartment Unit");
+    }
+
+    if (townhouse) {
+      propertyTypes.add("Townhouse");
+    }
+
+    if (castle) {
+      propertyTypes.add("Castle");
+    }
+
+    if (department) {
+      propertyTypes.add("Entire Department Community");
+    }
+
+    if (comingSoon) {
+      propertyStatus.add("Coming soon");
+    }
+
+    if (acceptingOffers) {
+      propertyStatus.add("Accepting offers");
+    }
+
+    if (underContract) {
+      propertyStatus.add("Under contract");
+    }
+
+    minPrice = minController.text;
+    maxPrice = maxController.text;
+    minBuiltYear = yearBuiltMin.text;
+    maxBuiltYear = yearBuiltMax.text;
+    maxPropertySize = sizeMax.text;
+    minPropertySize = sizeMin.text;
+    _parkingSpots = parkingSpots.text;
+    hasBassmentUnit = basement;
+    _view = view;
 
     if (bedButton.toString().length <= 2) {
       numberOfBedrooms = bedButton.string.substring(0, 1);
@@ -398,30 +301,30 @@ class FilterController extends GetxController {
       listingPropertyType = "For rent";
     }
     var response = await PropertyData.getProperties(
-        propertyTypes,
-        minPrice,
-        maxPrice,
-        numberOfBathrooms,
-        numberOfBedrooms,
-        view,
-        listingPropertyType.toString(),
-        location,
-        propertyStatus,
-        minPropertySize,
-        maxPropertySize,
-        minBuiltYear,
-        maxBuiltYear,
-        parkingSpots,
-        rentType,
-        hasBassmentUnit);
+      propertyTypes,
+      minPrice,
+      maxPrice,
+      numberOfBathrooms,
+      numberOfBedrooms,
+      _view,
+      listingPropertyType.toString(),
+      location,
+      propertyStatus,
+      minPropertySize,
+      maxPropertySize,
+      minBuiltYear,
+      maxBuiltYear,
+      _parkingSpots,
+      rentType,
+      hasBassmentUnit,
+    );
 
     if (response is Map<String, dynamic> &&
         response.containsKey('statusCode')) {
-      // Your existing code
       if (response['statusCode'] == 200) {
         listProperty = ListProperty.fromJson(response);
+        print(listProperty.listDto);
       } else {
-        // Your error handling code
         Get.defaultDialog(
           title: "Error",
           middleText:

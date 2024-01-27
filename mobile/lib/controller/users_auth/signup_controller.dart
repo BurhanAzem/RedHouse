@@ -64,13 +64,9 @@ class SignUpControllerImp extends GetxController {
     var response = await UserData.updateUser(
       userId,
       firstName.text,
-      lastName.text,
       email.text,
       phoneNumber.text,
-      password.text,
     );
-
-    print(response);
 
     if (response is Map<String, dynamic> && response['statusCode'] == 200) {
     } else {
@@ -82,23 +78,21 @@ class SignUpControllerImp extends GetxController {
     }
   }
 
-  // updateUserScore(int userId) async {
-  //   var response = await UserData.updateUserScore(
-  //     userId,
-  //     landlordScore,
-  //     customerScore,
-  //     userRole,
-  //   );
+  updateUserScore(int userId) async {
+    var response = await UserData.updateUserScore(
+      userId,
+      userRole,
+    );
 
-  //   if (response is Map<String, dynamic> && response['statusCode'] == 200) {
-  //   } else {
-  //     Get.defaultDialog(
-  //       title: "Error",
-  //       middleText:
-  //           "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
-  //     );
-  //   }
-  // }
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
 
   updateUserVerified(int userId, bool isVerified) async {
     var response = await UserData.updateUserVerified(userId, isVerified);

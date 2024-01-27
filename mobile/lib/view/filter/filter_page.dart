@@ -1,8 +1,8 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
-import 'package:client/view/filter/buy_filter.dart';
-import 'package:client/view/filter/rent_filter.dart';
+import 'package:client/view/filter/filter_elements.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class FilterPage extends StatefulWidget {
   FilterPage({Key? key}) : super(key: key);
@@ -11,81 +11,58 @@ class FilterPage extends StatefulWidget {
   _FilterPageState createState() => _FilterPageState();
 }
 
-class _FilterPageState extends State<FilterPage> {
+class _FilterPageState extends State<FilterPage>
+    with AutomaticKeepAliveClientMixin {
   FilterController controller = Get.put(FilterController());
+
+  @override
+  bool get wantKeepAlive => true; // Keep the state alive
 
   @override
   void initState() {
     super.initState();
 
     // Property type
-    controller.buyHouseTemp = controller.buyHouse;
-    controller.buyApartmentTemp = controller.buyApartment;
-    controller.buyTownhouseTemp = controller.buyTownhouse;
-    controller.buyCastleTemp = controller.buyCastle;
-    controller.buyDepartmentTemp = controller.buyDepartment;
-
-    controller.rentHouseTemp = controller.rentHouse;
-    controller.rentApartmentTemp = controller.rentApartment;
-    controller.rentTownhouseTemp = controller.rentTownhouse;
-    controller.rentCastleTemp = controller.rentCastle;
-    controller.rentDepartmentTemp = controller.rentDepartment;
-
+    controller.houseTemp = controller.house;
+    controller.apartmentTemp = controller.apartment;
+    controller.townhouseTemp = controller.townhouse;
+    controller.castleTemp = controller.castle;
+    controller.departmentTemp = controller.department;
     // Price
-    controller.buyMaxControllerTemp.text = controller.buyMaxController.text;
-    controller.buyMinControllerTemp.text = controller.buyMinController.text;
-    controller.rentMaxControllerTemp.text = controller.rentMaxController.text;
-    controller.rentMinControllerTemp.text = controller.rentMinController.text;
-
+    controller.maxControllerTemp.text = controller.maxController.text;
+    controller.minControllerTemp.text = controller.minController.text;
     // Property view
-    controller.buyViewTemp = controller.buyView;
-    controller.rentViewTemp = controller.rentView;
-
+    controller.viewTemp = controller.view;
     // Bed Bath
     controller.copyBathButtonTemp();
     controller.copyBedButtonTemp();
-
     // Listing by
-    controller.buyListingByTemp = controller.buyListingBy;
-    controller.rentListingByTemp = controller.rentListingBy;
-
+    controller.listingByTemp = controller.listingBy;
     // Property size
-    controller.buySizeMaxTemp.text = controller.buySizeMax.text;
-    controller.buySizeMinTemp.text = controller.buySizeMin.text;
-    controller.rentSizeMaxTemp.text = controller.rentSizeMax.text;
-    controller.rentSizeMinTemp.text = controller.rentSizeMin.text;
-
+    controller.sizeMaxTemp.text = controller.sizeMax.text;
+    controller.sizeMinTemp.text = controller.sizeMin.text;
     // Rent type
     controller.rentTypeTemp = controller.rentType;
-
     // Property status
-    controller.buyComingSoonTemp = controller.buyComingSoon;
-    controller.buyAcceptingOffersTemp = controller.buyAcceptingOffers;
-    controller.buyUnderContractTemp = controller.buyUnderContract;
-    controller.rentComingSoonTemp = controller.rentComingSoon;
-    controller.rentAcceptingOffersTemp = controller.rentAcceptingOffers;
-    controller.rentUnderContractTemp = controller.rentUnderContract;
-
+    controller.comingSoonTemp = controller.comingSoon;
+    controller.acceptingOffersTemp = controller.acceptingOffers;
+    controller.underContractTemp = controller.underContract;
     // Parking spots
-    controller.buyParkingSpotsTemp.text = controller.buyParkingSpots.text;
-    controller.rentParkingSpotsTemp.text = controller.rentParkingSpots.text;
-
+    controller.parkingSpotsTemp.text = controller.parkingSpots.text;
     // Basement
-    controller.buyBasementTemp = controller.buyBasement;
-    controller.rentBasementTemp = controller.rentBasement;
-
+    controller.basementTemp = controller.basement;
     // Year built
-    controller.buyYearBuiltMaxTemp.text = controller.buyYearBuiltMax.text;
-    controller.buyYearBuiltMinTemp.text = controller.buyYearBuiltMin.text;
-    controller.rentYearBuiltMaxTemp.text = controller.rentYearBuiltMax.text;
-    controller.rentYearBuiltMinTemp.text = controller.rentYearBuiltMin.text;
+    controller.yearBuiltMaxTemp.text = controller.yearBuiltMax.text;
+    controller.yearBuiltMinTemp.text = controller.yearBuiltMin.text;
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return DefaultTabController(
       length: 2,
-      initialIndex: controller.listingType ? 0 : 1,
+      initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
@@ -105,24 +82,22 @@ class _FilterPageState extends State<FilterPage> {
               MaterialButton(
                 onPressed: () {
                   setState(() {
-                    controller.rentMaxControllerTemp.text = "";
-                    controller.rentMinControllerTemp.text = "";
-                    controller.buyMaxControllerTemp.text = "";
-                    controller.buyMinControllerTemp.text = "";
-
-                    controller.buyViewTemp = "Any";
-                    controller.rentViewTemp = "Any";
-
+                    controller.maxControllerTemp.text = "";
+                    controller.minControllerTemp.text = "";
+                    controller.viewTemp = "Any";
                     controller.setBedButtonTemp("Any");
                     controller.setBathButtonTemp("Any");
-
-                    controller.rentListingByTemp = "Any";
-                    controller.buyListingByTemp = "Any";
-
-                    controller.rentSizeMaxTemp.text = "";
-                    controller.rentSizeMinTemp.text = "";
-                    controller.buySizeMaxTemp.text = "";
-                    controller.buySizeMinTemp.text = "";
+                    controller.listingByTemp = "Any";
+                    controller.sizeMaxTemp.text = "";
+                    controller.sizeMinTemp.text = "";
+                    controller.comingSoonTemp = true;
+                    controller.acceptingOffersTemp = true;
+                    controller.underContractTemp = true;
+                    controller.parkingSpotsTemp.text = "";
+                    controller.yearBuiltMaxTemp.text = "";
+                    controller.yearBuiltMinTemp.text = "";
+                    controller.basementTemp = true;
+                    controller.rentTypeTemp = "All";
                   });
                 },
                 child: const Text(
@@ -146,19 +121,66 @@ class _FilterPageState extends State<FilterPage> {
             labelColor: Colors.white,
             labelStyle: const TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 17,
+              fontSize: 18,
             ),
             unselectedLabelColor: Colors.grey[400],
             unselectedLabelStyle: const TextStyle(
               fontWeight: FontWeight.normal,
-              fontSize: 17,
+              fontSize: 18,
             ),
           ),
         ),
         body: TabBarView(
           children: [
-            BuyFilter(),
-            RentFilter(),
+            // For Buy
+            VisibilityDetector(
+              key: const Key("BuyFilter"),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction == 1) {
+                  controller.listingType = true;
+                  setState(() {});
+                }
+              },
+              child: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 1)),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.grey[200],
+                      ),
+                    );
+                  } else {
+                    return const FilterElements();
+                  }
+                },
+              ),
+            ),
+
+            // For Rent
+            VisibilityDetector(
+              key: const Key("RentFilter"),
+              onVisibilityChanged: (info) {
+                if (info.visibleFraction == 1) {
+                  controller.listingType = false;
+                  setState(() {});
+                }
+              },
+              child: FutureBuilder(
+                future: Future.delayed(const Duration(seconds: 1)),
+                builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.grey[200],
+                      ),
+                    );
+                  } else {
+                    return const FilterElements();
+                  }
+                },
+              ),
+            ),
           ],
         ),
       ),

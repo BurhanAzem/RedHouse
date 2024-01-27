@@ -126,21 +126,18 @@ class UserData {
 
   static Future<dynamic> updateUser(
     int userId,
-    String firstName,
-    String lastName,
+    String name,
     String email,
     String phoneNumber,
-    String password,
   ) async {
     if (await checkInternet()) {
       try {
         var uri = Uri.parse('${AppLink.users}/$userId');
 
         var data = {
-          "name": "$firstName $lastName",
+          "name": name,
           "email": email,
           "phoneNumber": phoneNumber,
-          "password": password,
         };
 
         var response = await http.put(
@@ -152,7 +149,40 @@ class UserData {
           body: json.encode(data),
         );
 
-        print(response);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map<String, dynamic> responseBody = json.decode(response.body);
+          return responseBody;
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> updateUserScore(
+    int userId,
+    String userRole,
+  ) async {
+    if (await checkInternet()) {
+      try {
+        var uri = Uri.parse('${AppLink.users}/$userId');
+
+        var data = {
+          "userRole": userRole,
+        };
+
+        var response = await http.put(
+          uri,
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          },
+          body: json.encode(data),
+        );
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map<String, dynamic> responseBody = json.decode(response.body);
@@ -168,46 +198,6 @@ class UserData {
       return StatusRequest.offlinefailure;
     }
   }
-
-  // static Future<dynamic> updateUserScore(
-  //   int userId,
-  //   int landlordScore,
-  //   int customerScore,
-  //   String userRole,
-  // ) async {
-  //   if (await checkInternet()) {
-  //     try {
-  //       var uri = Uri.parse('${AppLink.users}/$userId');
-
-  //       var data = {
-  //         "landlordScore": landlordScore,
-  //         "customerScore": customerScore,
-  //         "userRole": userRole,
-  //       };
-
-  //       var response = await http.put(
-  //         uri,
-  //         headers: <String, String>{
-  //           'Content-Type': 'application/json',
-  //           'Authorization': 'Bearer ${getToken()}',
-  //         },
-  //         body: json.encode(data),
-  //       );
-
-  //       if (response.statusCode == 200 || response.statusCode == 201) {
-  //         Map<String, dynamic> responseBody = json.decode(response.body);
-
-  //         return responseBody;
-  //       } else {
-  //         return StatusRequest.serverfailure;
-  //       }
-  //     } catch (e) {
-  //       return StatusRequest.serverfailure;
-  //     }
-  //   } else {
-  //     return StatusRequest.offlinefailure;
-  //   }
-  // }
 
   static Future<dynamic> updateUserVerified(
     int userId,
