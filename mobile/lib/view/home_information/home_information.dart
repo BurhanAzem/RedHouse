@@ -331,7 +331,7 @@ class _HomeInformationState extends State<HomeInformation> {
                       Text(
                         "ZIP / ${divideCodeIntoGroups(widget.property.propertyCode)}",
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 19,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 0, 0, 0),
                         ),
@@ -357,8 +357,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                         fontSize: 20,
                                         fontWeight: FontWeight.w700,
                                         // color: Colors.white,
-                                        color:
-                                            Color.fromARGB(255, 8, 8, 8)),
+                                        color: Color.fromARGB(255, 8, 8, 8)),
                                   ),
                                   const TextSpan(
                                     text: 'bedrooms,  ',
@@ -376,8 +375,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                         // color: Colors.white,
-                                        color:
-                                            Color.fromARGB(255, 0, 0, 0)),
+                                        color: Color.fromARGB(255, 0, 0, 0)),
                                   ),
                                   const TextSpan(
                                     text: 'bathrooms,  ',
@@ -395,8 +393,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
                                         // color: Colors.white,
-                                        color:
-                                            Color.fromARGB(255, 0, 0, 0)),
+                                        color: Color.fromARGB(255, 0, 0, 0)),
                                   ),
                                   const TextSpan(
                                     text: 'meters',
@@ -613,8 +610,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                           fontSize: 16,
                                           fontWeight: FontWeight.w500,
                                           // color: Colors.white,
-                                          color:
-                                              Color.fromARGB(255, 0, 0, 0)),
+                                          color: Color.fromARGB(255, 0, 0, 0)),
                                     ),
                                   ),
                                 ),
@@ -828,7 +824,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               fontWeight: FontWeight.w500),
                         ),
                         TextSpan(
-                          text: widget.property.listingBy,
+                          text: widget.property.user!.userRole,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,

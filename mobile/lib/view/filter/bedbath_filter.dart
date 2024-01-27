@@ -128,13 +128,18 @@ class _BedBathState extends State<BedBath> {
   }
 }
 
-class ReuseBedBathRow extends StatelessWidget {
+class ReuseBedBathRow extends StatefulWidget {
   const ReuseBedBathRow({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    FilterController bedBathController = Get.put(FilterController());
+  State<ReuseBedBathRow> createState() => _ReuseBedBathRowState();
+}
 
+class _ReuseBedBathRowState extends State<ReuseBedBathRow> {
+  FilterController bedBathController = Get.put(FilterController());
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

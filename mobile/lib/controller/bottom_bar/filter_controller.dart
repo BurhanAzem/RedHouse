@@ -7,21 +7,11 @@ import 'package:get/get.dart';
 
 class FilterController extends GetxController {
   bool listingType = false; // true --> Buy, false --> Rent
+  bool tabType = false; // Like as listingType temp
   ListProperty listProperty = ListProperty(listDto: []);
   List<Location> listAutoCompleteLocation = [];
   List<FlSpot> flSpotListRent = [];
   List<FlSpot> flSpotListSell = [];
-
-  Location location = Location(
-    id: 0,
-    streetAddress: "",
-    city: "",
-    region: "",
-    postalCode: "",
-    country: "",
-    latitude: 0,
-    longitude: 0,
-  );
 
   // Property type
   bool house = true;
@@ -117,25 +107,29 @@ class FilterController extends GetxController {
   String propertyTypeText = "Property type";
 
   void checkFiltersON() {
-    // if (priceText != 'Price' ||
-    //     bedBathText != "Bed / Bath" ||
-    //     buyListingBy != "Any" ||
-    //     rentListingBy != "Any" ||
-    //     buyView != "Any" ||
-    //     rentView != "Any" ||
-    //     buySizeMax.text.isNotEmpty ||
-    //     buySizeMin.text.isNotEmpty ||
-    //     rentSizeMax.text.isNotEmpty ||
-    //     rentSizeMin.text.isNotEmpty) {
-    //   filtersON = true;
-    // } else {
-    //   filtersON = false;
-    // }
+    if (priceText != 'Price' ||
+        bedBathText != "Bed / Bath" ||
+        propertyTypeText != "Property type" ||
+        listingBy != "Any" ||
+        view != "Any" ||
+        rentType != "All" ||
+        sizeMax.text.isNotEmpty ||
+        sizeMin.text.isNotEmpty ||
+        yearBuiltMax.text.isNotEmpty ||
+        yearBuiltMin.text.isNotEmpty ||
+        parkingSpots.text.isNotEmpty ||
+        basement == false ||
+        comingSoon == false ||
+        acceptingOffers == false ||
+        underContract == false) {
+      filtersON = true;
+    } else {
+      filtersON = false;
+    }
     update();
   }
 
-  void formatPriceRange(TextEditingController minController,
-      TextEditingController maxController) {
+  void formatPriceRange() {
     final minPrice = minController.text;
     final maxPrice = maxController.text;
 
@@ -182,6 +176,33 @@ class FilterController extends GetxController {
     } else {
       bedBathText = "Bed / Bath";
       bedBathON = false;
+    }
+    update();
+  }
+
+  void formatPropertyTypes() {
+    if (house && apartment && townhouse && castle && department) {
+      propertyTypeText = 'Property type';
+      propertyTypeON = false;
+    } else {
+      propertyTypeON = true;
+      List<String> selectedTypes = [];
+      if (house) {
+        selectedTypes.add('House');
+      }
+      if (apartment) {
+        selectedTypes.add('Apartment Unit');
+      }
+      if (townhouse) {
+        selectedTypes.add('Townhouse');
+      }
+      if (castle) {
+        selectedTypes.add('Castle');
+      }
+      if (department) {
+        selectedTypes.add('Entire Department');
+      }
+      propertyTypeText = selectedTypes.join(', ');
     }
     update();
   }
@@ -308,7 +329,6 @@ class FilterController extends GetxController {
       numberOfBedrooms,
       _view,
       listingPropertyType.toString(),
-      location,
       propertyStatus,
       minPropertySize,
       maxPropertySize,

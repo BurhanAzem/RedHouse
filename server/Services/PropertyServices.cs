@@ -235,6 +235,11 @@ namespace RedHouse_Server.Services
                 query = query.Where(p => p.View == filterDto.View);
             }
 
+            if (!string.IsNullOrEmpty(filterDto.ListingBy))
+            {
+                query = query.Where(p => p.User.UserRole == filterDto.ListingBy);
+            }
+
             if (!string.IsNullOrEmpty(filterDto.ListingType))
             {
                 if (filterDto.ListingType == "For rent")

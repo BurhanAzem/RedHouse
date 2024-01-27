@@ -105,13 +105,8 @@ class _PriceState extends State<Price> {
                                     controller.maxControllerTemp.text;
                                 controller.minController.text =
                                     controller.minControllerTemp.text;
-
-                                controller.formatPriceRange(
-                                    controller.minController,
-                                    controller.maxController);
-
+                                controller.formatPriceRange();
                                 controller.checkFiltersON();
-
                                 controller.getProperties();
                                 mapListController.isLoading = true;
                                 Navigator.pop(context);

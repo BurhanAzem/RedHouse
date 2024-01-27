@@ -1,4 +1,5 @@
 import 'package:client/controller/bottom_bar/filter_controller.dart';
+import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/filter/filter_elements.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ class FilterPage extends StatefulWidget {
 
 class _FilterPageState extends State<FilterPage>
     with AutomaticKeepAliveClientMixin {
-  FilterController controller = Get.put(FilterController());
+  FilterController controller = Get.put(FilterController(), permanent: true);
 
   @override
   bool get wantKeepAlive => true; // Keep the state alive
@@ -56,16 +57,29 @@ class _FilterPageState extends State<FilterPage>
     controller.yearBuiltMinTemp.text = controller.yearBuiltMin.text;
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
     return DefaultTabController(
       length: 2,
-      initialIndex: 0,
+      initialIndex: controller.listingType ? 0 : 1,
       child: Scaffold(
         appBar: AppBar(
           iconTheme: const IconThemeData(color: Colors.white),
+          // leading: IconButton(
+          //   icon: const Icon(
+          //     Icons.arrow_back,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     setState(() {
+          //       Get.off(() => const BottomBar());
+          //     });
+          //   },
+          // ),
           title: Row(
             children: <Widget>[
               const Padding(
@@ -82,6 +96,11 @@ class _FilterPageState extends State<FilterPage>
               MaterialButton(
                 onPressed: () {
                   setState(() {
+                    controller.houseTemp = true;
+                    controller.apartmentTemp = true;
+                    controller.townhouseTemp = true;
+                    controller.castleTemp = true;
+                    controller.department = true;
                     controller.maxControllerTemp.text = "";
                     controller.minControllerTemp.text = "";
                     controller.viewTemp = "Any";
@@ -90,13 +109,13 @@ class _FilterPageState extends State<FilterPage>
                     controller.listingByTemp = "Any";
                     controller.sizeMaxTemp.text = "";
                     controller.sizeMinTemp.text = "";
-                    controller.comingSoonTemp = true;
-                    controller.acceptingOffersTemp = true;
-                    controller.underContractTemp = true;
                     controller.parkingSpotsTemp.text = "";
                     controller.yearBuiltMaxTemp.text = "";
                     controller.yearBuiltMinTemp.text = "";
                     controller.basementTemp = true;
+                    controller.comingSoon = true;
+                    controller.acceptingOffers = true;
+                    controller.underContract = true;
                     controller.rentTypeTemp = "All";
                   });
                 },
@@ -137,8 +156,7 @@ class _FilterPageState extends State<FilterPage>
               key: const Key("BuyFilter"),
               onVisibilityChanged: (info) {
                 if (info.visibleFraction == 1) {
-                  controller.listingType = true;
-                  setState(() {});
+                  controller.tabType = true;
                 }
               },
               child: FutureBuilder(
@@ -162,8 +180,7 @@ class _FilterPageState extends State<FilterPage>
               key: const Key("RentFilter"),
               onVisibilityChanged: (info) {
                 if (info.visibleFraction == 1) {
-                  controller.listingType = false;
-                  setState(() {});
+                  controller.tabType = false;
                 }
               },
               child: FutureBuilder(

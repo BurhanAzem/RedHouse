@@ -1,3 +1,4 @@
+import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
@@ -23,16 +24,12 @@ class _ListWidgetState extends State<ListWidget>
   StaticController staticController = Get.put(StaticController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   MapListController mapListController = Get.put(MapListController());
+  FilterController filterController =
+      Get.put(FilterController(), permanent: true);
   bool isWidgetVisible = false; // Add a variable to track visibility
 
   @override
   bool get wantKeepAlive => true; // Keep the state alive
-
-  @override
-  void initState() {
-    mapListController.isLoading = true;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +132,7 @@ class _ListWidgetState extends State<ListWidget>
                                   children: [
                                     TextSpan(
                                       text:
-                                          'Brokered by the ${property.listingBy} ',
+                                          'Brokered by the ${property.user!.userRole} ',
                                       style: TextStyle(
                                         color: Colors.grey[700],
                                         fontSize: 12.5,

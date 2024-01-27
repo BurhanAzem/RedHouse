@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/core/functions/checkinternet.dart';
 import 'package:client/link_api.dart';
-import 'package:client/model/location.dart';
 import 'package:client/shared_preferences.dart';
 import 'package:client/model/neighborhood/neighborhoodDto.dart';
 import 'package:intl/intl.dart';
@@ -98,7 +97,6 @@ class PropertyData {
     String numberOfBedrooms,
     String view,
     String listingType,
-    Location location,
     List<String> propertyStatus,
     String minPropertySize,
     String maxPropertySize,
@@ -116,15 +114,6 @@ class PropertyData {
       "NumberOfBathRooms": numberOfBathrooms,
       "View": view == "Any" ? "" : view,
       "ListingType": listingType,
-      "LocationDto.StreetAddress": location.streetAddress,
-      "LocationDto.City": location.city,
-      "LocationDto.Region": location.region,
-      "LocationDto.PostalCode": location.postalCode,
-      "LocationDto.Country": location.country,
-      "LocationDto.Latitude":
-          location.latitude == 0.0 ? "" : location.latitude.toString(),
-      "LocationDto.Longitude":
-          location.longitude == 0.0 ? "" : location.longitude.toString(),
       "propertyStatus": propertyStatus,
       "minPropertySize": minPropertySize,
       "maxPropertySize": maxPropertySize,
@@ -147,7 +136,7 @@ class PropertyData {
 
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map<String, dynamic> responseBody = json.decode(response.body);
-
+          print(responseBody);
           return responseBody;
         } else {
           return StatusRequest.serverfailure;

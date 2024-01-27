@@ -26,8 +26,9 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   MapListController mapListController = Get.put(MapListController());
-  FilterController filterController = Get.put(FilterController());
-  LoginControllerImp loginController = Get.put(LoginControllerImp());
+  FilterController filterController = Get.put(FilterController(), permanent: true);
+  LoginControllerImp loginController =
+      Get.put(LoginControllerImp(), permanent: true);
   GoogleMapController? mapController;
 
   bool userNotified = false;
@@ -37,6 +38,7 @@ class _MapWidgetState extends State<MapWidget>
 
   bool mapButtonSelected = false;
   bool drawButtonSelected = false;
+  bool locationButtonSelected = false;
   MapType currentMapType = MapType.normal;
   late BitmapDescriptor icon;
 
@@ -58,6 +60,7 @@ class _MapWidgetState extends State<MapWidget>
   }
 
   Future<void> whenCameraMove(CameraPosition position) async {
+     mapListController.isLoading = false;
     if (mapController == null) {
       return;
     }
@@ -84,6 +87,9 @@ class _MapWidgetState extends State<MapWidget>
 
     if (mounted) {
       setState(() {
+        mapListController.visibleMarkers.clear();
+        mapListController.visibleProperties.clear();
+
         if (position.zoom >= 10) {
           reciveGeocode(position.target);
           mapListController.visibleProperties = filterController
@@ -132,9 +138,6 @@ class _MapWidgetState extends State<MapWidget>
         if (locality != mapListController.currentLocationName.value &&
             locality != "") {
           mapListController.currentLocationName.value = locality;
-          // filterController.location.region = locality;
-          await filterController.getProperties();
-          print(mapListController.currentLocationName.value);
         }
       }
     } catch (e) {}
@@ -150,15 +153,13 @@ class _MapWidgetState extends State<MapWidget>
 
   void toggleLocationButton() {
     setState(() {
-      mapListController.locationButtonSelected =
-          !mapListController.locationButtonSelected;
+      locationButtonSelected = !locationButtonSelected;
     });
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 7), () {
       if (mounted) {
         setState(() {
-          mapListController.locationButtonSelected =
-              !mapListController.locationButtonSelected;
+          locationButtonSelected = !locationButtonSelected;
         });
       }
     });
@@ -306,36 +307,38 @@ class _MapWidgetState extends State<MapWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    // whenCameraMove(mapListController.currentPosition);
 
     return VisibilityDetector(
       key: const Key('Map'),
       onVisibilityChanged: (VisibilityInfo info) async {
+        mapListController.isLoading = true;
         if (info.visibleFraction == 1) {
           if (mapListController.firstload) {
             await mapListController.getCurrentPosition();
             mapListController.firstload = false;
           }
 
-          if (mapListController.isLoading) {
+          setState(() {});
+
+          await filterController.getProperties();
+          _timer = Timer(const Duration(seconds: 1), () {
             if (mounted) {
-              setState(() {});
+              setState(() {
+                mapListController.isLoading = false;
+              });
             }
+          });
 
-            _timer = Timer(const Duration(seconds: 1), () {
-              if (mounted) {
-                setState(() {
-                  mapListController.isLoading = false;
-                });
-              }
-            });
-
+          if (mapListController.isLoading == false) {
             whenCameraMove(mapListController.currentPosition);
+            setState(() {});
           }
         }
       },
       child: Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: mapListController.locationButtonSelected
+        floatingActionButton: locationButtonSelected
             ? SizedBox(
                 height: 40,
                 child: FloatingActionButton.extended(
@@ -343,7 +346,8 @@ class _MapWidgetState extends State<MapWidget>
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   onPressed: () async {
-                    Get.to(() => const ClosestProperties());
+                    locationButtonSelected = false;
+                    Get.off(() => const ClosestProperties());
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -430,7 +434,7 @@ class _MapWidgetState extends State<MapWidget>
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
                         onTap: () async {
-                          if (!mapListController.locationButtonSelected) {
+                          if (!locationButtonSelected) {
                             bool isLocationEnabled =
                                 await Geolocator.isLocationServiceEnabled();
 
@@ -458,14 +462,14 @@ class _MapWidgetState extends State<MapWidget>
                           height: 50,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: mapListController.locationButtonSelected
+                            color: locationButtonSelected
                                 ? Colors.black
                                 : Colors.white,
                           ),
                           child: Icon(
                             Icons.my_location,
                             size: 25,
-                            color: mapListController.locationButtonSelected
+                            color: locationButtonSelected
                                 ? Colors.white
                                 : Colors.black,
                           ),
@@ -510,7 +514,9 @@ class _MapWidgetState extends State<MapWidget>
 
   @override
   void dispose() {
-    mapController?.dispose();
+    locationButtonSelected = false;
+    drawButtonSelected = false;
+    mapButtonSelected = false;
     _timer.cancel();
     super.dispose();
   }

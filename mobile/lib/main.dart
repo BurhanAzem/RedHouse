@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/users_auth/signup_controller.dart';
 import 'package:client/core/services/network_controller.dart';
 import 'package:client/lawyer%20view/lawyer_bottom_bar.dart';

@@ -24,11 +24,12 @@ namespace server.Dtos.PropertyDtos
 
         public string? RentType { get; set; }
 
-
         public string? NumberOfBedRooms { get; set; }
         public string? NumberOfBathRooms { get; set; }
 
         public string? View { get; set; }
+
+        public string? ListingBy { get; set; }
 
         public string? ListingType { get; set; }
         public LocationFilterDto? LocationDto { get; set; }

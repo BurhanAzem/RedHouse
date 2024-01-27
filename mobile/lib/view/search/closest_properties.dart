@@ -120,6 +120,17 @@ class _ClosestPropertiesState extends State<ClosestProperties>
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
+         leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  Get.off(() => const BottomBar());
+                });
+              },
+            ),
         title: const Text(
           "Closest Properties",
           style: TextStyle(

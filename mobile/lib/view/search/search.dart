@@ -1,3 +1,4 @@
+import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/view/filter/filters_listview.dart';
 import 'package:client/view/search/list_widget.dart';
@@ -17,6 +18,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   int resultsCount = 0;
   MapListController controller = Get.put(MapListController());
+  FilterController filterController = Get.put(FilterController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {

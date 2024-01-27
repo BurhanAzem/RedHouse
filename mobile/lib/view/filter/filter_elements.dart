@@ -15,18 +15,12 @@ class FilterElements extends StatefulWidget {
 
 class _RentFilterState extends State<FilterElements> {
   MapListController mapListController = Get.put(MapListController());
-  FilterController controller = Get.put(FilterController());
+  FilterController controller = Get.put(FilterController(), permanent: true);
   late bool house;
   late bool apartment;
   late bool townhouse;
   late bool castle;
   late bool department;
-
-  @override
-  void initState() {
-    super.initState();
-    print(controller.listingType);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +37,7 @@ class _RentFilterState extends State<FilterElements> {
       "Any",
       "Agent",
       "Landlord",
+      "Customer",
     ];
 
     const rentType = [
@@ -50,6 +45,34 @@ class _RentFilterState extends State<FilterElements> {
       "For daily",
       "For monthly",
     ];
+
+    String formatPropertyTypes() {
+      if (controller.houseTemp &&
+          controller.apartmentTemp &&
+          controller.townhouseTemp &&
+          controller.castleTemp &&
+          controller.departmentTemp) {
+        return 'Any';
+      } else {
+        List<String> selectedTypes = [];
+        if (controller.houseTemp) {
+          selectedTypes.add('House');
+        }
+        if (controller.apartmentTemp) {
+          selectedTypes.add('Apartment Unit');
+        }
+        if (controller.townhouseTemp) {
+          selectedTypes.add('Townhouse');
+        }
+        if (controller.castleTemp) {
+          selectedTypes.add('Castle');
+        }
+        if (controller.departmentTemp) {
+          selectedTypes.add('Entire Department');
+        }
+        return selectedTypes.join(', ');
+      }
+    }
 
     return GetBuilder<FilterController>(
         init: FilterController(),
@@ -154,7 +177,7 @@ class _RentFilterState extends State<FilterElements> {
                                   )),
                               Container(height: 4),
                               Text(
-                                " Any",
+                                formatPropertyTypes(),
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.grey[700],
@@ -513,7 +536,11 @@ class _RentFilterState extends State<FilterElements> {
                             snackStyle: SnackStyle.GROUNDED,
                           );
                         } else {
-                          controller.listingType = false;
+                          if (controller.tabType == false) {
+                            controller.listingType = false;
+                          } else {
+                            controller.listingType = true;
+                          }
 
                           // Property type
                           controller.house = controller.houseTemp;
@@ -566,14 +593,12 @@ class _RentFilterState extends State<FilterElements> {
                               controller.yearBuiltMinTemp.text;
 
                           // // //
-                          controller.formatPriceRange(
-                            controller.minController,
-                            controller.maxController,
-                          );
+                          controller.formatPriceRange();
                           controller.formatBedBath();
+                          controller.formatPropertyTypes();
                           controller.checkFiltersON();
                           controller.getProperties();
-                          mapListController.isLoading = true;
+                          // mapListController.isLoading = true;
 
                           Navigator.pop(context);
                         }

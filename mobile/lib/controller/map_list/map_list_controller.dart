@@ -14,7 +14,6 @@ class MapListController extends GetxController {
   bool firstload = true;
   bool isListIcon = true;
   int selectedValue = 1;
-  bool locationButtonSelected = false;
 
   rearrangeProperties() {
     // Sort properties based on selected sort option
