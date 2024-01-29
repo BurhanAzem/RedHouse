@@ -6,6 +6,7 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:client/view/search/closest_properties.dart';
+import 'package:client/view/search/tracking.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
@@ -26,7 +27,8 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget>
     with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   MapListController mapListController = Get.put(MapListController());
-  FilterController filterController = Get.put(FilterController(), permanent: true);
+  FilterController filterController =
+      Get.put(FilterController(), permanent: true);
   LoginControllerImp loginController =
       Get.put(LoginControllerImp(), permanent: true);
   GoogleMapController? mapController;
@@ -37,7 +39,7 @@ class _MapWidgetState extends State<MapWidget>
   late Timer _timer;
 
   bool mapButtonSelected = false;
-  bool drawButtonSelected = false;
+  bool trackingButtonSelected = false;
   bool locationButtonSelected = false;
   MapType currentMapType = MapType.normal;
   late BitmapDescriptor icon;
@@ -60,7 +62,7 @@ class _MapWidgetState extends State<MapWidget>
   }
 
   Future<void> whenCameraMove(CameraPosition position) async {
-     mapListController.isLoading = false;
+    mapListController.isLoading = false;
     if (mapController == null) {
       return;
     }
@@ -165,9 +167,17 @@ class _MapWidgetState extends State<MapWidget>
     });
   }
 
-  void toggleDrawButton() {
+  void toggleTrackingButton() {
     setState(() {
-      drawButtonSelected = !drawButtonSelected;
+      trackingButtonSelected = !trackingButtonSelected;
+    });
+
+    Timer(const Duration(seconds: 7), () {
+      if (mounted) {
+        setState(() {
+          trackingButtonSelected = !trackingButtonSelected;
+        });
+      }
     });
   }
 
@@ -319,7 +329,9 @@ class _MapWidgetState extends State<MapWidget>
             mapListController.firstload = false;
           }
 
-          setState(() {});
+          if (mounted) {
+            setState(() {});
+          }
 
           await filterController.getProperties();
           _timer = Timer(const Duration(seconds: 1), () {
@@ -355,7 +367,24 @@ class _MapWidgetState extends State<MapWidget>
                   label: const Text("Give my closest properties"),
                 ),
               )
-            : null,
+            : trackingButtonSelected
+                ? SizedBox(
+                    height: 40,
+                    child: FloatingActionButton.extended(
+                      heroTag: "btn1",
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      onPressed: () async {
+                        trackingButtonSelected = false;
+                        Get.off(() => const TrackingLocation());
+                      },
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      label: const Text("Tracking my location"),
+                    ),
+                  )
+                : null,
 
         // Body
         body: Stack(
@@ -373,12 +402,8 @@ class _MapWidgetState extends State<MapWidget>
                 zoomControlsEnabled: true,
                 mapType: currentMapType,
                 initialCameraPosition: mapListController.currentPosition,
-                onMapCreated: (controller) {
-                  if (mounted) {
-                    setState(() {
-                      mapController = controller;
-                    });
-                  }
+                onMapCreated: (newcontroller) {
+                  mapController = newcontroller;
 
                   mapController?.animateCamera(
                     CameraUpdate.newLatLngZoom(
@@ -428,6 +453,8 @@ class _MapWidgetState extends State<MapWidget>
                       ),
                     ),
                     const SizedBox(height: 10),
+
+                    // MyLocation Button
                     Material(
                       elevation: 4,
                       shape: const CircleBorder(),
@@ -477,25 +504,50 @@ class _MapWidgetState extends State<MapWidget>
                       ),
                     ),
                     const SizedBox(height: 10),
+
+                    // Car Button
                     Material(
                       elevation: 4,
                       shape: const CircleBorder(),
                       clipBehavior: Clip.antiAlias,
                       child: InkWell(
-                        onTap: toggleDrawButton,
+                        onTap: () async {
+                          if (!trackingButtonSelected) {
+                            bool isLocationEnabled =
+                                await Geolocator.isLocationServiceEnabled();
+
+                            if (!isLocationEnabled) {
+                              isLocationEnabled =
+                                  await Geolocator.openLocationSettings();
+                            }
+
+                            setState(() {
+                              toggleTrackingButton();
+                            });
+
+                            await mapListController.getCurrentPosition();
+
+                            mapController!.animateCamera(
+                              CameraUpdate.newLatLngZoom(
+                                mapListController.currentPosition.target,
+                                15,
+                              ),
+                            );
+                          }
+                        },
                         child: Container(
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: drawButtonSelected
+                            color: trackingButtonSelected
                                 ? Colors.black
                                 : Colors.white,
                           ),
                           child: Icon(
                             FontAwesomeIcons.car,
                             size: 20,
-                            color: drawButtonSelected
+                            color: trackingButtonSelected
                                 ? Colors.white
                                 : Colors.black,
                           ),
@@ -515,7 +567,7 @@ class _MapWidgetState extends State<MapWidget>
   @override
   void dispose() {
     locationButtonSelected = false;
-    drawButtonSelected = false;
+    trackingButtonSelected = false;
     mapButtonSelected = false;
     _timer.cancel();
     super.dispose();

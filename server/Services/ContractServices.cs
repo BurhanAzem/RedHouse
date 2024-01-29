@@ -19,10 +19,29 @@ namespace server.Services
             throw new NotImplementedException();
         }
 
-        public Task<ResponsDto<Contract>> DeleteContract(int contractId)
+        public async Task<ResponsDto<Contract>> DeleteContract(int contractId)
         {
-            throw new NotImplementedException();
+            var contract = await _redHouseDbContext.Contracts.FindAsync(contractId);
+
+            if (contract == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"Contract with {contractId} Does Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            _redHouseDbContext.Contracts.Remove(contract);
+            _redHouseDbContext.SaveChanges();
+
+            return new ResponsDto<Contract>
+            {
+                Exception = new Exception($"Contract with {contractId} Deleted successfully"),
+                StatusCode = HttpStatusCode.OK,
+            };
         }
+
 
         public Task<ResponsDto<Contract>> GetAllContracts()
         {
@@ -31,8 +50,8 @@ namespace server.Services
 
         public async Task<ResponsDto<Contract>> GetAllContractsForUser(int userId, ContractFilter contractFilter)
         {
-            var query = _redHouseDbContext.Contracts.Include(c => c.Offer.Landlord).Include(c => c.Offer.Customer).Include(c => c.Offer.Property).AsQueryable();
-            
+            var query = _redHouseDbContext.Contracts.Include(c => c.Lawyer).Include(c => c.Offer.Landlord).Include(c => c.Offer.Customer).Include(c => c.Offer.Property).Include(c => c.Offer.Property.User).Include(c => c.Offer.Property.propertyFiles).Include(c => c.Offer.Property.Location).AsQueryable();
+
             if (contractFilter.ContractTo.Trim() == "Landlord")
             {
                 query = query.Where(c => c.Offer.LandlordId == userId);
@@ -84,10 +103,45 @@ namespace server.Services
             return await _redHouseDbContext.Contracts.CountAsync();
         }
 
-        public Task<ResponsDto<Contract>> UpdateContract(ContractDto contractDto, int contractId)
+        public async Task<ResponsDto<Contract>> UpdateContract(UpdateContractDto contractDto, int contractId)
         {
-            throw new NotImplementedException();
+            var contract = await _redHouseDbContext.Contracts
+                .FirstOrDefaultAsync(c => c.Id == contractId);
+
+            if (contract == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception("Contract Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
+            if (contractDto.ContractStatus != null)
+            {
+                contract.ContractStatus = contractDto.ContractStatus;
+            }
+
+            if (contractDto.Earnings != null)
+            {
+                contract.Earnings = (double)contractDto.Earnings;
+            }
+
+            if (contractDto.IsShouldPay != null)
+            {
+                contract.IsShouldPay = (int)contractDto.IsShouldPay;
+            }
+
+            _redHouseDbContext.SaveChanges();
+
+            return new ResponsDto<Contract>
+            {
+                Dto = contract,
+                Message = "Contract updated successfully",
+                StatusCode = HttpStatusCode.OK,
+            };
         }
+
 
         public async Task<ResponsDto<Contract>> FilterContracts(SearchDto searchDto)
         {
@@ -201,15 +255,6 @@ namespace server.Services
 
         public async Task<ResponsDto<Contract>> AddLawerToContract(int contractId, int lawerId)
         {
-            var user = await _redHouseDbContext.Users.FindAsync(lawerId);
-            if (user == null)
-            {
-                return new ResponsDto<Contract>
-                {
-                    Exception = new Exception($"User with {lawerId} Dose Not Exist"),
-                    StatusCode = HttpStatusCode.BadRequest,
-                };
-            }
             var contract = await _redHouseDbContext.Contracts.FindAsync(contractId);
             if (contract == null)
             {
@@ -219,6 +264,30 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
+
+            if (lawerId == 0)
+            {
+                contract.LawyerId = null;
+                _redHouseDbContext.Contracts.Update(contract);
+                await _redHouseDbContext.SaveChangesAsync();
+
+                return new ResponsDto<Contract>
+                {
+                    Message = "Lawyer deleted successfully",
+                    StatusCode = HttpStatusCode.OK,
+                };
+            }
+
+            var user = await _redHouseDbContext.Users.FindAsync(lawerId);
+            if (user == null)
+            {
+                return new ResponsDto<Contract>
+                {
+                    Exception = new Exception($"User with {lawerId} Dose Not Exist"),
+                    StatusCode = HttpStatusCode.BadRequest,
+                };
+            }
+
             contract.LawyerId = lawerId;
             _redHouseDbContext.Contracts.Update(contract);
             await _redHouseDbContext.SaveChangesAsync();
@@ -228,5 +297,72 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+        //         public async Task<ResponsDto<Contract>> AddLawerToContract(int contractId, int lawerId)
+        // {
+        //     if (lawerId == 0)
+        //     {
+        //         var contract = await _redHouseDbContext.Contracts.FindAsync(contractId);
+        //         if (contract == null)
+        //         {
+        //             return new ResponsDto<Contract>
+        //             {
+        //                 Exception = new Exception($"Contract with {contractId} Does Not Exist"),
+        //                 StatusCode = HttpStatusCode.BadRequest,
+        //             };
+        //         }
+
+        //         contract.LawyerId = null;
+        //         _redHouseDbContext.Contracts.Update(contract);
+        //         await _redHouseDbContext.SaveChangesAsync();
+
+        //         return new ResponsDto<Contract>
+        //         {
+        //             Message = "Lawyer added successfully",
+        //             StatusCode = HttpStatusCode.OK,
+        //         };
+        //     }
+
+        //     var user = await _redHouseDbContext.Users.FindAsync(lawerId);
+        //     if (user == null)
+        //     {
+        //         return new ResponsDto<Contract>
+        //         {
+        //             Exception = new Exception($"User with {lawerId} Does Not Exist"),
+        //             StatusCode = HttpStatusCode.BadRequest,
+        //         };
+        //     }
+
+        //     var contractWithSameLawyer = await _redHouseDbContext.Contracts.FirstOrDefaultAsync(c => c.LawyerId == lawerId);
+        //     if (contractWithSameLawyer != null)
+        //     {
+        //         return new ResponsDto<Contract>
+        //         {
+        //             Exception = new Exception($"User with ID {lawerId} is already associated with another contract"),
+        //             StatusCode = HttpStatusCode.BadRequest,
+        //         };
+        //     }
+
+        //     var contract = await _redHouseDbContext.Contracts.FindAsync(contractId);
+        //     if (contract == null)
+        //     {
+        //         return new ResponsDto<Contract>
+        //         {
+        //             Exception = new Exception($"Contract with {contractId} Does Not Exist"),
+        //             StatusCode = HttpStatusCode.BadRequest,
+        //         };
+        //     }
+
+        //     contract.LawyerId = lawerId;
+        //     _redHouseDbContext.Contracts.Update(contract);
+        //     await _redHouseDbContext.SaveChangesAsync();
+
+        //     return new ResponsDto<Contract>
+        //     {
+        //         Message = "Lawyer added successfully",
+        //         StatusCode = HttpStatusCode.OK,
+        //     };
+        // }
+
     }
 }

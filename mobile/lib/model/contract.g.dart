@@ -23,6 +23,10 @@ Contract _$ContractFromJson(Map<String, dynamic> json) => Contract(
       milestones: (json['milestones'] as List<dynamic>?)
           ?.map((e) => Milestone.fromJson(e as Map<String, dynamic>))
           .toList(),
+      lawyerId: json['lawyerId'] as int?,
+      lawyer: json['lawyer'] == null
+          ? null
+          : User.fromJson(json['lawyer'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ContractToJson(Contract instance) => <String, dynamic>{

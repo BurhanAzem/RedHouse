@@ -37,15 +37,6 @@ class _EditProfileState extends State<EditProfile> {
     controller.phoneNumber.text = userDto["phoneNumber"].toString();
   }
 
-  // loadData() {
-  //   controller.email.text = userDto["email"];
-  //   controller.password.text = "11111Aa!";
-  //   controller.firstName.text = userDto["name"];
-  //   controller.postalCode.text =
-  //       userDto["locationId"].toString().padLeft(4, "${userDto["locationId"]}");
-  //   controller.phoneNumber.text = userDto["phoneNumber"].toString();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,7 +105,22 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 10),
+                Text(
+                  userDto["name"] ?? "",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                Text(
+                  userDto["email"] ?? "",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 17,
+                  ),
+                ),
+                const SizedBox(height: 75),
 
                 // FIELDS
                 TextFormField(
@@ -260,7 +266,7 @@ class _EditProfileState extends State<EditProfile> {
                         await controller.updateUser(userDto["id"]);
                         await controller.getUser(userDto["id"]);
                         userDto = json.decode(sharepref.getString("user")!);
-                        
+
                         controller.email.text = userDto["email"];
                         controller.firstName.text = userDto["name"];
                         controller.phoneNumber.text =

@@ -337,10 +337,9 @@ class _HomeInformationState extends State<HomeInformation> {
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 35),
 
                       // Container
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: Column(
@@ -380,11 +379,10 @@ class _HomeInformationState extends State<HomeInformation> {
                                   const TextSpan(
                                     text: 'bathrooms,  ',
                                     style: TextStyle(
-                                        fontSize: 19,
-                                        // color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        color:
-                                            Color.fromARGB(255, 196, 39, 27)),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
                                   ),
                                   TextSpan(
                                     text:
@@ -392,7 +390,6 @@ class _HomeInformationState extends State<HomeInformation> {
                                     style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
-                                        // color: Colors.white,
                                         color: Color.fromARGB(255, 0, 0, 0)),
                                   ),
                                   const TextSpan(
@@ -400,7 +397,6 @@ class _HomeInformationState extends State<HomeInformation> {
                                     style: TextStyle(
                                         fontSize: 19,
                                         fontWeight: FontWeight.w700,
-                                        // color: Colors.white,
                                         color:
                                             Color.fromARGB(255, 196, 39, 27)),
                                   ),
@@ -411,7 +407,7 @@ class _HomeInformationState extends State<HomeInformation> {
                         ),
                       ),
 
-                      const SizedBox(height: 35),
+                      const SizedBox(height: 30),
                       Row(
                         children: [
                           Row(
@@ -824,7 +820,7 @@ class _HomeInformationState extends State<HomeInformation> {
                               fontWeight: FontWeight.w500),
                         ),
                         TextSpan(
-                          text: widget.property.user!.userRole,
+                          text: widget.property.listingBy,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -965,7 +961,7 @@ class _HomeInformationState extends State<HomeInformation> {
                                   ? filterController.flSpotListRent
                                   : filterController.flSpotListSell,
                           color: const Color.fromARGB(255, 148, 104, 101),
-                          isCurved: true,
+                          isCurved: false,
                           barWidth: 3,
                           isStrokeCapRound: true,
                           dotData: const FlDotData(show: false),

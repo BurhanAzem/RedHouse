@@ -282,7 +282,7 @@ namespace RedHouse_Server.Migrations
                     b.Property<int>("IsShouldPay")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LawerId")
+                    b.Property<int?>("LawyerId")
                         .HasColumnType("int");
 
                     b.Property<int>("OfferId")
@@ -293,7 +293,7 @@ namespace RedHouse_Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LawerId");
+                    b.HasIndex("LawyerId");
 
                     b.HasIndex("OfferId");
 
@@ -892,9 +892,9 @@ namespace RedHouse_Server.Migrations
 
             modelBuilder.Entity("RedHouse_Server.Models.Contract", b =>
                 {
-                    b.HasOne("RedHouse_Server.Models.User", "Lawer")
+                    b.HasOne("RedHouse_Server.Models.User", "Lawyer")
                         .WithMany()
-                        .HasForeignKey("LawerId");
+                        .HasForeignKey("LawyerId");
 
                     b.HasOne("server.Models.Offer", "Offer")
                         .WithMany()
@@ -902,7 +902,7 @@ namespace RedHouse_Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Lawer");
+                    b.Navigation("Lawyer");
 
                     b.Navigation("Offer");
                 });

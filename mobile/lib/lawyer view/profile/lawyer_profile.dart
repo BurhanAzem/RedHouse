@@ -1,16 +1,19 @@
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/lawyer%20view/lawyer_complints.dart';
-import 'package:client/lawyer%20view/profile/edit_profile.dart';
+import 'package:client/lawyer%20view/profile/lawyer_edit_profile.dart';
 import 'package:client/main.dart';
 import 'package:client/view/more/my_feedback.dart';
-import 'package:client/view/more/profile/edit_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class LawyerProfile extends StatelessWidget {
+class LawyerProfile extends StatefulWidget {
   const LawyerProfile({super.key});
 
+  @override
+  State<LawyerProfile> createState() => _LawyerProfileState();
+}
+
+class _LawyerProfileState extends State<LawyerProfile> {
   @override
   Widget build(BuildContext context) {
     LoginControllerImp loginController = Get.put(LoginControllerImp());

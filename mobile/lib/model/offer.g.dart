@@ -23,12 +23,12 @@ Offer _$OfferFromJson(Map<String, dynamic> json) => Offer(
       customer: json['customer'] == null
           ? null
           : User.fromJson(json['customer'] as Map<String, dynamic>),
-      userCreated: json['userCreated'] == null
-          ? null
-          : User.fromJson(json['userCreated'] as Map<String, dynamic>),
       property: json['property'] == null
           ? null
           : Property.fromJson(json['property'] as Map<String, dynamic>),
+      userCreated: json['userCreated'] == null
+          ? null
+          : User.fromJson(json['userCreated'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$OfferToJson(Offer instance) => <String, dynamic>{

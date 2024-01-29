@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/lawyer%20view/lawyer_complints.dart';
 import 'package:client/lawyer%20view/lawyer_contracts.dart';
 import 'package:client/lawyer%20view/messages/messages_page.dart';
-import 'package:client/lawyer%20view/profile/profile.dart';
+import 'package:client/lawyer%20view/profile/lawyer_profile.dart';
 import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

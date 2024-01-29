@@ -31,12 +31,11 @@ class _LocationListTileState extends State<LocationListTile> {
 
             LatLng centerCoordinates =
                 LatLng(widget.location.latitude, widget.location.longitude);
-            print(centerCoordinates);
 
             setState(() {
               mapListController.currentPosition = CameraPosition(
                 target: centerCoordinates,
-                zoom: 10,
+                zoom: 16,
               );
             });
 

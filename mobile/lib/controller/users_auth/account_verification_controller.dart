@@ -1,5 +1,6 @@
 import 'package:client/core/class/statusrequest.dart';
 import 'package:client/data/users_auth.dart';
+import 'package:client/model/verification.dart';
 import 'package:get/get.dart';
 
 class AccountVerificationController extends GetxController {
@@ -8,9 +9,9 @@ class AccountVerificationController extends GetxController {
   String personal = "";
   List<String> downloadUrls = [];
   StatusRequest statusRequest = StatusRequest.loading;
+  Verification? userVerification;
 
-  @override
-  VerifyAccount() async {
+  verifyAccount() async {
     downloadUrls.add(cardID);
     downloadUrls.add(personal);
     statusRequest = StatusRequest.loading;
@@ -24,6 +25,23 @@ class AccountVerificationController extends GetxController {
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
       statusRequest = StatusRequest.failure;
+    }
+  }
+
+  getUserVerification(int userId) async {
+    var response = await UserData.getUserVerification(userId);
+    print(response);
+
+    if (response['statusCode'] == 200) {
+      userVerification =
+          Verification.fromJson(response['dto'] as Map<String, dynamic>);
+      print(response['dto']);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
     }
   }
 }

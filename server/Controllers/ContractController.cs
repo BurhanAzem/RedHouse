@@ -152,7 +152,7 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpPut("/contracts/{id}")]
-        public async Task<IActionResult> UpdateContract([FromBody] ContractDto contractDto, int id)
+        public async Task<IActionResult> UpdateContract([FromBody] UpdateContractDto contractDto, int id)
         {
             if (!ModelState.IsValid)
             {

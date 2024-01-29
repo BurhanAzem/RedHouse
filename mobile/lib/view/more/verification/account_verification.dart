@@ -112,7 +112,7 @@ class _AccountVerificationState extends State<AccountVerification>
     Map<String, dynamic> userDto = json.decode(userDtoJson ?? "{}");
     controller.userId = userDto["id"];
 
-    controller.VerifyAccount();
+    controller.verifyAccount();
     signUpController.updateUserVerified(userDto["id"], true);
     userDto["isVerified"] = true;
     String updatedUserDtoJson = jsonEncode(userDto);

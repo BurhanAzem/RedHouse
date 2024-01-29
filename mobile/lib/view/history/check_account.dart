@@ -1,7 +1,7 @@
 import 'package:client/controller/history/history_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/user.dart';
-import 'package:client/view/history/user_history_wdget.dart';
+import 'package:client/view/history/user_history_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

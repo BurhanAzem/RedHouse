@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/main.dart';
 import 'package:client/view/more/upgrade/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class AccountUpgrade extends StatefulWidget {
   const AccountUpgrade({Key? key}) : super(key: key);
@@ -11,17 +15,21 @@ class AccountUpgrade extends StatefulWidget {
   State<AccountUpgrade> createState() => _AccountUpgradeState();
 }
 
-class _AccountUpgradeState extends State<AccountUpgrade> {
+class _AccountUpgradeState extends State<AccountUpgrade>
+    with AutomaticKeepAliveClientMixin {
   int selectedCardIndex = 0; // Track the index of the selected card
-  LoginControllerImp loginController = Get.put(LoginControllerImp());
+  Map<String, dynamic> userDto = json.decode(sharepref.getString("user")!);
+
+  @override
+  bool get wantKeepAlive => true; // Keep the state alive
 
   @override
   void initState() {
-    if (loginController.userDto?["userRole"] == "Customer") {
+    if (userDto["userRole"] == "Customer") {
       selectedCardIndex = 1;
-    } else if (loginController.userDto?["userRole"] == "Landlord") {
+    } else if (userDto["userRole"] == "Landlord") {
       selectedCardIndex = 2;
-    } else if (loginController.userDto?["userRole"] == "Agent") {
+    } else if (userDto["userRole"] == "Agent") {
       selectedCardIndex = 3;
     }
     super.initState();
@@ -29,59 +37,77 @@ class _AccountUpgradeState extends State<AccountUpgrade> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          "Account Upgrade",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 19,
-            fontWeight: FontWeight.w600,
+    super.build(context);
+
+    return VisibilityDetector(
+      key: const Key('accountupgrade'),
+      onVisibilityChanged: (info) {
+        if (info.visibleFraction == 1) {
+          userDto = json.decode(sharepref.getString("user")!);
+          if (userDto["userRole"] == "Customer") {
+            selectedCardIndex = 1;
+          } else if (userDto["userRole"] == "Landlord") {
+            selectedCardIndex = 2;
+          } else if (userDto["userRole"] == "Agent") {
+            selectedCardIndex = 3;
+          }
+          setState(() {});
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          title: const Text(
+            "Account Upgrade",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 19,
+              fontWeight: FontWeight.w600,
+            ),
           ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: CardWidget(
-                    index: 0,
-                    selectedCardIndex: selectedCardIndex,
-                    isSelected: selectedCardIndex == 0,
+        body: Center(
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: CardWidget(
+                      index: 0,
+                      selectedCardIndex: selectedCardIndex,
+                      isSelected: selectedCardIndex == 0,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: CardWidget(
-                    index: 1,
-                    selectedCardIndex: selectedCardIndex,
-                    isSelected: selectedCardIndex == 1,
+                  SizedBox(
+                    width: double.infinity,
+                    child: CardWidget(
+                      index: 1,
+                      selectedCardIndex: selectedCardIndex,
+                      isSelected: selectedCardIndex == 1,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: CardWidget(
-                    index: 2,
-                    selectedCardIndex: selectedCardIndex,
-                    isSelected: selectedCardIndex == 2,
+                  SizedBox(
+                    width: double.infinity,
+                    child: CardWidget(
+                      index: 2,
+                      selectedCardIndex: selectedCardIndex,
+                      isSelected: selectedCardIndex == 2,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: CardWidget(
-                    index: 3,
-                    selectedCardIndex: selectedCardIndex,
-                    isSelected: selectedCardIndex == 3,
+                  SizedBox(
+                    width: double.infinity,
+                    child: CardWidget(
+                      index: 3,
+                      selectedCardIndex: selectedCardIndex,
+                      isSelected: selectedCardIndex == 3,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -167,7 +193,9 @@ class CardWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 onPressed: () {
-                  Get.to(() => const Payment());
+                  Get.to(() => Payment(
+                        selectedCardIndex: index,
+                      ));
                 },
                 minWidth: 200,
                 height: 40,

@@ -1,11 +1,9 @@
 import 'package:client/controller/map_list/map_list_controller.dart';
 import 'package:client/controller/static_api/static_controller.dart';
 import 'package:client/model/property.dart';
-import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/home_information/home_information.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class PropertyListTile extends StatefulWidget {
   final Property property;

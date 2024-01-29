@@ -124,6 +124,26 @@ class UserData {
     }
   }
 
+  static getUserVerification(int id) async {
+    if (await checkInternet()) {
+      var response = await http.get(Uri.parse('${AppLink.userIdentities}/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}',
+          });
+      print(response);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
   static Future<dynamic> updateUser(
     int userId,
     String name,
@@ -228,6 +248,56 @@ class UserData {
           return StatusRequest.serverfailure;
         }
       } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> getListAutoCompleteLawyer(String query) async {
+    final Map<String, dynamic> filters = {
+      "query": query,
+    };
+
+    if (await checkInternet()) {
+      final Uri uri = Uri.https("10.0.2.2:7042", "/lawyers", filters);
+
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+
+        return (responsebody);
+      } else {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
+
+  static Future<dynamic> getListAutoCompleteAgent(String query) async {
+    final Map<String, dynamic> filters = {
+      "query": query,
+    };
+
+    if (await checkInternet()) {
+      final Uri uri = Uri.https("10.0.2.2:7042", "/agents", filters);
+
+      var response = await http.get(uri, headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${getToken()}',
+      });
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Map responsebody = json.decode(response.body);
+
+        return (responsebody);
+      } else {
         return StatusRequest.serverfailure;
       }
     } else {

@@ -314,16 +314,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                       Text(
                         "ZIP / ${divideCodeIntoGroups(widget.property.propertyCode)}",
                         style: const TextStyle(
-                          fontSize: 16,
+                          fontSize: 19,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 0, 0, 0),
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 25),
+                      const SizedBox(height: 35),
 
                       // Container
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: Column(
@@ -363,11 +362,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                                   const TextSpan(
                                     text: 'bathrooms,  ',
                                     style: TextStyle(
-                                        fontSize: 19,
-                                        // color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        color:
-                                            Color.fromARGB(255, 196, 39, 27)),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w700,
+                                      color: Color.fromARGB(255, 196, 39, 27),
+                                    ),
                                   ),
                                   TextSpan(
                                     text:
@@ -375,7 +373,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.w500,
-                                        // color: Colors.white,
                                         color: Color.fromARGB(255, 0, 0, 0)),
                                   ),
                                   const TextSpan(
@@ -383,7 +380,6 @@ class _HomeWidgetState extends State<HomeWidget> {
                                     style: TextStyle(
                                         fontSize: 19,
                                         fontWeight: FontWeight.w700,
-                                        // color: Colors.white,
                                         color:
                                             Color.fromARGB(255, 196, 39, 27)),
                                   ),
@@ -394,7 +390,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                         ),
                       ),
 
-                      const SizedBox(height: 35),
+                      const SizedBox(height: 30),
                       Row(
                         children: [
                           Row(
@@ -948,7 +944,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                                   ? filterController.flSpotListRent
                                   : filterController.flSpotListSell,
                           color: const Color.fromARGB(255, 148, 104, 101),
-                          isCurved: true,
+                          isCurved: false,
                           barWidth: 3,
                           isStrokeCapRound: true,
                           dotData: const FlDotData(show: false),

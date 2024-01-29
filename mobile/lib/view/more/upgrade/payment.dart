@@ -1,22 +1,33 @@
+import 'dart:convert';
 import 'package:client/controller/booking/booking_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/controller/users_auth/signup_controller.dart';
+import 'package:client/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class Payment extends StatefulWidget {
-  const Payment({Key? key}) : super(key: key);
+  final int selectedCardIndex;
+  const Payment({
+    Key? key,
+    required this.selectedCardIndex,
+  }) : super(key: key);
 
   @override
   State<Payment> createState() => _PaymentState();
 }
 
 class _PaymentState extends State<Payment> {
-  LoginControllerImp loginController = Get.put(LoginControllerImp());
   BookingController bookingController = Get.put(BookingController());
+  SignUpControllerImp controller =
+      Get.put(SignUpControllerImp(), permanent: true);
+  Map<String, dynamic> userDto = json.decode(sharepref.getString("user")!);
   int cardType = 1;
   bool checkStep1 = false;
+
+
 
   void handleRadio(Object? e) => setState(() {
         cardType = e as int;
@@ -508,7 +519,7 @@ class _PaymentState extends State<Payment> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   // Remove any non-digit characters
                   String sanitizedValue = bookingController.cardNumber.text
                       .replaceAll(RegExp(r'\D'), '');
@@ -521,10 +532,33 @@ class _PaymentState extends State<Payment> {
                       checkStep1 = true;
                     });
                   } else {
-                    setState(() {
-                      checkStep1 = false;
-                    });
-                    // continueStep();
+                  setState(() {
+                    checkStep1 = false;
+                  });
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  SnackBar snackBar = const SnackBar(
+                    content: Text("Upgrade Successfully"),
+                    backgroundColor: Colors.blue,
+                  );
+
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  if (widget.selectedCardIndex == 1) {
+                    controller.userRole = "Customer";
+                  } else if (widget.selectedCardIndex == 2) {
+                    controller.userRole = "Landlord";
+                  } else {
+                    controller.userRole = "Agent";
+                  }
+                  await controller.updateUserScore(userDto["id"]);
+                  await controller.getUser(userDto["id"]);
+                  userDto = json.decode(sharepref.getString("user")!);
+
+                  controller.email.text = userDto["email"];
+                  controller.firstName.text = userDto["name"];
+                  controller.phoneNumber.text =
+                      userDto["phoneNumber"].toString();
+                  Navigator.pop(context);
+
                   }
                 },
                 child: const Text(

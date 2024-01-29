@@ -17,6 +17,6 @@ namespace server.Services
         public Task<ResponsDto<Milestone>> GetMilestone(int milestoneId);
         public Task<ResponsDto<Milestone>> DeleteMilestone(int contractId);
         public Task<ResponsDto<Milestone>> ApproveMilestone(int milestoneId);
-        public Task<ResponsDto<Milestone>> UpdateMilestone(MilestoneDto contractDto, int milestoneId);
+        public Task<ResponsDto<Contract>> UpdateMilestone(UpdateMilestoneDto milestoneDto, int milestoneId);
     }
 }

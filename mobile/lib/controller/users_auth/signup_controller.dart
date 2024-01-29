@@ -20,6 +20,8 @@ class SignUpControllerImp extends GetxController {
 
   GlobalKey<FormState> formstateRegister = GlobalKey<FormState>();
   GlobalKey<FormState> formstateUpdate = GlobalKey<FormState>();
+  List<User> listAutoCompleteLawyer = [];
+  List<User> listAutoCompleteAgent = [];
 
   @override
   void onInit() {
@@ -85,6 +87,7 @@ class SignUpControllerImp extends GetxController {
     );
 
     if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+      print(response);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -117,6 +120,40 @@ class SignUpControllerImp extends GetxController {
             User.fromJson(response['dto'] as Map<String, dynamic>).toJson()),
       );
       print(sharepref.getString("user"));
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  getListAutoCompleteLawyer(String query) async {
+    query = query.isEmpty ? "*" : query;
+    var response = await UserData.getListAutoCompleteLawyer(query);
+
+    if (response['statusCode'] == 200) {
+      listAutoCompleteLawyer = (response['listDto'] as List<dynamic>)
+          .map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  getListAutoCompleteAgent(String query) async {
+    query = query.isEmpty ? "*" : query;
+    var response = await UserData.getListAutoCompleteAgent(query);
+
+    if (response['statusCode'] == 200) {
+      listAutoCompleteAgent = (response['listDto'] as List<dynamic>)
+          .map((e) => User.fromJson(e as Map<String, dynamic>))
+          .toList();
     } else {
       Get.defaultDialog(
         title: "Error",

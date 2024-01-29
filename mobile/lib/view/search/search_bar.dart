@@ -375,7 +375,7 @@ class CustomSearch extends SearchDelegate {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  "Move to the property",
+                                  "Tracking my location",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 17),

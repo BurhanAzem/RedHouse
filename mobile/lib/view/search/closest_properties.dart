@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'dart:async';
 import 'package:client/controller/bottom_bar/filter_controller.dart';
 import 'package:client/controller/propertise/properties_controller.dart';
@@ -31,7 +33,6 @@ class _ClosestPropertiesState extends State<ClosestProperties>
   PageController _pageController = PageController();
 
   CameraPosition? currentPosition;
-  MapType currentMapType = MapType.normal;
   GoogleMapController? mapController;
 
   late BitmapDescriptor icon;
@@ -120,17 +121,17 @@ class _ClosestPropertiesState extends State<ClosestProperties>
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-         leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                setState(() {
-                  Get.off(() => const BottomBar());
-                });
-              },
-            ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            setState(() {
+              Get.off(() => const BottomBar());
+            });
+          },
+        ),
         title: const Text(
           "Closest Properties",
           style: TextStyle(
@@ -192,7 +193,7 @@ class _ClosestPropertiesState extends State<ClosestProperties>
     if (currentPosition != null) {
       return Expanded(
         child: GoogleMap(
-          mapType: currentMapType,
+          mapType: MapType.normal,
           initialCameraPosition: currentPosition!,
           onMapCreated: (controller) {
             mapController = controller;
@@ -202,12 +203,17 @@ class _ClosestPropertiesState extends State<ClosestProperties>
         ),
       );
     } else {
-      return Expanded(
-        child: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Colors.grey[200],
-          ),
-        ),
+      // return Expanded(
+      //   child: Center(
+      //     child: CircularProgressIndicator(
+      //       backgroundColor: Colors.grey[200],
+      //     ),
+      //   ),
+      // );
+      return const LinearProgressIndicator(
+        backgroundColor: Colors.black,
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+        minHeight: 3,
       );
     }
   }

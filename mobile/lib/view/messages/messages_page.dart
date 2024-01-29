@@ -23,8 +23,8 @@ class _MessagesState extends State<Messages> {
   bool isLoading = true; // Add a boolean variable for loading state
 
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  HistoryController historyController =
-      Get.put(HistoryController(), permanent: true);
+  // HistoryController historyController =
+  //     Get.put(HistoryController(), permanent: true);
   ApplicationsController applicationController =
       Get.put(ApplicationsController(), permanent: true);
 

@@ -1,5 +1,6 @@
 import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/core/functions/validInput.dart';
 import 'package:client/model/property.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,6 +26,8 @@ class _CreateOfferState extends State<CreateOffer> {
   OfferController offerController = Get.put(OfferController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   String message = "";
+  String priceError = "";
+  String descriptionError = "";
 
   @override
   void initState() {
@@ -38,12 +41,17 @@ class _CreateOfferState extends State<CreateOffer> {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.utc(1800, 7, 20),
+      firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: const Color(0xffd92328),
+            colorScheme: const ColorScheme.dark(
+              primary: Color.fromARGB(255, 196, 39, 27),
+            ),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
           ),
           child: child ?? Container(),
         );
@@ -90,68 +98,12 @@ class _CreateOfferState extends State<CreateOffer> {
       body: Container(
         padding: const EdgeInsets.all(20),
         child: Form(
+          key: offerController.formstate,
           child: ListView(
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(height: 5),
-                  // const Text(
-                  //   "Choose property",
-                  //   style: TextStyle(
-                  //       fontSize: 18,
-                  //       color: Colors.black,
-                  //       fontWeight: FontWeight.w500),
-                  // ),
-                  // Container(height: 5),
-                  // Container(
-                  //   child: TextFormField(
-                  //     controller: controller.milestoneName,
-                  //     style: const TextStyle(),
-                  //     decoration: InputDecoration(
-                  //       // suffixIcon: Icon(Icons.description),
-                  //       hintText: "Milestone name",
-                  //       floatingLabelBehavior: FloatingLabelBehavior.always,
-                  //       contentPadding: const EdgeInsets.all(5),
-                  //       border: OutlineInputBorder(
-                  //         borderRadius: BorderRadius.circular(10),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(height: 5),
-                  // Container(height: 15),
-
-                  // Price
-                  const Text(
-                    "Price",
-                    style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(height: 5),
-                  Container(
-                    child: TextFormField(
-                      controller: offerController.price,
-                      style: const TextStyle(),
-                      decoration: InputDecoration(
-                        hintText: widget.property.listingType == "For rent"
-                            ? "Enter the monthly rental price"
-                            : "Enter the buy price",
-                        suffixText: widget.property.listingType == "For rent"
-                            ? '\$/mo '
-                            : "\$ ",
-                        suffixStyle: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w600),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
                   Container(height: 20),
 
                   // Offer Expire Date
@@ -187,31 +139,71 @@ class _CreateOfferState extends State<CreateOffer> {
                           ),
                         )),
                   ),
+
                   Container(height: 20),
 
-                  // Description (Optional)
+                  // Price
                   const Text(
-                    "Description (Optional)",
+                    "Price",
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.black,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(height: 5),
-                  Container(
-                    child: TextFormField(
-                      minLines: 7,
-                      maxLines: 10,
-                      controller: offerController.description,
-                      style: const TextStyle(),
-                      decoration: InputDecoration(
-                        hintText:
-                            "Example: New house in the center of the city, there is close school and very beautiful view",
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                        contentPadding: const EdgeInsets.all(10),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                  TextFormField(
+                    validator: (val) {
+                      priceError = validInput(val!, 1, 100, "price");
+                      return priceError.isNotEmpty ? priceError : null;
+                    },
+                    controller: offerController.price,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      hintText: widget.property.listingType == "For rent"
+                          ? "Enter the monthly rental price"
+                          : "Enter the buy price",
+                      suffixText: widget.property.listingType == "For rent"
+                          ? '\$/mo '
+                          : "\$ ",
+                      suffixStyle: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w600),
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(10),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Container(height: 20),
+
+                  // Description (Optional)
+                  const Text(
+                    "Description",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(height: 5),
+                  TextFormField(
+                    validator: (val) {
+                      descriptionError =
+                          validInput(val!, 10, 100, "description");
+                      return descriptionError.isNotEmpty
+                          ? descriptionError
+                          : null;
+                    },
+                    minLines: 7,
+                    maxLines: 10,
+                    controller: offerController.description,
+                    style: const TextStyle(),
+                    decoration: InputDecoration(
+                      hintText:
+                          "Example: New house in the center of the city, there is close school and very beautiful view",
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      contentPadding: const EdgeInsets.all(12),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
                   ),
@@ -221,31 +213,35 @@ class _CreateOfferState extends State<CreateOffer> {
               MaterialButton(
                 onPressed: () {
                   setState(() {});
-                  ScaffoldMessenger.of(context).clearSnackBars();
+                  if (offerController.formstate.currentState!.validate() &&
+                      offerController.price.text.isNotEmpty &&
+                      offerController.description.text.isNotEmpty) {
+                    ScaffoldMessenger.of(context).clearSnackBars();
 
-                  Future<void> addOfferFuture() async {
-                    offerController.userCreatedId =
-                        loginController.userDto?["id"];
-                    offerController.landlordId = widget.landlordId;
-                    offerController.customerId = widget.customerId;
-                    offerController.propertyId = widget.property.id;
-                    await offerController.createOffer();
+                    Future<void> addOfferFuture() async {
+                      offerController.userCreatedId =
+                          loginController.userDto?["id"];
+                      offerController.landlordId = widget.landlordId;
+                      offerController.customerId = widget.customerId;
+                      offerController.propertyId = widget.property.id;
+                      await offerController.createOffer();
 
-                    setState(() {
-                      message = offerController.responseMessage;
-                    });
+                      setState(() {
+                        message = offerController.responseMessage;
+                      });
 
-                    if (message == "Created Successfully") {
-                      SnackBar snackBar = SnackBar(
-                        content: Text(message),
-                        backgroundColor: Colors.blue,
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      Navigator.of(context).pop();
+                      if (message == "Created Successfully") {
+                        SnackBar snackBar = SnackBar(
+                          content: Text(message),
+                          backgroundColor: Colors.blue,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        Navigator.of(context).pop();
+                      }
                     }
-                  }
 
-                  addOfferFuture();
+                    addOfferFuture();
+                  }
                 },
                 color: const Color.fromARGB(255, 0, 0, 0),
                 shape: RoundedRectangleBorder(

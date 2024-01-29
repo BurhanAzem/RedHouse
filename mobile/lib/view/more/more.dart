@@ -1,7 +1,10 @@
+import 'package:client/controller/contract/contracts_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
+import 'package:client/view/agent%20seach/agent_search.dart';
 import 'package:client/view/auth/register.dart';
 import 'package:client/view/contracts/all_contracts.dart';
+import 'package:client/view/lawyer%20seach/lawyer_search.dart';
 import 'package:client/view/messages/messages_page.dart';
 import 'package:client/view/more/my_applications.dart';
 import 'package:client/view/more/my_bookings.dart';
@@ -10,10 +13,13 @@ import 'package:client/view/more/my_properties.dart';
 import 'package:client/view/more/profile/edit_profile.dart';
 import 'package:client/view/more/profile/profile.dart';
 import 'package:client/view/more/upgrade/account_upgrade.dart';
-import 'package:client/view/more/account_verification.dart';
+import 'package:client/view/more/user_level.dart';
+import 'package:client/view/more/verification/account_verification.dart';
 import 'package:client/view/more/complaint.dart';
 import 'package:client/view/more/favorite_properties.dart';
 import 'package:client/view/more/my_feedback.dart';
+import 'package:client/view/more/verification/display_verification_status.dart';
+import 'package:client/view/notification/notifications.dart';
 import 'package:client/view/notification/notifications_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,6 +33,8 @@ class More extends StatefulWidget {
 
 class _MoreState extends State<More> {
   LoginControllerImp loginController = Get.put(LoginControllerImp());
+  ContractsController contractController =
+      Get.put(ContractsController(), permanent: true);
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +236,7 @@ class _MoreState extends State<More> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const Complaint());
+              Get.to(() => const AccountInformation());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -243,7 +251,7 @@ class _MoreState extends State<More> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const Complaint());
+              Get.to(() => const UserLevel());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -258,7 +266,7 @@ class _MoreState extends State<More> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const AccountVerification());
+              Get.to(() => const DisplayVerificaionStatus());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
@@ -315,6 +323,21 @@ class _MoreState extends State<More> {
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Get.to(() => const MyProperties());
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Properties",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
               ),
             ),
           ),
@@ -412,12 +435,12 @@ class _MoreState extends State<More> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const MyProperties());
+              Get.to(() => const Notifications());
             },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "Properties",
+                "Notifications",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -456,11 +479,36 @@ class _MoreState extends State<More> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              showSearch(
+                context: context,
+                delegate: AgentSearch(),
+              );
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "Select agent",
+                "Search agent",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              contractController.visitLawyerFromContract = false;
+              contractController.currentContract = null;
+              showSearch(
+                context: context,
+                delegate: LawyerSearch(),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "ٍSearch lawyer",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -470,6 +518,7 @@ class _MoreState extends State<More> {
           ),
 
           const SizedBox(height: 15),
+
           // here buying a home list
           // here buying a home list
           // here buying a home list
@@ -477,7 +526,7 @@ class _MoreState extends State<More> {
           Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: const Text(
-              "Buying a home",
+              "More",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -491,7 +540,7 @@ class _MoreState extends State<More> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "x1",
+                "Contact Us",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,
@@ -499,15 +548,25 @@ class _MoreState extends State<More> {
               ),
             ),
           ),
-
           InkWell(
-            onTap: () {
-              Get.to(() => const NotificationsSettings());
-            },
+            onTap: () {},
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
               child: const Text(
-                "x2",
+                "About Us",
+                style: TextStyle(
+                  color: Color.fromARGB(174, 0, 0, 0),
+                  fontSize: 19,
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {},
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 20),
+              child: const Text(
+                "Terms Us",
                 style: TextStyle(
                   color: Color.fromARGB(174, 0, 0, 0),
                   fontSize: 19,

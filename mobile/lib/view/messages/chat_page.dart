@@ -12,14 +12,14 @@ class ChatPage extends StatefulWidget {
   final Function onMessageSent;
   final String receiverUserEmail;
   final String receiverUserID;
-  final Application application;
+  final Application? application;
 
   const ChatPage(
       {super.key,
       required this.receiverUserEmail,
       required this.receiverUserID,
       required this.onMessageSent,
-      required this.application});
+      this.application});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -53,21 +53,56 @@ class _ChatPageState extends State<ChatPage> {
     _trueSeeMessageValue();
   }
 
-  Future<void> _trueSeeMessageValue() async {
-    // Update the 'SeeMessage' value to true in the Firestore database
-    await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
-      "$currentUserId SeeMessage": true,
-    });
+  // Future<void> _trueSeeMessageValue() async {
+  //   // Update the 'SeeMessage' value to true in the Firestore database
+  //   await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
+  //     "$currentUserId SeeMessage": true,
+  //   });
 
-    // Call the callback function to notify the parent widget
-    widget.onMessageSent();
+  //   // Call the callback function to notify the parent widget
+  //   widget.onMessageSent();
+  // }
+
+  // Future<void> _falseSeeMessageValue() async {
+  //   // Update the 'SeeMessage' value to true in the Firestore database
+  //   await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
+  //     "$receiverUserId SeeMessage": false,
+  //   });
+  // }
+
+  Future<void> _trueSeeMessageValue() async {
+    // Check if the document exists before updating
+    bool documentExists = await _fireStore
+        .collection("chat_rooms")
+        .doc(chatRoomId)
+        .get()
+        .then((doc) => doc.exists);
+
+    if (documentExists) {
+      // Update the 'SeeMessage' value to true in the Firestore database
+      await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
+        "$currentUserId SeeMessage": true,
+      });
+
+      // Call the callback function to notify the parent widget
+      widget.onMessageSent();
+    }
   }
 
   Future<void> _falseSeeMessageValue() async {
-    // Update the 'SeeMessage' value to true in the Firestore database
-    await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
-      "$receiverUserId SeeMessage": false,
-    });
+    // Check if the document exists before updating
+    bool documentExists = await _fireStore
+        .collection("chat_rooms")
+        .doc(chatRoomId)
+        .get()
+        .then((doc) => doc.exists);
+
+    if (documentExists) {
+      // Update the 'SeeMessage' value to false in the Firestore database
+      await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
+        "$receiverUserId SeeMessage": false,
+      });
+    }
   }
 
   String formatMessageTimestamp(Timestamp timestamp) {
@@ -117,7 +152,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         actions: [
-          if (true)
+          if (widget.application != null)
             PopupMenuButton(
               onSelected: (value) {
                 print(value);
@@ -128,9 +163,9 @@ class _ChatPageState extends State<ChatPage> {
                   case "Create offer":
                     Get.to(
                       () => CreateOffer(
-                        landlordId: widget.application.property.userId,
-                        customerId: widget.application.userId,
-                        property: widget.application.property,
+                        landlordId: widget.application!.property.userId,
+                        customerId: widget.application!.userId,
+                        property: widget.application!.property,
                       ),
                     );
                     break;
@@ -153,6 +188,11 @@ class _ChatPageState extends State<ChatPage> {
                 const PopupMenuItem(
                   value: "See offer",
                   child: Text("See offer"),
+                ),
+
+                const PopupMenuItem(
+                  value: "See offer",
+                  child: Text("See contract"),
                 ),
 
                 const PopupMenuItem(

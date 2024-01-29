@@ -106,11 +106,6 @@ namespace server.Services
                 Message = "Milestone Created Successfully",
                 StatusCode = HttpStatusCode.OK,
             };
-            // }
-            // return new ResponsDto<Milestone>
-            // {
-            //     StatusCode = HttpStatusCode.OK,
-            // };
         }
 
         public async Task<ResponsDto<Milestone>> DeleteMilestone(int contractId)
@@ -191,35 +186,84 @@ namespace server.Services
             };
         }
 
-        public async Task<ResponsDto<Milestone>> UpdateMilestone(MilestoneDto milestoneDto, int milestoneId)
+        public async Task<ResponsDto<Contract>> UpdateMilestone(UpdateMilestoneDto milestoneDto, int milestoneId)
         {
-            var mileston = await _redHouseDbContext.Milestones
-                 .FirstOrDefaultAsync(c => c.Id == milestoneId);
-            if (mileston == null)
+            var milestoneWithContractAndOffer = await _redHouseDbContext.Milestones
+                .Join(
+                    _redHouseDbContext.Contracts,
+                    milestone => milestone.ContractId,
+                    contract => contract.Id,
+                    (milestone, contract) => new { Milestone = milestone, Contract = contract }
+                )
+                .Join(
+                    _redHouseDbContext.Offers,
+                    result => result.Contract.OfferId,
+                    offer => offer.Id,
+                    (result, offer) => new { Milestone = result.Milestone, Contract = result.Contract, Offer = offer }
+                )
+                .Where(joinResult => joinResult.Milestone.Id == milestoneId)
+                .FirstOrDefaultAsync();
+
+            var milestone = milestoneWithContractAndOffer.Milestone;
+            var contract = milestoneWithContractAndOffer.Contract;
+            var offer = milestoneWithContractAndOffer.Offer;
+
+            if (milestone == null)
             {
-                return new ResponsDto<Milestone>
+                return new ResponsDto<Contract>
                 {
                     Exception = new Exception("Milestone Not Exist"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            Milestone updatedMilestone = new Milestone
+
+            if (milestoneDto.MilestoneDate != null)
             {
-                ContractId = milestoneDto.ContractId,
-                Description = milestoneDto.Description,
-                Amount = milestoneDto.Amount,
-                MilestoneDate = milestoneDto.MilestoneDate,
-                MilestoneName = milestoneDto.MilestoneName,
-                MilestoneStatus = milestoneDto.MilestoneStatus
-            };
-            _redHouseDbContext.Milestones.Update(updatedMilestone);
+                milestone.MilestoneDate = (DateTime)milestoneDto.MilestoneDate;
+            }
+
+            if (milestoneDto.MilestoneName != null)
+            {
+                milestone.MilestoneName = milestoneDto.MilestoneName;
+            }
+
+            if (milestoneDto.Description != null)
+            {
+                milestone.Description = milestoneDto.Description;
+            }
+
+            if (milestoneDto.Amount != null)
+            {
+                milestone.Amount = (int)milestoneDto.Amount;
+            }
+
+            if (milestoneDto.MilestoneStatus != null)
+            {
+                if (milestoneDto.MilestoneStatus == "Paid")
+                {
+                    // Update Earnings of the associated Contract
+                    contract.Earnings += (double)milestone.Amount;
+
+                    // Check if Earnings of the Contract reach the Offer Price
+                    if (contract.Earnings >= offer.Price)
+                    {
+                        contract.ContractStatus = "Closed";
+                        contract.EndDate = DateTime.Now;
+                    }
+                }
+                milestone.MilestoneStatus = milestoneDto.MilestoneStatus;
+            }
+
+
             _redHouseDbContext.SaveChanges();
-            return new ResponsDto<Milestone>
+            return new ResponsDto<Contract>
             {
-                Dto = mileston,
+                Dto = contract,
                 Message = "Milestone updated successfully",
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
+
     }
 }

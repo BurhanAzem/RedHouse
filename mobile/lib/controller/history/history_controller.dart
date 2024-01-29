@@ -50,6 +50,8 @@ class HistoryController extends GetxController {
     var response = await UserHistoryData.sendFeedback(
         userId, contractId, feedback.text, rating);
 
+    print(response);
+
     if (response['statusCode'] == 200) {
     } else {
       Get.defaultDialog(

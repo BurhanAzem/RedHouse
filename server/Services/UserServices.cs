@@ -19,19 +19,12 @@ namespace server.Services
 
         public async Task<ResponsDto<User>> FilterAgents(SearchDto searchDto)
         {
-            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
-            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
 
             var query = _redHouseDbContext.Users.Where(u => u.UserRole == "Agent").Include(u => u.Location).AsQueryable();
             if (searchDto.SearchQuery != null)
                 query = query.Where(u => u.Name.Contains(searchDto.SearchQuery));
-            var totalItems = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
 
-            var users = await query
-                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
-                .Take((int)searchDto.Limit)
-                .ToArrayAsync();
+            var users = await query.ToArrayAsync();
 
             if (users == null || !users.Any())
             {
@@ -41,8 +34,6 @@ namespace server.Services
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
-
-
 
             return new ResponsDto<User>
             {
@@ -55,19 +46,12 @@ namespace server.Services
 
         public async Task<ResponsDto<User>> FilterLawyers(SearchDto searchDto)
         {
-            searchDto.Page = searchDto.Page < 1 ? 1 : searchDto.Page;
-            searchDto.Limit = searchDto.Limit < 1 ? 10 : searchDto.Limit;
 
             var query = _redHouseDbContext.Users.Where(u => u.UserRole == "Lawyer").Include(u => u.Location).AsQueryable();
             if (searchDto.SearchQuery != null)
                 query = query.Where(u => u.Name.Contains(searchDto.SearchQuery));
-            var totalItems = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling((double)totalItems / (int)(searchDto.Limit));
 
-            var users = await query
-                .Skip((int)((searchDto.Page - 1) * searchDto.Limit))
-                .Take((int)searchDto.Limit)
-                .ToArrayAsync();
+            var users = await query.ToArrayAsync();
 
             if (users == null || !users.Any())
             {
@@ -77,8 +61,6 @@ namespace server.Services
                     StatusCode = HttpStatusCode.NotFound,
                 };
             }
-
-
 
             return new ResponsDto<User>
             {
@@ -139,21 +121,11 @@ namespace server.Services
                 };
             }
 
-            // var res = await _userManager.FindByEmailAsync(user.Email!);
-            // if (res != null)
-            // {
-            //     return new ResponsDto<User>
-            //     {
-            //         Exception = new Exception("User Already Exist"),
-            //         StatusCode = HttpStatusCode.BadRequest,
-            //     };
-            // }
-
             if (userDto.Name != null)
             {
                 user.Name = userDto.Name;
             }
-            if (userDto.Email!= null)
+            if (userDto.Email != null)
             {
                 user.Email = userDto.Email;
             }
@@ -165,15 +137,15 @@ namespace server.Services
             {
                 user.IsVerified = (bool)userDto.IsVerified;
             }
-            if(userDto.UserRole != null)
+            if (userDto.UserRole != null)
             {
                 user.UserRole = userDto.UserRole;
             }
-            if(userDto.CustomerScore != null)
+            if (userDto.CustomerScore != null)
             {
                 user.CustomerScore = (int)userDto.CustomerScore;
             }
-            if(userDto.LandlordScore != null)
+            if (userDto.LandlordScore != null)
             {
                 user.LandlordScore = (int)userDto.LandlordScore;
             }
@@ -257,7 +229,7 @@ namespace server.Services
         }
 
 
-         public async Task<ResponsDto<User>> GetAllLawyersForUser(int userId)
+        public async Task<ResponsDto<User>> GetAllLawyersForUser(int userId)
         {
             var user = await _redHouseDbContext.Users.FindAsync(userId);
             if (user == null)
@@ -274,10 +246,10 @@ namespace server.Services
 
             var lawyers = from contract in _redHouseDbContext.Contracts
              .Include(c => c.Lawyer)
-             where (contract.Offer != null &&
-                    (contract.Offer.CustomerId == userId || contract.Offer.LandlordId == userId)) &&
-                    contract.Lawyer != null
-             select contract.Lawyer;
+                          where (contract.Offer != null &&
+                                 (contract.Offer.CustomerId == userId || contract.Offer.LandlordId == userId)) &&
+                                 contract.Lawyer != null
+                          select contract.Lawyer;
 
 
 

@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/view/more/my_feedback.dart';
 import 'package:client/view/more/profile/edit_profile.dart';
+import 'package:client/view/more/user_level.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -16,11 +16,11 @@ class AccountInformation extends StatefulWidget {
   State<AccountInformation> createState() => _AccountInformationState();
 }
 
-class _AccountInformationState extends State<AccountInformation> with AutomaticKeepAliveClientMixin{
+class _AccountInformationState extends State<AccountInformation>
+    with AutomaticKeepAliveClientMixin {
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   Map<String, dynamic> userDto = json.decode(sharepref.getString("user")!);
 
-  
   @override
   bool get wantKeepAlive => true; // Keep the state alive
 
@@ -73,8 +73,8 @@ class _AccountInformationState extends State<AccountInformation> with AutomaticK
                       ),
                       child: Center(
                         child: Text(
-                          loginController.getShortenedName(
-                              userDto["name"] ?? ""),
+                          loginController
+                              .getShortenedName(userDto["name"] ?? ""),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 38,
@@ -145,7 +145,7 @@ class _AccountInformationState extends State<AccountInformation> with AutomaticK
                 const SizedBox(height: 30),
                 Divider(color: Colors.grey[300]),
                 const SizedBox(height: 10),
-    
+
                 // MENU
                 ProfileMenuWidget(
                   title: 'Setting',
@@ -156,7 +156,9 @@ class _AccountInformationState extends State<AccountInformation> with AutomaticK
                     title: 'User Level',
                     icon: FontAwesomeIcons.solidUser,
                     sizeIcon: 21,
-                    onPress: () {}),
+                    onPress: () {
+                      Get.to(() => const UserLevel());
+                    }),
                 ProfileMenuWidget(
                     title: 'Change Theme',
                     icon: FontAwesomeIcons.palette,

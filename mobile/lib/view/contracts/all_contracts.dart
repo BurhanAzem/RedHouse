@@ -3,7 +3,8 @@ import 'package:client/controller/contract/contracts_controller.dart';
 import 'package:client/main.dart';
 import 'package:client/model/contract.dart';
 import 'package:client/model/user.dart';
-import 'package:client/view/contracts/landlord_contract.dart';
+import 'package:client/view/contracts/customer%20contract/customer_contract.dart';
+import 'package:client/view/contracts/landlord%20contract/landlord_contract.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -38,6 +39,13 @@ class _AllContractsState extends State<AllContracts>
     User user = User.fromJson(userDto);
     controller.userId = user.id!;
     await controller.getContrcatsForUser();
+  }
+
+  String divideCodeIntoGroups(String code) {
+    final RegExp pattern = RegExp(r".{1,3}");
+    Iterable<Match> matches = pattern.allMatches(code);
+    List<String> groups = matches.map((match) => match.group(0)!).toList();
+    return groups.join(" ");
   }
 
   @override
@@ -286,148 +294,16 @@ class _AllContractsState extends State<AllContracts>
 
             return GestureDetector(
               onTap: () {
+                controller.visitLawyerFromContract = true;
+                controller.currentContract = contract;
                 Get.to(() => LandlordContract(contract: contract));
                 setState(() {});
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(0),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[400]!.withOpacity(0.4),
-                      spreadRadius: 5,
-                      blurRadius: 1,
-                      offset: const Offset(-3.5, 3.5),
-                    ),
-                  ],
-                ),
-                margin: _margin,
-                child: ListTile(
-                  title: Column(
-                    children: [
-                      // Intoducation
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            FontAwesomeIcons.handshake,
-                            size: 25,
-                            // color: Colors.white,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(left: 50),
-                            child: Text(
-                              "Contract ${index + 1}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 17,
-                                // color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            (DateTime.now().year == contract.startDate.year)
-                                ? DateFormat('MM-dd').format(contract.startDate)
-                                : DateFormat('yyyy-MM-dd')
-                                    .format(contract.startDate),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              // color: Colors.white,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 15),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     const Icon(
-                      //       FontAwesomeIcons.handshake,
-                      //       size: 25,
-                      //     ),
-                      //     Text(
-                      //       (controller.userContracts.isNotEmpty &&
-                      //               index < controller.userContracts.length)
-                      //           ? "       ${contract.startDate.toString().length <= 10 ? contract.startDate.toString() : contract.startDate.toString().substring(0, 9)}"
-                      //           : "N/A",
-                      //       style: const TextStyle(
-                      //         fontWeight: FontWeight.w600,
-                      //         fontSize: 12,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      Text(
-                        (contract.offer!.description.length <= 65)
-                            ? contract.offer!.description
-                            : '${contract.offer!.description.substring(0, 65)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                  isThreeLine: true,
-                  subtitle: Column(
-                    children: [
-                      const SizedBox(height: 15),
-                      Container(height: 0.7, color: const Color(0xffd92328)),
-                      const SizedBox(height: 15),
-                      // Text(
-                      //   (contract.offer!.description.length <= 100)
-                      //       ? contract.offer!.description
-                      //       : '${contract.offer!.description.substring(0, 100)}...',
-                      //   style: const TextStyle(fontWeight: FontWeight.w400),
-                      // ),
-                      // Container(
-                      //   height: 5,
-                      // ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Text(
-                                "Price: ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                contract.offer!.price.toString(),
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                  color: Color(0xffd92328),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "Status: ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                contract.contractStatus,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                    color: Color(0xffd92328)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              child: contractStyle(
+                contract,
+                _margin,
+                index,
+                true,
               ),
             );
           },
@@ -460,123 +336,164 @@ class _AllContractsState extends State<AllContracts>
             EdgeInsets _margin;
 
             if (index == controller.userContracts.length - 1) {
-              _margin = const EdgeInsets.symmetric(vertical: 30);
+              _margin =
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 30);
             } else {
-              _margin = const EdgeInsets.only(top: 30);
+              _margin = const EdgeInsets.only(left: 15, right: 15, top: 30);
             }
 
             return GestureDetector(
               onTap: () {
-                // Get.to(() => ContractReview(contract: contract));
+                controller.visitLawyerFromContract = true;
+                controller.currentContract = contract;
+                Get.to(() => CustomerContract(contract: contract));
                 setState(() {});
               },
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                child: ListTile(
-                  title: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Icon(
-                            FontAwesomeIcons.handshake,
-                            size: 25,
-                          ),
-                          Text(
-                            (contract.startDate.toString().length <= 10)
-                                ? "       ${contract.startDate.toString()}"
-                                : "       ${contract.startDate.toString().substring(0, 9)}",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        (contract.offer!.description.length <= 38)
-                            ? contract.offer!.description
-                            : '${contract.offer!.description.substring(0, 38)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                    ],
-                  ),
-                  isThreeLine:
-                      true, // This allows the title to take up more horizontal space
-                  subtitle: Column(
-                    children: [
-                      Container(
-                        height: 1,
-                      ),
-                      Container(height: 0.5, color: const Color(0xffd92328)),
-                      Container(
-                        height: 1,
-                      ),
-                      Text(
-                        (contract.offer!.description.length <= 100)
-                            ? contract.offer!.description
-                            : '${contract.offer!.description.substring(0, 100)}...',
-                        style: const TextStyle(fontWeight: FontWeight.w400),
-                      ),
-                      Container(
-                        height: 5,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              const Text(
-                                "Price: ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                              ),
-                              Text(
-                                contract.offer!.price.toString(),
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: Color(0xffd92328)),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text(
-                                "Contract status: ",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                              ),
-                              Text(
-                                contract.contractStatus,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    color: Color(0xffd92328)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+              child: contractStyle(
+                contract,
+                _margin,
+                index,
+                false,
               ),
             );
           },
         ),
       );
     }
+  }
+
+  Widget contractStyle(
+      Contract contract, EdgeInsets _margin, int index, bool landlordContract) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(0),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[400]!.withOpacity(0.4),
+            spreadRadius: 5,
+            blurRadius: 1,
+            offset: const Offset(-3.5, 3.5),
+          ),
+        ],
+      ),
+      margin: _margin,
+      child: ListTile(
+        title: Column(
+          children: [
+            // Intoducation
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Icon(
+                  FontAwesomeIcons.handshake,
+                  size: 25,
+                  // color: Colors.white,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 50),
+                  child: Text(
+                    "Contract ${index + 1}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      // color: Colors.white,
+                    ),
+                  ),
+                ),
+                Text(
+                  (DateTime.now().year == contract.startDate.year)
+                      ? DateFormat('MM-dd').format(contract.startDate)
+                      : DateFormat('yyyy-MM-dd').format(contract.startDate),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    // color: Colors.white,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Text(
+              (contract.offer!.description.length <= 65)
+                  ? contract.offer!.description
+                  : '${contract.offer!.description.substring(0, 65)}...',
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        isThreeLine: true,
+        subtitle: Column(
+          children: [
+            const SizedBox(height: 15),
+            Container(height: 0.7, color: const Color(0xffd92328)),
+            const SizedBox(height: 15),
+            Text(
+              landlordContract == true
+                  ? contract.offer!.customer!.name!
+                  : contract.offer!.landlord!.name!,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                // color: Color(0xffd92328),
+              ),
+            ),
+            const SizedBox(height: 3),
+            Text(
+              divideCodeIntoGroups(contract.offer!.property!.propertyCode),
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+                // color: Color(0xffd92328),
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      "Price: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      contract.offer!.price.toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        color: Color(0xffd92328),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text(
+                      "Status: ",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                    Text(
+                      contract.contractStatus,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                          color: Color(0xffd92328)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

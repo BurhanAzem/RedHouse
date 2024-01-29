@@ -24,7 +24,7 @@ namespace RedHouse_Server.Controllers
         {
             _milestoneServices = milestoneServices;
         }
-        
+
         // [Authorize]
         [HttpPost("/milestones")]
         public async Task<IActionResult> CreateMilestone([FromBody] MilestoneDto milestoneDto)
@@ -119,7 +119,7 @@ namespace RedHouse_Server.Controllers
 
 
         [HttpPut("/milestones/{id}")]
-        public async Task<IActionResult> UpdateMilestone([FromBody] MilestoneDto milestoneDto, int id)
+        public async Task<IActionResult> UpdateMilestone([FromBody] UpdateMilestoneDto milestoneDto, int id)
         {
             if (!ModelState.IsValid)
             {
@@ -157,32 +157,7 @@ namespace RedHouse_Server.Controllers
 
 
 
-// public Task<ResponsDto<Milestone>> GetAllMilestone();
-//         public Task<ResponsDto<Milestone>> GetAllMilestoneForContract(int contractId);
-//         public Task<ResponsDto<Milestone>> GetMilestone(int milestoneId);
-//         public Task<ResponsDto<Milestone>> DeleteMilestone(int contractId);
-//         public Task<ResponsDto<Milestone>> ApproveMilestone(int milestoneId);
-//         public Task<ResponsDto<Milestone>> UpdateMilestone(MilestoneDto contractDto, int milestoneId);
 
-
-
-        // [HttpPost("/applications/{id}/reject")]
-        // public async Task<IActionResult> RejectApplication(int id)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return BadRequest(ModelState);
-        //     }
-        //     var result = await _contractServices.RejectApplication(id);
-        //     if (result.Exception != null)
-        //     {
-        //         var code = result.StatusCode;
-        //         throw new StatusCodeException(code.Value, result.Exception);
-        //     }
-        //     // else if(result.StatusCode == System.Net.HttpStatusCode.OK)
-        //     return Ok(result);
-
-        // }
     }
 }
 

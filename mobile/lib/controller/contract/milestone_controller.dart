@@ -1,4 +1,5 @@
 import 'package:client/data/milestones.dart';
+import 'package:client/model/contract.dart';
 import 'package:client/model/milestone.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,8 @@ class MilestoneControllerImp extends MilestoneController {
   TextEditingController amount = TextEditingController();
   TextEditingController milestoneStatus = TextEditingController();
   int contractId = 1;
+
+  Contract? getNewContract;
 
   addMilestone(int contractId) async {
     var response = await MilestoneData.addMilestone(
@@ -54,11 +57,44 @@ class MilestoneControllerImp extends MilestoneController {
     }
   }
 
-  double getSubAmountForContract() {
-    double totalAmount = 0.0;
-    for (Milestone milestone in milestones) {
-      totalAmount += milestone.amount;
+  updateMilestoneStatus(int id, String newStatus) async {
+    var response = await MilestoneData.updateMilestoneStatus(id, newStatus);
+
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
     }
-    return totalAmount;
+  }
+
+  getContractById(int id) async {
+    var response = await MilestoneData.getContractById(id);
+
+    if (response['statusCode'] == 200) {
+      getNewContract =
+          Contract.fromJson(response['dto'] as Map<String, dynamic>);
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
+  }
+
+  updateShouldPay(int id, int newStatus) async {
+    var response = await MilestoneData.updateShouldPay(id, newStatus);
+    print(response);
+    if (response is Map<String, dynamic> && response['statusCode'] == 200) {
+    } else {
+      Get.defaultDialog(
+        title: "Error",
+        middleText:
+            "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+      );
+    }
   }
 }

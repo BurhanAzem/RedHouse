@@ -8,7 +8,7 @@ import 'package:client/routes.dart';
 import 'package:client/view/auth/login.dart';
 import 'package:client/view/bottom_bar/bottom_bar.dart';
 import 'package:client/view/manage_properties/applications/all_applications.dart';
-import 'package:client/view/more/account_verification.dart';
+import 'package:client/view/more/verification/account_verification.dart';
 import 'package:client/view/more/upgrade/account_upgrade.dart';
 import 'package:client/view/more/upgrade/payment.dart';
 import 'package:client/view/manage_properties/offers/all_offers.dart';

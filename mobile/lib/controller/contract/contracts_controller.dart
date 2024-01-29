@@ -14,6 +14,9 @@ class ContractsController extends GetxController {
   Contract? contractIsCreated;
   String responseMessage = "";
 
+  Contract? currentContract;
+  bool visitLawyerFromContract = true;
+
   getContrcatsForUser() async {
     var response = await ContractsData.getContrcatsForUser(
       userId,
@@ -26,6 +29,7 @@ class ContractsController extends GetxController {
         userContracts = (response['listDto'] as List<dynamic>)
             .map((e) => Contract.fromJson(e as Map<String, dynamic>))
             .toList();
+        print(userContracts);
       } else {
         Get.defaultDialog(
           title: "Error",
@@ -72,6 +76,24 @@ class ContractsController extends GetxController {
         middleText:
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
+    }
+  }
+
+  addLawyerToContract(int contractId, int lawyerId) async {
+    var response =
+        await ContractsData.addLawyerToContract(contractId, lawyerId);
+
+    print(response);
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+        responseMessage = response['message'];
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
   }
 }
