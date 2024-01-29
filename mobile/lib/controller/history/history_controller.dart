@@ -19,7 +19,6 @@ class HistoryController extends GetxController {
       userHistories = (response['listDto'] as List<dynamic>)
           .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(userHistories);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -36,7 +35,6 @@ class HistoryController extends GetxController {
       propertyHistory = (response['listDto'] as List<dynamic>)
           .map((e) => UserHistory.fromJson(e as Map<String, dynamic>))
           .toList();
-      print(propertyHistory);
     } else {
       Get.defaultDialog(
         title: "Error",
@@ -50,7 +48,6 @@ class HistoryController extends GetxController {
     var response = await UserHistoryData.sendFeedback(
         userId, contractId, feedback.text, rating);
 
-    print(response);
 
     if (response['statusCode'] == 200) {
     } else {

@@ -46,6 +46,8 @@ class ContractsController extends GetxController {
       contractStatus,
       contractType,
     );
+
+    print(response);
     if (response is Map<String, dynamic>) {
       if (response['statusCode'] == 200) {
         lawyerContracts = (response['listDto'] as List<dynamic>)
@@ -70,6 +72,7 @@ class ContractsController extends GetxController {
             Contract.fromJson(response['dto'] as Map<String, dynamic>);
       }
       responseMessage = response['message'];
+      print(responseMessage);
     } else {
       Get.defaultDialog(
         title: "Error",

@@ -22,6 +22,7 @@ class SignUpControllerImp extends GetxController {
   GlobalKey<FormState> formstateUpdate = GlobalKey<FormState>();
   List<User> listAutoCompleteLawyer = [];
   List<User> listAutoCompleteAgent = [];
+  List<User> lawyerContacts = [];
 
   @override
   void onInit() {
@@ -160,6 +161,24 @@ class SignUpControllerImp extends GetxController {
         middleText:
             "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
       );
+    }
+  }
+
+  getlawyerContacts(int id) async {
+    var response = await UserData.getlawyerContacts(id);
+
+    if (response is Map<String, dynamic>) {
+      if (response['statusCode'] == 200) {
+        lawyerContacts = (response['listDto'] as List<dynamic>)
+            .map((e) => User.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        Get.defaultDialog(
+          title: "Error",
+          middleText:
+              "statusCode: ${response['statusCode']}, exceptions: ${response['exceptions']}",
+        );
+      }
     }
   }
 

@@ -98,13 +98,13 @@ namespace RedHouse_Server.Controllers
         }
 
         [HttpGet("/lawyers/{id}/contracts")]
-        public async Task<IActionResult> GetAllContractsForLawer(int id)
+        public async Task<IActionResult> GetAllContractsForLawer(int id, [FromQuery] ContractFilter contractFilter)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _contractServices.GetAllContractsForLawer(id);
+            var result = await _contractServices.GetAllContractsForLawer(id, contractFilter);
             if (result.Exception != null)
             {
                 var code = result.StatusCode;

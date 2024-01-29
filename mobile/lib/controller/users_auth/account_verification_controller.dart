@@ -30,12 +30,10 @@ class AccountVerificationController extends GetxController {
 
   getUserVerification(int userId) async {
     var response = await UserData.getUserVerification(userId);
-    print(response);
 
     if (response['statusCode'] == 200) {
       userVerification =
           Verification.fromJson(response['dto'] as Map<String, dynamic>);
-      print(response['dto']);
     } else {
       Get.defaultDialog(
         title: "Error",

@@ -129,7 +129,7 @@ class _FeedbackState extends State<Feedback>
                   child: TextFormField(
                     validator: (val) {
                       descriptionError =
-                          validInput(val!, 10, 100, "description");
+                          validInput(val!, 10, 400, "description");
                       return descriptionError.isNotEmpty
                           ? descriptionError
                           : null;

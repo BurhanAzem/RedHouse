@@ -53,23 +53,6 @@ class _ChatPageState extends State<ChatPage> {
     _trueSeeMessageValue();
   }
 
-  // Future<void> _trueSeeMessageValue() async {
-  //   // Update the 'SeeMessage' value to true in the Firestore database
-  //   await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
-  //     "$currentUserId SeeMessage": true,
-  //   });
-
-  //   // Call the callback function to notify the parent widget
-  //   widget.onMessageSent();
-  // }
-
-  // Future<void> _falseSeeMessageValue() async {
-  //   // Update the 'SeeMessage' value to true in the Firestore database
-  //   await _fireStore.collection("chat_rooms").doc(chatRoomId).update({
-  //     "$receiverUserId SeeMessage": false,
-  //   });
-  // }
-
   Future<void> _trueSeeMessageValue() async {
     // Check if the document exists before updating
     bool documentExists = await _fireStore

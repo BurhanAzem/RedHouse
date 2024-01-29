@@ -1,12 +1,17 @@
+import 'dart:convert';
 import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/controller/history/history_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/controller/users_auth/signup_controller.dart';
+import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/firebase/chats_model.dart';
 import 'package:client/view/messages/chat_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -15,21 +20,17 @@ class LawyerMessges extends StatefulWidget {
   const LawyerMessges({super.key});
 
   @override
-  State<LawyerMessges> createState() => _LawyerMessgesState();
+  State<LawyerMessges> createState() => _MessagesState();
 }
 
-class _LawyerMessgesState extends State<LawyerMessges> {
-  bool isLoading = true; // Add a boolean variable for loading state
-
+class _MessagesState extends State<LawyerMessges> {
+  bool isLoading = true;
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  HistoryController historyController =
-      Get.put(HistoryController(), permanent: true);
-  ApplicationsController applicationController =
-      Get.put(ApplicationsController(), permanent: true);
-  // Color primaryColor = Color.fromARGB(255, 26, 85, 154);
-  Color primaryColor = Color.fromARGB(255, 11, 27, 169);
+  SignUpControllerImp signUpController =
+      Get.put(SignUpControllerImp(), permanent: true);
+  Map<String, dynamic> userDto = json.decode(sharepref.getString("user")!);
 
-  // instance of fireStore
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
   Map<String, String> lastMessageTextMap = {};
@@ -52,16 +53,12 @@ class _LawyerMessgesState extends State<LawyerMessges> {
   }
 
   Future<void> loadData() async {
-    // Check if data is already loaded to avoid duplication
     if (!isLoading) {
       return;
     }
 
-    await applicationController
-        .getApprovedApplicationsForUser(loginController.userDto?["id"]);
-    print(applicationController.approvedApplicationsForUser);
+    await signUpController.getlawyerContacts(loginController.userDto?["id"]);
 
-    // Set isLoading to false only after data is loaded
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -99,8 +96,21 @@ class _LawyerMessgesState extends State<LawyerMessges> {
     }
 
     return Scaffold(
+      key: scaffoldKey,
+      floatingActionButton: FloatingActionButton(
+        heroTag: "messagebtn",
+        backgroundColor: Colors.orange[700],
+        foregroundColor: Colors.white,
+        onPressed: () {},
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: const Icon(
+          FontAwesomeIcons.phone,
+          size: 23,
+        ),
+      ),
       appBar: AppBar(
-        backgroundColor: primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
           "Messages",
@@ -112,7 +122,138 @@ class _LawyerMessgesState extends State<LawyerMessges> {
         ),
         centerTitle: true,
       ),
-      body: applicationController.approvedApplicationsForUser.isEmpty
+      drawer: Drawer(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shape: null,
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          child: ListView(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 55,
+                    height: 55,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color.fromRGBO(0, 153, 115, 1),
+                    ),
+                    child: Center(
+                      child: Text(
+                        loginController.getShortenedName(userDto["name"] ?? ""),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: ListTile(
+                    title: Text(userDto["name"]),
+                    subtitle: Text(
+                      userDto["email"],
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                  ))
+                ],
+              ),
+              const SizedBox(height: 5),
+              const Divider(),
+              const SizedBox(height: 8),
+              const ListTile(
+                title: Text(
+                  "Home page",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.home,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Upload shot",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.upload,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Favourites",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.solidHeart,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Calls",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.phone,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Saved Messages",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.solidBookmark,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Settings",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.gear,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Back",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.chevronLeft,
+                  size: 21,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      body: signUpController.lawyerContacts.isEmpty
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -124,20 +265,17 @@ class _LawyerMessgesState extends State<LawyerMessges> {
                     height: 200,
                   ),
                   const SizedBox(height: 20),
-                  Text(
+                  const Text(
                     "Oops! No chat found",
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: primaryColor,
                     ),
                   ),
                 ],
               ),
             )
           : _buildUserList(onMessageSent: () {
-              // Callback function to be called when a new message is sent
-              // This will trigger a rebuild of the Messages widget
               if (mounted) {
                 setState(() {});
               }
@@ -161,56 +299,34 @@ class _LawyerMessgesState extends State<LawyerMessges> {
         List<DocumentSnapshot> filteredUsers = snapshot.data!.docs.where((doc) {
           Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
           return data['email'] != currentUserEmail &&
-              applicationController.approvedApplicationsForUser.any(
-                (application) =>
-                    application.user.email == data['email'] ||
-                    application.property.user?.email == data['email'],
-              );
+              signUpController.lawyerContacts
+                  .any((user) => user.email == data['email']);
         }).toList();
-
-        // Find the corresponding application
-        List<Application> userApplications = filteredUsers.map((doc) {
-          Map<String, dynamic> userData = doc.data()! as Map<String, dynamic>;
-          return applicationController.approvedApplicationsForUser.firstWhere(
-            (application) =>
-                application.user.email == userData['email'] ||
-                application.property.user?.email == userData['email'],
-          );
-        }).toList();
-
-        print(userApplications);
-        print(filteredUsers);
 
         return ListView.builder(
           itemCount: filteredUsers.length,
           itemBuilder: (context, index) {
-            return _buildUserItem(
-                filteredUsers[index], userApplications[index], onMessageSent);
+            return _buildUserItem(filteredUsers[index], onMessageSent);
           },
         );
       },
     );
   }
 
-  Widget _buildUserItem(DocumentSnapshot document, Application application,
-      Function onMessageSent) {
+  Widget _buildUserItem(DocumentSnapshot document, Function onMessageSent) {
     Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
-    // Construct chat room id from sender id and receiver id (sorted to ensure uniqueness)
     String receiverUserId = data['uid'];
     List<String> ids = [currentUserId, receiverUserId];
     ids.sort();
     String chatRoomId = ids.join("_");
-    print(application);
 
-    // Use FutureBuilder to wait for the completion of asynchronous operations
     return FutureBuilder(
       future: _createChatRoomDocument(
           chatRoomId, currentUserId, currentUserEmail, receiverUserId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
-          return _buildUserListItem(
-              chatRoomId, data, application, onMessageSent);
+          return _buildUserListItem(chatRoomId, data, onMessageSent);
         } else {
           return shimmer(data);
         }
@@ -218,14 +334,13 @@ class _LawyerMessgesState extends State<LawyerMessges> {
     );
   }
 
-  Widget _buildUserListItem(String chatRoomId, Map<String, dynamic> data,
-      Application application, Function onMessageSent) {
+  Widget _buildUserListItem(
+      String chatRoomId, Map<String, dynamic> data, Function onMessageSent) {
     String lastMessageText = lastMessageTextMap[chatRoomId] ?? "";
     Timestamp lastMessageTime =
         lastMessageTimeMap[chatRoomId] ?? Timestamp.now();
 
     bool isUnread = isUnreadMap[chatRoomId] ?? false;
-    print(isUnread);
 
     return Container(
       height: 85,
@@ -264,8 +379,8 @@ class _LawyerMessgesState extends State<LawyerMessges> {
                 subtitle: Row(
                   children: [
                     Text(
-                      lastMessageText.length > 20
-                          ? "${lastMessageText.substring(0, 20)}..."
+                      lastMessageText.length > 18
+                          ? "${lastMessageText.substring(0, 18)}..."
                           : lastMessageText,
                       style: TextStyle(
                         fontSize: isUnread ? 13 : 14.5,
@@ -292,7 +407,6 @@ class _LawyerMessgesState extends State<LawyerMessges> {
                 receiverUserEmail: data['name'],
                 receiverUserID: data['uid'],
                 onMessageSent: onMessageSent,
-                application: application,
               ));
         },
       ),
@@ -353,10 +467,8 @@ class _LawyerMessgesState extends State<LawyerMessges> {
         lastMessageTextMap[chatRoomId] = lastMessage.get("message");
         lastMessageTimeMap[chatRoomId] = lastMessage.get("timestamp");
       } else {
-        print("No messages found in the chat room");
       }
     } catch (error) {
-      print("Error creating chat room document: $error");
     }
   }
 

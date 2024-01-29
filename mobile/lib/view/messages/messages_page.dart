@@ -1,12 +1,15 @@
+import 'dart:convert';
 import 'package:client/controller/application/applications_controller.dart';
 import 'package:client/controller/history/history_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
+import 'package:client/main.dart';
 import 'package:client/model/application.dart';
 import 'package:client/model/firebase/chats_model.dart';
 import 'package:client/view/messages/chat_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -21,12 +24,11 @@ class Messages extends StatefulWidget {
 
 class _MessagesState extends State<Messages> {
   bool isLoading = true; // Add a boolean variable for loading state
-
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   LoginControllerImp loginController = Get.put(LoginControllerImp());
-  // HistoryController historyController =
-  //     Get.put(HistoryController(), permanent: true);
   ApplicationsController applicationController =
       Get.put(ApplicationsController(), permanent: true);
+  Map<String, dynamic> userDto = json.decode(sharepref.getString("user")!);
 
   // instance of fireStore
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -98,6 +100,20 @@ class _MessagesState extends State<Messages> {
     }
 
     return Scaffold(
+      key: scaffoldKey,
+      floatingActionButton: FloatingActionButton(
+        heroTag: "messagebtn",
+        backgroundColor: Colors.orange[700],
+        foregroundColor: Colors.white,
+        onPressed: () {},
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(100),
+        ),
+        child: const Icon(
+          FontAwesomeIcons.phone,
+          size: 23,
+        ),
+      ),
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         title: const Text(
@@ -109,6 +125,137 @@ class _MessagesState extends State<Messages> {
           ),
         ),
         centerTitle: true,
+      ),
+      drawer: Drawer(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        shape: null,
+        child: Container(
+          padding: const EdgeInsets.all(15),
+          child: ListView(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 55,
+                    height: 55,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color.fromRGBO(0, 153, 115, 1),
+                    ),
+                    child: Center(
+                      child: Text(
+                        loginController.getShortenedName(userDto["name"] ?? ""),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 21,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                      child: ListTile(
+                    title: Text(userDto["name"]),
+                    subtitle: Text(
+                      userDto["email"],
+                      style: const TextStyle(
+                        fontSize: 13,
+                      ),
+                    ),
+                  ))
+                ],
+              ),
+              const SizedBox(height: 5),
+              const Divider(),
+              const SizedBox(height: 8),
+              const ListTile(
+                title: Text(
+                  "Home page",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.home,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Upload shot",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.upload,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Favourites",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.solidHeart,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Calls",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.phone,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Saved Messages",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.solidBookmark,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Settings",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.gear,
+                  size: 20,
+                ),
+              ),
+              const ListTile(
+                title: Text(
+                  "Back",
+                  style: TextStyle(
+                    fontSize: 17,
+                  ),
+                ),
+                leading: Icon(
+                  FontAwesomeIcons.chevronLeft,
+                  size: 21,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: applicationController.approvedApplicationsForUser.isEmpty
           ? Center(
@@ -311,7 +458,7 @@ class _MessagesState extends State<Messages> {
           senderId: currentUserId,
           senderEmail: currentUserEmail,
           receiverId: receiverUserId,
-          message: "Now you can communicate",
+          message: "Now you can communicate with each other.",
           timestamp: Timestamp.now(),
         );
 

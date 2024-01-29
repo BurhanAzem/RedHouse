@@ -4,7 +4,10 @@ import 'package:client/controller/contract/offer_controller.dart';
 import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/model/offer.dart';
 import 'package:client/model/user.dart';
-import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/contracts/customer%20contract/customer_contract.dart';
+import 'package:client/view/contracts/landlord%20contract/landlord_contract.dart';
+import 'package:client/view/history/check_account.dart';
+import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -22,7 +25,7 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
   OfferController controller = Get.put(OfferController());
   LoginControllerImp loginController = Get.put(LoginControllerImp());
   ContractsController contractsController = Get.put(ContractsController());
-  Color primaryColor = const Color.fromARGB(255, 61, 59, 59);
+  Color primaryColor = const Color.fromARGB(255, 122, 104, 214);
 
   late String userType;
   late User userName;
@@ -177,11 +180,11 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
         children: [
           Container(
             height: 160,
-            decoration:  BoxDecoration(
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
                 bottomRight: Radius.circular(50),
               ),
-              color:  primaryColor,
+              color: primaryColor,
             ),
             child: Stack(
               children: [
@@ -198,11 +201,11 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                       ),
                       color: Colors.white,
                     ),
-                    child:  Center(
+                    child: Center(
                       child: Text(
                         "Your Offer                   ",
                         style: TextStyle(
-                          color:  primaryColor,
+                          color: primaryColor,
                           fontSize: 23,
                           fontWeight: FontWeight.w600,
                         ),
@@ -244,7 +247,8 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                     boxShadow: [
                       BoxShadow(
                         // color: Colors.grey.withOpacity(0.4),
-                        color: Color.fromARGB(255, 94, 66, 231).withOpacity(0.4),
+                        color: const Color.fromARGB(255, 94, 66, 231)
+                            .withOpacity(0.4),
                         // color: Colors.grey.withOpacity(0.4),
                         blurRadius: 20,
                         spreadRadius: 4,
@@ -268,8 +272,8 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                   height: 210,
                   width: 150,
                   decoration: BoxDecoration(
-                  //  color: Color.fromARGB(255, 94, 66, 231),
-                   color:  primaryColor,
+                    //  color: Color.fromARGB(255, 94, 66, 231),
+                    color: primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -277,7 +281,6 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          // application.applicationStatus,
                           widget.offer.offerStatus,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
@@ -328,10 +331,10 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                   children: [
                     Text(
                       DateFormat('yyyy-MM-dd').format(widget.offer.offerDate),
-                      style:  TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 18,
-                      color:  primaryColor,
+                        color: primaryColor,
                       ),
                     ),
                     const SizedBox(height: 7),
@@ -344,7 +347,7 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                       ),
                     ),
                     Text(
-                      (userName!.name!.length <= 15)
+                      (userName.name!.length <= 15)
                           ? userName.name!
                           : '${userName.name!.substring(0, 15)}...',
                       style: const TextStyle(
@@ -392,12 +395,12 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
               minHeight: 160,
               maxHeight: constraints.maxHeight,
             ),
-            decoration:  BoxDecoration(
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(50),
                 bottomLeft: Radius.circular(50),
               ),
-             color:  primaryColor,
+              color: primaryColor,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
@@ -423,7 +426,7 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
-                            color: Colors.grey,
+                            color: Colors.black45,
                           ),
                         ),
                       ],
@@ -457,7 +460,7 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
-                            color: Colors.grey,
+                            color: Colors.black45,
                           ),
                           maxLines: null,
                           overflow: TextOverflow.visible,
@@ -496,7 +499,7 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
           children: [
             InkWell(
               onTap: () {
-                // Get.to(() => HomeWidget(property: application.property));
+                Get.to(() => HomeWidget(property: widget.offer.property!));
               },
               child: Container(
                 decoration: const BoxDecoration(
@@ -507,12 +510,12 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                child:  Text(
+                child: Text(
                   "Click here to see property",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color:  primaryColor,
+                    color: primaryColor,
                   ),
                 ),
               ),
@@ -520,7 +523,9 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
             Container(height: 10),
             InkWell(
               onTap: () {
-                // Get.to(() => CheckAccount(user: application.property.user!));
+                userType == "Customer"
+                    ? Get.to(() => CheckAccount(user: widget.offer.customer!))
+                    : Get.to(() => CheckAccount(user: widget.offer.landlord!));
               },
               child: Container(
                 decoration: const BoxDecoration(
@@ -531,12 +536,14 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                child:  Text(
-                  "Click here to see landlord history",
+                child: Text(
+                  userType == "Customer"
+                      ? "Click here to see customer history"
+                      : "Click here to see landlord history",
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color:  primaryColor,
+                    color: primaryColor,
                   ),
                 ),
               ),
@@ -587,7 +594,7 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
           Navigator.pop(context);
         },
         style: ElevatedButton.styleFrom(
-          primary: Colors.black,
+          primary: const Color.fromARGB(185, 0, 0, 0),
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
@@ -619,10 +626,22 @@ class _SentOfferState extends State<SentOffer> with TickerProviderStateMixin {
       height: 40,
       child: ElevatedButton(
         onPressed: () {
-          // go to contract
+          contractsController.visitLawyerFromContract = true;
+          contractsController.currentContract =
+              contractsController.contractIsCreated!;
+          if (widget.offer.landlordId == loginController.userDto?["id"]) {
+            Get.to(() => LandlordContract(
+                contract: contractsController.contractIsCreated!));
+          } else {
+            contractsController.visitLawyerFromContract = true;
+            contractsController.currentContract =
+                contractsController.contractIsCreated!;
+            Get.to(() => CustomerContract(
+                contract: contractsController.contractIsCreated!));
+          }
         },
         style: ElevatedButton.styleFrom(
-          primary: Colors.black,
+          primary: const Color.fromARGB(185, 0, 0, 0),
           onPrimary: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),

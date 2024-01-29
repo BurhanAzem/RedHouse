@@ -4,6 +4,7 @@ import 'package:client/controller/history/check_history_contoller.dart';
 import 'package:client/model/property.dart';
 import 'package:client/model/user_history.dart';
 import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -287,7 +288,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        Get.to(() => HomeInformation(
+                                        Get.to(() => HomeWidget(
                                             property: propertyHistory
                                                 .contract.offer!.property!));
                                       },
@@ -361,7 +362,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                 Row(
                                   children: [
                                     RatingBarIndicator(
-                                      rating: propertyHistory.landlordRating
+                                      rating: propertyHistory.landlordRating!
                                           .toDouble(),
                                       itemCount: 5,
                                       itemSize: 20,
@@ -384,9 +385,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                 ),
                                 const SizedBox(height: 7),
                                 Text(
-                                  propertyHistory.feedbackToLandlord +
-                                      propertyHistory.feedbackToLandlord +
-                                      propertyHistory.feedbackToLandlord,
+                                  propertyHistory.feedbackToLandlord!,
                                   style: const TextStyle(
                                     fontSize: 15,
                                   ),
@@ -439,7 +438,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                 Row(
                                   children: [
                                     RatingBarIndicator(
-                                      rating: propertyHistory.customerRating
+                                      rating: propertyHistory.customerRating!
                                           .toDouble(),
                                       itemCount: 5,
                                       itemSize: 20,
@@ -460,9 +459,7 @@ class _CheckPropertyState extends State<CheckProperty> {
                                 ),
                                 const SizedBox(height: 7),
                                 Text(
-                                  propertyHistory.feedbackToCustomer +
-                                      propertyHistory.feedbackToCustomer +
-                                      propertyHistory.feedbackToCustomer,
+                                  propertyHistory.feedbackToCustomer!,
                                   style: const TextStyle(
                                     fontSize: 15,
                                   ),

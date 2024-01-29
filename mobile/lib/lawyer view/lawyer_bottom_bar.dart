@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:client/controller/users_auth/login_controller.dart';
-import 'package:client/lawyer%20view/lawyer_contracts.dart';
+import 'package:client/lawyer%20view/lawyer%20contract/all_contracts.dart';
 import 'package:client/lawyer%20view/messages/messages_page.dart';
 import 'package:client/lawyer%20view/profile/lawyer_profile.dart';
 import 'package:client/main.dart';
@@ -30,10 +30,6 @@ class _BottomBarState extends State<LawyerBottomBar> {
       FontAwesomeIcons.solidComment,
       color: Colors.grey[600],
     ),
-    // Icon(
-    //   FontAwesomeIcons.envelopeOpenText,
-    //   color: Colors.grey[600],
-    // ),
     Icon(
       FontAwesomeIcons.userGraduate,
       color: Colors.grey[600],
@@ -47,9 +43,6 @@ class _BottomBarState extends State<LawyerBottomBar> {
     const Icon(
       FontAwesomeIcons.solidComment,
     ),
-    // const Icon(
-    //   FontAwesomeIcons.envelopeOpenText,
-    // ),
     const Icon(
       FontAwesomeIcons.userGraduate,
     ),
@@ -72,8 +65,6 @@ class _BottomBarState extends State<LawyerBottomBar> {
         children: const [
           LawyerContracts(),
           LawyerMessges(),
-          // LawyerComplints(),
-          // LawyerMore(),
           LawyerProfile(),
         ],
       ),
@@ -83,8 +74,6 @@ class _BottomBarState extends State<LawyerBottomBar> {
         iconSize: 18,
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF001BFF),
-        // selectedItemColor: primaryColor,
-        // color: const Color(0xFF001BFF).withOpacity(0.1),
         unselectedItemColor: Colors.grey[800],
         unselectedLabelStyle:
             const TextStyle(fontWeight: FontWeight.w500, fontSize: 11),
@@ -94,7 +83,6 @@ class _BottomBarState extends State<LawyerBottomBar> {
           _buildBottomNavigationBarItem(0),
           _buildBottomNavigationBarItem(1),
           _buildBottomNavigationBarItem(2),
-          // _buildBottomNavigationBarItem(3),
         ],
         onTap: (index) {
           setState(() {
@@ -120,8 +108,6 @@ class _BottomBarState extends State<LawyerBottomBar> {
         return "Contracts";
       case 1:
         return "Messages";
-      // case 2:
-      //   return "Complints";
       case 2:
         return "Profile";
       default:

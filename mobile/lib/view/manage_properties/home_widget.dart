@@ -114,7 +114,9 @@ class _HomeWidgetState extends State<HomeWidget> {
         );
       }
     }
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<Map<String, BitmapDescriptor>> initNeighborhoodIcons() async {

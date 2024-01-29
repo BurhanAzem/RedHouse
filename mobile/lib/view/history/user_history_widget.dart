@@ -3,6 +3,7 @@ import 'package:client/controller/users_auth/login_controller.dart';
 import 'package:client/controller/history/check_history_contoller.dart';
 import 'package:client/model/user_history.dart';
 import 'package:client/view/home_information/home_information.dart';
+import 'package:client/view/manage_properties/home_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/svg.dart';
@@ -97,9 +98,11 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
               Column(
                 children: [
                   Text(
-                    "${checkHistoryController.averageRating}",
+                    checkHistoryController.averageRating.toStringAsFixed(2),
                     style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w500),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   RatingBarIndicator(
                     rating: checkHistoryController.averageRating,
@@ -164,7 +167,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                             ),
                             InkWell(
                               onTap: () {
-                                Get.to(() => HomeInformation(
+                                Get.to(() => HomeWidget(
                                     property:
                                         userHistory.contract.offer!.property!));
                               },
@@ -189,6 +192,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                             ),
                           ],
                         ),
+                        
                         // here landlord
                         Row(
                           children: [
@@ -236,7 +240,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                         Row(
                           children: [
                             RatingBarIndicator(
-                              rating: userHistory.landlordRating.toDouble(),
+                              rating: userHistory.landlordRating!.toDouble(),
                               itemCount: 5,
                               itemSize: 20,
                               itemBuilder: (context, index) {
@@ -257,16 +261,13 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                         ),
                         const SizedBox(height: 7),
                         Text(
-                          userHistory.feedbackToLandlord +
-                              userHistory.feedbackToLandlord +
-                              userHistory.feedbackToLandlord +
-                              userHistory.feedbackToLandlord +
-                              userHistory.feedbackToLandlord,
+                          userHistory.feedbackToLandlord!,
                           style: const TextStyle(
                             fontSize: 15,
                           ),
                         ),
                         const SizedBox(height: 25),
+
                         // here customer
                         Row(
                           children: [
@@ -312,7 +313,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                         Row(
                           children: [
                             RatingBarIndicator(
-                              rating: userHistory.customerRating.toDouble(),
+                              rating: userHistory.customerRating!.toDouble(),
                               itemCount: 5,
                               itemSize: 20,
                               itemBuilder: (context, index) {
@@ -331,12 +332,7 @@ class _UserHistoryWidgetState extends State<UserHistoryWidget> {
                         ),
                         const SizedBox(height: 7),
                         Text(
-                          userHistory.feedbackToCustomer +
-                              userHistory.feedbackToCustomer +
-                              userHistory.feedbackToCustomer +
-                              userHistory.feedbackToCustomer +
-                              userHistory.feedbackToCustomer +
-                              userHistory.feedbackToCustomer,
+                          userHistory.feedbackToCustomer!,
                           style: const TextStyle(
                             fontSize: 15,
                           ),

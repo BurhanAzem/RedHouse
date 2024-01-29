@@ -67,7 +67,7 @@ class CheckHistoryController extends GetxController {
     sumRating = 0;
 
     for (UserHistory history in listHistories) {
-      sumRating += (history.landlordRating + history.customerRating) / 2;
+      sumRating += (history.landlordRating! + history.customerRating!) / 2;
       print(
           "================================================================================================================");
       print(sumRating);

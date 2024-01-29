@@ -232,19 +232,42 @@ namespace server.Services
             }
         }
 
-        public async Task<ResponsDto<Contract>> GetAllContractsForLawer(int userId)
+        public async Task<ResponsDto<Contract>> GetAllContractsForLawer(int userId, ContractFilter contractFilter)
         {
             var user = await _redHouseDbContext.Users.FindAsync(userId);
             if (user == null)
             {
                 return new ResponsDto<Contract>
                 {
-                    Exception = new Exception($"User with {userId} Dose Not Exist"),
+                    Exception = new Exception($"User with {userId} Does Not Exist"),
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-            var contracts = await _redHouseDbContext.Contracts.Include(o => o.Milestones).Include(o => o.ContractActivities).Where(c => c.LawyerId == userId).ToArrayAsync();
 
+            var query = _redHouseDbContext.Contracts
+                .Include(c => c.Lawyer)
+                .Include(c => c.Offer)
+                .Include(c => c.Offer.Landlord)
+                .Include(c => c.Offer.Customer)
+                .Include(c => c.Offer.Property)
+                .Include(c => c.Offer.Property.User)
+                .Include(c => c.Offer.Property.propertyFiles)
+                .Include(c => c.Offer.Property.Location)
+                .Where(c => c.LawyerId == userId)
+                .AsQueryable();
+
+            // Apply filters directly on the query
+            if (contractFilter.ContractType.Trim() != "All")
+            {
+                query = query.Where(c => c.ContractType == contractFilter.ContractType.Trim());
+            }
+
+            if (contractFilter.ContractStatus.Trim() != "All")
+            {
+                query = query.Where(c => c.ContractStatus == contractFilter.ContractStatus.Trim());
+            }
+
+            var contracts = await query.ToArrayAsync();
 
             return new ResponsDto<Contract>
             {
@@ -252,6 +275,7 @@ namespace server.Services
                 StatusCode = HttpStatusCode.OK,
             };
         }
+
 
         public async Task<ResponsDto<Contract>> AddLawerToContract(int contractId, int lawerId)
         {

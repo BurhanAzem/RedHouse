@@ -10,7 +10,6 @@ namespace server.Services
     {
         public Task<ResponsDto<UserHistory>> CreateUserHistory(CreateUserHistoryDto createHistoryDto);
         public Task<ResponsDto<UserHistory>> GetUserHistory(int userId);
-        // public Task<ResponsDto<UserHistory>> GetUserHistory(int applicationId);
         public Task<ResponsDto<UserHistory>> GetPropertyHistory(int propertyId);
 
         public Task<ResponsDto<UserHistory>> DeleteUserHistory(int userId);

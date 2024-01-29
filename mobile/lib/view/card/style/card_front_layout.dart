@@ -65,6 +65,7 @@ class CardFrontLayout {
               end: Alignment.bottomRight,
               colors: [
                 Color.fromARGB(255, 106, 85, 207),
+                Color.fromARGB(255, 122, 104, 214),
                 Color.fromARGB(255, 131, 120, 191),
                 Color.fromARGB(255, 219, 194, 122),
               ],
@@ -135,7 +136,6 @@ class CardFrontLayout {
                             reDays >= 0 ? offerON() : offerOFF(),
                             style: TextStyle(
                               package: 'awesome_card',
-                              // color: Color.fromARGB(255, 94, 88, 58),
                               color: textColor,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'MavenPro',

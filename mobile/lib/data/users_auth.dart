@@ -304,4 +304,29 @@ class UserData {
       return StatusRequest.offlinefailure;
     }
   }
+
+  static getlawyerContacts(int id) async {
+    if (await checkInternet()) {
+      try {
+        final Uri uri =
+            Uri.https("10.0.2.2:7042", "/lawyers/$id/basic-contacts");
+
+        var response = await http.get(uri, headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${getToken()}',
+        });
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responsebody = json.decode(response.body);
+          return (responsebody);
+        } else {
+          return StatusRequest.serverfailure;
+        }
+      } catch (e) {
+        return StatusRequest.serverfailure;
+      }
+    } else {
+      return StatusRequest.offlinefailure;
+    }
+  }
 }

@@ -84,15 +84,15 @@ namespace server.Services
 
 
             var contracts = _redHouseDbContext.Contracts
-    .Where(c => c.Offer.CustomerId == userId)
-    .Include(c => c.Offer.Property).ThenInclude(p => p.Location).Include(p => p.Offer.Property.propertyFiles) // Include the Property navigation property
-    .Include(c => c.Offer.Landlord) // Include the Landlord navigation property
-    .Include(c => c.Offer.Customer) // Include the Customer navigation property
-    .ToList();
+            .Where(c => c.Offer.CustomerId == userId || c.Offer.LandlordId == userId)
+            .Include(c => c.Offer.Property).ThenInclude(p => p.Location)
+            .Include(p => p.Offer.Property.propertyFiles)
+            .Include(c => c.Offer.Landlord)
+            .Include(c => c.Offer.Customer)
+            .ToList();
 
             var userHistories = _redHouseDbContext.UserHistoryRecords
-                .ToList()
-                .Join(
+                .ToList().Join(
                     contracts,
                     uh => uh.ContractId,
                     c => c.Id,
@@ -108,9 +108,6 @@ namespace server.Services
                     }
                 )
                 .ToList();
-
-
-
 
 
             return new ResponsDto<UserHistory>
@@ -137,8 +134,6 @@ namespace server.Services
                     StatusCode = HttpStatusCode.BadRequest,
                 };
             }
-
-
 
 
             var contracts = _redHouseDbContext.Contracts

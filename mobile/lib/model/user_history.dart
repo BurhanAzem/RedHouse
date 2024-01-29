@@ -10,11 +10,11 @@ class UserHistory {
   int contractId;
   Contract contract;
 
-  String feedbackToLandlord;
-  String feedbackToCustomer;
+  String? feedbackToLandlord;
+  String? feedbackToCustomer;
 
-  int customerRating;
-  int landlordRating;
+  int? customerRating;
+  int? landlordRating;
 
   String helpful = "";
 

@@ -55,7 +55,7 @@ class ContractsData {
     if (await checkInternet()) {
       try {
         final Uri uri =
-            Uri.https("10.0.2.2:7042", "/lawyers/$lawyerId/contracts");
+            Uri.https("10.0.2.2:7042", "/lawyers/$lawyerId/contracts", filters);
 
         var response = await http.get(uri, headers: <String, String>{
           'Content-Type': 'application/json',

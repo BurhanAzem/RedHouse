@@ -7,7 +7,7 @@ namespace RedHouse_Server.Dtos.ContractDtos
     {
         public string ContractType { get; set; }
         public string ContractStatus { get; set; }
-        public string ContractTo { get; set; }
+        public string? ContractTo { get; set; }
 
     }
 }
